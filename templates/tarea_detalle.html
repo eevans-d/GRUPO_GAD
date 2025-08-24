@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Detalle de Tarea: {{ tarea.codigo }}</h2>
+        <div>
+            <a href="/tarea/{{ tarea.id }}/editar" class="btn btn-primary">Editar</a>
+            <form action="/tarea/{{ tarea.id }}/delete" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.');">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
+            <a href="/" class="btn btn-secondary">Volver al Dashboard</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">{{ tarea.titulo }}</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><b>Tipo:</b> {{ tarea.tipo }}</li>
+                    <li class="list-group-item">
+                        <b>Estado:</b>
+                        {% if tarea.estado.value == 'finalizada' %}
+                            <span class="badge bg-success">Finalizada</span>
+                        {% elif tarea.estado.value == 'en_curso' %}
+                            <span class="badge bg-primary">En Curso</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Programada</span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item"><b>Delegado:</b> {{ tarea.delegado.nombre }} (ID: {{ tarea.delegado.telegram_id }})</li>
+                    <li class="list-group-item"><b>Inicio Programado:</b> {{ tarea.inicio_programado.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+                    <li class="list-group-item"><b>Fin Real:</b> {{ tarea.fin_real.strftime('%Y-%m-%d %H:%M:%S') if tarea.fin_real else 'N/A' }}</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Efectivos Asignados</h5>
+                {% if tarea.asignados %}
+                    <ul class="list-group">
+                        {% for efectivo in tarea.asignados %}
+                            <li class="list-group-item">{{ efectivo.nombre }} ({{ efectivo.especialidad }})</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No hay efectivos asignados a esta tarea.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Editar Tarea: {{ tarea.codigo }}</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form action="/tarea/{{ tarea.id }}/editar" method="post">
+            <div class="mb-3">
+                <label for="codigo" class="form-label">Código de Tarea</label>
+                <input type="text" class="form-control" id="codigo" name="codigo" value="{{ tarea.codigo }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" value="{{ tarea.titulo }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo</label>
+                <input type="text" class="form-control" id="tipo" name="tipo" value="{{ tarea.tipo }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="delegado_usuario_id" class="form-label">Delegado</label>
+                <select class="form-select" id="delegado_usuario_id" name="delegado_usuario_id" required>
+                    {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}" {% if usuario.id == tarea.delegado_usuario_id %}selected{% endif %}>
+                        {{ usuario.nombre }} (ID: {{ usuario.id }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="asignados_ids" class="form-label">Efectivos Asignados</label>
+                <select class="form-select" id="asignados_ids" name="asignados_ids" multiple required size="8">
+                    {% set asignados_actuales_ids = tarea.asignados | map(attribute='id') | list %}
+                    {% for efectivo in efectivos %}
+                    <option value="{{ efectivo.id }}" {% if efectivo.id in asignados_actuales_ids %}selected{% endif %}>
+                        {{ efectivo.nombre }} ({{ efectivo.especialidad }})
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">
+                    Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples efectivos.
+                </div>
+            </div>
+            <a href="/tarea/{{ tarea.id }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

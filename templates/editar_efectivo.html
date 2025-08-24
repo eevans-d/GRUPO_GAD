@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Editar Efectivo: {{ efectivo.nombre }}</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form action="/efectivos/{{ efectivo.id }}/editar" method="post">
+            <div class="mb-3">
+                <label for="dni" class="form-label">DNI</label>
+                <input type="text" class="form-control" id="dni" name="dni" value="{{ efectivo.dni }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ efectivo.nombre }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="especialidad" class="form-label">Especialidad</label>
+                <input type="text" class="form-control" id="especialidad" name="especialidad" value="{{ efectivo.especialidad or '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="usuario_id" class="form-label">Vincular a Usuario (Opcional)</label>
+                <select class="form-select" id="usuario_id" name="usuario_id">
+                    <option value="">No vincular</option>
+                    {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}" {% if efectivo.usuario_id == usuario.id %}selected{% endif %}>
+                        {{ usuario.nombre }} (Telegram ID: {{ usuario.telegram_id }})
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">
+                    Vincula este efectivo a una cuenta de usuario de Telegram para permitirle interactuar con el bot.
+                </div>
+            </div>
+            <a href="/efectivos" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

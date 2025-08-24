@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <!-- Columna de Tareas -->
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Tareas Actuales</h2>
+            <a href="/crear-tarea" class="btn btn-success">Crear Nueva Tarea</a>
+        </div>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Código</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Delegado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tarea in tareas %}
+                        <tr>
+                            <td><span class="badge bg-secondary">{{ tarea.codigo }}</span></td>
+                            <td>{{ tarea.titulo }}</td>
+                            <td>{{ tarea.tipo }}</td>
+                            <td>
+                                {% if tarea.estado.value == 'finalizada' %}
+                                    <span class="badge bg-success">Finalizada</span>
+                                {% elif tarea.estado.value == 'en_curso' %}
+                                    <span class="badge bg-primary">En Curso</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Programada</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ tarea.delegado.nombre }}</td>
+                            <td>
+                                <a href="/tarea/{{ tarea.id }}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No hay tareas para mostrar.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna de Efectivos Disponibles -->
+    <div class="col-md-4">
+        <h2>Efectivos Disponibles</h2>
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for efectivo in efectivos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ efectivo.nombre }}
+                    <span class="badge bg-info rounded-pill">{{ efectivo.especialidad }}</span>
+                </li>
+                {% else %}
+                <li class="list-group-item text-center">No hay efectivos disponibles.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

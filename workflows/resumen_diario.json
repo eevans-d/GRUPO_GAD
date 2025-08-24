@@ -1,0 +1,89 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "cronExpression": "0 8 * * *",
+        "timeZone": "{{ $vars.TZ }}"
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT COUNT(*) AS en_curso FROM gad.tareas WHERE estado='en_curso'; -- Añade más"
+      },
+      "name": "Query",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": {
+        "postgres": "GAD_DB"
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return {msg: `Resumen: En curso: ${$input.first().json.en_curso}`};"
+      },
+      "name": "Format",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.telegram.org/bot{{ $creds.TELEGRAM.token }}/sendMessage",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "{{ $vars.ADMIN_CHAT_ID }}"
+            },
+            {
+              "name": "text",
+              "value": "{{ $input.first().json.msg }}"
+            }
+          ]
+        }
+      },
+      "name": "Send",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": {
+        "httpRequest": "TELEGRAM"
+      }
+    }
+  ],
+  "connections": {
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Query"
+          }
+        ]
+      ]
+    },
+    "Query": {
+      "main": [
+        [
+          {
+            "node": "Format"
+          }
+        ]
+      ]
+    },
+    "Format": {
+      "main": [
+        [
+          {
+            "node": "Send"
+          }
+        ]
+      ]
+    }
+  }
+}
