@@ -1,0 +1,109 @@
+# -*- coding: utf-8 -*-
+"""
+Modelo de Usuario para el sistema GRUPO_GAD.
+"""
+
+from typing import Optional, List
+from sqlalchemy import String, Integer, Boolean, DateTime, Text, BigInteger
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.dialects.postgresql import UUID as sa_UUID, JSONB, ENUM
+import uuid
+from datetime import datetime
+
+from .base import Base
+from src.shared.constants import UserLevel
+
+
+class Usuario(Base):
+    """Modelo de Usuario del sistema."""
+    
+    __tablename__ = "usuarios"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    uuid = mapped_column(
+        sa_UUID(as_uuid=True), 
+        default=uuid.uuid4, 
+        unique=True, 
+        nullable=False
+    )
+    
+    # Información personal
+    dni: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
+    nombre: Mapped[str] = mapped_column(String(100), nullable=False)
+    apellido: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    telefono: Mapped[Optional[str]] = mapped_column(String(20))
+    telegram_id: Mapped[Optional[int]] = mapped_column(BigInteger, unique=True)
+    
+    # Nivel de autorización
+    nivel: Mapped[UserLevel] = mapped_column(
+        ENUM(UserLevel, name="nivel_usuario", schema="gad"),
+        default=UserLevel.LEVEL_1,
+        nullable=False
+    )
+    
+    # Campos de seguridad
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    verificado: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    ultimo_acceso: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    intentos_fallidos: Mapped[int] = mapped_column(Integer, default=0)
+    bloqueado_hasta: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    extra_data: Mapped[dict] = mapped_column(JSONB, default={})
+    
+    # Relaciones
+    efectivo: Mapped["Efectivo"] = relationship(
+        "Efectivo", 
+        back_populates="usuario", 
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+    
+    tareas_delegadas: Mapped[List["Tarea"]] = relationship(
+        "Tarea",
+        foreign_keys="Tarea.delegado_usuario_id",
+        back_populates="delegado_usuario"
+    )
+    
+    tareas_creadas: Mapped[List["Tarea"]] = relationship(
+        "Tarea",
+        foreign_keys="Tarea.creado_por_usuario_id",
+        back_populates="creado_por_usuario"
+    )
+    
+    historial_estados: Mapped[List["HistorialEstado"]] = relationship(
+        "HistorialEstado",
+        back_populates="usuario"
+    )
+    
+    @property
+    def nombre_completo(self) -> str:
+        """Retorna el nombre completo del usuario."""
+        return f"{self.nombre} {self.apellido}"
+    
+    @property
+    def is_active(self) -> bool:
+        """Verifica si el usuario está activo."""
+        return not self.deleted_at and self.verificado
+    
+    @property
+    def is_blocked(self) -> bool:
+        """Verifica si el usuario está bloqueado temporalmente."""
+        if not self.bloqueado_hasta:
+            return False
+        return self.bloqueado_hasta > datetime.utcnow()
+    
+    def can_access_level(self, required_level: UserLevel) -> bool:
+        """Verifica si el usuario puede acceder a un nivel requerido."""
+        return self.nivel.value >= required_level.value
+    
+    def reset_failed_attempts(self) -> None:
+        """Reinicia los intentos fallidos."""
+        self.intentos_fallidos = 0
+        self.bloqueado_hasta = None
+    
+    def increment_failed_attempts(self) -> None:
+        """Incrementa los intentos fallidos."""
+        self.intentos_fallidos += 1
+    
+    def __str__(self) -> str:
+        return f"{self.nombre_completo} ({self.email})"

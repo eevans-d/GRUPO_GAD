@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "grupo_gad"
+version = "0.1.0"
+description = "Sistema de Gestión de Tareas para Personal Policial"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.0"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.20"}
+asyncpg = "^0.28.0"
+pydantic = "^2.3.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-telegram-bot = "^20.6"
+requests = "^2.31.0"
+redis = "^5.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.1"
+httpx = "^0.24.1"
+ruff = "^0.0.292"
+black = "^23.9.1"
+mypy = "^1.5.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
