@@ -3,7 +3,7 @@
 Funciones de seguridad, como hashing de contraseñas y gestión de tokens JWT.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Union
 
 from jose import jwt
@@ -16,6 +16,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ALGORITHM = "HS256"
 
+
 def create_access_token(
     subject: Union[str, Any], expires_delta: timedelta = None
 ) -> str:
@@ -23,9 +24,9 @@ def create_access_token(
     Crea un nuevo token de acceso JWT.
     """
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
+        expire = datetime.now(timezone.utc) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     to_encode = {"exp": expire, "sub": str(subject)}

@@ -3,35 +3,79 @@
 Modelo base para todos los modelos ORM.
 """
 
+import json
 from typing import Any, Dict
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.ext.asyncio import AsyncAttrs
-from datetime import datetime
+from sqlalchemy.types import TypeDecorator, JSON
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from datetime import datetime, timezone
+
+
+class CustomJsonB(TypeDecorator):
+    """Platform-independent JSONB type.
+
+    Uses JSONB on PostgreSQL, otherwise uses JSON.
+    """
+
+    impl = JSON
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            return dialect.type_descriptor(JSONB())
+        else:
+            return dialect.type_descriptor(JSON())
+
+
+class CustomArray(TypeDecorator):
+    """Platform-independent ARRAY type.
+
+    Uses ARRAY on PostgreSQL, otherwise simulates with JSON.
+    """
+
+    impl = JSON
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == "postgresql":
+            return dialect.type_descriptor(ARRAY(Integer))
+        else:
+            return dialect.type_descriptor(JSON())
+
+    def process_bind_param(self, value, dialect):
+        if dialect.name == "postgresql" or value is None:
+            return value
+        return json.dumps(value)
+
+    def process_result_value(self, value, dialect):
+        if dialect.name == "postgresql" or value is None:
+            return value
+        return json.loads(value)
 
 
 class Base(AsyncAttrs, DeclarativeBase):
     """Modelo base para todos los modelos ORM."""
-    
+
     __abstract__ = True
-    
+
     # Metadata compartida
     metadata = MetaData(schema="gad")
-    
+
     # Campos de auditoría comunes
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
-        nullable=False
+        default=lambda: datetime.now(timezone.utc), nullable=False
     )
-    
+
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
-        nullable=False
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
-    
+
     deleted_at: Mapped[datetime] = mapped_column(nullable=True)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convierte el modelo a diccionario."""
         result = {}
@@ -43,7 +87,7 @@ class Base(AsyncAttrs, DeclarativeBase):
             else:
                 result[column.name] = value
         return result
-    
+
     def __repr__(self) -> str:
         """Representación en string del modelo."""
         attrs = []

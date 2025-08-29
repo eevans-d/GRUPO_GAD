@@ -15,7 +15,12 @@ from src.schemas.tarea import TareaCreate, TareaUpdate
 
 class CRUDTarea(CRUDBase[Tarea, TareaCreate, TareaUpdate]):
     async def get_multi_by_delegado(
-        self, db: AsyncSession, *, delegado_usuario_id: int, skip: int = 0, limit: int = 100
+        self,
+        db: AsyncSession,
+        *,
+        delegado_usuario_id: int,
+        skip: int = 0,
+        limit: int = 100
     ) -> List[Tarea]:
         """
         Obtiene las tareas de un delegado específico.

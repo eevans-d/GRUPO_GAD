@@ -5,7 +5,6 @@ Esquemas de Pydantic para la validación de datos de la API.
 
 from .usuario import Usuario, UsuarioCreate, UsuarioUpdate
 from .token import Token, TokenPayload
-from src.shared.constants import UserLevel, AvailabilityStatus, TaskStatus
 
 __all__ = [
     "Usuario",

@@ -5,7 +5,7 @@ Esquemas para el modelo de Usuario.
 
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 from src.shared.constants import UserLevel
 
@@ -41,8 +41,7 @@ class UsuarioInDBBase(UsuarioBase):
     id: int
     uuid: str
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Propiedades para retornar al cliente

@@ -8,13 +8,14 @@ from telegram.ext import CommandHandler, CallbackContext
 
 from src.bot.services.api import api_service
 
+
 def finalizar_tarea(update: Update, context: CallbackContext) -> None:
     """
     Finaliza una tarea.
     Formato: /finalizar <código_tarea>
     """
     user_id = update.message.from_user.id
-    
+
     if not context.args:
         update.message.reply_text("Formato incorrecto. Uso: /finalizar <código_tarea>")
         return
@@ -29,4 +30,4 @@ def finalizar_tarea(update: Update, context: CallbackContext) -> None:
         update.message.reply_text(f"Error al finalizar la tarea: {e}")
 
 
-finalizar_tarea_handler = CommandHandler('finalizar', finalizar_tarea)
+finalizar_tarea_handler = CommandHandler("finalizar", finalizar_tarea)

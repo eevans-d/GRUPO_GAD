@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Sistema de Gestión de Tareas para Personal Policial"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -17,14 +18,18 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-telegram-bot = "^20.6"
 requests = "^2.31.0"
 redis = "^5.0.1"
+python-multipart = "^0.0.20"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
+pytest = "^8.4.1"
 pytest-asyncio = "^0.21.1"
-httpx = "^0.24.1"
+httpx = "^0.25.0"
 ruff = "^0.0.292"
 black = "^23.9.1"
 mypy = "^1.5.1"
+pytest-cov = "^6.2.1"
+aiosqlite = "^0.21.0"
+pytest-env = "^1.1.5"
 
 [build-system]
 requires = ["poetry-core"]

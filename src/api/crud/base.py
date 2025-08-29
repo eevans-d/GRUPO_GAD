@@ -39,9 +39,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Obtiene múltiples registros con paginación.
         """
-        result = await db.execute(
-            select(self.model).offset(skip).limit(limit)
-        )
+        result = await db.execute(select(self.model).offset(skip).limit(limit))
         return result.scalars().all()
 
     async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
@@ -65,14 +63,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Actualiza un registro existente.
         """
-        obj_data = jsonable_encoder(db_obj)
+        jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True)
-        for field in obj_data:
-            if field in update_data:
+            update_data = obj_in.model_dump(exclude_unset=True)
+
+        for field in update_data:
+            if hasattr(db_obj, field):
                 setattr(db_obj, field, update_data[field])
+
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)

@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional
 from config.settings import settings
 from src.schemas.tarea import Tarea, TareaCreate
 
+
 class ApiService:
     def __init__(self, api_url: str, token: Optional[str] = None):
         self.api_url = api_url
@@ -20,7 +21,9 @@ class ApiService:
         return response.json()
 
     def _post(self, endpoint: str, data: Dict[str, Any]) -> Any:
-        response = requests.post(f"{self.api_url}{endpoint}", json=data, headers=self.headers)
+        response = requests.post(
+            f"{self.api_url}{endpoint}", json=data, headers=self.headers
+        )
         response.raise_for_status()
         return response.json()
 
@@ -38,7 +41,9 @@ class ApiService:
 
     def finalize_task(self, task_code: str, telegram_id: int) -> Tarea:
         """Finaliza una tarea."""
-        return self._post(f"/tasks/{task_code}/finalize", data={"telegram_id": telegram_id})
+        return self._post(
+            f"/tasks/{task_code}/finalize", data={"telegram_id": telegram_id}
+        )
 
     def get_available_efectivos(self, nivel: str) -> List[Dict[str, Any]]:
         """Obtiene los efectivos disponibles."""

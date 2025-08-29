@@ -3,7 +3,6 @@
 Dependencias de FastAPI para la aplicación.
 """
 
-from typing import Generator, Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -24,8 +23,7 @@ reusable_oauth2 = OAuth2PasswordBearer(
 
 
 async def get_current_user(
-    db: AsyncSession = Depends(get_db_session),
-    token: str = Depends(reusable_oauth2)
+    db: AsyncSession = Depends(get_db_session), token: str = Depends(reusable_oauth2)
 ) -> Usuario:
     """
     Dependencia para obtener el usuario actual a partir de un token JWT.

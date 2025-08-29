@@ -6,7 +6,7 @@ Esquemas para el modelo de Tarea.
 from typing import Optional, List
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from src.shared.constants import TaskStatus, TaskPriority, TaskType
 
@@ -16,6 +16,7 @@ class TareaBase(BaseModel):
     codigo: Optional[str] = None
     titulo: Optional[str] = None
     descripcion: Optional[str] = None
+    estado: Optional[TaskStatus] = None
     tipo: Optional[TaskType] = None
     prioridad: Optional[TaskPriority] = TaskPriority.MEDIUM
     inicio_programado: Optional[datetime] = None
@@ -46,8 +47,7 @@ class TareaInDBBase(TareaBase):
     uuid: str
     estado: TaskStatus
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Propiedades para retornar al cliente

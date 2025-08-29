@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     """Inicia el bot."""
     if not settings.TELEGRAM_BOT_TOKEN:
-        logger.critical("Error: La variable de entorno TELEGRAM_BOT_TOKEN debe estar definida.")
+        logger.critical(
+            "Error: La variable de entorno TELEGRAM_BOT_TOKEN debe estar definida."
+        )
         return
 
     # Create the Updater and pass it your bot's token.

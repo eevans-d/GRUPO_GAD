@@ -26,6 +26,7 @@ def test_create_access_token():
     token = create_access_token(subject)
     assert isinstance(token, str)
 
+
 def test_create_access_token_with_delta():
     """
     Test para verificar que la creación de tokens de acceso con delta funciona correctamente.
