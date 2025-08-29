@@ -3,7 +3,7 @@
 Operaciones CRUD para el modelo de Tarea.
 """
 
-from typing import List
+from typing import List, Sequence # Added Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -21,7 +21,7 @@ class CRUDTarea(CRUDBase[Tarea, TareaCreate, TareaUpdate]):
         delegado_usuario_id: int,
         skip: int = 0,
         limit: int = 100
-    ) -> List[Tarea]:
+    ) -> Sequence[Tarea]: # Changed return type
         """
         Obtiene las tareas de un delegado específico.
         """

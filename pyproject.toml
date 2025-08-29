@@ -34,3 +34,7 @@ pytest-env = "^1.1.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+explicit_package_bases = true
+namespace_packages = true

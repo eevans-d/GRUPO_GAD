@@ -10,14 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.crud.crud_usuario import usuario as crud_usuario
 from src.api.dependencies import get_current_active_user
-from src.api.models.usuario import Usuario
+from src.api.models.usuario import Usuario # Keep this import for the SQLAlchemy model
 from src.core.database import get_db_session
-from src.schemas.usuario import Usuario, UsuarioCreate, UsuarioUpdate
+from src.schemas.usuario import Usuario as UsuarioSchema, UsuarioCreate, UsuarioUpdate # Renamed import
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[Usuario])
+@router.get("/", response_model=List[UsuarioSchema]) # Use UsuarioSchema here
 async def read_users(
     db: AsyncSession = Depends(get_db_session),
     skip: int = 0,
@@ -31,7 +31,7 @@ async def read_users(
     return users
 
 
-@router.post("/", response_model=Usuario)
+@router.post("/", response_model=UsuarioSchema) # Use UsuarioSchema here
 async def create_user(
     *,
     db: AsyncSession = Depends(get_db_session),
@@ -51,7 +51,7 @@ async def create_user(
     return user
 
 
-@router.get("/me", response_model=Usuario)
+@router.get("/me", response_model=UsuarioSchema) # Use UsuarioSchema here
 async def read_user_me(
     current_user: Usuario = Depends(get_current_active_user),
 ) -> Any:
@@ -61,7 +61,7 @@ async def read_user_me(
     return current_user
 
 
-@router.get("/{user_id}", response_model=Usuario)
+@router.get("/{user_id}", response_model=UsuarioSchema) # Use UsuarioSchema here
 async def read_user_by_id(
     user_id: int,
     current_user: Usuario = Depends(get_current_active_user),
@@ -79,7 +79,7 @@ async def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=Usuario)
+@router.put("/{user_id}", response_model=UsuarioSchema) # Use UsuarioSchema here
 async def update_user(
     *,
     db: AsyncSession = Depends(get_db_session),

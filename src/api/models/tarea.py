@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 # -*- coding: utf-8 -*-
 """
 Modelo de Tarea para el sistema GRUPO_GAD.
 """
 
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime, timedelta
 from sqlalchemy import (
     String,
@@ -23,6 +24,12 @@ import uuid
 from .base import Base, CustomJsonB, CustomArray
 from src.shared.constants import TaskStatus, TaskPriority, TaskType
 from .associations import tarea_efectivos  # Add this line
+
+
+if TYPE_CHECKING:
+    from .usuario import Usuario
+    from .efectivo import Efectivo
+    from .historial_estado import HistorialEstado
 
 
 class Tarea(Base):

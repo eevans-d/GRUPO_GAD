@@ -3,7 +3,7 @@
 Clase base para las operaciones CRUD (Create, Read, Update, Delete).
 """
 
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Sequence # Added Sequence
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -30,12 +30,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Obtiene un registro por su ID.
         """
-        result = await db.execute(select(self.model).filter(self.model.id == id))
+        result = await db.execute(select(self.model).filter(self.model.id == id)) # type: ignore # Added type: ignore
         return result.scalars().first()
 
     async def get_multi(
         self, db: AsyncSession, *, skip: int = 0, limit: int = 100
-    ) -> List[ModelType]:
+    ) -> Sequence[ModelType]: # Changed return type
         """
         Obtiene múltiples registros con paginación.
         """
@@ -78,7 +78,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.refresh(db_obj)
         return db_obj
 
-    async def remove(self, db: AsyncSession, *, id: int) -> ModelType:
+    async def remove(self, db: AsyncSession, *, id: int) -> Optional[ModelType]: # Changed return type
         """
         Elimina un registro.
         """

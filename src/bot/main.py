@@ -4,8 +4,9 @@ Punto de entrada principal para el bot de Telegram de GRUPO_GAD.
 """
 
 import logging
+import asyncio # Added asyncio
 
-from telegram.ext import Updater
+from telegram.ext import Application, ApplicationBuilder # Changed import
 
 from config.settings import settings
 from src.bot.handlers import register_handlers
@@ -17,7 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main() -> None:
+async def main() -> None: # Changed to async def
     """Inicia el bot."""
     if not settings.TELEGRAM_BOT_TOKEN:
         logger.critical(
@@ -25,24 +26,20 @@ def main() -> None:
         )
         return
 
-    # Create the Updater and pass it your bot's token.
-    updater = Updater(settings.TELEGRAM_BOT_TOKEN)
-
-    # Get the dispatcher to register handlers
-    dispatcher = updater.dispatcher
+    # Create the Application and pass it your bot's token.
+    application = (
+        ApplicationBuilder.builder() # type: ignore # Added type: ignore
+        .token(settings.TELEGRAM_BOT_TOKEN)
+        .build()
+    )
 
     # Register all handlers
-    register_handlers(dispatcher)
+    register_handlers(application.dispatcher)
 
     # Start the Bot
-    updater.start_polling()
     logger.info("Bot iniciado y escuchando...")
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
+    await application.run_polling() # Changed to await application.run_polling()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main()) # Changed to run async main

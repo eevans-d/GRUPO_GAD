@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 # -*- coding: utf-8 -*-
 """
 Modelo de Usuario para el sistema GRUPO_GAD.
 """
 
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from sqlalchemy import String, Integer, Boolean, DateTime, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as sa_UUID, ENUM
@@ -13,6 +14,12 @@ from datetime import datetime, timezone
 
 from .base import Base, CustomJsonB
 from src.shared.constants import UserLevel
+
+
+if TYPE_CHECKING:
+    from .efectivo import Efectivo
+    from .tarea import Tarea
+    from .historial_estado import HistorialEstado
 
 
 class Usuario(Base):
@@ -88,6 +95,11 @@ class Usuario(Base):
         if not self.bloqueado_hasta:
             return False
         return self.bloqueado_hasta > datetime.now(timezone.utc)
+
+    @property
+    def is_superuser(self) -> bool:
+        """Verifica si el usuario tiene nivel de superusuario (nivel 3)."""
+        return self.nivel == UserLevel.LEVEL_3
 
     def can_access_level(self, required_level: UserLevel) -> bool:
         """Verifica si el usuario puede acceder a un nivel requerido."""

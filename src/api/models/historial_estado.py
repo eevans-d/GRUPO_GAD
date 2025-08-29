@@ -1,16 +1,22 @@
 from __future__ import annotations
+
 # -*- coding: utf-8 -*-
 """
 Modelo de HistorialEstado para el sistema GRUPO_GAD.
 """
 
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from sqlalchemy import Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ENUM
 
 from .base import Base, CustomJsonB
 from src.shared.constants import TaskStatus
+
+
+if TYPE_CHECKING:
+    from .tarea import Tarea
+    from .usuario import Usuario
 
 
 class HistorialEstado(Base):

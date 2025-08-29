@@ -46,7 +46,7 @@ Hemos completado la Fase 3, construyendo el cerebro de la aplicación.
 *   **Servicio de Autenticación**: Se ha creado el primer servicio de lógica de negocio, `AuthService`, para manejar la autenticación de usuarios.
 *   **Dependencias de API**: Se ha implementado el sistema de dependencias en `src/api/dependencies.py` para gestionar la autenticación y autorización en los endpoints de la API.
 
-**Estado Actual:** La aplicación ahora tiene una base sólida y completa para la lógica de negocio, la interacción con la base de datos y la seguridad. Todos los componentes del "backend" están listos para ser expuestos a través de los endpoints de la API.
+**Estado Actual:** La aplicación ahora tiene una base sólida y completa para la lógica de negocio, la interacción con la base de datos y la seguridad. Todos los componentes del '''backend''' están listos para ser expuestos a través de los endpoints de la API.
 
 **Próximo Paso:** Iniciar la **FASE 4: Endpoints de la API**, donde crearemos los endpoints REST que permitirán a los clientes (como el bot o un frontend web) interactuar con el sistema.
 
@@ -81,9 +81,28 @@ Hemos completado la refactorización del bot de Telegram, modernizando su arquit
 *   **Arquitectura Modular**: Se ha descompuesto el bot, que antes era un único archivo, en una estructura de directorios modular y organizada (`commands`, `handlers`, `services`), haciendo el código más limpio y fácil de mantener.
 *   **Servicio de API Centralizado**: Toda la comunicación con el backend se ha centralizado en un `ApiService` dedicado, lo que simplifica la gestión de las llamadas a la API.
 *   **Manejadores de Comandos Separados**: Cada comando del bot (`/start`, `/crear`, etc.) ahora reside en su propio archivo, mejorando la legibilidad y la organización.
-*   **Funcionalidad Preservada**: Se ha mantenido y refactorizado toda la funcionalidad original, incluyendo el comando "listo" para finalizar tareas.
+*   **Funcionalidad Preservada**: Se ha mantenido y refactorizado toda la funcionalidad original, incluyendo el comando '''listo''' para finalizar tareas.
 *   **Código Limpio**: Se ha eliminado el antiguo archivo `bot.py`, completando la migración a la nueva estructura.
 
 **Estado Actual:** El bot de Telegram ha sido completamente refactorizado y ahora se comunica con nuestra nueva API. La interfaz de usuario principal del sistema es ahora más robusta y escalable.
 
 **Próximo Paso:** Iniciar la **FASE 6: Pruebas y Calidad de Código**, donde nos aseguraremos de que todo lo que hemos construido funcione correctamente y sea fiable.
+
+---
+
+## 28 de Agosto de 2025
+
+### Hito: Inicio de la FASE 6 - Pruebas y Calidad de Código
+
+Retomando el proyecto. El objetivo de esta fase es asegurar la robustez, fiabilidad y calidad del código de toda la aplicación refactorizada.
+
+**Plan de Acción para la FASE 6:**
+
+1.  **Análisis de Dependencias:** Revisar `pyproject.toml` para confirmar el entorno de trabajo. (Completado)
+2.  **Revisión de la Configuración de Pruebas:** Inspeccionar `.env.example` y `pytest.ini` para asegurar que el entorno de pruebas esté configurado correctamente.
+3.  **Ejecución de la Suite de Pruebas:** Correr todos los tests existentes con `pytest` para obtener una línea base del estado actual de la aplicación.
+4.  **Análisis de Cobertura (Coverage):** Evaluar el informe de cobertura de pruebas para identificar áreas críticas sin testear.
+5.  **Análisis de Calidad de Código (Linting):** Ejecutar `ruff` y `mypy` para detectar errores, inconsistencias y problemas de tipado en el código.
+6.  **Revisión y Refactorización (si es necesario):** Basado en los resultados de las pruebas y el linting, identificar y corregir los problemas encontrados.
+
+Comenzamos con el punto 2: Revisión de la Configuración de Pruebas.

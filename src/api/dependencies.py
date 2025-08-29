@@ -6,7 +6,7 @@ Dependencias de FastAPI para la aplicación.
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt
+from jose import jwt # type: ignore # Added type: ignore
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -61,7 +61,7 @@ async def get_current_active_superuser(
     """
     Dependencia para obtener el superusuario activo actual.
     """
-    if not current_user.is_superuser:
+    if not current_user.is_superuser: # This line will now be valid after Usuario model update
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
         )
