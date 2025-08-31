@@ -5,7 +5,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
 from typing import List, Optional
-from pydantic import Field, PostgresDsn, field_validator, ValidationInfo
+from pydantic import Field, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -25,29 +25,11 @@ class Settings(BaseSettings):
 
     # === API ===
     API_V1_STR: str = Field("/api/v1")
-    SECRET_KEY: str = Field(...)
+    SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # === BASE DE DATOS ===
-    POSTGRES_SERVER: str = Field("localhost")
-    POSTGRES_USER: str = Field("gad_user")
-    POSTGRES_PASSWORD: str = Field(...)
-    POSTGRES_DB: str = Field("gad_db")
-    POSTGRES_PORT: int = Field(5432)
-    DATABASE_URL: Optional[PostgresDsn] = None
-
-    @field_validator("DATABASE_URL", mode="before")
-    def assemble_db_connection(cls, v: Optional[str], info: ValidationInfo) -> str:
-        """Construye la URL de conexión a la base de datos."""
-        if isinstance(v, str):
-            return v
-        return (
-            f"postgresql+asyncpg://{info.data.get('POSTGRES_USER')}:"
-            f"{info.data.get('POSTGRES_PASSWORD')}@"
-            f"{info.data.get('POSTGRES_SERVER')}:"
-            f"{info.data.get('POSTGRES_PORT')}/"
-            f"{info.data.get('POSTGRES_DB') or ''}"
-        )
+    DB_URL: str
 
     # === REDIS (CACHÉ) ===
     REDIS_HOST: str = Field("localhost")
@@ -56,10 +38,15 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: Optional[str] = Field(None)
 
     # === TELEGRAM BOT ===
-    TELEGRAM_BOT_TOKEN: str = Field(...)
+    TELEGRAM_TOKEN: str
+    ADMIN_CHAT_ID: str
+    WHITELIST_IDS: List[int]
     TELEGRAM_WEBHOOK_URL: Optional[str] = Field(None)
     TELEGRAM_WEBHOOK_PATH: str = Field("/webhook/telegram")
     TELEGRAM_WEBHOOK_PORT: int = Field(8000)
+
+    # === TIMEZONE ===
+    TZ: str = Field("UTC")
 
     # === SEGURIDAD ===
     USERS_OPEN_REGISTRATION: bool = Field(False)
@@ -73,7 +60,7 @@ class Settings(BaseSettings):
     PROMETHEUS_ENABLED: bool = Field(True)
 
     model_config = SettingsConfigDict(
-        case_sensitive=True, env_file=".env", env_file_encoding="utf-8"
+        case_sensitive=False, env_file=".env", env_file_encoding="utf-8"
     )
 
 

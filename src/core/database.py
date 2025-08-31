@@ -11,7 +11,7 @@ from config.settings import settings
 
 # Crear el motor de base de datos asíncrono
 async_engine = create_async_engine(
-    str(settings.DATABASE_URL),
+    str(settings.DB_URL),
     pool_pre_ping=True,
     echo=settings.DEBUG,
 )
