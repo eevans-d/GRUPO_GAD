@@ -1,35 +1,36 @@
-from __future__ import annotations
-
 # -*- coding: utf-8 -*-
 """
 Modelo de Tarea para el sistema GRUPO_GAD.
 """
+from __future__ import annotations
 
-from typing import Optional, List, TYPE_CHECKING
-from datetime import datetime, timedelta
-from sqlalchemy import (
-    String,
-    Integer,
-    DateTime,
-    Numeric,
-    Text,
-    ForeignKey,
-    CheckConstraint,
-)
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID as sa_UUID, ENUM
-from sqlalchemy.ext.hybrid import hybrid_property
 import uuid
+from datetime import datetime, timedelta
+from typing import TYPE_CHECKING, List, Optional
 
-from .base import Base, CustomJsonB, CustomArray
-from src.shared.constants import TaskStatus, TaskPriority, TaskType
-from .associations import tarea_efectivos  # Add this line
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Text,
+)
+from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy.dialects.postgresql import UUID as sa_UUID
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from src.shared.constants import TaskPriority, TaskStatus, TaskType
+
+from .associations import tarea_efectivos
+from .base import Base, CustomArray, CustomJsonB
 
 if TYPE_CHECKING:
-    from .usuario import Usuario
     from .efectivo import Efectivo
     from .historial_estado import HistorialEstado
+    from .usuario import Usuario
 
 
 class Tarea(Base):

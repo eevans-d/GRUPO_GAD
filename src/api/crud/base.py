@@ -3,7 +3,7 @@
 Clase base para las operaciones CRUD (Create, Read, Update, Delete).
 """
 
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Sequence # Added Sequence
+from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union, Sequence # Added Sequence
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel

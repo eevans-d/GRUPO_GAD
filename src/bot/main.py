@@ -6,7 +6,7 @@ Punto de entrada principal para el bot de Telegram de GRUPO_GAD.
 import logging
 import asyncio # Added asyncio
 
-from telegram.ext import Application, ApplicationBuilder # Changed import
+from telegram.ext import ApplicationBuilder # Changed import
 
 from config.settings import settings
 from src.bot.handlers import register_handlers
