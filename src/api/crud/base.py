@@ -3,7 +3,16 @@
 Clase base para las operaciones CRUD (Create, Read, Update, Delete).
 """
 
-from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union, Sequence # Added Sequence
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -78,7 +87,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.refresh(db_obj)
         return db_obj
 
-    async def remove(self, db: AsyncSession, *, id: int) -> Optional[ModelType]: # Changed return type
+    async def remove(
+        self, db: AsyncSession, *, id: int
+    ) -> Optional[ModelType]:
         """
         Elimina un registro.
         """

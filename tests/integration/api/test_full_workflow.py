@@ -4,7 +4,6 @@ Tests de integración para un flujo de trabajo completo de la API.
 """
 
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 

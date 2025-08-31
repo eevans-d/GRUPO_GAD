@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# -*- coding: utf-8 -*-
 """
 Modelo de Usuario para el sistema GRUPO_GAD.
 """

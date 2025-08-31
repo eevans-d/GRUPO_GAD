@@ -61,7 +61,7 @@ async def get_current_active_superuser(
     """
     Dependencia para obtener el superusuario activo actual.
     """
-    if not current_user.is_superuser: # This line will now be valid after Usuario model update
+    if not current_user.is_superuser:
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
         )

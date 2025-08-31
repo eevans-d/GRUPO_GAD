@@ -5,7 +5,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
 from typing import List, Optional
-from pydantic import Field, PostgresDsn, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
