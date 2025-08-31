@@ -37,8 +37,17 @@ class TareaCreate(TareaBase):
 
 
 # Propiedades para la actualización
-class TareaUpdate(TareaBase):
-    pass
+class TareaUpdate(BaseModel):
+    codigo: Optional[str] = None
+    titulo: Optional[str] = None
+    descripcion: Optional[str] = None
+    estado: Optional[TaskStatus] = None
+    tipo: Optional[TaskType] = None
+    prioridad: Optional[TaskPriority] = None
+    inicio_programado: Optional[datetime] = None
+    fin_programado: Optional[datetime] = None
+    delegado_usuario_id: Optional[int] = None
+    efectivos_asignados: Optional[List[int]] = None
 
 
 # Propiedades compartidas por los modelos en la BD

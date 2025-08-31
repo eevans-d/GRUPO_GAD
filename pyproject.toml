@@ -19,6 +19,8 @@ python-telegram-bot = "^20.6"
 requests = "^2.31.0"
 redis = "^5.0.1"
 python-multipart = "^0.0.20"
+loguru = "^0.7.3"
+alembic = "^1.16.5"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"

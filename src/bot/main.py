@@ -3,22 +3,33 @@
 Punto de entrada principal para el bot de Telegram de GRUPO_GAD.
 """
 
-import logging
-import asyncio # Added asyncio
+import sys
+import asyncio
+from loguru import logger
 
-from telegram.ext import ApplicationBuilder # Changed import
+from telegram.ext import ApplicationBuilder
 
 from config.settings import settings
 from src.bot.handlers import register_handlers
 
-# Enable logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+# --- Configuración de Loguru ---
+# Eliminar el handler por defecto para evitar duplicados
+logger.remove()
+# Añadir un handler para la consola
+logger.add(sys.stdout, colorize=True, format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>")
+# Añadir un handler para el archivo de log del bot
+logger.add(
+    "logs/bot.log",
+    rotation="10 MB",
+    retention="7 days",
+    enqueue=True,
+    backtrace=True,
+    diagnose=True,
+    format="{time} {level} {message}"
 )
-logger = logging.getLogger(__name__)
 
 
-async def main() -> None: # Changed to async def
+async def main() -> None:
     """Inicia el bot."""
     if not settings.TELEGRAM_BOT_TOKEN:
         logger.critical(
@@ -26,20 +37,21 @@ async def main() -> None: # Changed to async def
         )
         return
 
-    # Create the Application and pass it your bot's token.
+    # Crear la aplicación y pasarle el token del bot.
     application = (
-        ApplicationBuilder.builder() # type: ignore # Added type: ignore
+        ApplicationBuilder()
         .token(settings.TELEGRAM_BOT_TOKEN)
         .build()
     )
 
-    # Register all handlers
-    register_handlers(application.dispatcher)
+    # Registrar todos los handlers
+    register_handlers(application)
 
-    # Start the Bot
+    # Iniciar el Bot
     logger.info("Bot iniciado y escuchando...")
-    await application.run_polling() # Changed to await application.run_polling()
+    await application.run_polling()
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) # Changed to run async main
+    logger.info("Iniciando el bot...")
+    asyncio.run(main())

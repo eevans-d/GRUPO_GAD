@@ -32,7 +32,15 @@ class UsuarioCreate(UsuarioBase):
 
 
 # Propiedades para la actualización
-class UsuarioUpdate(UsuarioBase):
+class UsuarioUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    nombre: Optional[str] = None
+    apellido: Optional[str] = None
+    dni: Optional[str] = None
+    telefono: Optional[str] = None
+    telegram_id: Optional[int] = None
+    nivel: Optional[UserLevel] = None
+    verificado: Optional[bool] = None
     password: Optional[str] = None
 
 

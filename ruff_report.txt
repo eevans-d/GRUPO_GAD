@@ -1,0 +1,60 @@
+src/api/crud/base.py:
+   6:89 E501 Line too long (96 > 88 characters)
+  81:89 E501 Line too long (102 > 88 characters)
+
+src/api/dependencies.py:
+  64:89 E501 Line too long (94 > 88 characters)
+
+src/api/models/__init__.py:
+  13:28 F811 Redefinition of unused `MetricaTarea` from line 12
+
+src/api/models/tarea.py:
+  49:89 E501 Line too long (93 > 88 characters)
+
+src/api/models/usuario.py:
+   8:1 E402 Module level import not at top of file
+   9:1 E402 Module level import not at top of file
+  10:1 E402 Module level import not at top of file
+  11:1 E402 Module level import not at top of file
+  12:1 E402 Module level import not at top of file
+  13:1 E402 Module level import not at top of file
+  15:1 E402 Module level import not at top of file
+  16:1 E402 Module level import not at top of file
+
+src/api/routers/users.py:
+  15:89 E501 Line too long (103 > 88 characters)
+
+src/bot/commands/crear_tarea.py:
+  18:89 E501 Line too long (92 > 88 characters)
+  25:89 E501 Line too long (160 > 88 characters)
+  34:89 E501 Line too long (92 > 88 characters)
+  39:89 E501 Line too long (122 > 88 characters)
+  46:89 E501 Line too long (153 > 88 characters)
+  60:89 E501 Line too long (95 > 88 characters)
+  63:89 E501 Line too long (151 > 88 characters)
+
+src/bot/commands/finalizar_tarea.py:
+  12:89 E501 Line too long (90 > 88 characters)
+  31:89 E501 Line too long (98 > 88 characters)
+
+src/bot/handlers/messages/message_handler.py:
+   8:89 E501 Line too long (94 > 88 characters)
+  13:89 E501 Line too long (95 > 88 characters)
+  32:89 E501 Line too long (102 > 88 characters)
+  37:89 E501 Line too long (94 > 88 characters)
+  40:89 E501 Line too long (109 > 88 characters)
+
+src/core/database.py:
+  7:89 E501 Line too long (105 > 88 characters)
+
+src/core/security.py:
+  21:89 E501 Line too long (91 > 88 characters)
+
+tests/conftest.py:
+   8:89 E501 Line too long (89 > 88 characters)
+  34:89 E501 Line too long (92 > 88 characters)
+
+tests/unit/core/test_security.py:
+  32:89 E501 Line too long (93 > 88 characters)
+
+Found 33 errors.
