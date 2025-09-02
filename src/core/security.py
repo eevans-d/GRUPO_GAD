@@ -4,9 +4,9 @@ Funciones de seguridad, como hashing de contraseñas y gestión de tokens JWT.
 """
 
 from datetime import datetime, timedelta, timezone
-from typing import Any, Union, Optional # Added Optional
+from typing import Any, Optional, Union
 
-from jose import jwt # type: ignore # Added type: ignore
+from jose import jwt
 from passlib.context import CryptContext
 
 from config.settings import settings
@@ -17,8 +17,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ALGORITHM = "HS256"
 
 
-def create_access_token(
-    subject: Union[str, Any], expires_delta: Optional[timedelta] = None # Changed type hint
+def def create_access_token(
+    subject: Union[str, Any], expires_delta: Optional[timedelta] = None
 ) -> str:
     """
     Crea un nuevo token de acceso JWT.

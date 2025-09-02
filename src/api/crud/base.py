@@ -39,12 +39,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Obtiene un registro por su ID.
         """
-        result = await db.execute(select(self.model).filter(self.model.id == id)) # type: ignore # Added type: ignore
+        query = select(self.model).filter(self.model.id == id)  # type: ignore
+        result = await db.execute(query)
         return result.scalars().first()
 
     async def get_multi(
         self, db: AsyncSession, *, skip: int = 0, limit: int = 100
-    ) -> Sequence[ModelType]: # Changed return type
+    ) -> Sequence[ModelType]:
         """
         Obtiene múltiples registros con paginación.
         """
@@ -76,7 +77,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.model_dump(exclude_unset=True)
+            update_data = obj_in.model_dump(
+                exclude_unset=True
+            )
 
         for field in update_data:
             if hasattr(db_obj, field):

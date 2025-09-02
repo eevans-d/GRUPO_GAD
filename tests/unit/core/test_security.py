@@ -29,9 +29,21 @@ def test_create_access_token():
 
 def test_create_access_token_with_delta():
     """
-    Test para verificar que la creación de tokens de acceso con delta funciona correctamente.
+    Test para verificar que la creación de tokens de acceso con delta funciona
+    correctamente.
     """
     subject = "testuser"
     delta = timedelta(minutes=30)
     token = create_access_token(subject, expires_delta=delta)
     assert isinstance(token, str)
+
+
+def test_password_hashing_with_different_passwords():
+    """
+    Test para verificar que el hashing de contraseñas no coincide con
+    contraseñas diferentes.
+    """
+    password = "testpassword"
+    wrong_password = "wrongpassword"
+    hashed_password = get_password_hash(password)
+    assert not verify_password(wrong_password, hashed_password)

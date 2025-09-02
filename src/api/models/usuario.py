@@ -4,15 +4,18 @@ from __future__ import annotations
 Modelo de Usuario para el sistema GRUPO_GAD.
 """
 
-from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, Integer, Boolean, DateTime, BigInteger
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID as sa_UUID, ENUM
 import uuid
 from datetime import datetime, timezone
+from typing import List, Optional, TYPE_CHECKING
+
+from sqlalchemy import BigInteger, Boolean, DateTime, Integer, String
+from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy.dialects.postgresql import UUID as sa_UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.shared.constants import UserLevel
 
 from .base import Base, CustomJsonB
-from src.shared.constants import UserLevel
 
 
 if TYPE_CHECKING:

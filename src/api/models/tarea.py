@@ -46,7 +46,8 @@ class Tarea(Base):
         CheckConstraint(
             "(inicio_real IS NULL AND fin_real IS NULL) OR "
             "(inicio_real IS NOT NULL AND fin_real IS NULL) OR "
-            "(inicio_real IS NOT NULL AND fin_real IS NOT NULL AND fin_real >= inicio_real)",
+            "(inicio_real IS NOT NULL AND fin_real IS NOT NULL AND "
+            "fin_real >= inicio_real)",
             name="chk_tareas_fechas_reales",
         ),
         {"schema": "gad"},

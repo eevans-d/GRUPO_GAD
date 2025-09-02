@@ -4,8 +4,12 @@ Configuración y gestión de la sesión de la base de datos.
 """
 
 from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker # Changed import
-# from sqlalchemy.orm import sessionmaker # Removed import
+
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from config.settings import settings
 
@@ -17,7 +21,7 @@ async_engine = create_async_engine(
 )
 
 # Crear una fábrica de sesiones asíncronas
-AsyncSessionFactory = async_sessionmaker( # Changed to async_sessionmaker
+AsyncSessionFactory = async_sessionmaker(
     bind=async_engine,
     class_=AsyncSession,
     expire_on_commit=False,

@@ -13,7 +13,16 @@ from config.settings import settings
 # Eliminar el handler por defecto para evitar duplicados en la consola
 logger.remove()
 # Añadir un handler para la consola con un formato simple
-logger.add(sys.stdout, colorize=True, format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>")
+logger.add(
+    sys.stdout,
+    colorize=True,
+    format=(
+        "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
+        "<level>{level: <8}</level> | "
+        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+        "<level>{message}</level>"
+    ),
+)
 # Añadir un handler para escribir logs a un archivo, con rotación y retención
 logger.add(
     "logs/api.log",
