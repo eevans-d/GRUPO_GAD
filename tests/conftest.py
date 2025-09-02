@@ -5,7 +5,7 @@ Define fixtures para crear un entorno de prueba aislado y consistente:
 - Configura una base de datos SQLite en memoria.
 - Crea y destruye las tablas de la base de datos para cada sesión de prueba.
 - Sobrescribe las dependencias de la aplicación para usar la base de datos de prueba.
-- Proporciona un cliente de prueba de FastAPI (`TestClient`) para interactuar con la API.
+- Ofrece un cliente (`TestClient`) para interactuar con la API.
 """
 import asyncio
 

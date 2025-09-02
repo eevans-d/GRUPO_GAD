@@ -1,8 +1,8 @@
-from __future__ import annotations
-
 """
 Modelo de Usuario para el sistema GRUPO_GAD.
 """
+
+from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
