@@ -10,7 +10,7 @@
 # --- Configuración ---
 REMOTE_USER="root"                      # Usuario SSH en tu VPS
 REMOTE_HOST="YOUR_VPS_IP"               # IP de tu VPS
-DOMAIN="staging.tu-dominio.com"         # Dominio de staging para los health checks
+DOMAIN="staging.midominio.com"  # Dominio público para los health checks
 PROJECT_DIR="/root/gad-project"         # Directorio del proyecto en el VPS
 
 # --- ¡ATENCIÓN! ---

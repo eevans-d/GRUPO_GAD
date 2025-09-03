@@ -25,6 +25,8 @@ class Settings(BaseSettings):
 
     # === API ===
     API_V1_STR: str = Field("/api/v1")
+    # La SECRET_KEY debe ser proporcionada a través de una variable de entorno.
+    # Es crucial para la seguridad de la aplicación (ej. JWT).
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
@@ -32,7 +34,7 @@ class Settings(BaseSettings):
     DB_URL: str
 
     # === REDIS (CACHÉ) ===
-    REDIS_HOST: str = Field("localhost")
+    REDIS_HOST: str = Field("redis")
     REDIS_PORT: int = Field(6379)
     REDIS_DB: int = Field(0)
     REDIS_PASSWORD: Optional[str] = Field(None)
