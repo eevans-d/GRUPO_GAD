@@ -12,6 +12,7 @@ fastapi = "^0.103.0"
 uvicorn = {extras = ["standard"], version = "^0.23.2"}
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.20"}
 asyncpg = "^0.28.0"
+psycopg2-binary = "^2.9.9"  # Driver para Alembic
 pydantic = "^2.3.0"
 pydantic-settings = "^2.1.0"
 email-validator = "^2.1.1"
@@ -20,14 +21,15 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-telegram-bot = "^20.6"
 requests = "^2.31.0"
 redis = "^5.0.1"
-python-multipart = "^0.0.20"
+python-multipart = "^0.0.7" # Para OAuth2 forms
 loguru = "^0.7.3"
 alembic = "^1.16.5"
+httpx = "^0.25.0" # Para comunicación Bot-API
+geopy = "^2.4.1" # Para geocodificación del dashboard
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 pytest-asyncio = "^0.21.1"
-httpx = "^0.25.0"
 ruff = "^0.0.292"
 black = "^23.9.1"
 mypy = "^1.5.1"

@@ -42,6 +42,9 @@ RUN addgroup --system app && adduser --system --group app
 # Copiar código fuente
 COPY . .
 
+# Copiar script de inicio
+COPY scripts/start.sh /app/start.sh
+
 # Cambiar propietario
 RUN chown -R app:app $APP_HOME
 
@@ -52,4 +55,4 @@ USER app
 EXPOSE 8000
 
 # Comando de inicio
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/start.sh"]

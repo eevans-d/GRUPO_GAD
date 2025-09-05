@@ -5,7 +5,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
 from typing import List, Optional
-from pydantic import Field
+from pydantic import Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -31,7 +31,22 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # === BASE DE DATOS ===
-    DB_URL: str
+    POSTGRES_SERVER: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
+    DB_URL: Optional[str] = None
+
+    @validator("DB_URL", pre=True)
+    def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
+        if isinstance(v, str):
+            return v
+        return (
+            f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:"
+            f"{values.get('POSTGRES_PASSWORD')}@"
+            f"{values.get('POSTGRES_SERVER')}/"
+            f"{values.get('POSTGRES_DB')}"
+        )
 
     # === REDIS (CACHÉ) ===
     REDIS_HOST: str = Field("redis")
