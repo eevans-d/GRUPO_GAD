@@ -4,9 +4,11 @@ Punto de entrada principal para la API de GRUPO_GAD.
 """
 import sys
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from loguru import logger
 
 from src.api.routers import api_router
+from src.api.routers import dashboard as dashboard_router
 from config.settings import settings
 
 # --- Configuración de Loguru ---
@@ -49,6 +51,11 @@ async def log_requests(request: Request, call_next):
     logger.info(f"Response: {response.status_code}")
     return response
 
+# Montar archivos estáticos para el dashboard
+app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")
+
+# Incluir routers
+app.include_router(dashboard_router.router)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 logger.info("API iniciada y lista para recibir peticiones.")

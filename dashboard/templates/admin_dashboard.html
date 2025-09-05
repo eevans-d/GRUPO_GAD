@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRUPO_GAD - Centro de Control Administrativo</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+background: #f0f2f5;
+overflow: hidden;
+}
+
+/* === LAYOUT PRINCIPAL === */
+.dashboard-container {
+display: grid;
+grid-template-columns: 1.5fr 450px;
+grid-template-rows: 60px 1fr;
+height: 100vh;
+gap: 12px;
+padding: 12px;
+}
+
+/* === HEADER === */
+.header {
+grid-column: 1/-1;
+background: linear-gradient(135deg, #1e3c72, #2a5298);
+color: white;
+padding: 10px 20px;
+border-radius: 8px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.header-info {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+.status-badge {
+background: rgba(255,255,255,0.2);
+padding: 5px 10px;
+border-radius: 15px;
+font-size: 12px;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+/* === MAPA === */
+.map-section {
+background: white;
+border-radius: 8px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+position: relative;
+overflow: hidden;
+}
+#main-map {
+height: 100%;
+width: 100%;
+min-height: 400px;
+}
+.map-controls {
+position: absolute;
+top: 10px;
+left: 10px;
+z-index: 1000;
+background: rgba(255,255,255,0.95);
+padding: 10px;
+border-radius: 6px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+backdrop-filter: blur(5px);
+}
+
+/* === PANEL LATERAL === */
+.side-panel {
+background: white;
+border-radius: 8px;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+overflow: hidden;
+display: flex;
+flex-direction: column;
+}
+.tabs {
+display: flex;
+background: #f8f9fa;
+border-bottom: 2px solid #dee2e6;
+flex-wrap: wrap;
+}
+.tab {
+flex: 1;
+padding: 10px 4px;
+border: none;
+background: transparent;
+cursor: pointer;
+font-size: 14px;
+font-weight: 500;
+color: #6c757d;
+transition: all 0.2s;
+min-width: 50px;
+}
+.tab.active {
+background: white;
+color: #007bff;
+border-bottom: 2px solid #007bff;
+}
+.tab:hover {
+background: rgba(0,123,255,0.1);
+}
+.tab-panel {
+flex: 1;
+overflow-y: auto;
+padding: 15px;
+display: none;
+}
+.tab-panel.active {
+display: block;
+}
+
+/* === COMPONENTES === */
+.metric-card {
+background: linear-gradient(135deg, #667eea, #764ba2);
+color: white;
+padding: 12px;
+border-radius: 6px;
+text-align: center;
+margin-bottom: 10px;
+}
+.metric-value {
+font-size: 24px;
+font-weight: bold;
+margin-bottom: 4px;
+}
+.metric-label {
+font-size: 11px;
+opacity: 0.9;
+}
+.btn {
+padding: 8px 12px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 12px;
+font-weight: 500;
+transition: all 0.2s;
+background: #e9ecef;
+text-decoration: none;
+display: inline-block;
+text-align: center;
+}
+.btn:hover {
+transform: translateY(-1px);
+box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.btn-primary { background: #007bff; color: white; }
+.btn-success { background: #28a745; color: white; }
+.btn-danger { background: #dc3545; color: white; }
+.btn-warning { background: #ffc107; color: black; }
+.btn-info { background: #17a2b8; color: white; }
+.btn-sm { padding: 6px 10px; font-size: 11px; }
+.input {
+width: 100%;
+padding: 8px;
+border: 1px solid #dee2e6;
+border-radius: 4px;
+font-size: 12px;
+}
+.input:focus {
+outline: none;
+border-color: #007bff;
+box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+}
+.card {
+background: #f8f9fa;
+border: 1px solid #dee2e6;
+border-radius: 4px;
+padding: 10px;
+margin-bottom: 10px;
+}
+.user-card {
+cursor: pointer;
+transition: background 0.2s;
+}
+.user-card:hover {
+background: #e9ecef;
+}
+.user-card.online {
+border-left: 3px solid #28a745;
+}
+.note {
+background: #fff3cd;
+border: 1px solid #ffc107;
+border-radius: 4px;
+padding: 8px;
+margin-bottom: 8px;
+position: relative;
+font-size: 12px;
+}
+.note-delete {
+position: absolute;
+top: 5px;
+right: 5px;
+background: none;
+border: none;
+color: #dc3545;
+cursor: pointer;
+font-size: 16px;
+}
+.telegram-box {
+border: 2px solid #0088cc;
+border-radius: 6px;
+margin-bottom: 15px;
+}
+.telegram-header {
+background: #0088cc;
+color: white;
+padding: 8px;
+font-weight: 600;
+font-size: 13px;
+}
+.telegram-body {
+padding: 10px;
+}
+.link-oficial {
+display: block;
+text-decoration: none;
+color: #007bff;
+font-size: 12px;
+transition: background 0.2s;
+padding: 5px;
+border-radius: 4px;
+}
+.link-oficial:hover {
+background: #f8f9fa;
+text-decoration: none;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+.dashboard-container {
+grid-template-columns: 1fr;
+grid-template-rows: auto 400px auto;
+}
+.tabs {
+font-size: 12px;
+}
+.tab {
+padding: 8px 2px;
+font-size: 12px;
+}
+}
+
+/* === ANIMACIONES === */
+@keyframes slideIn {
+from { transform: translateX(100%); opacity: 0; }
+to { transform: translateX(0); opacity: 1; }
+}
+.notification {
+position: fixed;
+top: 20px;
+right: 20px;
+padding: 12px 16px;
+border-radius: 6px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+z-index: 9999;
+animation: slideIn 0.3s ease;
+font-size: 13px;
+max-width: 300px;
+}
+.notification.success { background: #28a745; color: white; }
+.notification.error { background: #dc3545; color: white; }
+.notification.warning { background: #ffc107; color: black; }
+.notification.info { background: #17a2b8; color: white; }
+</style>
+</head>
+<body>
+<div class="dashboard-container">
+  <!-- === HEADER === -->
+  <div class="header">
+    <div class="header-info">
+      <div>
+        <div style="font-size: 18px; font-weight: 600;">🚔 GRUPO_GAD</div>
+        <div style="font-size: 11px; opacity: 0.9;">Centro de Control Administrativo</div>
+      </div>
+      <div class="status-badge">
+        <span id="status-indicator">🟢</span>
+        <span>Sistema</span>
+      </div>
+      <div class="status-badge">
+        <span>👮</span>
+        <span id="active-users">0 activos</span>
+      </div>
+      <div class="status-badge">
+        <span>🚨</span>
+        <span id="emergency-count">0 emergencias</span>
+      </div>
+      <div class="status-badge" id="clock">--:--:--</div>
+    </div>
+    <button class="btn btn-danger" onclick="dashboard.logout()">🚪 Cerrar Sesión</button>
+  </div>
+
+  <!-- === MAPA === -->
+  <div class="map-section">
+    <div id="main-map"></div>
+    <div class="map-controls">
+      <div style="margin-bottom: 8px;">
+        <input id="search-address" class="input" placeholder="Buscar dirección..." 
+               style="width: 200px; display: inline-block;" 
+               onkeypress="if(event.key === 'Enter') dashboard.searchAddress()"/>
+        <button class="btn btn-primary" onclick="dashboard.searchAddress()">🔍</button>
+      </div>
+      <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+        <button class="btn btn-info" onclick="dashboard.toggleLayer('usuarios')" id="btn-usuarios">👮</button>
+        <button class="btn btn-info" onclick="dashboard.toggleLayer('tareas')" id="btn-tareas">📋</button>
+        <button class="btn btn-danger" onclick="dashboard.toggleLayer('emergencias')" id="btn-emergencias">🚨</button>
+        <button class="btn btn-success" onclick="dashboard.refreshMap()">🔄</button>
+        <button class="btn btn-warning" onclick="dashboard.openInGoogleMaps()">🗺</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === PANEL LATERAL === -->
+  <div class="side-panel">
+    <div class="tabs">
+      <button class="tab active" data-tab="dashboard">📊</button>
+      <button class="tab" data-tab="telegram">📱</button>
+      <button class="tab" data-tab="users">👥</button>
+      <button class="tab" data-tab="notes">📝</button>
+      <button class="tab" data-tab="emergency">🚨</button>
+      <button class="tab" data-tab="links">🔗</button>
+      <button class="tab" data-tab="osint">🔍</button>
+    </div>
+
+    <!-- === TAB: DASHBOARD === -->
+    <div class="tab-panel active" data-panel="dashboard">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+        <div class="metric-card">
+          <div class="metric-value" id="metric-tasks">0</div>
+          <div class="metric-label">Tareas Activas</div>
+        </div>
+        <div class="metric-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+          <div class="metric-value" id="metric-officers">0</div>
+          <div class="metric-label">Efectivos</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4 style="margin-bottom: 10px; font-size: 14px;">⚡ Acciones Rápidas</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button class="btn btn-danger" onclick="dashboard.quickEmergency()">🚨 Emergencia</button>
+          <button class="btn btn-warning" onclick="dashboard.broadcastAlert()">📢 Alerta</button>
+          <button class="btn btn-info" onclick="dashboard.requestStatus()">📊 Estado</button>
+          <button class="btn btn-success" onclick="dashboard.refreshAll()">🔄 Actualizar</button>
+        </div>
+      </div>
+      <!-- Protocolos de emergencia se añaden dinámicamente por JavaScript -->
+    </div>
+
+    <!-- === TAB: TELEGRAM === -->
+    <div class="tab-panel" data-panel="telegram">
+      <div class="telegram-box">
+        <div class="telegram-header">📱 Control Telegram</div>
+        <div class="telegram-body">
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; font-size: 11px; margin-bottom: 4px;">Grupo:</label>
+            <select id="tg-group" class="input">
+              <option value="general">General (Todos)</option>
+              <option value="supervisores">Supervisores</option>
+              <option value="emergencias">Emergencias</option>
+              <option value="operaciones">Operaciones</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; font-size: 11px; margin-bottom: 4px;">Tipo:</label>
+            <select id="tg-type" class="input">
+              <option value="normal">Normal</option>
+              <option value="alert">Alerta</option>
+              <option value="urgent">Urgente</option>
+              <option value="info">Información</option>
+            </select>
+          </div>
+          <textarea id="tg-message" class="input" placeholder="Mensaje..." style="height: 80px; resize: vertical;"></textarea>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn btn-primary" onclick="dashboard.sendTelegram()" style="flex: 1;">📤 Enviar</button>
+            <button class="btn" onclick="dashboard.clearTelegram()">🗑</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h5 style="font-size: 12px; margin-bottom: 8px;">Mensajes Rápidos:</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button class="btn btn-info" onclick="dashboard.quickMessage('status')">📊 Estado</button>
+          <button class="btn btn-warning" onclick="dashboard.quickMessage('meeting')">📅 Reunión</button>
+          <button class="btn btn-danger" onclick="dashboard.quickMessage('patrol')">🚔 Patrulla</button>
+          <button class="btn btn-success" onclick="dashboard.quickMessage('report')">📝 Reporte</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- === TAB: USUARIOS === -->
+    <div class="tab-panel" data-panel="users">
+      <div style="margin-bottom: 10px;">
+        <input id="search-users" class="input" placeholder="Buscar usuario..." oninput="dashboard.filterUsers(this.value)"/>
+      </div>
+      <div style="background: #e3f2fd; padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 11px;">
+        <strong>📊 Resumen:</strong> <span id="users-summary">Cargando...</span>
+      </div>
+      <div id="users-list" style="max-height: 400px; overflow-y: auto;">
+        <!-- Se carga dinámicamente -->
+      </div>
+      <button class="btn btn-primary" onclick="dashboard.loadUsers()" style="width: 100%; margin-top: 10px;">🔄 Actualizar Personal</button>
+    </div>
+
+    <!-- === TAB: NOTAS === -->
+    <div class="tab-panel" data-panel="notes">
+      <div style="margin-bottom: 15px;">
+        <textarea id="new-note" class="input" placeholder="Nueva nota..." style="height: 60px;" onkeydown="if(event.ctrlKey && event.key === 'Enter') dashboard.addNote()"></textarea>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button class="btn btn-success" onclick="dashboard.addNote()" style="flex: 1;">➕ Añadir</button>
+          <button class="btn btn-warning" onclick="dashboard.exportNotes()">📄</button>
+          <button class="btn btn-danger" onclick="dashboard.clearNotes()">🗑</button>
+        </div>
+      </div>
+      <div id="notes-list" style="max-height: 300px; overflow-y: auto;">
+        <!-- Se carga dinámicamente -->
+      </div>
+    </div>
+
+    <!-- === TAB: EMERGENCIAS === -->
+    <div class="tab-panel" data-panel="emergency">
+      <div class="card" style="background: #f8d7da; border-color: #f5c6cb;">
+        <h4 style="color: #721c24; margin-bottom: 10px; font-size: 14px;">🚨 Crear Emergencia</h4>
+        <div style="margin-bottom: 10px;">
+          <label style="display: block; font-size: 11px; margin-bottom: 4px;">Descripción:</label>
+          <textarea id="emergency-desc" class="input" placeholder="Descripción detallada de la emergencia..." style="height: 60px;"></textarea>
+        </div>
+        <button class="btn btn-danger" onclick="dashboard.createEmergency()" style="width: 100%;">🚨 CREAR EMERGENCIA</button>
+      </div>
+    </div>
+
+    <!-- === TAB: ENLACES OFICIALES === -->
+    <div class="tab-panel" data-panel="links">
+      <h4 style="margin-bottom: 15px; font-size: 14px;">🔗 Enlaces Oficiales GAD</h4>
+      <div class="card" style="padding: 10px; margin-bottom: 10px;">
+        <a href="https://www.mseg.gba.gov.ar/" target="_blank" rel="noopener noreferrer" class="link-oficial" onclick="dashboard.logAccess('MSEG_PBA')">
+          🏛 <strong>Ministerio Seguridad PBA</strong><br>
+          <small>Normativas y capacitaciones GAD</small>
+        </a>
+      </div>
+      <div class="card" style="padding: 10px; margin-bottom: 10px;">
+        <a href="https://www.argentina.gob.ar/seguridad" target="_blank" rel="noopener noreferrer" class="link-oficial" onclick="dashboard.logAccess('SEGURIDAD_NAC')">
+          📋 <strong>Seguridad Nacional</strong><br>
+          <small>Leyes federales aplicables</small>
+        </a>
+      </div>
+      <div class="card" style="padding: 10px; margin-bottom: 10px;">
+        <a href="https://x.com/policiapba" target="_blank" rel="noopener noreferrer" class="link-oficial" onclick="dashboard.logAccess('TWITTER_PBA')">
+          🐦 <strong>X Policía PBA</strong><br>
+          <small>Alertas públicas y operativos</small>
+        </a>
+      </div>
+      
+      <div class="card">
+        <h5 style="margin-bottom: 8px; font-size: 12px;">🗺 Herramientas de Mapeo</h5>
+        <div style="margin-bottom: 10px;">
+          <input id="map-search-address" class="input" placeholder="Dirección para investigar..."/>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px;">
+          <button class="btn btn-success btn-sm" onclick="dashboard.viewStreetView()">🏠 Vista Frontal</button>
+          <button class="btn btn-success btn-sm" onclick="dashboard.viewSatellite()">🛰 Vista Aérea</button>
+          <button class="btn btn-warning btn-sm" onclick="dashboard.viewBoth()">👁 Ambas Vistas</button>
+          <button class="btn btn-danger btn-sm" onclick="dashboard.markLocation()">📍 Marcar Punto</button>
+        </div>
+      </div>
+      
+      <div class="card" style="padding: 10px;">
+        <h5 style="margin-bottom: 8px; font-size: 12px;">🔍 Herramientas Rápidas</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <a href="https://www.whois.com/whois/" target="_blank" class="btn btn-info btn-sm">WHOIS</a>
+          <a href="https://www.shodan.io/" target="_blank" class="btn btn-info btn-sm">Shodan</a>
+          <a href="https://haveibeenpwned.com/" target="_blank" class="btn btn-info btn-sm">HIBP</a>
+          <a href="https://www.virustotal.com/" target="_blank" class="btn btn-info btn-sm">VirusTotal</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- === TAB: OSINT === -->
+    <div class="tab-panel" data-panel="osint">
+      <h4 style="margin-bottom: 15px; font-size: 14px;">🔍 Herramientas de Investigación</h4>
+      <div style="margin-bottom: 15px;">
+        <input id="osint-target" class="input" placeholder="DNI, nombre, dirección, teléfono, email..."/>
+      </div>
+      
+      <div class="card">
+        <h5 style="margin-bottom: 8px; font-size: 12px;">🌐 Búsquedas Públicas</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button class="btn btn-info btn-sm" onclick="dashboard.osintSearch('google')">🔍 Google</button>
+          <button class="btn btn-info btn-sm" onclick="dashboard.osintSearch('linkedin')">💼 LinkedIn</button>
+          <button class="btn btn-info btn-sm" onclick="dashboard.osintSearch('facebook')">👥 Facebook</button>
+          <button class="btn btn-info btn-sm" onclick="dashboard.osintSearch('instagram')">📷 Instagram</button>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h5 style="margin-bottom: 8px; font-size: 12px;">🏛 Consultas Oficiales</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button class="btn btn-warning btn-sm" onclick="dashboard.osintSearch('renaper')">🆔 RENAPER</button>
+          <button class="btn btn-warning btn-sm" onclick="dashboard.osintSearch('anses')">💰 ANSES</button>
+          <button class="btn btn-warning btn-sm" onclick="dashboard.osintSearch('registro')">🚗 Registro</button>
+          <button class="btn btn-warning btn-sm" onclick="dashboard.osintSearch('judicial')">⚖ Judicial</button>
+        </div>
+      </div>
+      
+      <button class="btn btn-danger" onclick="dashboard.osintSearch('comprehensive')" style="width: 100%; margin-top: 10px;">🎯 Investigación Completa</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/static/dashboard.js"></script>
+</body>
+</html>
