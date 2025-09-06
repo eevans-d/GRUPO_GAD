@@ -27,3 +27,4 @@ data/
 
 # Env files (guarda solo el .env.example)
 .env
+.env.production
