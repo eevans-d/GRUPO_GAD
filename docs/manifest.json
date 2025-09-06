@@ -1,0 +1,25 @@
+{
+  "project": {
+    "name": "TU_PROYECTO",
+    "version": "0.1.0",
+    "description": "Proyecto con Guardrails Standard"
+  },
+  "dependencies": {
+    "allowlist": {
+      "npm": ["express", "zod", "dotenv", "pino", "cors"],
+      "pypi": ["fastapi", "uvicorn", "pydantic", "python-dotenv", "pytest", "requests"]
+    },
+    "dev_allowlist": {
+      "npm": ["typescript", "ts-node", "eslint", "@typescript-eslint/parser", "@typescript-eslint/eslint-plugin", "jest", "ts-jest", "@types/jest", "supertest", "@types/supertest"]
+    }
+  },
+  "testing_policy": {
+    "unit_min_coverage_pct": 50,
+    "smoke_required": true
+  },
+  "invariants": [
+    "Validar inputs con esquemas cuando aplique",
+    "No dependencias fuera de allowlist sin justificación",
+    "Tests mínimos por módulo nuevo"
+  ]
+}
