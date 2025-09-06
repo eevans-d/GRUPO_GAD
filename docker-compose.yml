@@ -1,24 +1,28 @@
 version: '3.8'
 
+# Archivo de Docker Compose para el entorno de PRODUCCIÓN.
+# Diferencias clave con el docker-compose.yml de desarrollo:
+# - Utiliza un archivo .env.production para las variables de entorno.
+# - No expone los puertos de la base de datos (PostgreSQL) ni de Redis al host.
+#   La comunicación con estos servicios debe ocurrir a través de la red interna de Docker.
+# - El puerto de la API (8000) se mantiene expuesto para que un reverse proxy (como Nginx o Traefik)
+#   pueda redirigir el tráfico externo hacia él.
+
 services:
   db:
     image: postgres:15-alpine
-    container_name: gad_db
+    container_name: gad_db_prod
     restart: unless-stopped
+    env_file:
+      - ./.env.production
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-gad_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gad_password}
-      POSTGRES_DB: ${POSTGRES_DB:-gad_db}
       POSTGRES_INITDB_ARGS: "-E UTF8"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
-    ports:
-      - "5433:5432"
+      - postgres_data_prod:/var/lib/postgresql/data
     networks:
-      - gad-network
+      - gad-network-prod
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gad_user} -d ${POSTGRES_DB:-gad_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -30,15 +34,13 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: gad_redis
+    container_name: gad_redis_prod
     restart: unless-stopped
     command: redis-server --appendonly yes
     volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
+      - redis_data_prod:/data
     networks:
-      - gad-network
+      - gad-network-prod
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -54,17 +56,14 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.api
-    container_name: gad_api
+    container_name: gad_api_prod
     restart: unless-stopped
-    environment:
-      - PYTHONPATH=/app
-      - POSTGRES_SERVER=db
-      - REDIS_HOST=redis
-      - TELEGRAM_WEBHOOK_URL=${TELEGRAM_WEBHOOK_URL}
     env_file:
-      - ./.env
+      - ./.env.production
+    environment:
+      POSTGRES_SERVER: db
     ports:
-      - "8000:8000"
+      - "8000:8000" # Exponer para el reverse proxy
     volumes:
       - ./logs:/app/logs
     depends_on:
@@ -73,7 +72,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - gad-network
+      - gad-network-prod
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
       interval: 30s
@@ -90,17 +89,17 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.bot
-    container_name: gad_bot
+    container_name: gad_bot_prod
     restart: unless-stopped
-    environment:
-      - API_BASE_URL=http://api:8000
     env_file:
-      - ./.env
+      - ./.env.production
+    environment:
+      POSTGRES_SERVER: db
     depends_on:
       api:
         condition: service_healthy
     networks:
-      - gad-network
+      - gad-network-prod
     logging:
       driver: "json-file"
       options:
@@ -108,12 +107,9 @@ services:
         max-file: "3"
 
 networks:
-  gad-network:
+  gad-network-prod:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.21.0.0/16
 
 volumes:
-  postgres_data:
-  redis_data:
+  postgres_data_prod:
+  redis_data_prod:
