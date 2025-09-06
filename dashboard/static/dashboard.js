@@ -2,6 +2,15 @@
  * Dashboard GRUPO_GAD - Centro de Control Administrativo
  * Implementación completa con todas las funcionalidades integradas
  */
+// Network helper: usa cookies y credentials: 'include' para sesiones HttpOnly
+class NetworkManager {
+  constructor(baseUrl = '') { this.baseUrl = baseUrl }
+  async request(path, opts = {}) {
+    const url = path.startsWith('http') ? path : `${this.baseUrl}${path}`
+    const init = Object.assign({ credentials: 'include' }, opts)
+    return fetch(url, init)
+  }
+}
 class Dashboard {
   constructor() {
     // Configuración del mapa y capas
@@ -21,8 +30,10 @@ class Dashboard {
       marcadores: true
     };
     
-    // Datos de la aplicación
-    this.token = localStorage.getItem('admin_token');
+  // Datos de la aplicación
+  // No leer token desde localStorage (usar cookies HttpOnly)
+  this.token = null
+  this.network = new NetworkManager();
     this.notes = [];
     this.users = [];
     this.markedLocations = [];
@@ -32,12 +43,20 @@ class Dashboard {
   }
 
   // === INICIALIZACIÓN ===
-  init() {
-    // Verificación de autenticación
-    if (!this.token) {
-      alert('No hay sesión activa');
-      window.location.href = '/login';
-      return;
+  async init() {
+    // Verificación de autenticación mediante endpoint que valide sesión (usa cookies HttpOnly)
+    try {
+      const resp = await this.network.request('/api/v1/users/me', { method: 'GET' })
+      if (!resp.ok) {
+        window.location.href = '/login'
+        return
+      }
+      // usuario autenticado; token se gestiona por cookie HttpOnly en el backend
+      this.token = null
+    } catch (err) {
+      console.error('Error verificando sesión:', err)
+      window.location.href = '/login'
+      return
     }
     
     // Inicialización de componentes
@@ -148,12 +167,8 @@ class Dashboard {
       const center = this.map.getCenter();
       const url = `/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=10000`;
       
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
-      });
+  //usar NetworkManager para enviar cookies de sesión en lugar de Authorization header
+  const response = await this.network.request(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);

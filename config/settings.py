@@ -4,6 +4,7 @@ Configuración centralizada del sistema GRUPO_GAD.
 Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
+import pathlib
 from typing import List, Optional
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -31,7 +32,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # === BASE DE DATOS ===
-    POSTGRES_SERVER: str
+    # Valor por defecto 'db' para evitar fallo si la variable no está presente en entornos docker
+    POSTGRES_SERVER: str = Field("db")
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
@@ -76,8 +78,14 @@ class Settings(BaseSettings):
     # === MONITOREO ===
     PROMETHEUS_ENABLED: bool = Field(True)
 
+    # Preferir .env.production si existe; caer a .env como fallback
+    env_files = []
+    if pathlib.Path('.env.production').exists():
+        env_files.append('.env.production')
+    env_files.append('.env')
+
     model_config = SettingsConfigDict(
-        case_sensitive=False, env_file=".env", env_file_encoding="utf-8"
+        case_sensitive=False, env_file=env_files, env_file_encoding="utf-8"
     )
 
 
