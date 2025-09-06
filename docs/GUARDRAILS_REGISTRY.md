@@ -159,6 +159,78 @@ Checklist de requisitos atendidos
 
 ---
 
-Archivo generado por el agente: si quieres, copio este contenido también al portapapeles o lo añado en otro formato.
+## Plan de trabajo consolidado y roadmap (registrado)
 
-Fin del resumen generado automáticamente en la sesión.
+- Timestamp: 2025-09-06T06:05:00+00:00
+- Branch objetivo: release/v1.0.0-rc1
+- Autor: automated-assistant
+- Propósito: Documento de trabajo priorizado y accionable que contiene las tareas siguientes, estimaciones, criterios de aceptación y comandos reproducibles. Diseñado para retomar el trabajo en una futura sesión con claridad.
+
+Checklist principal (prioridades inmediatas)
+1) Estabilización de entorno y variables (P0 - 0-24h)
+   - Tarea: Asegurar `.env.production` presente y consistente; añadir `POSTGRES_SERVER=db` si falta.
+   - Propietario: Tú / operator
+   - Comandos clave:
+     - Revisar .env: `sed -n '1,200p' .env.production`
+     - Validar settings: `python -c "from config.settings import settings; print(settings.DB_URL)"`
+   - Criterio de aceptación: API arranca localmente sin ValidationError de Pydantic para DB.
+   - Riesgos: sobreescribir valores sensibles (no commitear `.env`).
+
+2) Migraciones y arranque (P0 - 0-24h)
+   - Tarea: Ejecutar migraciones con Alembic y confirmar schema.
+   - Propietario: Tú / DBA
+   - Comandos clave:
+     - `python -m alembic current`
+     - `python -m alembic upgrade head`
+     - `./scripts/start.sh` (o `python -m uvicorn src.api.main:app --reload` para dev)
+   - Criterio de aceptación: `alembic current` muestra revision aplicada; endpoint `/api/v1/health` responde OK.
+   - Riesgos: migraciones destructivas — hacer backup antes.
+
+3) Autenticación basada en cookies (P0 - 0-24h) [Parcialmente implementado]
+   - Tarea: Verificar login/logout y que cookie HttpOnly se establezca y borre correctamente.
+   - Propietario: Tú / QA
+   - Comandos clave:
+     - `curl -i -X POST -d "username=...&password=..." http://localhost:8000/api/v1/auth/login`
+     - `curl -i -b "access_token=..." http://localhost:8000/api/v1/users/me`
+     - `curl -i -X POST http://localhost:8000/api/v1/auth/logout`
+   - Criterio de aceptación: navegador muestra cookie `access_token` HttpOnly; `/api/v1/users/me` responde 200 cuando la cookie está presente.
+
+4) Docker / compose (P1 - 24-48h)
+   - Tarea: No tocar producción ahora; preparar `docker-compose.yml` robusto para dev/ci (healthchecks y volúmenes) y `.env.production` usado por Docker.
+   - Propietario: DevOps / Tú
+   - Comandos clave:
+     - `docker compose config`
+     - `docker compose up --build -d`
+   - Criterio de aceptación: servicios `db`, `api`, `redis` llegan a `healthy`.
+   - Riesgos: no aplicar cambios directos mientras Gemini Code Assist trabaja en paralelo; usar rama feature/PR para cambios mayores.
+
+5) Seguridad front y migración de localStorage (P1 - 48-72h)
+   - Tarea: Mantener localStorage para datos no sensibles (notas/markers); eliminar token en favor de cookies (ya hecho).
+   - Propietario: Frontend dev
+   - Acciones concretas: remover `localStorage.removeItem('admin_token')` y usar `logout` endpoint — (ya implementado).
+   - Criterio de aceptación: login/logout workflow en navegador y no existan referencias a `localStorage.getItem('admin_token')` en el código activo.
+
+6) CI y pruebas (P2 - 3-7 días)
+   - Tarea: Añadir prueba de integración mínima que valide health endpoints y checker allowlist en CI.
+   - Propietario: Tú / CI owner
+   - Comandos clave (local): `pytest -q` y `python3 scripts/check_allowlist.py`
+   - Criterio de aceptación: workflow en `.github/workflows/*` pasa con cambios mínimos.
+
+7) Observabilidad y logging (P2 - 1-2 semanas)
+   - Tarea: Añadir metrics middleware y logging central (prometheus + logging config).
+   - Propietario: DevOps / Backend
+   - Criterio de aceptación: métricas expuestas y logs en `logs/` con rotación.
+
+Entregables y artefactos a generar
+- PRs separados por área: `fix/env`, `fix/auth-cookie`, `feat/docker-health`, `ci/tests`.
+- Scripts: `consolidated_fix_grupo_gad.sh` (ya propuesto en docs), `validate_grupo_gad_final.sh` para validación automatizada.
+- Registro actualizado: `docs/GUARDRAILS_REGISTRY.md` (esta entrada)
+
+Notas operativas
+- No commitear archivos `.env` ni secrets. Usar `backups/` locales para exportar dumps antes de migraciones.
+- Para cambios Docker grandes, usar rama feature y abrir PR para revisión humana.
+
+Siguiente acción inmediata sugerida (para la próxima sesión)
+- Ejecutar migraciones en entorno de staging/local y validar health endpoints. Recopilar errores y registrar output en `outputs/runs/<timestamp>/`.
+
+---
