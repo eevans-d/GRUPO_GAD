@@ -117,6 +117,31 @@ Checklist de requisitos atendidos
 - Si vas a usar LLM real, configurar `GEMINI_CMD` y ejecutar dry-run.
 - Preparar un PR para revisión de los artefactos Guardrails si deseas control de cambios colaborativo.
 
+## Entrada: cambios de sesión y DB (POSTGRES_SERVER + cookies HttpOnly)
+
+- Timestamp: 2025-09-06T05:40:00+00:00
+- Branch: release/v1.0.0-rc1
+- Autor: automated-assistant
+- Archivos modificados:
+  - `config/settings.py` (valor por defecto POSTGRES_SERVER, preferir .env.production)
+  - `dashboard/static/dashboard.js` (eliminada dependencia de token en localStorage; añadido NetworkManager con cookies)
+  - `src/api/routers/auth.py` (login: establecer cookie HttpOnly `access_token` además del body)
+- Descripción breve: Cambios mínimos para evitar fallos por variables de entorno faltantes y para migrar la autenticación hacia sesiones por cookie HttpOnly. No se tocaron componentes Docker ni se añadieron dependencias externas.
+- Acciones realizadas:
+  - Actualizado `config/settings.py` para asegurar `POSTGRES_SERVER='db'` por defecto y preferir `.env.production` si existe.
+  - Sustituido uso del token en localStorage en `dashboard/static/dashboard.js` por verificación de sesión usando `NetworkManager` con `credentials: 'include'`.
+  - Modificado `src/api/routers/auth.py` para establecer cookie HttpOnly `access_token` en el login y mantener compatibilidad con la respuesta JSON.
+  - Comprobación de sintaxis Python (`py_compile`) sobre los archivos modificados: OK.
+  - Ejecutado `scripts/check_allowlist.py`: OK (exit 0).
+- Resultado: Cambios commiteados localmente. Recomendado: realizar pruebas integradas (levantar API local y comprobar `/api/v1/users/me`, login y acceso al dashboard). No se realizaron cambios destructivos ni en Docker.
+- Siguientes pasos sugeridos:
+  1. Empujar commits al remoto (`git push origin release/v1.0.0-rc1`).
+  2. Probar login en entorno local y verificar cookie HttpOnly (herramientas: navegador devtools, curl con --cookie).
+  3. Actualizar frontend logout para borrar cookie vía endpoint `/logout` (backend) en vez de `localStorage.removeItem('admin_token')`.
+  4. Revisar otras referencias a `localStorage` no sensibles y decidir si mantenerlas (notas) o migrarlas.
+
+---
+
 Archivo generado por el agente: si quieres, copio este contenido también al portapapeles o lo añado en otro formato.
 
 Fin del resumen generado automáticamente en la sesión.
