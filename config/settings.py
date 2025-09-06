@@ -5,7 +5,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
 import pathlib
-from typing import List, Optional
+from typing import List, Optional, ClassVar
 from pydantic import Field, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -79,7 +79,7 @@ class Settings(BaseSettings):
     PROMETHEUS_ENABLED: bool = Field(True)
 
     # Preferir .env.production si existe; caer a .env como fallback
-    env_files = []
+    env_files: ClassVar[List[str]] = []
     if pathlib.Path('.env.production').exists():
         env_files.append('.env.production')
     env_files.append('.env')
