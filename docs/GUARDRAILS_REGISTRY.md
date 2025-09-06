@@ -142,6 +142,23 @@ Checklist de requisitos atendidos
 
 ---
 
+## Entrada: commit pendiente - scripts
+
+- Timestamp: 2025-09-06T05:55:00+00:00
+- Branch: release/v1.0.0-rc1
+- Autor: automated-assistant
+- Archivos revisados y commitados:
+  - `scripts/check_allowlist.py` (mejoras: soporte pyproject, mensajes claros, dev_allowlist included)
+  - `scripts/start.sh` (arranque: aplicar migraciones con alembic y lanzar uvicorn)
+- Descripción breve: Revisé ambos scripts para asegurar comportamiento y los agregué al control de versiones.
+- Acciones realizadas:
+  - Lectura y verificación de `scripts/check_allowlist.py` (ya actualizado y probado previamente).
+  - Lectura de `scripts/start.sh` (script de arranque simple que ejecuta migraciones y arranca Uvicorn).
+  - Stage + commit de ambos archivos.
+- Resultado: Cambios commitados y listos para push (a continuación se realizará push al remoto).
+
+---
+
 Archivo generado por el agente: si quieres, copio este contenido también al portapapeles o lo añado en otro formato.
 
 Fin del resumen generado automáticamente en la sesión.
