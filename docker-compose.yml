@@ -60,6 +60,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./.env.production
+    environment:
+      POSTGRES_SERVER: db
     ports:
       - "8000:8000" # Exponer para el reverse proxy
     volumes:
@@ -91,6 +93,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./.env.production
+    environment:
+      POSTGRES_SERVER: db
     depends_on:
       api:
         condition: service_healthy
