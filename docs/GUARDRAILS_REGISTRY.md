@@ -234,3 +234,16 @@ Siguiente acción inmediata sugerida (para la próxima sesión)
 - Ejecutar migraciones en entorno de staging/local y validar health endpoints. Recopilar errores y registrar output en `outputs/runs/<timestamp>/`.
 
 ---
+
+## Entrada: inicio del procedimiento de rotación de secretos y PR
+
+- Timestamp: 2025-09-06T06:30:00+00:00
+- Branch creada: `chore/guardrails-env-fixes`
+- Autor: automated-assistant
+- Descripción: Se creó una rama para agrupar cambios menores de configuración (plantilla .env, ignore, parche settings, shim auth). Se añadió un script documental `scripts/rotate_secrets.sh` que describe pasos seguros para rotar credenciales y limpiar secretos del historial.
+- Acciones realizadas:
+  - `git checkout -b chore/guardrails-env-fixes` (push al remoto)
+  - Añadido `scripts/rotate_secrets.sh` (documental)
+  - Recomendación: coordinar rotación de secretos y ejecutar BFG/git-filter-repo si se decide limpiar historial.
+
+---
