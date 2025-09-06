@@ -18,6 +18,19 @@ Registro de acciones automáticas y verificaciones realizadas por el flujo Guard
 
 ---
 
+## Entrada: plan para backup y limpieza de historial (PREPARACIÓN)
+
+- Timestamp: 2025-09-06T06:45:00+00:00
+- Branch: `chore/guardrails-env-fixes`
+- Autor: automated-assistant
+- Plan: crear backup espejo del repositorio, revisar y (opcional) ejecutar limpieza de historial para eliminar archivos con secretos (ej.: `.env.production`).
+- Scripts añadidos:
+  - `scripts/prepare_repo_backup.sh` — crea un mirror bare para respaldos
+  - `scripts/perform_history_cleanup.sh` — guía para usar `git-filter-repo` o `BFG` (destructivo)
+- Nota: ejecución de la limpieza requiere consenso y backup; no se ejecutó automáticamente.
+
+---
+
 ## Anexo: Resumen de sesión añadido
 
 - Timestamp añadido al registro: 2025-09-06T05:18:00+00:00
