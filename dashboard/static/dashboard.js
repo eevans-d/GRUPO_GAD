@@ -1036,10 +1036,14 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
 
   logout() {
     if (confirm('¿Cerrar sesión?')) {
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_notes');
-      localStorage.removeItem('marked_locations');
-      window.location.href = '/login';
+      // Llamar al endpoint de logout para eliminar cookie HttpOnly en el backend
+      this.network.request('/api/v1/auth/logout', { method: 'POST' })
+        .finally(() => {
+          // Eliminar datos locales no sensibles
+          localStorage.removeItem('admin_notes');
+          localStorage.removeItem('marked_locations');
+          window.location.href = '/login';
+        });
     }
   }
 }

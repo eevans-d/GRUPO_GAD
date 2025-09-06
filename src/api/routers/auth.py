@@ -16,6 +16,13 @@ from src.schemas.token import Token
 router = APIRouter()
 
 
+@router.post("/logout")
+async def logout(response: Response):
+    """Eliminar cookie de sesión (logout)."""
+    response.delete_cookie("access_token")
+    return {"status": "logged_out"}
+
+
 @router.post("/login", response_model=Token)
 async def login_for_access_token(
     response: Response,
