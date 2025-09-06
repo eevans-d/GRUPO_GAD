@@ -55,7 +55,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: docker/Dockerfile.api
+      dockerfile: docker/Dockerfile.api.simple
     container_name: gad_api_prod
     restart: unless-stopped
     env_file:
