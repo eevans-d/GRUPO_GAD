@@ -18,6 +18,16 @@ Registro de acciones automáticas y verificaciones realizadas por el flujo Guard
 
 ---
 
+## Entrada: sanitización de `.env.production` y documentación de rotación
+
+- Timestamp: 2025-09-06T06:50:00+00:00
+- Branch: `chore/guardrails-env-fixes`
+- Autor: automated-assistant
+- Acción: Reemplazados valores sensibles en `.env.production` por placeholders y añadido `docs/SECRETS_ROTATION.md` con pasos para rotar y limpiar historial.
+- Nota: Esta operación no elimina secretos del historial de Git; ejecutar limpieza destructiva sigue siendo opcional y requiere confirmación.
+
+---
+
 Backup creado:
 
 - Timestamp: 2025-09-06T06:27:07Z
