@@ -18,6 +18,12 @@ Registro de acciones automáticas y verificaciones realizadas por el flujo Guard
 
 ---
 
+Backup creado:
+
+- Timestamp: 2025-09-06T06:27:07Z
+- Ruta: `backups/git-mirror-20250906T062707Z`
+- Nota: mirror bare creado localmente; mueve a almacenamiento seguro antes de operaciones destructivas.
+
 ## Entrada: plan para backup y limpieza de historial (PREPARACIÓN)
 
 - Timestamp: 2025-09-06T06:45:00+00:00
