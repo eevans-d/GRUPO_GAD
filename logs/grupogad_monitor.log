@@ -1,0 +1,33 @@
+[2025-09-02 01:06:55] - --- Iniciando Checks de Salud Horarios ---
+[2025-09-02 01:06:55] - Realizando Health Check de la API...
+[2025-09-02 01:06:55] - ALERTA: API Health Check FALLÓ (Código: 000)
+[2025-09-02 01:06:55] - Verificando estado de los servicios Docker Compose...
+
+The command 'docker-compose' could not be found in this WSL 2 distro.
+We recommend to activate the WSL integration in Docker Desktop settings.
+
+For details about using Docker Desktop with WSL 2, visit:
+
+https://docs.docker.com/go/wsl2/
+
+[2025-09-02 01:06:55] - Verificando espacio en disco...
+[2025-09-02 01:06:55] - Uso de disco: 9%
+[2025-09-02 01:06:55] - Verificando uso de recursos de contenedores...
+
+The command 'docker' could not be found in this WSL 2 distro.
+We recommend to activate the WSL integration in Docker Desktop settings.
+
+For details about using Docker Desktop with WSL 2, visit:
+
+https://docs.docker.com/go/wsl2/
+
+[2025-09-02 01:06:55] - --- Checks de Salud Horarios Completados ---
+[2025-09-02 01:06:55] - --- Recopilando Métricas Básicas ---
+[2025-09-02 01:06:55] - Obteniendo conteo de usuarios activos...
+[2025-09-02 01:06:55] - No se pudo obtener el conteo de usuarios activos.
+[2025-09-02 01:06:55] - Obteniendo tareas creadas en últimas 24h...
+[2025-09-02 01:06:55] - No se pudo obtener el conteo de tareas creadas.
+[2025-09-02 01:06:55] - Obteniendo mensajes de Telegram enviados...
+[2025-09-02 01:06:55] - Métrica de Mensajes Telegram: Requiere integración específica.
+[2025-09-02 01:06:55] - Obteniendo tiempo de respuesta promedio de un endpoint clave...
+[2025-09-02 01:06:55] - Monitoreo completado.

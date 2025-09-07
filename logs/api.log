@@ -1,0 +1,19 @@
+2025-08-30T05:09:05.373012+0000 INFO API iniciada y lista para recibir peticiones.
+2025-08-30T05:09:05.746121+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-08-30T05:09:06.007035+0000 INFO Response: 200
+2025-08-31T04:16:05.474218+0000 INFO API iniciada y lista para recibir peticiones.
+2025-08-31T04:16:05.881884+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-08-31T04:16:06.189571+0000 INFO Response: 200
+2025-08-31T04:26:05.459611+0000 INFO API iniciada y lista para recibir peticiones.
+2025-08-31T04:26:05.828300+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-08-31T04:26:06.066876+0000 INFO Response: 200
+2025-08-31T04:40:53.473847+0000 INFO API iniciada y lista para recibir peticiones.
+2025-08-31T04:40:53.581810+0000 INFO Request: GET http://test/api/v1/health
+2025-08-31T04:40:53.582427+0000 INFO Response: 200
+2025-08-31T04:40:53.879030+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-08-31T04:40:54.140469+0000 INFO Response: 200
+2025-09-06T06:04:43.454148+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-06T06:04:43.547963+0000 INFO Request: GET http://test/api/v1/health
+2025-09-06T06:04:43.549131+0000 INFO Response: 200
+2025-09-06T06:04:43.878524+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-06T06:04:44.154481+0000 INFO Response: 200

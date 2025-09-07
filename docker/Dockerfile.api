@@ -50,6 +50,7 @@ COPY alembic.ini /app/alembic.ini
 COPY alembic /app/alembic
 COPY config /app/config
 COPY src /app/src
+COPY dashboard /app/dashboard
 COPY scripts/start.sh /app/start.sh
 
 # Cambiar propietario

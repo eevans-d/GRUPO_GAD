@@ -1,30 +1,23 @@
+# Node
+node_modules/
+dist/
+.env
+npm-debug.log*
+
 # Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-.venv/
 venv/
-env/
-
-# Node
-node_modules/
-npm-debug.log*
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Docker
-data/
-*.db
-
-# Logs
-*.log
-
-# Env files (guarda solo el .env.example)
 .env
-.env.production
+
+# VS Code
+.vscode/
+.history/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
