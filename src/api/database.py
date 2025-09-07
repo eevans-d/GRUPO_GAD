@@ -3,13 +3,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DB_URL = os.getenv("DB_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Ensure DB_URL is not None
-if DB_URL is None:
-    raise ValueError("DB_URL environment variable is not set.")
+# Ensure DATABASE_URL is not None
+if DATABASE_URL is None:
+    raise ValueError("DATABASE_URL environment variable is not set.")
 
-engine = create_engine(DB_URL)
+engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

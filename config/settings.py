@@ -4,6 +4,7 @@ Configuración centralizada del sistema GRUPO_GAD.
 Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
+import os
 import pathlib
 from typing import List, Optional, ClassVar
 from pydantic import Field, validator
@@ -37,12 +38,20 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
-    DB_URL: Optional[str] = None
+    DATABASE_URL: Optional[str] = None
 
-    @validator("DB_URL", pre=True)
+    @validator("DATABASE_URL", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
-        if isinstance(v, str):
+        # Priority: explicit DATABASE_URL -> legacy DB_URL env var -> assemble from parts
+        if isinstance(v, str) and v:
             return v
+
+        # Allow legacy DB_URL environment variable as a fallback for compatibility
+        legacy = os.getenv("DB_URL")
+        if isinstance(legacy, str) and legacy:
+            return legacy
+
+        # Fallback: build from individual POSTGRES_* components
         return (
             f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:"
             f"{values.get('POSTGRES_PASSWORD')}@"

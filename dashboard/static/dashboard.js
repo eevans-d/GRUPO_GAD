@@ -31,8 +31,7 @@ class Dashboard {
     };
     
   // Datos de la aplicación
-  // No leer token desde localStorage (usar cookies HttpOnly)
-  this.token = null
+  // Las sesiones se gestionan por cookie HttpOnly en el backend
   this.network = new NetworkManager();
     this.notes = [];
     this.users = [];
@@ -51,8 +50,7 @@ class Dashboard {
         window.location.href = '/login'
         return
       }
-      // usuario autenticado; token se gestiona por cookie HttpOnly en el backend
-      this.token = null
+  // usuario autenticado; la cookie HttpOnly gestiona la sesión
     } catch (err) {
       console.error('Error verificando sesión:', err)
       window.location.href = '/login'
@@ -362,10 +360,9 @@ class Dashboard {
     }
     
     try {
-      const response = await fetch('/api/v1/admin/telegram/send', {
+      const response = await this.network.request('/api/v1/admin/telegram/send', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ group, message, type })
@@ -483,9 +480,10 @@ class Dashboard {
   // === GESTIÓN DE USUARIOS ===
   async loadUsers() {
     try {
-      const response = await fetch('/api/v1/users/', {
+      const response = await this.network.request('/api/v1/users/', {
+        method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.token}`
+          'Content-Type': 'application/json'
         }
       });
       
@@ -676,10 +674,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
     const center = this.map.getCenter();
     
     try {
-      const response = await fetch('/api/v1/tasks/emergency', {
+      const response = await this.network.request('/api/v1/tasks/emergency', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

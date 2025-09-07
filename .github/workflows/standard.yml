@@ -3,6 +3,9 @@ on: [push, pull_request]
 jobs:
   standard:
     runs-on: ubuntu-latest
+    env:
+      # Allow repository secret to supply DATABASE_URL for integration steps
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - uses: actions/checkout@v4
       
@@ -35,6 +38,8 @@ jobs:
         run: cd pyservice && pytest -q
         
       - name: Check allowlists
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python scripts/check_allowlist.py
         
       - name: Basic security scan
