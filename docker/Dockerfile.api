@@ -48,6 +48,8 @@ RUN addgroup --system app && adduser --system --group app
 # Copiar los archivos de configuración y scripts necesarios para la ejecución
 COPY alembic.ini /app/alembic.ini
 COPY alembic /app/alembic
+COPY config /app/config
+COPY src /app/src
 COPY scripts/start.sh /app/start.sh
 
 # Cambiar propietario

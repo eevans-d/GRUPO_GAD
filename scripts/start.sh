@@ -5,7 +5,7 @@ set -e
 
 # Run database migrations
 echo "Running database migrations..."
-python -m alembic upgrade head
+alembic upgrade head
 
 # Start the application
 echo "Starting Uvicorn server..."

@@ -14,12 +14,16 @@ RUN apt-get update && apt-get install -y \
 # Instalar Poetry
 RUN pip install "poetry==$POETRY_VERSION"
 
-# Copiar archivos de configuración de Poetry
+# Configurar poetry para no crear un venv
+RUN poetry config virtualenvs.create false
+
+WORKDIR /build
+
+# Copiar todos los archivos necesarios para la instalación
 COPY pyproject.toml poetry.lock* ./
 
 # Instalar dependencias
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN poetry install --no-dev --no-interaction --no-ansi
 
 # Etapa de producción
 FROM python:3.11-slim
@@ -34,12 +38,13 @@ WORKDIR $APP_HOME
 
 # Copiar dependencias de la etapa de construcción
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Crear usuario no root
 RUN addgroup --system app && adduser --system --group app
 
 # Copiar código fuente
-COPY . .
+COPY ./src /app/src
 
 # Cambiar propietario
 RUN chown -R app:app $APP_HOME
