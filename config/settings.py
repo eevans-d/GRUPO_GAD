@@ -46,7 +46,7 @@ class Settings(BaseSettings):
 
     @field_validator("DATABASE_URL", mode="before")
     def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
-        # Priority: explicit DATABASE_URL -> legacy DB_URL env var -> assemble from parts
+        # Priority: explicit DATABASE_URL -> legacy DB_URL -> assemble from parts
         if isinstance(v, str) and v:
             return v
 
