@@ -1,4 +1,4 @@
-#!/home/eevan/ProyectosIA/GRUPO_GAD/.venv/bin/python3
+#!/home/eevan/ProyectosIA/GRUPO_GAD/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

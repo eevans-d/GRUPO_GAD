@@ -131,3 +131,27 @@ def get_settings() -> "Settings":
     module import time in order to prevent ValidationError when env vars are missing.
     """
     return Settings()  # type: ignore
+
+
+# Backwards-compatible module-level `settings` object.
+# This is a lazy proxy that will attempt to instantiate a fully-validated
+# Settings on first attribute access. If instantiation fails (missing envs),
+# it falls back to Settings.construct() to provide a non-validating object
+# so other modules that import `settings` at import time do not crash.
+class _LazySettingsProxy:
+    _inst = None
+
+    def _build(self):
+        if self._inst is None:
+            try:
+                self._inst = Settings()
+            except Exception:
+                # Last-resort: construct without validation to avoid import errors
+                self._inst = Settings.construct()
+        return self._inst
+
+    def __getattr__(self, name):
+        return getattr(self._build(), name)
+
+
+settings = _LazySettingsProxy()
