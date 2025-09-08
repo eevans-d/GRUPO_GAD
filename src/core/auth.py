@@ -1,6 +1,4 @@
-from typing import Any
 
-from fastapi import Depends
 
 # Reuse existing implementations
 from src.core.security import create_access_token

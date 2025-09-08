@@ -7,7 +7,8 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 import os
 import pathlib
 from typing import List, Optional, ClassVar
-from pydantic import Field
+
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,95 +19,115 @@ class Settings(BaseSettings):
     """
 
     # === PROYECTO ===
-    PROJECT_NAME: str = Field("GRUPO_GAD")
-    PROJECT_VERSION: str = Field("1.0.0")
-    PROJECT_DESCRIPTION: str = Field(
-        "Sistema de Gestión de Tareas para Personal Policial"
-    )
-    DEBUG: bool = Field(False)
+    PROJECT_NAME: str = "GRUPO_GAD"
+    PROJECT_VERSION: str = "1.0.0"
+    PROJECT_DESCRIPTION: str = "Sistema de Gestión de Tareas para Personal Policial"
+    DEBUG: bool = False
 
     # === API ===
-    API_V1_STR: str = Field("/api/v1")
-    # La SECRET_KEY debe ser proporcionada a través de una variable de entorno.
-    # Es crucial para la seguridad de la aplicación (ej. JWT).
+    API_V1_STR: str = "/api/v1"
     SECRET_KEY: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # === BASE DE DATOS ===
-    # Valor por defecto 'db' para evitar fallo si la variable no está
-    # presente en entornos docker
-    POSTGRES_SERVER: str = Field("db")
+    POSTGRES_SERVER: str = "db"
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
-    POSTGRES_PORT: int = Field(5432)
+    POSTGRES_PORT: int = 5432
+    
+    # La URL de la base de datos se construye dinámicamente si no se provee.
+    # Prioridad: 1. DATABASE_URL, 2. DB_URL (legado), 3. Componentes POSTGRES_*.
     DATABASE_URL: Optional[str] = None
 
-    from pydantic import field_validator
-
     @field_validator("DATABASE_URL", mode="before")
-    def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
-        # Priority: explicit DATABASE_URL -> legacy DB_URL -> assemble from parts
+    @classmethod
+    def assemble_db_connection(cls, v: Optional[str], values) -> Optional[str]:
+        # Keep behaviour for direct DATABASE_URL or legacy DB_URL env
         if isinstance(v, str) and v:
             return v
 
-        # Allow legacy DB_URL environment variable as a fallback for compatibility
-        legacy = os.getenv("DB_URL")
-        if isinstance(legacy, str) and legacy:
-            return legacy
+        legacy_db_url = os.getenv("DB_URL")
+        if legacy_db_url:
+            return legacy_db_url
 
-        # Fallback: build from individual POSTGRES_* components
-        return (
-            f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:"
-            f"{values.get('POSTGRES_PASSWORD')}@"
-            f"{values.get('POSTGRES_SERVER')}:{values.get('POSTGRES_PORT')}/"
-            f"{values.get('POSTGRES_DB')}"
-        )
+        # Fall back to components
+        user = values.data.get("POSTGRES_USER")
+        password = values.data.get("POSTGRES_PASSWORD")
+        server = values.data.get("POSTGRES_SERVER")
+        port = values.data.get("POSTGRES_PORT")
+        db = values.data.get("POSTGRES_DB")
+
+        if all([user, password, server, port, db]):
+            return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
+
+        # Return None if we can't assemble; caller may handle the absence.
+        return None
+
+    def assemble_db_url(self) -> Optional[str]:
+        """Return a usable DB URL, checking DATABASE_URL, DB_URL and POSTGRES_* components.
+
+        This helper is explicit and safe to call at runtime without relying on
+        a global settings instantiation at import time.
+        """
+        # Prefer explicit DATABASE_URL set during initialization
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+
+        # Fallback to legacy env var
+        legacy_db_url = os.getenv("DB_URL")
+        if legacy_db_url:
+            return legacy_db_url
+
+        # Use components if available
+        if self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB:
+            return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
+        return None
 
     # === REDIS (CACHÉ) ===
-    REDIS_HOST: str = Field("redis")
-    REDIS_PORT: int = Field(6379)
-    REDIS_DB: int = Field(0)
-    REDIS_PASSWORD: Optional[str] = Field(None)
+    REDIS_HOST: str = "redis"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    REDIS_PASSWORD: Optional[str] = None
 
     # === TELEGRAM BOT ===
     TELEGRAM_TOKEN: str
     ADMIN_CHAT_ID: str
     WHITELIST_IDS: List[int]
-    TELEGRAM_WEBHOOK_URL: Optional[str] = Field(None)
-    TELEGRAM_WEBHOOK_PATH: str = Field("/webhook/telegram")
-    TELEGRAM_WEBHOOK_PORT: int = Field(8000)
+    TELEGRAM_WEBHOOK_URL: Optional[str] = None
+    TELEGRAM_WEBHOOK_PATH: str = "/webhook/telegram"
+    TELEGRAM_WEBHOOK_PORT: int = 8000
 
     # === TIMEZONE ===
-    TZ: str = Field("UTC")
+    TZ: str = "UTC"
 
-    # Environment metadata (may be provided by deploy systems)
-    ENVIRONMENT: Optional[str] = Field(None)
+    # Environment metadata
+    ENVIRONMENT: Optional[str] = None
 
     # === SEGURIDAD ===
-    USERS_OPEN_REGISTRATION: bool = Field(False)
-    ALLOWED_HOSTS: List[str] = Field(["*"])
+    USERS_OPEN_REGISTRATION: bool = False
+    ALLOWED_HOSTS: List[str] = ["*"]
 
     # === LOGGING ===
-    LOG_LEVEL: str = Field("INFO")
-    LOG_FILE: Optional[str] = Field(None)
+    LOG_LEVEL: str = "INFO"
+    LOG_FILE: Optional[str] = None
 
     # === MONITOREO ===
-    PROMETHEUS_ENABLED: bool = Field(True)
-
-    # Preferir .env.production si existe; caer a .env como fallback
-    env_files: ClassVar[List[str]] = []
-    if pathlib.Path('.env.production').exists():
-        env_files.append('.env.production')
-    env_files.append('.env')
+    PROMETHEUS_ENABLED: bool = True
 
     model_config = SettingsConfigDict(
-        case_sensitive=False,
-        env_file=env_files,
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
+            case_sensitive=False,
+            env_file=(".env.production", ".env"),
+            env_file_encoding="utf-8",
+            extra="ignore",
+        )
 
+def get_settings() -> "Settings":
+    """Return a fresh Settings instance.
 
-# Instancia única de configuración
-settings = Settings()
+    Use this helper to instantiate settings lazily (for example inside scripts
+    or migration runners). Avoid importing and using a global `settings` at
+    module import time in order to prevent ValidationError when env vars are missing.
+    """
+    return Settings()  # type: ignore

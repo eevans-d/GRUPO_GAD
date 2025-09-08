@@ -31,8 +31,12 @@ def check_npm() -> bool:
         print(f"❌ Error leyendo package.json: {e}")
         return False
 
-    runtime_allow: Set[str] = set(manifest.get("dependencies", {}).get("allowlist", {}).get("npm", []))
-    dev_allow: Set[str] = set(manifest.get("dependencies", {}).get("dev_allowlist", {}).get("npm", []))
+    runtime_allow: Set[str] = set(
+        manifest.get("dependencies", {}).get("allowlist", {}).get("npm", [])
+    )
+    dev_allow: Set[str] = set(
+        manifest.get("dependencies", {}).get("dev_allowlist", {}).get("npm", [])
+    )
 
     runtime_used: Set[str] = set(pkg.get("dependencies", {}).keys())
     dev_used: Set[str] = set(pkg.get("devDependencies", {}).keys())
@@ -66,41 +70,52 @@ def parse_requirements_lines(lines: List[str]) -> List[str]:
 
 def check_python() -> bool:
     manifest = load_manifest()
-    allow = set(p.lower() for p in manifest.get("dependencies", {}).get("allowlist", {}).get("pypi", []))
-    dev_allow = set(p.lower() for p in manifest.get("dependencies", {}).get("dev_allowlist", {}).get("pypi", []))
+    allow = set(
+        p.lower()
+        for p in manifest.get("dependencies", {}).get("allowlist", {}).get("pypi", [])
+    )
+    dev_allow = set(
+        p.lower()
+        for p in manifest.get("dependencies", {})
+        .get("dev_allowlist", {})
+        .get("pypi", [])
+    )
 
     # Prefer pyproject.toml (poetry) if present
     pyproject = pathlib.Path("pyproject.toml")
     used = []
     if pyproject.exists():
         try:
-            # extract simple dependency names from [tool.poetry.dependencies] and group.dev
+            # extract simple dependency names from [tool.poetry.dependencies]
+            # and group.dev
             content = pyproject.read_text()
             dep_section = False
             for line in content.splitlines():
-                if line.strip().startswith("[tool.poetry.dependencies]"):
+                stripped_line = line.strip()
+                if stripped_line == "[tool.poetry.dependencies]":
                     dep_section = True
                     continue
-                if line.strip().startswith("[tool.poetry.") and dep_section:
+                if stripped_line.startswith("[tool.poetry.") and dep_section:
                     # end of dependencies section
                     dep_section = False
-                if dep_section:
-                    if line.strip() and not line.strip().startswith("#"):
-                        name = line.split("=")[0].strip()
-                        if name and name != "python":
-                            used.append(name.lower())
+                if dep_section and stripped_line and not stripped_line.startswith("#"):
+                    name = stripped_line.split("=")[0].strip()
+                    if name and name != "python":
+                        used.append(name.lower())
+
             # also check dev group
             dev_marker = "[tool.poetry.group.dev.dependencies]"
             if dev_marker in content:
                 in_dev = False
                 for line in content.splitlines():
-                    if line.strip().startswith(dev_marker):
+                    stripped_line = line.strip()
+                    if stripped_line == dev_marker:
                         in_dev = True
                         continue
-                    if in_dev and line.strip().startswith("["):
+                    if in_dev and stripped_line.startswith("["):
                         in_dev = False
-                    if in_dev and line.strip() and not line.strip().startswith("#"):
-                        name = line.split("=")[0].strip()
+                    if in_dev and stripped_line and not stripped_line.startswith("#"):
+                        name = stripped_line.split("=")[0].strip()
                         if name:
                             used.append(name.lower())
         except Exception:
