@@ -47,6 +47,30 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
+# --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
+MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
+
+
+@app.middleware("http")
+async def max_body_size_middleware(request: Request, call_next):
+    # Comprobar Content-Length si está presente
+    content_length = request.headers.get("content-length")
+    if content_length is not None:
+        try:
+            if int(content_length) > MAX_REQUEST_BODY_SIZE:
+                return JSONResponse(
+                    status_code=413,
+                    content={"detail": "Request body too large"},
+                )
+        except ValueError:
+            # Si no es un número válido, continuar y dejar que downstream valide
+            pass
+
+    # Para transferencias chunked u otras sin Content-Length, no se puede
+    # verificar sin consumir el body; confiamos en proxies frontales y límites
+    # adicionales en producción para esa protección.
+    return await call_next(request)
+
 # --- Middleware CORS ---
 app.add_middleware(
     CORSMiddleware,
