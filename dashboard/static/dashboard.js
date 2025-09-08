@@ -21,7 +21,7 @@ class Dashboard {
       emergencias: L.layerGroup(),
       marcadores: L.layerGroup() // Marcadores personalizados
     };
-    
+
     // Estado de visibilidad de las capas
     this.layersVisible = {
       usuarios: true,
@@ -29,14 +29,14 @@ class Dashboard {
       emergencias: true,
       marcadores: true
     };
-    
-  // Datos de la aplicación
-  // Las sesiones se gestionan por cookie HttpOnly en el backend
-  this.network = new NetworkManager();
+
+    // Datos de la aplicación
+    // Las sesiones se gestionan por cookie HttpOnly en el backend
+    this.network = new NetworkManager();
     this.notes = [];
     this.users = [];
     this.markedLocations = [];
-    
+
     // Inicialización
     this.init();
   }
@@ -50,24 +50,24 @@ class Dashboard {
         window.location.href = '/login'
         return
       }
-  // usuario autenticado; la cookie HttpOnly gestiona la sesión
+      // usuario autenticado; la cookie HttpOnly gestiona la sesión
     } catch (err) {
       console.error('Error verificando sesión:', err)
       window.location.href = '/login'
       return
     }
-    
+
     // Inicialización de componentes
     this.initMap();
     this.initTabs();
     this.createQuickAlerts();
-    
+
     // Carga de datos inicial
     this.loadData();
     this.loadUsers();
     this.loadNotes();
     this.loadMarkedLocations();
-    
+
     // Utilidades
     this.startClock();
     this.startPeriodicUpdates();
@@ -78,16 +78,16 @@ class Dashboard {
     try {
       // Inicializar mapa centrado en Buenos Aires
       this.map = L.map('main-map').setView([-34.6037, -58.3816], 13);
-      
+
       // Añadir capa base de OpenStreetMap
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 19
       }).addTo(this.map);
-      
+
       // Añadir todas las capas de marcadores
       Object.values(this.markers).forEach(layer => layer.addTo(this.map));
-      
+
       // Evento click para mostrar coordenadas
       this.map.on('click', (e) => {
         L.popup()
@@ -135,11 +135,11 @@ class Dashboard {
     // Desactivar todas las pestañas
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    
+
     // Activar la pestaña seleccionada
     document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
     document.querySelector(`[data-panel="${tabName}"]`).classList.add('active');
-    
+
     // Acciones específicas por pestaña
     if (tabName === 'users') {
       this.loadUsers();
@@ -164,14 +164,14 @@ class Dashboard {
     try {
       const center = this.map.getCenter();
       const url = `/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=10000`;
-      
-  //usar NetworkManager para enviar cookies de sesión en lugar de Authorization header
-  const response = await this.network.request(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
-      
+
+      //usar NetworkManager para enviar cookies de sesión en lugar de Authorization header
+      const response = await this.network.request(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-      
+
       const data = await response.json();
       this.updateMap(data);
       this.updateCounters(data);
@@ -185,7 +185,7 @@ class Dashboard {
     this.markers.usuarios.clearLayers();
     this.markers.tareas.clearLayers();
     this.markers.emergencias.clearLayers();
-    
+
     // Procesar usuarios/efectivos
     if (data.usuarios && Array.isArray(data.usuarios)) {
       data.usuarios.forEach(user => {
@@ -193,20 +193,20 @@ class Dashboard {
           const marker = L.marker([user.lat, user.lng], {
             icon: this.createIcon('👮')
           });
-          
+
           marker.bindPopup(this.createPopupContent(
-            'Efectivo', 
-            user.lat, 
-            user.lng, 
-            user.entity_id, 
+            'Efectivo',
+            user.lat,
+            user.lng,
+            user.entity_id,
             user.distance_m
           ));
-          
+
           this.markers.usuarios.addLayer(marker);
         }
       });
     }
-    
+
     // Procesar tareas y emergencias
     if (data.tareas && Array.isArray(data.tareas)) {
       data.tareas.forEach(task => {
@@ -214,20 +214,20 @@ class Dashboard {
           const isEmergency = task.priority === 'CRITICA';
           const layer = isEmergency ? 'emergencias' : 'tareas';
           const icon = isEmergency ? '🚨' : '📋';
-          
+
           const marker = L.marker([task.lat, task.lng], {
             icon: this.createIcon(icon)
           });
-          
+
           marker.bindPopup(this.createPopupContent(
-            isEmergency ? 'Emergencia' : 'Tarea', 
-            task.lat, 
-            task.lng, 
-            task.entity_id, 
+            isEmergency ? 'Emergencia' : 'Tarea',
+            task.lat,
+            task.lng,
+            task.entity_id,
             task.distance_m,
             isEmergency
           ));
-          
+
           this.markers[layer].addLayer(marker);
         }
       });
@@ -245,7 +245,7 @@ class Dashboard {
   createPopupContent(title, lat, lng, id, dist, isEmergency = false) {
     const distStr = Number.isFinite(dist) ? `${Math.round(dist)}m` : '-';
     const idStr = (id || '').substring(0, 8) + '...';
-    
+
     return `
       <div style="min-width: 220px;">
         <b>${isEmergency ? '🚨' : ''}${title}</b><br>
@@ -277,7 +277,7 @@ class Dashboard {
     const users = data.usuarios ? data.usuarios.length : 0;
     const tasks = data.tareas ? data.tareas.length : 0;
     const emergencies = data.tareas ? data.tareas.filter(t => t.priority === 'CRITICA').length : 0;
-    
+
     document.getElementById('active-users').textContent = `${users} activos`;
     document.getElementById('emergency-count').textContent = `${emergencies} emergencias`;
     document.getElementById('metric-tasks').textContent = tasks;
@@ -293,9 +293,9 @@ class Dashboard {
   toggleLayer(layerName) {
     const layer = this.markers[layerName];
     const button = document.getElementById(`btn-${layerName}`);
-    
+
     if (!layer || !button) return;
-    
+
     if (this.layersVisible[layerName]) {
       this.map.removeLayer(layer);
       button.style.opacity = '0.5';
@@ -303,30 +303,30 @@ class Dashboard {
       layer.addTo(this.map);
       button.style.opacity = '1';
     }
-    
+
     this.layersVisible[layerName] = !this.layersVisible[layerName];
   }
 
   async searchAddress() {
     const query = document.getElementById('search-address').value.trim();
     if (!query) return;
-    
+
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
       const response = await fetch(url);
       const results = await response.json();
-      
+
       if (results.length > 0) {
         const lat = parseFloat(results[0].lat);
         const lng = parseFloat(results[0].lon);
-        
+
         this.map.setView([lat, lng], 16);
-        
+
         L.marker([lat, lng])
           .addTo(this.map)
           .bindPopup(`📍 ${results[0].display_name}`)
           .openPopup();
-          
+
         this.showNotification('Ubicación encontrada', 'success');
         this.quickNote(`🔍 Búsqueda: ${query} -> ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
       } else {
@@ -353,12 +353,12 @@ class Dashboard {
     const group = document.getElementById('tg-group').value;
     const type = document.getElementById('tg-type').value;
     const message = document.getElementById('tg-message').value.trim();
-    
+
     if (!message) {
       this.showNotification('Escriba un mensaje', 'warning');
       return;
     }
-    
+
     try {
       const response = await this.network.request('/api/v1/admin/telegram/send', {
         method: 'POST',
@@ -367,7 +367,7 @@ class Dashboard {
         },
         body: JSON.stringify({ group, message, type })
       });
-      
+
       if (response.ok) {
         document.getElementById('tg-message').value = '';
         document.getElementById('tg-message').style.background = '';
@@ -389,24 +389,24 @@ class Dashboard {
 
   quickMessage(type) {
     const messages = {
-      'status': { 
-        text: '📊 Todos los efectivos reporten estado y ubicación actual', 
-        type: 'alert' 
+      'status': {
+        text: '📊 Todos los efectivos reporten estado y ubicación actual',
+        type: 'alert'
       },
-      'meeting': { 
+      'meeting': {
         text: '📅 Reunión de coordinación en 30 minutos - Asistencia obligatoria',
-        type: 'alert' 
+        type: 'alert'
       },
-      'patrol': { 
+      'patrol': {
         text: '🚔 Intensificar patrullaje - Prioridad ALTA - Reportar cada 15 min',
-        type: 'urgent' 
+        type: 'urgent'
       },
-      'report': { 
+      'report': {
         text: '📝 Enviar reporte de turno antes de las 18:00',
-        type: 'info' 
+        type: 'info'
       }
     };
-    
+
     const msg = messages[type];
     if (msg) {
       document.getElementById('tg-type').value = msg.type;
@@ -444,17 +444,17 @@ class Dashboard {
         message: '📅 REUNIÓN URGENTE\nTodos los supervisores en 15 minutos - Asistencia obligatoria'
       }
     };
-    
+
     const alert = alerts[type];
     if (!alert) return;
-    
+
     document.getElementById('tg-group').value = alert.group;
     document.getElementById('tg-type').value = alert.type;
     document.getElementById('tg-message').value = alert.message;
-    
+
     this.switchTab('telegram');
     document.getElementById('tg-message').style.background = '#fff3cd';
-    
+
     this.showNotification(`⚠ Alerta ${type.replace('-', '').toUpperCase()} preparada`, 'warning');
     this.quickNote(`⚠ Protocolo preparado: ${type} - ${new Date().toLocaleTimeString()}`);
   }
@@ -472,7 +472,7 @@ class Dashboard {
         <button class="btn btn-primary btn-sm" onclick="dashboard.quickAlert('reunion-urgente')" style="width: 100%;">📅 Reunión Urgente Supervisores</button>
       </div>
     `;
-    
+
     const dashPanel = document.querySelector('[data-panel="dashboard"]');
     if (dashPanel) dashPanel.insertAdjacentHTML('beforeend', html);
   }
@@ -486,7 +486,7 @@ class Dashboard {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         this.users = await response.json();
         this.renderUsers();
@@ -503,14 +503,14 @@ class Dashboard {
   renderUsers(filter = '') {
     const container = document.getElementById('users-list');
     if (!container) return;
-    
-    const filtered = this.users.filter(u => 
-      !filter || 
+
+    const filtered = this.users.filter(u =>
+      !filter ||
       (u.nombre && u.nombre.toLowerCase().includes(filter.toLowerCase())) ||
       (u.email && u.email.toLowerCase().includes(filter.toLowerCase())) ||
       (u.telegram_id && u.telegram_id.toString().includes(filter))
     );
-    
+
     container.innerHTML = filtered.map(user => `
       <div class="card user-card ${user.is_active ? 'online' : ''}" onclick="dashboard.showUser('${user.id}')">
         <div style="font-weight: 600; margin-bottom: 4px;">
@@ -533,14 +533,14 @@ class Dashboard {
     const total = this.users.length;
     const active = this.users.filter(u => u.is_active).length;
     const withTelegram = this.users.filter(u => u.telegram_id).length;
-    
+
     document.getElementById('users-summary').textContent = `${total} total, ${active} activos, ${withTelegram} con Telegram`;
   }
 
   showUser(userId) {
     const user = this.users.find(u => u.id === userId);
     if (!user) return;
-    
+
     const details = `👤 INFORMACIÓN DEL USUARIO
 Nombre: ${user.nombre || '-'}
 Email: ${user.email || '-'}
@@ -549,7 +549,7 @@ Telegram: ${user.telegram_id || 'No vinculado'}
 Estado: ${user.is_active ? 'Activo' : 'Inactivo'}
 ID: ${user.id}
 Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`;
-    
+
     alert(details);
     this.quickNote(`👤 Consultado usuario: ${user.nombre} (${user.email})`);
   }
@@ -571,14 +571,14 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
     const input = document.getElementById('new-note');
     const text = input.value.trim();
     if (!text) return;
-    
+
     const note = {
       id: Date.now(),
       text: text,
       timestamp: new Date().toISOString(),
       category: 'manual'
     };
-    
+
     this.notes.unshift(note);
     this.saveNotes();
     this.renderNotes();
@@ -593,7 +593,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       timestamp: new Date().toISOString(),
       category: 'auto'
     };
-    
+
     this.notes.unshift(note);
     this.saveNotes();
     this.renderNotes();
@@ -608,12 +608,12 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
   renderNotes() {
     const container = document.getElementById('notes-list');
     if (!container) return;
-    
+
     if (this.notes.length === 0) {
       container.innerHTML = '<div class="card">Sin notas</div>';
       return;
     }
-    
+
     container.innerHTML = this.notes.map(note => `
       <div class="note">
         <button class="note-delete" onclick="dashboard.deleteNote(${note.id})">×</button>
@@ -637,19 +637,19 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       this.showNotification('No hay notas para exportar', 'warning');
       return;
     }
-    
-    const text = this.notes.map(n => 
+
+    const text = this.notes.map(n =>
       `[${new Date(n.timestamp).toLocaleString()}] ${n.text}`
     ).join('\n\n');
-    
+
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = `notas_grupo_gad_${new Date().toISOString().split('T')[0]}.txt`;
     a.click();
-    
+
     URL.revokeObjectURL(url);
     this.showNotification('Notas exportadas', 'success');
   }
@@ -670,9 +670,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       this.showNotification('Ingrese descripción de la emergencia', 'warning');
       return;
     }
-    
+
     const center = this.map.getCenter();
-    
+
     try {
       const response = await this.network.request('/api/v1/tasks/emergency', {
         method: 'POST',
@@ -686,11 +686,11 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
           descripcion: desc
         })
       });
-      
+
       if (response.ok) {
         const result = await response.json();
         document.getElementById('emergency-desc').value = '';
-        
+
         this.showNotification(`✅ Emergencia creada: ${result.codigo || 'OK'}`, 'success');
         this.quickNote(`🚨 Emergencia creada: ${desc} en ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
         this.refreshMap();
@@ -743,11 +743,11 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
       const response = await fetch(url);
       const results = await response.json();
-      
+
       if (results.length > 0) {
         const lat = parseFloat(results[0].lat);
         const lng = parseFloat(results[0].lon);
-        
+
         if (viewType === 'street') {
           this.openStreetView(lat, lng);
         } else if (viewType === 'satellite') {
@@ -755,12 +755,12 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
         } else {
           this.showLocationModal(lat, lng, address);
         }
-        
+
         L.marker([lat, lng])
           .addTo(this.map)
           .bindPopup(`🔍 ${address}`)
           .openPopup();
-          
+
         this.map.setView([lat, lng], 17);
       } else {
         this.showNotification('Dirección no encontrada', 'warning');
@@ -815,7 +815,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
         </div>
       </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalHtml);
     this.quickNote(`📍 Vista dual: ${title} (${lat.toFixed(4)}, ${lng.toFixed(4)})`);
   }
@@ -825,15 +825,15 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
     const address = document.getElementById('map-search-address').value.trim();
     const description = prompt('Descripción del punto marcado:');
     if (!description) return;
-    
+
     let lat, lng;
-    
+
     if (address) {
       try {
         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
         const response = await fetch(url);
         const results = await response.json();
-        
+
         if (results.length > 0) {
           lat = parseFloat(results[0].lat);
           lng = parseFloat(results[0].lon);
@@ -850,20 +850,20 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       lat = center.lat;
       lng = center.lng;
     }
-    
+
     this.markQuickLocation(lat, lng, description);
   }
 
   markQuickLocation(lat, lng, description) {
     const type = prompt('Tipo:\n1) 🏠 Allanamiento\n2) 🔍 Inspección\n3) ⭐ Punto de Interés\n4) 🚔 Patrullaje', '3');
-    const types = {'1': '🏠', '2': '🔍', '3': '⭐', '4': '🚔'};
-    const typeNames = {'1': 'Allanamiento', '2': 'Inspección', '3': 'Punto Interés', '4': 'Patrullaje'};
-    
+    const types = { '1': '🏠', '2': '🔍', '3': '⭐', '4': '🚔' };
+    const typeNames = { '1': 'Allanamiento', '2': 'Inspección', '3': 'Punto Interés', '4': 'Patrullaje' };
+
     const icon = types[type] || '📍';
     const typeName = typeNames[type] || 'Marcador';
-    
+
     const marks = JSON.parse(localStorage.getItem('marked_locations') || '[]');
-    
+
     const newMark = {
       id: Date.now(),
       lat: lat,
@@ -873,15 +873,15 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       icon: icon,
       timestamp: new Date().toISOString()
     };
-    
+
     marks.push(newMark);
     localStorage.setItem('marked_locations', JSON.stringify(marks));
-    
+
     this.addMarkerToMap(newMark);
-    
+
     this.showNotification(`${icon} ${typeName} marcado`, 'success');
     this.quickNote(`${icon} ${typeName}: ${description} en ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
-    
+
     const modal = document.getElementById('location-modal');
     if (modal) modal.remove();
   }
@@ -894,7 +894,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
         className: ''
       })
     });
-    
+
     marker.bindPopup(
       `
       <strong>${mark.icon} ${mark.type}</strong><br>
@@ -905,7 +905,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       </button>
     `
     );
-    
+
     this.markers.marcadores.addLayer(marker);
     this.map.setView([mark.lat, mark.lng], 17);
   }
@@ -918,9 +918,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
   deleteMarker(markId) {
     const marks = JSON.parse(localStorage.getItem('marked_locations') || '[]');
     const filtered = marks.filter(m => m.id !== markId);
-    
+
     localStorage.setItem('marked_locations', JSON.stringify(filtered));
-    
+
     this.refreshMarkedLocations();
     this.showNotification('Marca eliminada', 'success');
   }
@@ -937,9 +937,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       this.showNotification('Ingrese objetivo de investigación', 'warning');
       return;
     }
-    
+
     const searches = {
-      'google': `https://www.google.com/search?q="${target}"`, 
+      'google': `https://www.google.com/search?q="${target}"`,
       'linkedin': `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(target)}`,
       'facebook': `https://www.facebook.com/search/top?q=${encodeURIComponent(target)}`,
       'instagram': `https://www.instagram.com/explore/tags/${encodeURIComponent(target.replace(/\s+/g, ''))}/`,
@@ -948,7 +948,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
       'registro': `https://www.argentina.gob.ar/justicia/registro-automotor`,
       'judicial': `https://www.pjn.gov.ar/`
     };
-    
+
     if (platform === 'comprehensive') {
       const urls = [
         `https://www.google.com/search?q="${target}" site:argentina.gob.ar`,
@@ -956,9 +956,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
         `https://www.google.com/search?q="${target}"`,
         `https://www.linkedin.com/search/results/all/?keywords=${encodeURIComponent(target)}`
       ];
-      
+
       urls.forEach(url => window.open(url, '_blank'));
-      
+
       this.quickNote(`🎯 Investigación completa: ${target} - ${urls.length} búsquedas`);
       this.showNotification(`Investigación completa iniciada (${urls.length} ventanas)`, 'info');
     } else if (searches[platform]) {
@@ -1007,7 +1007,7 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
         clock.textContent = now.toLocaleTimeString('es-AR');
       }
     };
-    
+
     updateClock();
     setInterval(updateClock, 1000);
   }
@@ -1022,9 +1022,9 @@ Creado: ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}`
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       notification.style.animation = 'slideOut 0.3s ease';
       setTimeout(() => notification.remove(), 300);
