@@ -1,9 +1,0 @@
-# pack-refs with: peeled fully-peeled sorted 
-f33b50a52eae734420cdf8266d1a2b2676bf8b64 refs/heads/chore/guardrails-env-fixes
-6ba82a5c2b3d467222941a632ad3cb375e2cfdce refs/heads/master
-4e701a4cb54b38f82bc8d88267fdf4d7dd8a185b refs/heads/release/v1.0.0-rc1
-f33b50a52eae734420cdf8266d1a2b2676bf8b64 refs/remotes/origin/chore/guardrails-env-fixes
-7e7dc4a71ef1df9bb99e4df727903604cc4ef32b refs/remotes/origin/master
-d9bcabd2c7a70a539c8019f30ea95e1728ad92e3 refs/remotes/origin/release/v1.0.0-rc1
-602836e9f291618664fa071955f51503e402cc64 refs/tags/v1.0.0-rc1
-^6ba82a5c2b3d467222941a632ad3cb375e2cfdce

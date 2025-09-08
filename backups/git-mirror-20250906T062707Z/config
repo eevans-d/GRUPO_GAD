@@ -1,8 +1,0 @@
-[core]
-	repositoryformatversion = 0
-	filemode = true
-	bare = true
-[remote "origin"]
-	url = /home/eevan/ProyectosIA/GRUPO_GAD
-	fetch = +refs/*:refs/*
-	mirror = true
