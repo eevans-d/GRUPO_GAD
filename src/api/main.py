@@ -10,6 +10,10 @@ from loguru import logger
 from src.api.routers import api_router
 from src.api.routers import dashboard as dashboard_router
 from config.settings import settings
+from starlette.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from starlette import status
 
 # --- Configuración de Loguru ---
 # Eliminar el handler por defecto para evitar duplicados en la consola
@@ -42,6 +46,27 @@ app = FastAPI(
     description=settings.PROJECT_DESCRIPTION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
+
+# --- Middleware CORS ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_HOSTS,  # Usar la configuración de ALLOWED_HOSTS
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- Manejo de Errores Personalizado ---
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error for request {request.url}: {exc.errors()}")
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "detail": "Validation Error",
+            "errors": exc.errors()
+        },
+    )
 
 # --- Middleware de Logging ---
 @app.middleware("http")

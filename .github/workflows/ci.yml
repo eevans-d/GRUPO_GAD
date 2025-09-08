@@ -1,17 +1,130 @@
-name: CI
-on: [push, pull_request]
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
-      - name: Install deps
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: pip install poetry==1.5.1
+
+      - name: Install dependencies
+        run: poetry install --no-root
+
+      - name: Run Ruff Linter
+        run: poetry run ruff check .
+
+      - name: Run Black Formatter Check
+        run: poetry run black --check .
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgis/postgis:15-3.3-alpine
+        env:
+          POSTGRES_USER: gad_user
+          POSTGRES_PASSWORD: CHANGEME_POSTGRES_PASSWORD # Use a secret for this in real CI
+          POSTGRES_DB: gad_db
+        ports:
+          - 5433:5432 # Use the same port as in docker-compose.yml
+        options: >-
+          --health-cmd "pg_isready -U gad_user -d gad_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: pip install poetry==1.5.1
+
+      - name: Install dependencies
+        run: poetry install --no-root
+
+      - name: Wait for DB and Redis
         run: |
-          python -m pip install --upgrade pip
-          pip install pre-commit
-      - name: Run pre-commit
-        run: pre-commit run --all-files
+          echo "Waiting for DB to be ready..."
+          for i in $(seq 1 30); do
+            if poetry run python -c "import psycopg2; psycopg2.connect(dbname='gad_db', user='gad_user', password='CHANGEME_POSTGRES_PASSWORD', host='localhost', port='5433')"; then
+              echo "DB is ready!"
+              break
+            fi
+            sleep 1
+          done
+          echo "Waiting for Redis to be ready..."
+          for i in $(seq 1 30); do
+            if redis-cli -h localhost -p 6379 ping; then
+              echo "Redis is ready!"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run Pytest
+        env:
+          DATABASE_URL: postgresql+asyncpg://gad_user:CHANGEME_POSTGRES_PASSWORD@localhost:5433/gad_db
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: "" # Assuming no password for CI redis
+          SECRET_KEY: a_very_secret_key_for_ci_testing
+          TELEGRAM_TOKEN: fake_telegram_token
+          ADMIN_CHAT_ID: "12345"
+          WHITELIST_IDS: "[]"
+        run: poetry run pytest
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [lint, test] # Only build if lint and tests pass
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push API image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/Dockerfile.api
+          push: true
+          tags: your_docker_username/grupo_gad_api:latest # Replace with your actual Docker Hub username
+
+      - name: Build and push Bot image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/Dockerfile.bot
+          push: true
+          tags: your_docker_username/grupo_gad_bot:latest # Replace with your actual Docker Hub username
