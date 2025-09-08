@@ -26,6 +26,7 @@ loguru = "^0.7.3"
 alembic = "^1.16.5"
 httpx = "^0.25.0" # Para comunicación Bot-API
 geopy = "^2.4.1" # Para geocodificación del dashboard
+gunicorn = "^21.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
