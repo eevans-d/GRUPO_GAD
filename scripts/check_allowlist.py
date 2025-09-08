@@ -76,9 +76,7 @@ def check_python() -> bool:
     )
     dev_allow = set(
         p.lower()
-        for p in manifest.get("dependencies", {})
-        .get("dev_allowlist", {})
-        .get("pypi", [])
+        for p in manifest.get("dependencies", {}).get("dev_allowlist", {}).get("pypi", [])
     )
 
     # Prefer pyproject.toml (poetry) if present
@@ -86,36 +84,33 @@ def check_python() -> bool:
     used = []
     if pyproject.exists():
         try:
-            # extract simple dependency names from [tool.poetry.dependencies]
-            # and group.dev
+            # extract simple dependency names from [tool.poetry.dependencies] and group.dev
             content = pyproject.read_text()
             dep_section = False
             for line in content.splitlines():
-                stripped_line = line.strip()
-                if stripped_line == "[tool.poetry.dependencies]":
+                if line.strip() == "[tool.poetry.dependencies]":
                     dep_section = True
                     continue
-                if stripped_line.startswith("[tool.poetry.") and dep_section:
+                if line.strip().startswith("[tool.poetry.") and dep_section:
                     # end of dependencies section
                     dep_section = False
-                if dep_section and stripped_line and not stripped_line.startswith("#"):
-                    name = stripped_line.split("=")[0].strip()
-                    if name and name != "python":
-                        used.append(name.lower())
-
+                if dep_section:
+                    if line.strip() and not line.strip().startswith("#"):
+                        name = line.split("=")[0].strip()
+                        if name and name != "python":
+                            used.append(name.lower())
             # also check dev group
             dev_marker = "[tool.poetry.group.dev.dependencies]"
             if dev_marker in content:
                 in_dev = False
                 for line in content.splitlines():
-                    stripped_line = line.strip()
-                    if stripped_line == dev_marker:
+                    if line.strip() == dev_marker:
                         in_dev = True
                         continue
-                    if in_dev and stripped_line.startswith("["):
+                    if in_dev and line.strip().startswith("["):
                         in_dev = False
-                    if in_dev and stripped_line and not stripped_line.startswith("#"):
-                        name = stripped_line.split("=")[0].strip()
+                    if in_dev and line.strip() and not line.strip().startswith("#"):
+                        name = line.split("=")[0].strip()
                         if name:
                             used.append(name.lower())
         except Exception:

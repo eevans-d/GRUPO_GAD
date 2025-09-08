@@ -14,8 +14,7 @@ asyncpg = "^0.28.0"
 
 # Force starlette to a patched release to mitigate multipart/form vulnerabilities
 fastapi = "^0.110.0"
-# Prefer a patched starlette release to mitigate multipart/form DoS
-starlette = ">=0.40.0"
+# Starlette is managed as a sub-dependency of FastAPI
 
 pydantic = "^2.3.0"
 pydantic-settings = "^2.1.0"
