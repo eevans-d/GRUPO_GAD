@@ -12,9 +12,10 @@ uvicorn = {extras = ["standard"], version = "^0.23.2"}
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.20"}
 asyncpg = "^0.28.0"
 
-# Force starlette to a patched release to mitigate multipart/form vulnerabilities
-fastapi = "^0.110.0"
-# Starlette is managed as a sub-dependency of FastAPI
+# SECURITY HARDENING: Force latest compatible versions
+fastapi = "^0.115.0"  # Latest with security patches
+starlette = "^0.40.0"  # Force patched version (may conflict - will resolve)
+uvicorn = {extras = ["standard"], version = "^0.32.0"}  # Latest
 
 pydantic = "^2.3.0"
 pydantic-settings = "^2.1.0"
@@ -24,7 +25,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-telegram-bot = "^20.6"
 requests = "^2.31.0"
 redis = "^5.0.1"
-python-multipart = ">=0.0.18" # Para OAuth2 forms (parche de seguridad)
+python-multipart = ">=0.0.20"  # Latest security patches
 loguru = "^0.7.3"
 alembic = "^1.16.5"
 httpx = "^0.25.0" # Para comunicación Bot-API
