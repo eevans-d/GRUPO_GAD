@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: {}
 
 jobs:
   lint:
@@ -128,3 +129,29 @@ jobs:
           file: docker/Dockerfile.bot
           push: true
           tags: your_docker_username/grupo_gad_bot:latest # Replace with your actual Docker Hub username
+
+  security:
+    name: Dependency security scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: pip install poetry==1.5.1
+
+      - name: Export dependencies
+        run: |
+          poetry export -f requirements.txt --without-hashes -o requirements.txt
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Run pip-audit
+        run: |
+          pip-audit -r requirements.txt || true

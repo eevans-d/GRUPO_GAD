@@ -7,7 +7,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 import os
 import pathlib
 from typing import List, Optional, ClassVar
-from pydantic import Field, validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -33,14 +33,18 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(30)
 
     # === BASE DE DATOS ===
-    # Valor por defecto 'db' para evitar fallo si la variable no está presente en entornos docker
+    # Valor por defecto 'db' para evitar fallo si la variable no está
+    # presente en entornos docker
     POSTGRES_SERVER: str = Field("db")
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
+    POSTGRES_PORT: int = Field(5432)
     DATABASE_URL: Optional[str] = None
 
-    @validator("DATABASE_URL", pre=True)
+    from pydantic import field_validator
+
+    @field_validator("DATABASE_URL", mode="before")
     def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
         # Priority: explicit DATABASE_URL -> legacy DB_URL env var -> assemble from parts
         if isinstance(v, str) and v:
@@ -55,7 +59,7 @@ class Settings(BaseSettings):
         return (
             f"postgresql+asyncpg://{values.get('POSTGRES_USER')}:"
             f"{values.get('POSTGRES_PASSWORD')}@"
-            f"{values.get('POSTGRES_SERVER')}/"
+            f"{values.get('POSTGRES_SERVER')}:{values.get('POSTGRES_PORT')}/"
             f"{values.get('POSTGRES_DB')}"
         )
 
@@ -76,6 +80,9 @@ class Settings(BaseSettings):
     # === TIMEZONE ===
     TZ: str = Field("UTC")
 
+    # Environment metadata (may be provided by deploy systems)
+    ENVIRONMENT: Optional[str] = Field(None)
+
     # === SEGURIDAD ===
     USERS_OPEN_REGISTRATION: bool = Field(False)
     ALLOWED_HOSTS: List[str] = Field(["*"])
@@ -94,7 +101,10 @@ class Settings(BaseSettings):
     env_files.append('.env')
 
     model_config = SettingsConfigDict(
-        case_sensitive=False, env_file=env_files, env_file_encoding="utf-8"
+        case_sensitive=False,
+        env_file=env_files,
+        env_file_encoding="utf-8",
+        extra="ignore",
     )
 
 
