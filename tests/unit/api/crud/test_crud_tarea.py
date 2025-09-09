@@ -1,23 +1,21 @@
-# -*- coding: utf-8 -*-
 """
 Tests unitarios para las operaciones CRUD de Tarea.
 """
 
+# =======================
+# Tests unitarios: CRUD Tarea
+# =======================
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 from datetime import datetime
-
 from src.api.crud.crud_tarea import CRUDTarea
-from src.api.models.tarea import Tarea  # Add tarea_efectivos
+from src.api.models.tarea import Tarea
 from src.schemas.tarea import TareaCreate, TareaUpdate
 from src.shared.constants import TaskStatus, TaskType
 
-
 @pytest.fixture
 def mock_db_session():
-    """
-    Fixture que proporciona una sesión de base de datos mockeada.
-    """
     session = AsyncMock()
     session.execute = AsyncMock()
     session.commit = AsyncMock()
@@ -26,19 +24,15 @@ def mock_db_session():
     session.delete = AsyncMock()
     return session
 
-
 @pytest.fixture
 def crud_tarea_instance():
-    """
-    Fixture que proporciona una instancia de CRUDTarea.
-    """
     return CRUDTarea(Tarea)
-
 
 @pytest.mark.asyncio
 async def test_create_tarea(mock_db_session, crud_tarea_instance):
     """
     Test para crear una tarea.
+    """
     """
     tarea_in = TareaCreate(
         codigo="TASK001",
@@ -74,7 +68,9 @@ async def test_create_tarea(mock_db_session, crud_tarea_instance):
 @pytest.mark.asyncio
 async def test_get_multi_by_delegado(mock_db_session, crud_tarea_instance):
     """
+    """
     Test para obtener tareas por delegado.
+    """
     """
     mock_tarea1 = MagicMock(spec=Tarea, delegado_usuario_id=1)
     mock_tarea2 = MagicMock(spec=Tarea, delegado_usuario_id=1)
@@ -94,8 +90,6 @@ async def test_get_multi_by_delegado(mock_db_session, crud_tarea_instance):
 
 @pytest.mark.asyncio
 async def test_update_tarea(mock_db_session, crud_tarea_instance):
-    """
-    Test para actualizar una tarea de forma simplificada y robusta.
     """
     # 1. Setup: Crear un objeto de tarea existente
     db_obj = Tarea(
@@ -131,9 +125,6 @@ async def test_update_tarea(mock_db_session, crud_tarea_instance):
 
 @pytest.mark.asyncio
 async def test_remove_tarea(mock_db_session, crud_tarea_instance):
-    """
-    Test para eliminar una tarea.
-    """
     tarea_to_delete = MagicMock(spec=Tarea)
     tarea_to_delete.id = 1
 
