@@ -92,13 +92,31 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         },
     )
 
-# --- Middleware de Logging ---
+
+# --- Middleware de Logging Mejorado ---
+import time
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+    start_time = time.time()
     logger.info(f"Request: {request.method} {request.url}")
-    response = await call_next(request)
-    logger.info(f"Response: {response.status_code}")
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        logger.error(f"Error: {exc}")
+        raise
+    process_time = (time.time() - start_time) * 1000
+    logger.info(f"Response: {response.status_code} | Time: {process_time:.2f}ms")
     return response
+
+# --- Endpoint de métricas básicas ---
+from fastapi.responses import PlainTextResponse
+@app.get("/metrics", response_class=PlainTextResponse, tags=["monitoring"])
+async def metrics():
+    uptime = int(time.time() - app.state.start_time)
+    return f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n"
+
+# Guardar tiempo de inicio para métricas
+app.state.start_time = time.time()
 
 # Montar archivos estáticos para el dashboard
 app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")

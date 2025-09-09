@@ -1,3 +1,4 @@
+# Exponer símbolos principales para tests y uso externo
 # -*- coding: utf-8 -*-
 """
 Modelos ORM para el sistema GRUPO_GAD.
