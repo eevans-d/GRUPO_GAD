@@ -4,16 +4,17 @@ Modelo base para todos los modelos ORM.
 """
 
 import json
-from typing import Any, Dict
-from sqlalchemy import MetaData, Integer
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.ext.asyncio import AsyncAttrs
-from sqlalchemy.types import TypeDecorator, JSON
-from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from datetime import datetime, timezone
+from typing import Any, Dict
+
+from sqlalchemy import Integer, MetaData
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.types import JSON, TypeDecorator
 
 
-class CustomJsonB(TypeDecorator):
+class CustomJsonB(TypeDecorator[Any]):
     """Platform-independent JSONB type.
 
     Uses JSONB on PostgreSQL, otherwise uses JSON.
@@ -22,14 +23,14 @@ class CustomJsonB(TypeDecorator):
     impl = JSON
     cache_ok = True
 
-    def load_dialect_impl(self, dialect):
+    def load_dialect_impl(self, dialect: Any) -> Any:
         if dialect.name == "postgresql":
             return dialect.type_descriptor(JSONB())
         else:
             return dialect.type_descriptor(JSON())
 
 
-class CustomArray(TypeDecorator):
+class CustomArray(TypeDecorator[Any]):
     """Platform-independent ARRAY type.
 
     Uses ARRAY on PostgreSQL, otherwise simulates with JSON.
@@ -38,18 +39,18 @@ class CustomArray(TypeDecorator):
     impl = JSON
     cache_ok = True
 
-    def load_dialect_impl(self, dialect):
+    def load_dialect_impl(self, dialect: Any) -> Any:
         if dialect.name == "postgresql":
             return dialect.type_descriptor(ARRAY(Integer))
         else:
             return dialect.type_descriptor(JSON())
 
-    def process_bind_param(self, value, dialect):
+    def process_bind_param(self, value: Any, dialect: Any) -> Any:
         if dialect.name == "postgresql" or value is None:
             return value
         return json.dumps(value)
 
-    def process_result_value(self, value, dialect):
+    def process_result_value(self, value: Any, dialect: Any) -> Any:
         if dialect.name == "postgresql" or value is None:
             return value
         return json.loads(value)

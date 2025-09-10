@@ -248,3 +248,61 @@
 2025-09-10T00:10:11.169373-0300 INFO API iniciada y lista para recibir peticiones.
 2025-09-10T00:10:13.749568-0300 INFO API iniciada y lista para recibir peticiones.
 2025-09-10T00:10:16.093314-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T00:54:46.036773-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:00:23.489644-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:01:49.715772-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:03:52.251306-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:03:59.261715-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T04:11:13.169582+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:11:59.590018-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T04:12:13.695448+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:13:03.133034-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T04:13:13.042308+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T04:13:13.137586+0000 INFO Request: GET http://test/api/v1/health
+2025-09-10T04:13:13.138406+0000 INFO Response: 200 | Time: 0.83ms
+2025-09-10T04:13:13.430916+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-10T04:13:13.693529+0000 INFO Response: 200 | Time: 262.61ms
+2025-09-10T04:13:13.941410+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-10T04:13:14.192612+0000 INFO Response: 200 | Time: 251.20ms
+2025-09-10T01:16:03.704800-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:16:17.317281-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:17:38.324508-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:18:06.356694-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:25:06.576422-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:27:40.043192-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:29:30.172230-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:34:41.607897-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T01:36:10.532952-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:17:23.496289-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:23:50.847557-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:29:36.341612-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:29:38.183806-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:29:40.137908-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:29:42.195131-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:34:47.522831-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:34:53.689232-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:35:49.793027-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:37:27.714038-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:41:02.895966-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:42:31.869877-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:43:32.203634-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:48:41.842788-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:51:18.235764-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:51:28.441356-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:51:35.428276-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:52:36.460664-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:54:08.199617-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:55:05.409932-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T02:55:07.520348-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:19:40.216013-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:20:18.371240-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:21:20.508381-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:21:42.376178-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:22:19.534651-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:31:09.844996-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:31:11.855566-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:31:14.384841-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:31:16.167469-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:39:51.663662-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:41:33.629834-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-10T03:42:42.782950-0300 INFO API iniciada y lista para recibir peticiones.

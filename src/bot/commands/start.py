@@ -4,14 +4,16 @@ Manejador para el comando /start.
 """
 
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext
+from telegram.ext import CallbackContext, CommandHandler
+from telegram import Bot, Chat, User
+from typing import Any
 
 
-async def start(update: Update, context: CallbackContext) -> None: # Added async
+async def start(update: Update, context: CallbackContext[Bot, Update, Chat, User]) -> None:
     """Envia un mensaje de bienvenida."""
     if update.message is None: # Added None check
         return
-    update.message.reply_text("Bienvenido al Bot de Gestión de Agentes (GAD).")
+    await update.message.reply_text("Bienvenido al Bot de Gestión de Agentes (GAD).")
 
 
 start_handler = CommandHandler("start", start)

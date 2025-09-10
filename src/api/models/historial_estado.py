@@ -5,6 +5,7 @@ Modelo de HistorialEstado para el sistema GRUPO_GAD.
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Optional
+from typing import Any
 
 from sqlalchemy import ForeignKey, Integer, Text
 from sqlalchemy.dialects.postgresql import ENUM
@@ -43,7 +44,7 @@ class HistorialEstado(Base):
 
     motivo: Mapped[Optional[str]] = mapped_column(Text)
 
-    extra_data: Mapped[dict] = mapped_column(CustomJsonB, default={})
+    extra_data: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
 
     # Relaciones
     tarea: Mapped["Tarea"] = relationship("Tarea", back_populates="historial_estados")

@@ -5,7 +5,7 @@ Esquemas para el modelo de Usuario.
 
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from src.shared.constants import UserLevel
 

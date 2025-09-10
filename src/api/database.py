@@ -1,4 +1,5 @@
 import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -17,7 +18,9 @@ Base = declarative_base()
 
 
 # Dependency to get a DB session
-def get_db():
+from typing import Generator, Any
+
+def get_db() -> Generator[Any, None, None]:
     db = SessionLocal()
     try:
         yield db

@@ -7,13 +7,16 @@ from datetime import datetime
 
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
+from typing import Any
 
-from src.bot.services.api import api_service
+from src.bot.services.api_service import ApiService
 from src.schemas.tarea import TareaCreate
 from src.shared.constants import TaskType
 
 
-async def crear_tarea(update: Update, context: CallbackContext) -> None:
+from telegram.ext import CallbackContext
+from telegram import Bot, Chat, User
+async def crear_tarea(update: Update, context: CallbackContext[Bot, Update, Chat, User]) -> None:
     """
     Crea una nueva tarea.
     Formato: /crear <código> <título> <tipo> <id_delegado> <id_asignado1> ...
@@ -61,13 +64,16 @@ async def crear_tarea(update: Update, context: CallbackContext) -> None:
             efectivos_asignados=asignados_ids,
         )
 
-        await api_service.create_task(task_in)
+        from config.settings import settings
+        api_url = getattr(settings, "API_V1_STR", "/api/v1")
+        token = None  # Si tienes un token, obténlo aquí
+        api_service = ApiService(api_url, token)
+        api_service.create_task(task_in)
         await update.message.reply_text(f"Tarea '{codigo}' creada exitosamente.")
 
     except (ValueError, TypeError) as e:
         await update.message.reply_text(
-            f"Error en los argumentos. Asegúrate de que los IDs sean números y "
-            f"el formato sea correcto: {e}"
+            f"Error en los argumentos. Asegúrate de que los IDs sean números y el formato sea correcto: {e}"
         )
     except Exception as e:
         await update.message.reply_text(f"Error al crear la tarea: {e}")

@@ -2,9 +2,10 @@
 """Modelo de Efectivo para el sistema GRUPO_GAD."""
 
 import enum
-from uuid import UUID, uuid4
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
+from typing import Any
+from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import ENUM as pg_ENUM
@@ -68,7 +69,7 @@ class Efectivo(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
-    extra_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSON)
+    extra_metadata: Mapped[Optional[dict[str, Any]]] = mapped_column("metadata", JSON)
 
     # --- Relationships ---
     usuario: Mapped["Usuario"] = relationship(back_populates="efectivo")

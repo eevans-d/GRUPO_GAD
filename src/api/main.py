@@ -3,17 +3,20 @@
 Punto de entrada principal para la API de GRUPO_GAD.
 """
 import sys
-from fastapi import FastAPI, Request
-from fastapi.staticfiles import StaticFiles
-from loguru import logger
+from typing import Any
 
-from src.api.routers import api_router
-from src.api.routers import dashboard as dashboard_router
-from config.settings import settings
-from starlette.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.responses import Response
+from fastapi.staticfiles import StaticFiles
+from loguru import logger
 from starlette import status
+from starlette.middleware.cors import CORSMiddleware
+
+from config.settings import settings
+from src.api.routers import api_router
+from src.api.routers import dashboard as dashboard_router
 
 # --- Configuración de Loguru ---
 # Eliminar el handler por defecto para evitar duplicados en la consola
@@ -52,7 +55,8 @@ MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
 
 
 @app.middleware("http")
-async def max_body_size_middleware(request: Request, call_next):
+
+async def max_body_size_middleware(request: Request, call_next: Any) -> JSONResponse:
     # Comprobar Content-Length si está presente
     content_length = request.headers.get("content-length")
     if content_length is not None:
@@ -69,7 +73,10 @@ async def max_body_size_middleware(request: Request, call_next):
     # Para transferencias chunked u otras sin Content-Length, no se puede
     # verificar sin consumir el body; confiamos en proxies frontales y límites
     # adicionales en producción para esa protección.
-    return await call_next(request)
+    response = await call_next(request)
+    if isinstance(response, JSONResponse):
+        return response
+    return JSONResponse(content=str(response))
 
 # --- Middleware CORS ---
 app.add_middleware(
@@ -82,7 +89,8 @@ app.add_middleware(
 
 # --- Manejo de Errores Personalizado ---
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     logger.error(f"Validation error for request {request.url}: {exc.errors()}")
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -95,8 +103,11 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 # --- Middleware de Logging Mejorado ---
 import time
+
+
 @app.middleware("http")
-async def log_requests(request: Request, call_next):
+
+async def log_requests(request: Request, call_next: Any) -> Response:
     start_time = time.time()
     logger.info(f"Request: {request.method} {request.url}")
     try:
@@ -105,15 +116,20 @@ async def log_requests(request: Request, call_next):
         logger.error(f"Error: {exc}")
         raise
     process_time = (time.time() - start_time) * 1000
-    logger.info(f"Response: {response.status_code} | Time: {process_time:.2f}ms")
-    return response
+    logger.info(f"Response: {getattr(response, 'status_code', 'N/A')} | Time: {process_time:.2f}ms")
+    if isinstance(response, Response):
+        return response
+    return Response(content=str(response))
 
 # --- Endpoint de métricas básicas ---
 from fastapi.responses import PlainTextResponse
+
+
 @app.get("/metrics", response_class=PlainTextResponse, tags=["monitoring"])
-async def metrics():
+
+async def metrics() -> PlainTextResponse:
     uptime = int(time.time() - app.state.start_time)
-    return f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n"
+    return PlainTextResponse(f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n")
 
 # Guardar tiempo de inicio para métricas
 app.state.start_time = time.time()

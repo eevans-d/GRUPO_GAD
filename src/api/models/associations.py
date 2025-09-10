@@ -3,9 +3,9 @@
 Definiciones de tablas de asociación para relaciones muchos a muchos.
 """
 
-from sqlalchemy import Table, Column, Integer, ForeignKey
-from .base import Base
+from sqlalchemy import Column, ForeignKey, Integer, Table
 
+from .base import Base
 
 # Tabla de asociación muchos a muchos entre tareas y efectivos
 tarea_efectivos = Table(

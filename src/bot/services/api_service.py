@@ -3,8 +3,9 @@
 Servicio para interactuar con la API de GRUPO_GAD.
 """
 
-import requests
 from typing import Any, Dict, List, Optional
+
+import requests
 
 from config.settings import settings
 from src.schemas.tarea import Tarea, TareaCreate
@@ -20,7 +21,7 @@ class ApiService:
         response.raise_for_status()
         return response.json()
 
-    def _post(self, endpoint: str, data: Dict[str, Any]) -> Any:
+    def _post(self, endpoint: str, data: dict[str, Any]) -> Any:
         response = requests.post(
             f"{self.api_url}{endpoint}", json=data, headers=self.headers
         )
@@ -31,23 +32,20 @@ class ApiService:
         """Obtiene el nivel de autenticación de un usuario."""
         try:
             response = self._get(f"/auth/{telegram_id}")
-            return response.get("nivel")
+            nivel = response.get("nivel")
+            if isinstance(nivel, str):
+                return nivel
+            return None
         except requests.exceptions.RequestException:
             return None
 
     def create_task(self, task_in: TareaCreate) -> Tarea:
         """Crea una nueva tarea."""
-        return self._post("/tasks/", data=task_in.dict())
+        response = self._post("/tasks/create", task_in.model_dump())
+        return Tarea(**response)
 
     def finalize_task(self, task_code: str, telegram_id: int) -> Tarea:
-        """Finaliza una tarea."""
-        return self._post(
-            f"/tasks/{task_code}/finalize", data={"telegram_id": telegram_id}
-        )
-
-    def get_available_efectivos(self, nivel: str) -> List[Dict[str, Any]]:
-        """Obtiene los efectivos disponibles."""
-        return self._get(f"/disponibles?nivel={nivel}")
-
-
-api_service = ApiService(api_url=f"http://api:8000{settings.API_V1_STR}")
+        """Finaliza una tarea por código y usuario."""
+        data = {"task_code": task_code, "telegram_id": telegram_id}
+        response = self._post("/tasks/finalize", data)
+        return Tarea(**response)

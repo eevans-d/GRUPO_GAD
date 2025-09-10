@@ -3,7 +3,7 @@
 Operaciones CRUD para el modelo de Tarea.
 """
 
-from typing import Sequence # Added Sequence
+from typing import Sequence  # Added Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select

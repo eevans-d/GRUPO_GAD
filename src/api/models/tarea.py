@@ -7,6 +7,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, List, Optional
+from typing import Any
 
 from sqlalchemy import (
     CheckConstraint,
@@ -110,8 +111,8 @@ class Tarea(Base):
     duracion_real_horas: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
 
     # Metadata y notas
-    notas: Mapped[dict] = mapped_column(CustomJsonB, default={})
-    extra_data: Mapped[dict] = mapped_column(CustomJsonB, default={})
+    notas: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
+    extra_data: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
 
     # Relaciones ORM
     delegado_usuario: Mapped["Usuario"] = relationship(

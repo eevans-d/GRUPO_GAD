@@ -5,7 +5,7 @@ Agregador de routers para la API.
 
 from fastapi import APIRouter
 
-from . import auth, users, tasks, health
+from . import auth, health, tasks, users
 
 api_router = APIRouter()
 api_router.include_router(health.router, tags=["health"])

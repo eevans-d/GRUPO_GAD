@@ -6,7 +6,8 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
-from typing import List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
+from typing import Any
 
 from sqlalchemy import BigInteger, Boolean, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import ENUM
@@ -17,11 +18,10 @@ from src.shared.constants import UserLevel
 
 from .base import Base, CustomJsonB
 
-
 if TYPE_CHECKING:
     from .efectivo import Efectivo
-    from .tarea import Tarea
     from .historial_estado import HistorialEstado
+    from .tarea import Tarea
 
 
 class Usuario(Base):
@@ -55,7 +55,7 @@ class Usuario(Base):
     ultimo_acceso: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     intentos_fallidos: Mapped[int] = mapped_column(Integer, default=0)
     bloqueado_hasta: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    extra_data: Mapped[dict] = mapped_column(CustomJsonB, default={})
+    extra_data: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
 
     # Relaciones
     efectivo: Mapped["Efectivo"] = relationship(

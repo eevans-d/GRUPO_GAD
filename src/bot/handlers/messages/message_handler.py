@@ -7,11 +7,14 @@ import re
 
 from telegram import Update
 from telegram.ext import CallbackContext, MessageHandler, filters
+from typing import Any
 
-from src.bot.services.api import api_service
+from src.bot.services.api_service import ApiService
 
 
-async def message_handler_func(update: Update, context: CallbackContext) -> None:
+from telegram.ext import CallbackContext
+from telegram import Bot, Chat, User
+async def message_handler_func(update: Update, context: CallbackContext[Bot, Update, Chat, User]) -> None:
     """
     Procesa mensajes de texto para encontrar palabras clave.
     """
@@ -26,7 +29,11 @@ async def message_handler_func(update: Update, context: CallbackContext) -> None
     if match:
         codigo_tarea = match.group(1)
         try:
-            await api_service.finalize_task(
+            from config.settings import settings
+            api_url = getattr(settings, "API_V1_STR", "/api/v1")
+            token = None  # Si tienes un token, obténlo aquí
+            api_service = ApiService(api_url, token)
+            api_service.finalize_task(
                 task_code=codigo_tarea, telegram_id=user_id
             )
             await update.message.reply_text(

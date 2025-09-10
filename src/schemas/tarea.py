@@ -3,12 +3,12 @@
 Esquemas para el modelo de Tarea.
 """
 
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from src.shared.constants import TaskStatus, TaskPriority, TaskType
+from src.shared.constants import TaskPriority, TaskStatus, TaskType
 
 
 # Propiedades compartidas

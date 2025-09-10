@@ -6,7 +6,7 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 
 import os
 import pathlib
-from typing import List, Optional, ClassVar
+from typing import List, Optional, ClassVar, Any
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -42,7 +42,7 @@ class Settings(BaseSettings):
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
-    def assemble_db_connection(cls, v: Optional[str], values) -> Optional[str]:
+    def assemble_db_connection(cls, v: str | None, info: Any) -> str | None:
         # Keep behaviour for direct DATABASE_URL or legacy DB_URL env
         if isinstance(v, str) and v:
             return v
@@ -52,11 +52,12 @@ class Settings(BaseSettings):
             return legacy_db_url
 
         # Fall back to components
-        user = values.data.get("POSTGRES_USER")
-        password = values.data.get("POSTGRES_PASSWORD")
-        server = values.data.get("POSTGRES_SERVER")
-        port = values.data.get("POSTGRES_PORT")
-        db = values.data.get("POSTGRES_DB")
+        data = getattr(info, "data", {})
+        user = data.get("POSTGRES_USER")
+        password = data.get("POSTGRES_PASSWORD")
+        server = data.get("POSTGRES_SERVER")
+        port = data.get("POSTGRES_PORT")
+        db = data.get("POSTGRES_DB")
 
         if all([user, password, server, port, db]):
             return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
@@ -130,7 +131,15 @@ def get_settings() -> "Settings":
     or migration runners). Avoid importing and using a global `settings` at
     module import time in order to prevent ValidationError when env vars are missing.
     """
-    return Settings()  # type: ignore
+    return Settings(
+        SECRET_KEY=os.getenv("SECRET_KEY", ""),
+        POSTGRES_USER=os.getenv("POSTGRES_USER", ""),
+        POSTGRES_PASSWORD=os.getenv("POSTGRES_PASSWORD", ""),
+        POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
+        TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
+        ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
+        WHITELIST_IDS=[int(x) for x in os.getenv("WHITELIST_IDS", "").split(",") if x],
+    )
 
 
 # Backwards-compatible module-level `settings` object.
@@ -141,16 +150,24 @@ def get_settings() -> "Settings":
 class _LazySettingsProxy:
     _inst = None
 
-    def _build(self):
+    def _build(self) -> Settings:
         if self._inst is None:
             try:
-                self._inst = Settings()
+                self._inst = Settings(
+                    SECRET_KEY=os.getenv("SECRET_KEY", ""),
+                    POSTGRES_USER=os.getenv("POSTGRES_USER", ""),
+                    POSTGRES_PASSWORD=os.getenv("POSTGRES_PASSWORD", ""),
+                    POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
+                    TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
+                    ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
+                    WHITELIST_IDS=[int(x) for x in os.getenv("WHITELIST_IDS", "").split(",") if x],
+                )
             except Exception:
                 # Last-resort: construct without validation to avoid import errors
                 self._inst = Settings.construct()
         return self._inst
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         return getattr(self._build(), name)
 
 

@@ -3,14 +3,16 @@
 Modelo de MetricaTarea para el sistema GRUPO_GAD.
 """
 
-from typing import Optional
-from sqlalchemy import Integer, REAL, DECIMAL
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import ENUM
 from datetime import datetime, timezone
+from typing import Optional
+
+from sqlalchemy import DECIMAL, REAL, Integer
+from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy.orm import Mapped, mapped_column
+
+from src.shared.constants import TaskPriority, TaskType
 
 from .base import Base
-from src.shared.constants import TaskType, TaskPriority
 
 
 class MetricaTarea(Base):
