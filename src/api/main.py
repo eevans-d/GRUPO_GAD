@@ -55,8 +55,7 @@ MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
 
 
 @app.middleware("http")
-
-async def max_body_size_middleware(request: Request, call_next: Any) -> JSONResponse:
+async def max_body_size_middleware(request: Request, call_next: Any):
     # Comprobar Content-Length si está presente
     content_length = request.headers.get("content-length")
     if content_length is not None:
@@ -74,9 +73,7 @@ async def max_body_size_middleware(request: Request, call_next: Any) -> JSONResp
     # verificar sin consumir el body; confiamos en proxies frontales y límites
     # adicionales en producción para esa protección.
     response = await call_next(request)
-    if isinstance(response, JSONResponse):
-        return response
-    return JSONResponse(content=str(response))
+    return response
 
 # --- Middleware CORS ---
 app.add_middleware(
@@ -89,7 +86,6 @@ app.add_middleware(
 
 # --- Manejo de Errores Personalizado ---
 @app.exception_handler(RequestValidationError)
-
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
     logger.error(f"Validation error for request {request.url}: {exc.errors()}")
     return JSONResponse(
@@ -106,7 +102,6 @@ import time
 
 
 @app.middleware("http")
-
 async def log_requests(request: Request, call_next: Any) -> Response:
     start_time = time.time()
     logger.info(f"Request: {request.method} {request.url}")
@@ -117,9 +112,7 @@ async def log_requests(request: Request, call_next: Any) -> Response:
         raise
     process_time = (time.time() - start_time) * 1000
     logger.info(f"Response: {getattr(response, 'status_code', 'N/A')} | Time: {process_time:.2f}ms")
-    if isinstance(response, Response):
-        return response
-    return Response(content=str(response))
+    return response
 
 # --- Endpoint de métricas básicas ---
 from fastapi.responses import PlainTextResponse
