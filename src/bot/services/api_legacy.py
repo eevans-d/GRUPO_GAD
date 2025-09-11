@@ -17,13 +17,13 @@ class ApiService:
         self.headers = {"Authorization": f"Bearer {token}"} if token else {}
 
     def _get(self, endpoint: str) -> Any:
-        response = requests.get(f"{self.api_url}{endpoint}", headers=self.headers)
+        response = requests.get(f"{self.api_url}{endpoint}", headers=self.headers, timeout=10)
         response.raise_for_status()
         return response.json()
 
     def _post(self, endpoint: str, data: dict[str, Any]) -> Any:
         response = requests.post(
-            f"{self.api_url}{endpoint}", json=data, headers=self.headers
+            f"{self.api_url}{endpoint}", json=data, headers=self.headers, timeout=10
         )
         response.raise_for_status()
         return response.json()

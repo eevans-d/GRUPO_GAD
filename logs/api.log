@@ -329,3 +329,10 @@
 2025-09-11T03:15:11.177011+0000 INFO Response: 200 | Time: 271.41ms
 2025-09-11T03:15:11.420202+0000 INFO Request: POST http://test/api/v1/auth/login
 2025-09-11T03:15:11.659584+0000 INFO Response: 200 | Time: 239.38ms
+2025-09-11T03:30:44.612462+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-11T03:30:44.690954+0000 INFO Request: GET http://test/api/v1/health
+2025-09-11T03:30:44.692485+0000 INFO Response: 200 | Time: 1.47ms
+2025-09-11T03:30:44.974743+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T03:30:45.228182+0000 INFO Response: 200 | Time: 253.44ms
+2025-09-11T03:30:45.471100+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T03:30:45.719986+0000 INFO Response: 200 | Time: 248.89ms
