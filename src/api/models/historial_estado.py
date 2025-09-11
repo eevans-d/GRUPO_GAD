@@ -28,18 +28,18 @@ class HistorialEstado(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     tarea_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("gad.tareas.id"), nullable=False
+    Integer, ForeignKey("tareas.id"), nullable=False
     )
 
     estado_anterior: Mapped[Optional[TaskStatus]] = mapped_column(
-        ENUM(TaskStatus, name="estado_tarea", schema="gad")
+    ENUM(TaskStatus, name="estado_tarea")
     )
     estado_nuevo: Mapped[TaskStatus] = mapped_column(
-        ENUM(TaskStatus, name="estado_tarea", schema="gad"), nullable=False
+    ENUM(TaskStatus, name="estado_tarea"), nullable=False
     )
 
     usuario_id: Mapped[Optional[int]] = mapped_column(
-        Integer, ForeignKey("gad.usuarios.id")
+    Integer, ForeignKey("usuarios.id")
     )
 
     motivo: Mapped[Optional[str]] = mapped_column(Text)

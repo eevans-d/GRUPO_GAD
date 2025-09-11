@@ -81,7 +81,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 exclude_unset=True
             )
 
+        # Campos sensibles que nunca deben ser modificados por update
+        SENSITIVE_FIELDS = {"id", "uuid", "created_at", "updated_at", "deleted_at"}
         for field in update_data:
+            if field in SENSITIVE_FIELDS:
+                continue
             if hasattr(db_obj, field):
                 setattr(db_obj, field, update_data[field])
 

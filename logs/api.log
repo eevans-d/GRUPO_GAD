@@ -336,3 +336,17 @@
 2025-09-11T03:30:45.228182+0000 INFO Response: 200 | Time: 253.44ms
 2025-09-11T03:30:45.471100+0000 INFO Request: POST http://test/api/v1/auth/login
 2025-09-11T03:30:45.719986+0000 INFO Response: 200 | Time: 248.89ms
+2025-09-11T04:18:56.050239+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-11T04:18:56.204317+0000 INFO Request: GET http://test/api/v1/health
+2025-09-11T04:18:56.206599+0000 INFO Response: 200 | Time: 2.33ms
+2025-09-11T04:18:56.719211+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T04:18:57.153867+0000 INFO Response: 200 | Time: 434.65ms
+2025-09-11T04:18:57.577935+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T04:18:57.996825+0000 INFO Response: 200 | Time: 418.88ms
+2025-09-11T04:40:25.594493+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-11T04:40:25.751108+0000 INFO Request: GET http://test/api/v1/health
+2025-09-11T04:40:25.752803+0000 INFO Response: 200 | Time: 1.67ms
+2025-09-11T04:40:26.241224+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T04:40:26.684803+0000 INFO Response: 200 | Time: 443.59ms
+2025-09-11T04:40:27.103558+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-11T04:40:27.526247+0000 INFO Response: 200 | Time: 422.69ms

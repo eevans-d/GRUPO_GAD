@@ -44,7 +44,7 @@ class Usuario(Base):
 
     # Nivel de autorización
     nivel: Mapped[UserLevel] = mapped_column(
-        ENUM(UserLevel, name="nivel_usuario", schema="gad"),
+    ENUM(UserLevel, name="nivel_usuario"),
         default=UserLevel.LEVEL_1,
         nullable=False,
     )

@@ -62,7 +62,7 @@ class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
 
     # Metadata compartida
-    metadata = MetaData(schema="gad")
+    metadata = MetaData()
 
     # Campos de auditoría comunes
     created_at: Mapped[datetime] = mapped_column(

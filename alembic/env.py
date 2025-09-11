@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
-# Import your models' Base and settings
-from src.api.models.base import Base
+# Importar todos los modelos para registrar las tablas y relaciones
+from src.api.models import Base, Usuario, Efectivo, Tarea, HistorialEstado, MetricaTarea, tarea_efectivos
 
 # Do not import Settings at module import time; import lazily inside functions
 

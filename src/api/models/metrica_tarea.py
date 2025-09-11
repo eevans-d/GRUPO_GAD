@@ -23,10 +23,10 @@ class MetricaTarea(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     tipo_tarea: Mapped[TaskType] = mapped_column(
-        ENUM(TaskType, name="tipo_tarea", schema="gad"), nullable=False
+    ENUM(TaskType, name="tipo_tarea"), nullable=False
     )
     prioridad: Mapped[TaskPriority] = mapped_column(
-        ENUM(TaskPriority, name="prioridad_tarea", schema="gad"), nullable=False
+    ENUM(TaskPriority, name="prioridad_tarea"), nullable=False
     )
 
     # Métricas acumuladas
