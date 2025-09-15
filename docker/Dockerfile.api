@@ -1,6 +1,6 @@
 # SECURITY HARDENED - Multi-stage build with digest pinning
 # Builder stage with pinned digest for reproducible builds
-FROM python:3.11.9-slim@sha256:edaf703dce209d774af3ff768c7a60357c9cfb3b73dab8e55f72b5e7b949b914 as builder
+FROM python:3.11.9-slim as builder
 
 # Security-first environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -23,15 +23,16 @@ RUN poetry config virtualenvs.create false
 WORKDIR /build
 
 # Copiar todos los archivos necesarios para la instalación
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml ./
+
 COPY src/ ./src/
-COPY README.md .
+
 
 # Instalar dependencias y el proyecto mismo
-RUN poetry install --no-dev --no-interaction --no-ansi
+RUN poetry install --without dev --no-interaction --no-ansi
 
 # Production stage with same pinned base image
-FROM python:3.11.9-slim@sha256:edaf703dce209d774af3ff768c7a60357c9cfb3b73dab8e55f72b5e7b949b914
+FROM python:3.11.9-slim
 
 # Security-first environment + non-root user
 ENV PYTHONDONTWRITEBYTECODE=1 \
