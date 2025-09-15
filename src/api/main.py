@@ -43,11 +43,37 @@ logger.add(
     format="{time} {level} {message}"
 )
 
+from contextlib import asynccontextmanager
+from src.core.database import async_engine, init_db
+import time
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Gestiona los eventos de arranque y parada de la aplicación.
+    """
+    # Startup
+    logger.info("Iniciando aplicación y conexión a la base de datos...")
+    init_db(str(settings.DATABASE_URL))
+    app.state.start_time = time.time()
+    logger.info("Conexión a la base de datos establecida.")
+    
+    yield
+    
+    # Shutdown
+    logger.info("Cerrando conexión a la base de datos...")
+    if async_engine:
+        await async_engine.dispose()
+    logger.info("Conexión a la base de datos cerrada.")
+
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION,
     description=settings.PROJECT_DESCRIPTION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    lifespan=lifespan,
 )
 
 # --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
@@ -124,8 +150,7 @@ async def metrics() -> PlainTextResponse:
     uptime = int(time.time() - app.state.start_time)
     return PlainTextResponse(f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n")
 
-# Guardar tiempo de inicio para métricas
-app.state.start_time = time.time()
+
 
 # Montar archivos estáticos para el dashboard
 app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")

@@ -357,3 +357,142 @@
 2025-09-11T05:01:41.709925+0000 INFO Response: 200 | Time: 447.06ms
 2025-09-11T05:01:42.165475+0000 INFO Request: POST http://test/api/v1/auth/login
 2025-09-11T05:01:42.616391+0000 INFO Response: 200 | Time: 450.93ms
+2025-09-15T03:33:11.728673-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-15T03:35:22.225693-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-15T03:35:22.366182-0300 INFO Request: POST http://test/auth/login
+2025-09-15T03:35:22.367208-0300 INFO Response: 404 | Time: 1.04ms
+2025-09-15T03:35:22.411314-0300 INFO Request: POST http://test/auth/login
+2025-09-15T03:35:22.412163-0300 INFO Response: 404 | Time: 0.86ms
+2025-09-15T03:35:22.425083-0300 INFO Request: POST http://test/auth/login
+2025-09-15T03:35:22.425955-0300 INFO Response: 404 | Time: 0.88ms
+2025-09-15T03:35:22.436158-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:35:22.438353-0300 INFO Response: 401 | Time: 2.20ms
+2025-09-15T03:35:22.443731-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:35:22.445497-0300 INFO Response: 401 | Time: 1.77ms
+2025-09-15T03:35:22.458053-0300 INFO Request: GET http://test/api/v1/users/1
+2025-09-15T03:35:22.459793-0300 INFO Response: 401 | Time: 1.75ms
+2025-09-15T03:35:22.464652-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:35:22.467440-0300 INFO Response: 401 | Time: 2.79ms
+2025-09-15T03:35:22.471644-0300 INFO Request: PUT http://test/api/v1/users/1
+2025-09-15T03:35:22.475310-0300 INFO Response: 401 | Time: 3.66ms
+2025-09-15T03:35:22.541267-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:35:22.543533-0300 INFO Response: 401 | Time: 2.27ms
+2025-09-15T03:35:22.548949-0300 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-15T03:35:22.552300-0300 INFO Response: 401 | Time: 3.38ms
+2025-09-15T03:35:22.558299-0300 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-15T03:35:22.559921-0300 INFO Response: 401 | Time: 1.63ms
+2025-09-15T03:36:44.474988-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-15T03:36:44.621035-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:36:44.627695-0300 INFO Response: 200 | Time: 6.68ms
+2025-09-15T03:36:44.635736-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:36:44.641372-0300 INFO Response: 401 | Time: 5.64ms
+2025-09-15T03:36:44.646286-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:36:44.651149-0300 ERROR Validation error for request http://test/api/v1/auth/login: [{'type': 'missing', 'loc': ('body', 'password'), 'msg': 'Field required', 'input': None}]
+2025-09-15T03:36:44.651691-0300 INFO Response: 422 | Time: 5.41ms
+2025-09-15T03:36:44.656619-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:36:44.658298-0300 INFO Response: 401 | Time: 1.68ms
+2025-09-15T03:36:44.663119-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:36:44.664546-0300 INFO Response: 401 | Time: 1.43ms
+2025-09-15T03:36:44.705317-0300 INFO Request: GET http://test/api/v1/users/1
+2025-09-15T03:36:44.706805-0300 INFO Response: 401 | Time: 1.50ms
+2025-09-15T03:36:44.711030-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:36:44.714062-0300 INFO Response: 401 | Time: 3.03ms
+2025-09-15T03:36:44.718436-0300 INFO Request: PUT http://test/api/v1/users/1
+2025-09-15T03:36:44.720636-0300 INFO Response: 401 | Time: 2.20ms
+2025-09-15T03:36:44.725148-0300 INFO Request: GET http://test/api/v1/users/999
+2025-09-15T03:36:44.726942-0300 INFO Response: 401 | Time: 1.80ms
+2025-09-15T03:36:44.742544-0300 INFO Request: PUT http://test/api/v1/users/999
+2025-09-15T03:36:44.750594-0300 INFO Response: 401 | Time: 8.06ms
+2025-09-15T03:36:44.771597-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:36:44.776391-0300 INFO Response: 401 | Time: 4.80ms
+2025-09-15T03:36:44.797058-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:36:44.800137-0300 INFO Response: 401 | Time: 3.09ms
+2025-09-15T03:36:44.811275-0300 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-15T03:36:44.815777-0300 INFO Response: 401 | Time: 4.51ms
+2025-09-15T03:36:44.825674-0300 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-15T03:36:44.829205-0300 INFO Response: 401 | Time: 3.54ms
+2025-09-15T03:36:44.839565-0300 INFO Request: GET http://test/api/v1/tasks/999
+2025-09-15T03:36:44.841621-0300 INFO Response: 401 | Time: 2.07ms
+2025-09-15T03:36:44.854196-0300 INFO Request: PUT http://test/api/v1/tasks/999
+2025-09-15T03:36:44.861688-0300 INFO Response: 401 | Time: 7.49ms
+2025-09-15T03:36:44.886778-0300 INFO Request: DELETE http://test/api/v1/tasks/999
+2025-09-15T03:36:44.889205-0300 INFO Response: 401 | Time: 2.44ms
+2025-09-15T03:36:44.922122-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:36:44.926377-0300 INFO Response: 401 | Time: 4.26ms
+2025-09-15T03:37:35.960334-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-15T03:37:36.152320-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:37:36.161642-0300 INFO Response: 200 | Time: 9.35ms
+2025-09-15T03:37:36.174587-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:37:36.182251-0300 INFO Response: 401 | Time: 7.67ms
+2025-09-15T03:37:36.189983-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:37:36.194964-0300 ERROR Validation error for request http://test/api/v1/auth/login: [{'type': 'missing', 'loc': ('body', 'password'), 'msg': 'Field required', 'input': None}]
+2025-09-15T03:37:36.195790-0300 INFO Response: 422 | Time: 5.79ms
+2025-09-15T03:37:36.201202-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:37:36.204098-0300 INFO Response: 401 | Time: 2.91ms
+2025-09-15T03:37:36.209157-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:37:36.222237-0300 INFO Response: 200 | Time: 13.08ms
+2025-09-15T03:37:36.231932-0300 INFO Request: GET http://test/api/v1/users/1
+2025-09-15T03:37:36.236541-0300 INFO Response: 401 | Time: 4.61ms
+2025-09-15T03:37:36.245031-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:37:36.248467-0300 INFO Response: 401 | Time: 3.44ms
+2025-09-15T03:37:36.253318-0300 INFO Request: PUT http://test/api/v1/users/1
+2025-09-15T03:37:36.256993-0300 INFO Response: 401 | Time: 3.68ms
+2025-09-15T03:37:36.267354-0300 INFO Request: GET http://test/api/v1/users/999
+2025-09-15T03:37:36.271040-0300 ERROR Error: object NoneType can't be used in 'await' expression
+2025-09-15T03:37:36.590217-0300 INFO Request: PUT http://test/api/v1/users/999
+2025-09-15T03:37:36.596241-0300 ERROR Error: object NoneType can't be used in 'await' expression
+2025-09-15T03:37:36.804196-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:37:36.816477-0300 ERROR Validation error for request http://test/api/v1/users/: [{'type': 'missing', 'loc': ('body', 'nombre'), 'msg': 'Field required', 'input': {'email': 'test@test.com', 'username': 'test', 'password': 'password123'}}, {'type': 'missing', 'loc': ('body', 'apellido'), 'msg': 'Field required', 'input': {'email': 'test@test.com', 'username': 'test', 'password': 'password123'}}, {'type': 'missing', 'loc': ('body', 'dni'), 'msg': 'Field required', 'input': {'email': 'test@test.com', 'username': 'test', 'password': 'password123'}}]
+2025-09-15T03:37:36.817037-0300 INFO Response: 422 | Time: 12.85ms
+2025-09-15T03:37:36.827352-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:37:36.829364-0300 INFO Response: 401 | Time: 2.01ms
+2025-09-15T03:37:36.834283-0300 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-15T03:37:36.840347-0300 INFO Response: 401 | Time: 6.06ms
+2025-09-15T03:37:36.847617-0300 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-15T03:37:36.849556-0300 INFO Response: 401 | Time: 1.94ms
+2025-09-15T03:37:36.854175-0300 INFO Request: GET http://test/api/v1/tasks/999
+2025-09-15T03:37:36.856300-0300 ERROR Error: object NoneType can't be used in 'await' expression
+2025-09-15T03:37:37.074305-0300 INFO Request: PUT http://test/api/v1/tasks/999
+2025-09-15T03:37:37.080117-0300 ERROR Error: object NoneType can't be used in 'await' expression
+2025-09-15T03:37:37.289067-0300 INFO Request: DELETE http://test/api/v1/tasks/999
+2025-09-15T03:37:37.292386-0300 ERROR Error: object NoneType can't be used in 'await' expression
+2025-09-15T03:37:37.488588-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:37:37.490879-0300 ERROR Error: 'async_generator' object has no attribute 'execute'
+2025-09-15T03:38:17.255375-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-15T03:38:17.402303-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:38:17.408045-0300 INFO Response: 200 | Time: 5.76ms
+2025-09-15T03:38:17.414802-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:38:17.420290-0300 INFO Response: 401 | Time: 5.50ms
+2025-09-15T03:38:17.425379-0300 INFO Request: POST http://test/api/v1/auth/login
+2025-09-15T03:38:17.429691-0300 ERROR Validation error for request http://test/api/v1/auth/login: [{'type': 'missing', 'loc': ('body', 'password'), 'msg': 'Field required', 'input': None}]
+2025-09-15T03:38:17.430345-0300 INFO Response: 422 | Time: 4.97ms
+2025-09-15T03:38:17.434367-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:38:17.435966-0300 INFO Response: 401 | Time: 1.60ms
+2025-09-15T03:38:17.440247-0300 INFO Request: GET http://test/dashboard
+2025-09-15T03:38:17.445036-0300 INFO Response: 200 | Time: 4.79ms
+2025-09-15T03:38:17.450136-0300 INFO Request: GET http://test/api/v1/users/1
+2025-09-15T03:38:17.451785-0300 INFO Response: 401 | Time: 1.65ms
+2025-09-15T03:38:17.456996-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:38:17.460926-0300 INFO Response: 401 | Time: 3.93ms
+2025-09-15T03:38:17.467750-0300 INFO Request: PUT http://test/api/v1/users/1
+2025-09-15T03:38:17.471569-0300 INFO Response: 401 | Time: 3.82ms
+2025-09-15T03:38:17.478998-0300 INFO Request: GET http://test/api/v1/users/999
+2025-09-15T03:38:17.481772-0300 INFO Response: 404 | Time: 2.78ms
+2025-09-15T03:38:17.489956-0300 INFO Request: PUT http://test/api/v1/users/999
+2025-09-15T03:38:17.502185-0300 INFO Response: 404 | Time: 12.24ms
+2025-09-15T03:38:17.507982-0300 INFO Request: POST http://test/api/v1/users/
+2025-09-15T03:38:17.536640-0300 INFO Response: 400 | Time: 28.71ms
+2025-09-15T03:38:17.542920-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:38:17.544478-0300 INFO Response: 401 | Time: 1.56ms
+2025-09-15T03:38:17.549082-0300 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-15T03:38:17.551874-0300 INFO Response: 401 | Time: 2.79ms
+2025-09-15T03:38:17.557612-0300 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-15T03:38:17.560567-0300 INFO Response: 401 | Time: 2.94ms
+2025-09-15T03:38:17.565383-0300 INFO Request: GET http://test/api/v1/tasks/999
+2025-09-15T03:38:17.572761-0300 INFO Response: 404 | Time: 7.38ms
+2025-09-15T03:38:17.577155-0300 INFO Request: PUT http://test/api/v1/tasks/999
+2025-09-15T03:38:17.582921-0300 INFO Response: 404 | Time: 5.77ms
+2025-09-15T03:38:17.587707-0300 INFO Request: DELETE http://test/api/v1/tasks/999
+2025-09-15T03:38:17.589326-0300 INFO Response: 404 | Time: 1.62ms
+2025-09-15T03:38:17.593173-0300 INFO Request: GET http://test/api/v1/tasks/
+2025-09-15T03:38:17.595451-0300 INFO Response: 200 | Time: 2.28ms

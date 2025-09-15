@@ -1,6 +1,6 @@
 # SECURITY HARDENED - Multi-stage build with digest pinning
 # Builder stage with pinned digest for reproducible builds
-FROM python:3.11.9-slim as builder
+FROM python:3.12-slim as builder
 
 # Security-first environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -23,7 +23,7 @@ RUN poetry config virtualenvs.create false
 WORKDIR /build
 
 # Copiar todos los archivos necesarios para la instalación
-COPY pyproject.toml ./
+COPY pyproject.toml poetry.lock ./
 
 COPY src/ ./src/
 
@@ -32,7 +32,7 @@ COPY src/ ./src/
 RUN poetry install --without dev --no-interaction --no-ansi
 
 # Production stage with same pinned base image
-FROM python:3.11.9-slim
+FROM python:3.12-slim
 
 # Security-first environment + non-root user
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -54,7 +54,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean
 
 # Copiar dependencias de la etapa de construcción
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Crear usuario no root
