@@ -1,67 +1,23 @@
-# SECURITY HARDENED - Multi-stage build with digest pinning
-# Builder stage with pinned digest for reproducible builds
-FROM python:3.12-slim as builder
+FROM python:3.12-slim
 
-# Security-first environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.8.4 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# Instalar Poetry
-RUN pip install "poetry==$POETRY_VERSION"
-
-# Configurar poetry para no crear un venv
-RUN poetry config virtualenvs.create false
-
-WORKDIR /build
-
-# Copiar todos los archivos necesarios para la instalación
-COPY pyproject.toml poetry.lock ./
-
-COPY src/ ./src/
-
-
-# Instalar dependencias y el proyecto mismo
-RUN poetry install --without dev --no-interaction --no-ansi
-
-# Production stage with same pinned base image
-FROM python:3.12-slim
-
-# Security-first environment + non-root user
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    APP_HOME=/app \
-    APP_USER=appuser
-
-# Create non-root user for security
-RUN groupadd -r $APP_USER && useradd -r -g $APP_USER $APP_USER
-
-# Create directory and set ownership
-WORKDIR $APP_HOME
-RUN chown $APP_USER:$APP_USER $APP_HOME
-
-# Install minimal runtime dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
+    curl gcc \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Copiar dependencias de la etapa de construcción
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+# Copy and install Python dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Crear usuario no root
-RUN addgroup --system app && adduser --system --group app
-
-# Copiar los archivos de configuración y scripts necesarios para la ejecución
+# Copy the rest of the application code
 COPY alembic.ini /app/alembic.ini
 COPY alembic /app/alembic
 COPY config /app/config
@@ -69,14 +25,13 @@ COPY src /app/src
 COPY dashboard /app/dashboard
 COPY scripts/start.sh /app/start.sh
 
-# Cambiar propietario
-RUN chown -R app:app $APP_HOME
-
-# Cambiar a usuario no root
+# Create non-root user for security
+RUN groupadd -r app && useradd -r -g app app
+RUN chown -R app:app /app
 USER app
 
-# Puerto expuesto
+# Expose port
 EXPOSE 8000
 
-# Comando de inicio
-CMD ["/app/start.sh"]
+# Start command
+CMD ["/app/scripts/start.sh"]

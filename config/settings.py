@@ -138,7 +138,7 @@ def get_settings() -> "Settings":
         POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
         TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
         ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
-        WHITELIST_IDS=[int(x) for x in os.getenv("WHITELIST_IDS", "").split(",") if x],
+        WHITELIST_IDS=[int(s.strip()) for s in os.getenv("WHITELIST_IDS", "").replace('[','').replace(']','').split(',') if s.strip().isdigit()],
     )
 
 
@@ -160,7 +160,7 @@ class _LazySettingsProxy:
                     POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
                     TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
                     ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
-                    WHITELIST_IDS=[int(x) for x in os.getenv("WHITELIST_IDS", "").split(",") if x],
+                    WHITELIST_IDS=[int(s.strip()) for s in os.getenv("WHITELIST_IDS", "").replace('[','').replace(']','').split(',') if s.strip().isdigit()],
                 )
             except Exception:
                 # Last-resort: construct without validation to avoid import errors

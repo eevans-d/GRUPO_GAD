@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  db:
+    ports:
+      # No exponer el puerto de la BD a la red host en producción
+      # La comunicación es a través de la red interna de Docker.
+      - "127.0.0.1:5432:5432"
+    restart: always
+
+  redis:
+    restart: always
+
+  api:
+    volumes: [] # Eliminar los montajes de volumen para usar el código dentro de la imagen
+    ports:
+      # No exponer el puerto de la API directamente; Caddy es el punto de entrada
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env.production
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  bot:
+    volumes: [] # Eliminar montajes de volumen
+    env_file:
+      - .env.production
+    restart: always
+
+  caddy:
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    restart: always
