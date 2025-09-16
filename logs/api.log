@@ -541,3 +541,4 @@
 2025-09-16T05:04:50.737840+0000 INFO Response: 404 | Time: 3.41ms
 2025-09-16T05:04:50.796797+0000 INFO Request: GET http://test/api/v1/tasks/
 2025-09-16T05:04:50.825769+0000 INFO Response: 200 | Time: 28.97ms
+2025-09-16T02:11:40.722027-0300 INFO API iniciada y lista para recibir peticiones.
