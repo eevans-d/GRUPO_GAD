@@ -34,4 +34,4 @@ USER app
 EXPOSE 8000
 
 # Start command
-CMD ["/app/scripts/start.sh"]
+CMD ["/app/start.sh"]
