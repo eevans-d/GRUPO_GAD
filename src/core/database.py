@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from sqlalchemy.pool import StaticPool
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from config.settings import settings
@@ -33,17 +34,23 @@ def init_db(db_url: str):
     MAX_OVERFLOW = getattr(settings, "DB_MAX_OVERFLOW", 10)
     POOL_TIMEOUT = getattr(settings, "DB_POOL_TIMEOUT", 30)
 
-    connect_args = {}
+    connect_args: dict[str, Any] = {}
     if db_url.startswith("sqlite"):
         # SQLite requiere este argumento para funcionar correctamente con asyncio
         connect_args = {"check_same_thread": False}
-        
+
+        create_kwargs: dict[str, Any] = {
+            "pool_pre_ping": True,
+            "echo": settings.DEBUG,
+            "connect_args": connect_args,
+        }
+        # Usar StaticPool para bases en memoria
+        if "memory" in db_url:
+            create_kwargs["poolclass"] = StaticPool
+
         async_engine = create_async_engine(
             db_url,
-            pool_pre_ping=True,
-            echo=settings.DEBUG,
-            connect_args=connect_args,
-            poolclass=StaticPool if "memory" in db_url else None # Usar StaticPool para :memory:
+            **create_kwargs,
         )
     else:
         async_engine = create_async_engine(
@@ -61,6 +68,32 @@ def init_db(db_url: str):
         class_=AsyncSession,
         expire_on_commit=False,
     )
+
+
+def _ensure_initialized_default() -> None:
+    """Ensure default in-memory SQLite engine/session factory exists.
+
+    Esto permite que tests que importan AsyncSessionFactory sin haber llamado
+    init_db() no fallen. En entornos reales, init_db() sobreescribirá estos
+    valores con la configuración de la base de datos real.
+    """
+    global async_engine, AsyncSessionFactory
+    if async_engine is None or AsyncSessionFactory is None:
+        async_engine = create_async_engine(
+            "sqlite+aiosqlite:///:memory:",
+            echo=False,
+            connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
+        )
+        AsyncSessionFactory = async_sessionmaker(
+            bind=async_engine,
+            class_=AsyncSession,
+            expire_on_commit=False,
+        )
+
+
+# Inicializar por defecto para entornos de test/import sin init_db()
+_ensure_initialized_default()
 
 
 # --- Circuit Breaker para la Base de Datos ---
