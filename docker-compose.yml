@@ -49,6 +49,12 @@ services:
       - ./logs:/app/logs
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/metrics"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       db:
         condition: service_healthy
@@ -67,7 +73,7 @@ services:
       - .env
     depends_on:
       api:
-        condition: service_started # Bot can start once API is running
+        condition: service_healthy # Bot starts once API is healthy
     restart: unless-stopped
     networks:
       - gad-network
@@ -79,12 +85,19 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/metrics"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     networks:
       - gad-network
 
