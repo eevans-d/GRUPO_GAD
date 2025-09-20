@@ -62,5 +62,5 @@ strict = true
 minversion = "8.0"
 addopts = "--cov=src --cov-report=html --cov-report=term-missing --cov-fail-under=85"
 testpaths = ["tests"]
-pythonpath = ["-"]
+pythonpath = ["src"]
 asyncio_mode = "auto"
