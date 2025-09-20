@@ -36,9 +36,31 @@ pytest --disable-warnings -v
 uvicorn src.api.main:app --reload
 ```
 
-### Producción (Docker)
+### Desarrollo con Docker (recomendado)
+Levantar entorno dev (Postgres, Redis, API, Bot, Caddy opcional):
 ```bash
-docker-compose up --build -d
+docker compose up -d --build
+```
+
+Ver estado de servicios y healthchecks:
+```bash
+docker compose ps
+```
+
+Logs de la API:
+```bash
+docker logs -f gad_api_dev
+```
+
+Endpoints útiles:
+- API: http://localhost:8000
+- Métricas: http://localhost:8000/metrics
+- Dashboard via Caddy (si está activo): http://localhost
+
+Limpieza profunda y rebuild si algo se queda en mal estado (montajes, cache de build, etc.):
+```bash
+docker compose down -v
+docker compose up -d --build
 ```
 
 
@@ -114,7 +136,7 @@ print(resp.json())
 
 - Linter: ruff
 - Tipado: mypy
-- Tests: pytest (>78% cobertura)
+- Tests: pytest (umbral de cobertura en CI: 85%)
 - Script de auditoría de seguridad incluido
 
 ## 8. Checklist de Entrega
@@ -124,3 +146,9 @@ print(resp.json())
 - [x] Seguridad y robustez garantizadas
 - [x] Documentación actualizada
 - [x] Listo para producción
+
+## 9. Troubleshooting Docker
+
+- Caddy no levanta o muestra error de montaje: asegúrate que el archivo `Caddyfile` existe y tiene contenido válido. Si persiste, ejecuta `docker compose down -v` y vuelve a levantar.
+- La API reinicia con exit code 3: revisa `docker logs gad_api_dev` para detectar dependencias faltantes o errores de import.
+- La API no está healthy: verifica `http://localhost:8000/metrics` y que la base de datos esté healthy; espera el `start_period` del healthcheck.
