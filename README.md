@@ -161,6 +161,7 @@ El estado de la build se muestra en el badge superior. Puedes ver las ejecucione
 - Imagen: el Dockerfile de la API (`docker/Dockerfile.api`) instala dependencias desde `requirements.lock` (pin de versiones) para builds reproducibles.
 - Orquestación: usa `docker/docker-compose.prod.yml` con un `.env.production`.
 - Arranque de la API: `scripts/start.sh` calcula `workers` dinámicamente y fija timeouts/keepalive de Gunicorn.
+ - Imagen publicada en GHCR: `ghcr.io/eevans-d/grupo_gad/api:v1.0.0` (también `:latest`).
 
 Desplegar con Docker Compose (producción):
 
@@ -179,10 +180,19 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u <usuario_github> --password-stdin
 ```yaml
 services:
 	api:
-		image: ghcr.io/eevans-d/grupo_gad/api:latest # o un tag versionado vX.Y.Z
+		image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0 # o :latest
 		env_file:
 			- .env.production
 		# ...
+```
+
+Ejemplo docker run (sin Compose):
+```bash
+docker run -d \
+  --name gad_api \
+  --env-file .env.production \
+  -p 8000:8000 \
+  ghcr.io/eevans-d/grupo_gad/api:v1.0.0
 ```
 
 Notas:
