@@ -28,24 +28,7 @@ jobs:
         if: ${{ hashFiles('package.json') != '' }}
         run: npm test --silent
 
-      # Python pipeline using Poetry at repo root (pyproject.toml)
-      - name: Setup Python
-        if: ${{ hashFiles('pyproject.toml') != '' }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          cache: 'pip'
-      - name: Install Poetry
-        if: ${{ hashFiles('pyproject.toml') != '' }}
-        run: pip install pipx && pipx install poetry
-      - name: Install Python deps
-        if: ${{ hashFiles('pyproject.toml') != '' }}
-        run: |
-          poetry config virtualenvs.create false
-          poetry install --with dev --no-interaction --no-ansi
-      - name: Python tests
-        if: ${{ hashFiles('pyproject.toml') != '' }}
-        run: pytest -q
+      # Python pipeline removida para evitar duplicidad; CI principal en .github/workflows/ci.yml
 
       - name: Check allowlists
         if: ${{ hashFiles('scripts/check_allowlist.py') != '' && env.DATABASE_URL != '' }}

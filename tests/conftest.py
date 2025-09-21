@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
+from typing import AsyncGenerator
 
 from src.api.main import app
 from src.api.models.base import Base
@@ -55,7 +56,7 @@ TestingSessionLocal = sessionmaker(
 
 
 # --- Sobrescritura de Dependencias ---
-async def override_get_db_session() -> AsyncSession:
+async def override_get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """
     Dependencia de base de datos para ser usada durante las pruebas.
     """

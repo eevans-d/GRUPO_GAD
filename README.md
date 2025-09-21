@@ -1,5 +1,7 @@
 # 📦 Documentación Final - GRUPO GAD
 
+[![CI](https://github.com/eevans-d/GRUPO_GAD/actions/workflows/ci.yml/badge.svg)](https://github.com/eevans-d/GRUPO_GAD/actions/workflows/ci.yml)
+
 ## 1. Descripción General
 - Proyecto GRUPO GAD: API y backend para gestión de tareas, usuarios y operaciones de seguridad.
 - Stack: Python 3.12+, FastAPI, SQLAlchemy Async, Alembic, Poetry 2.x, Docker.
