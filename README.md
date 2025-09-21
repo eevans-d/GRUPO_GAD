@@ -141,6 +141,16 @@ print(resp.json())
 - Tests: pytest (umbral de cobertura en CI: 85%)
 - Script de auditoría de seguridad incluido
 
+### CI/CD
+
+Este repositorio usa GitHub Actions con el workflow `CI`:
+- Python 3.12 y Poetry 2.x con cache local del entorno (`.venv`).
+- Lint con `ruff` y type-check con `mypy` (no bloqueante de momento).
+- Pruebas con `pytest` y reporte de cobertura (HTML como artifact y `--cov-fail-under=85`).
+- Base de datos en pruebas: `sqlite+aiosqlite:///:memory:` para velocidad y aislamiento.
+
+El estado de la build se muestra en el badge superior. Puedes ver las ejecuciones y descargar el artifact de cobertura en la pestaña Actions.
+
 ## 8. Checklist de Entrega
 
 - [x] Migraciones aplicadas y validadas

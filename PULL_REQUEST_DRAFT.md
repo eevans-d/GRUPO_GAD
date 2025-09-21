@@ -1,102 +1,45 @@
-# 🔴 SECURITY ATTACK TIER 1: Complete hardening blitz
+# CI moderna + test stability + docs
 
-## 🎯 ATAQUE COMPLETADO - TIER 1 CRÍTICO
+## 🎯 Objetivo
+Dejar el repositorio con una CI confiable (lint, typing, tests, cobertura) y pruebas estables sin depender de servicios externos.
 
-**FILOSOFÍA:** Quien pega primero, pega dos veces ⚡
+### ✅ Cambios principales
 
-### ✅ LOGROS CRÍTICOS ALCANZADOS:
+**CI (GitHub Actions):**
+- Nuevo workflow `.github/workflows/ci.yml`:
+	- Python 3.12 + Poetry 2.x mediante pipx, cache de `.venv`.
+	- Lint con `ruff`, type-check con `mypy` (no bloqueante por ahora).
+	- `pytest` con cobertura (HTML artifact y `--cov-fail-under=85`).
+	- Base de datos para tests: `sqlite+aiosqlite:///:memory:`.
+- `.github/workflows/standard.yml`: se removió la parte de Python para evitar duplicidad; mantenemos Node (si aplica) y `semgrep`.
 
-**🛡️ CI SECURITY HARDENED:**
-- Eliminados TODOS los `|| true` que permitían fallos silenciosos
-- Gitleaks implementado con full history scan
-- pip-audit ahora es FAIL-FAST con JSON reports  
-- 6 secretos hardcodeados → GitHub Secrets
+**Pruebas unificadas:**
+- Configuración de `pytest` unificada en `pyproject.toml` (se elimina `pytest.ini` en este repo).
+- `pythonpath = ["src"]`, `asyncio_mode = "auto"`, filtros de warnings y cobertura.
 
-**⚡ DEPENDENCIAS AGRESIVAMENTE ACTUALIZADAS:**
-- FastAPI: 0.110.0 → 0.115.0 (latest security patches)
-- Starlette: FORZADO a 0.40.0 (vulnerability patches)
-- python-multipart: bumped a 0.0.20
-- uvicorn: actualizado a 0.32.0
+**Tipado y dependencias:**
+- `tests/conftest.py`: corrección de anotación a `AsyncGenerator[AsyncSession, None]`.
+- `pyproject.toml`: añadida dependencia `requests` para servicios del bot.
 
-**🐳 DOCKER COMPLETAMENTE ENDURECIDO:**
-- Multi-stage builds con SHA256 digest pinning
-- Non-root user implementation
-- .dockerignore security-optimized (93 lines)
-- Minimal attack surface
+**Docs:**
+- `README.md`: agregado badge de CI y sección “CI/CD”.
 
-**📋 DOCUMENTACIÓN Y CONTINUIDAD:**
-- ATTACK_PLAN.md creado con roadmap completo
-- Estados trackeados para próxima sesión
-- Scripts de rotación preparados
+### 🧪 Verificación
+- Suite de tests local: verde (1 skip esperado).
+- CI se ejecutará automáticamente al pushear a la rama; artifact `htmlcov` disponible.
 
-### ⚠️ ACCIONES MANUALES REQUERIDAS:
+### 📌 Notas
+- Mantenemos `mypy` como “soft-fail” para no bloquear entregas; podemos endurecerlo en una siguiente iteración.
+- Si se prefiere, se puede retirar `standard.yml` completamente y mover `semgrep` al workflow principal.
 
-1. **CRÍTICO - Crear GitHub Secrets:**
-```bash
-# Ejecutar script de rotación:
-./scripts/rotate_secrets.sh
-# Luego en GitHub Settings > Secrets:
-gh secret set POSTGRES_PASSWORD --body "nuevo_password"
-gh secret set SECRET_KEY --body "nuevo_secret_key"
-gh secret set TELEGRAM_TOKEN --body "nuevo_telegram_token"
-```
+### 📁 Archivos modificados
+- `.github/workflows/ci.yml` (nuevo flujo principal)
+- `.github/workflows/standard.yml` (simplificado, sin Python)
+- `pyproject.toml` (pytest config consolidada y `requests`)
+- `tests/conftest.py` (tipado)
+- `README.md` (badge y doc CI)
 
-2. **Resolver dependencias agresivas:**
-```bash
-poetry lock --no-update  # Intentar lock conservador
-# Si falla:
-poetry lock  # Full resolution
-poetry install
-```
-
-3. **Validar todo funciona:**
-```bash
-pytest
-pip-audit -r requirements.txt
-docker build -f docker/Dockerfile.api .
-```
-
-### 📊 MÉTRICAS DEL ATAQUE:
-- **Vulnerabilidades mitigadas:** 8+ críticas
-- **Tiempo invertido:** 45 minutos
-- **Hardening level:** Máximo para TIER 1
-- **Commits:** Atómicos para rollback rápido
-- **Branch:** `chore/guardrails-env-fixes` (commit 8023ab8)
-
-### 🎯 PRÓXIMA SESIÓN - TIER 2:
-- Database connection resilience
-- Monitoring & observability  
-- Testing infrastructure expansion
-- Performance optimization
-- Feature flags implementation
-
-### 🔄 PLAN DE ROLLBACK (si algo falla):
-```bash
-git revert 8023ab8  # Revert attack commit
-git push origin chore/guardrails-env-fixes --force
-# O rollback a commit estable anterior
-```
-
-### 📁 ARCHIVOS MODIFICADOS:
-- `.github/workflows/ci.yml` - Security hardening total
-- `pyproject.toml` - Aggressive dependency updates  
-- `docker/Dockerfile.api` - Multi-stage + non-root + pinning
-- `.dockerignore` - Security optimization (NEW)
-- `ATTACK_PLAN.md` - Continuity roadmap (NEW)
-
-**ESTADO:** ✅ TIER 1 COMPLETADO - LISTO PARA TIER 2
-
----
-
-**Para crear el PR manualmente:**
-1. Ve a GitHub.com → tu repo
-2. Compara `main` con `chore/guardrails-env-fixes` 
-3. Crea PR con este contenido como descripción
-4. Asigna reviewers y labels de seguridad
-
-**Comando para reanudar próxima sesión:**
-```bash
-cd /home/eevan/ProyectosIA/GRUPO_GAD
-git checkout chore/guardrails-env-fixes
-cat ATTACK_PLAN.md
-```
+### 🚀 Siguientes pasos propuestos
+1. Endurecer `mypy` a “hard-fail” cuando el tipado esté saneado al 100%.
+2. Integrar un badge de cobertura (ej. Codecov) o publicar `coverage.xml` como artifact adicional.
+3. Opcional: mover `semgrep` al workflow principal y retirar `standard.yml`.
