@@ -4,7 +4,7 @@ Endpoints de autenticación para la API.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
-from typing import Dict, Any
+from typing import Any, Dict
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,8 +16,6 @@ from src.schemas.token import Token
 
 router = APIRouter()
 
-
-from typing import Dict, Any
 @router.post("/logout")
 
 async def logout(response: Response) -> Dict[str, Any]:

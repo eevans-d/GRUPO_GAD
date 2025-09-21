@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 Configuración y gestión de la sesión de la base de datos.
 """
 
 import asyncio
-from typing import AsyncGenerator, Any
+from typing import Any, AsyncGenerator
 
-from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -143,10 +138,14 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     Utiliza reintentos (retry) y un circuit breaker para robustez.
     """
     if not AsyncSessionFactory:
-        raise RuntimeError("Database not initialized. Call init_db() on application startup.")
+        raise RuntimeError(
+            "Database not initialized. Call init_db() on application startup."
+        )
 
     if not db_circuit_breaker.can_attempt():
-        raise RuntimeError("DB circuit breaker is OPEN. Too many failures. Wait before retrying.")
+        raise RuntimeError(
+            "DB circuit breaker is OPEN. Too many failures. Wait before retrying."
+        )
     
     try:
         async with AsyncSessionFactory() as session:

@@ -3,20 +3,23 @@
 Punto de entrada principal para la API de GRUPO_GAD.
 """
 import sys
-from typing import Any, Awaitable, Callable, AsyncIterator
+import time
+from contextlib import asynccontextmanager
+from typing import AsyncIterator, Awaitable, Callable
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
-from starlette.responses import Response
+from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from loguru import logger
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import Response
 
 from config.settings import settings
 from src.api.routers import api_router
 from src.api.routers import dashboard as dashboard_router
+from src.core.database import async_engine, init_db
 
 # --- Configuración de Loguru ---
 # Eliminar el handler por defecto para evitar duplicados en la consola
@@ -42,10 +45,6 @@ logger.add(
     diagnose=True,
     format="{time} {level} {message}",
 )
-
-from contextlib import asynccontextmanager
-from src.core.database import async_engine, init_db
-import time
 
 
 @asynccontextmanager
@@ -127,7 +126,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 
 # --- Middleware de Logging Mejorado ---
-import time
 
 
 @app.middleware("http")
@@ -147,7 +145,6 @@ async def log_requests(
     return response
 
 # --- Endpoint de métricas básicas ---
-from fastapi.responses import PlainTextResponse
 
 
 @app.get("/metrics", response_class=PlainTextResponse, tags=["monitoring"])

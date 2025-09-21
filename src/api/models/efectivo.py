@@ -7,14 +7,13 @@ from typing import TYPE_CHECKING, List, Optional
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, String, func, Table, Column, Integer
+from sqlalchemy import DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import ENUM as pg_ENUM
 from sqlalchemy.dialects.postgresql import UUID as pg_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import JSON
 
 from .base import Base
-from .associations import tarea_efectivos
 
 if TYPE_CHECKING:
     from .tarea import Tarea

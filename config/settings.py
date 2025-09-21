@@ -5,10 +5,9 @@ Utiliza Pydantic Settings para validación automática de variables de entorno.
 """
 
 import os
-import pathlib
-from typing import List, Optional, ClassVar, Any
+from typing import Any, List, Optional
 
-from pydantic import Field, field_validator
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -138,7 +137,11 @@ def get_settings() -> "Settings":
         POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
         TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
         ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
-        WHITELIST_IDS=[int(s.strip()) for s in os.getenv("WHITELIST_IDS", "").replace('[','').replace(']','').split(',') if s.strip().isdigit()],
+        WHITELIST_IDS=[
+            int(s.strip())
+            for s in os.getenv("WHITELIST_IDS", "").replace("[", "").replace("]", "").split(",")
+            if s.strip().isdigit()
+        ],
     )
 
 
@@ -160,7 +163,11 @@ class _LazySettingsProxy:
                     POSTGRES_DB=os.getenv("POSTGRES_DB", ""),
                     TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN", ""),
                     ADMIN_CHAT_ID=os.getenv("ADMIN_CHAT_ID", ""),
-                    WHITELIST_IDS=[int(s.strip()) for s in os.getenv("WHITELIST_IDS", "").replace('[','').replace(']','').split(',') if s.strip().isdigit()],
+                    WHITELIST_IDS=[
+                        int(s.strip())
+                        for s in os.getenv("WHITELIST_IDS", "").replace("[", "").replace("]", "").split(",")
+                        if s.strip().isdigit()
+                    ],
                 )
             except Exception:
                 # Last-resort: construct without validation to avoid import errors

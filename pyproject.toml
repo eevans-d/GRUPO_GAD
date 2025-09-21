@@ -52,8 +52,17 @@ mypy = "^1.18.1"
 aiosqlite = "^0.21.0"
 [tool.ruff]
 target-version = "py312"
-line-length = 88
-select = ["E", "F", "I"]
+line-length = 120
+exclude = [
+	"tests",
+	"alembic",
+	"scripts",
+	"src/bot",
+	"src/app",
+]
+
+[tool.ruff.lint]
+select = ["E", "F"]
 
 [tool.mypy]
 python_version = "3.12"
