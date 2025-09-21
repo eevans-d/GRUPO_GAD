@@ -25,4 +25,5 @@ exec gunicorn \
 	--timeout 60 \
 	--graceful-timeout 30 \
 	--keep-alive 5 \
-	--log-level info
+		--log-level info \
+		--access-logfile -

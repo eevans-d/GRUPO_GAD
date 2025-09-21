@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from loguru import logger
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from starlette.responses import Response
 
 from config.settings import settings
@@ -75,6 +76,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Reconocer X-Forwarded-* cuando corremos detrás de un reverse proxy
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+
 # --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
 MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
 
@@ -101,6 +105,9 @@ async def max_body_size_middleware(
     # verificar sin consumir el body; confiamos en proxies frontales y límites
     # adicionales en producción para esa protección.
     response = await call_next(request)
+    # Ocultar cabecera 'server' por seguridad básica
+    if "server" in response.headers:
+        del response.headers["server"]
     return response
 
 # --- Middleware CORS ---
