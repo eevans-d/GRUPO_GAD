@@ -156,6 +156,39 @@ Este repositorio usa GitHub Actions con el workflow `CI`:
 
 El estado de la build se muestra en el badge superior. Puedes ver las ejecuciones y descargar el artifact de cobertura en la pestaña Actions.
 
+## 7.1. Producción (Docker)
+
+- Imagen: el Dockerfile de la API (`docker/Dockerfile.api`) instala dependencias desde `requirements.lock` (pin de versiones) para builds reproducibles.
+- Orquestación: usa `docker/docker-compose.prod.yml` con un `.env.production`.
+- Arranque de la API: `scripts/start.sh` calcula `workers` dinámicamente y fija timeouts/keepalive de Gunicorn.
+
+Desplegar con Docker Compose (producción):
+
+```bash
+docker compose -f docker/docker-compose.prod.yml up -d --build
+```
+
+Usar imagen publicada en GHCR (opcional, tras merge/tag):
+
+1) Autenticarse (si es necesario):
+```bash
+echo $GITHUB_TOKEN | docker login ghcr.io -u <usuario_github> --password-stdin
+```
+
+2) Referenciar la imagen en tu Compose/infra:
+```yaml
+services:
+	api:
+		image: ghcr.io/eevans-d/grupo_gad/api:latest # o un tag versionado vX.Y.Z
+		env_file:
+			- .env.production
+		# ...
+```
+
+Notas:
+- Mantén `requirements.lock` actualizado cuando cambies dependencias (regenera y commitea).
+- No incluyas secretos en el repositorio; utiliza `.env.production` en el servidor.
+
 ## 8. Checklist de Entrega
 
 - [x] Migraciones aplicadas y validadas
