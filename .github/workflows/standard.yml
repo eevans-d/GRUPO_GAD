@@ -1,0 +1,42 @@
+name: Standard
+on: [push, pull_request]
+jobs:
+  standard:
+    runs-on: ubuntu-latest
+    env:
+      # Allow repository secret to supply DATABASE_URL for integration steps
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node.js pipeline (optional if package.json exists)
+      - name: Setup Node
+        if: ${{ hashFiles('package.json') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Node deps
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npm ci
+      - name: Lint
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npx eslint . || echo "Lint warnings"
+      - name: Typecheck
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npx tsc --noEmit || echo "Type warnings"
+      - name: Node tests
+        if: ${{ hashFiles('package.json') != '' }}
+        run: npm test --silent
+
+      # Python pipeline removida para evitar duplicidad; CI principal en .github/workflows/ci.yml
+
+      - name: Check allowlists
+        if: ${{ hashFiles('scripts/check_allowlist.py') != '' && env.DATABASE_URL != '' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python scripts/check_allowlist.py
+
+      - name: Basic security scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/security-audit

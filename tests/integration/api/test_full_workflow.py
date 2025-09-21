@@ -1,25 +1,27 @@
-# -*-
-"""
-Tests de integración para un flujo de trabajo completo de la API.
-"""
-
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.schemas.usuario import UsuarioCreate
 from src.api.crud.crud_usuario import usuario
 
-# Marcador para todas las pruebas en este módulo
+# =======================
+# Tests de integración: workflow
+# =======================
+
 pytestmark = pytest.mark.asyncio
 
+async def test_create_task_and_dashboard(client: AsyncClient, db_session: AsyncSession):
+    # Crear usuario y obtener token
+    test_email = "admin@example.com"
+    test_password = "adminpass"
+    user_in = UsuarioCreate(email=test_email, password=test_password, nombre="Admin", apellido="User", dni="87654321Z")
+    await usuario.create(db_session, obj_in=user_in)
+    login_data = {"username": test_email, "password": test_password}
+    login_resp = await client.post("/api/v1/auth/login", data=login_data)
+    assert login_resp.status_code == 200
+    _ = login_resp.json()["access_token"]
 
 async def test_user_creation_and_login(client: AsyncClient, db_session: AsyncSession):
-    """ 
-    Test para verificar la creación de un usuario y el posterior login.
-    """
-    # Datos del usuario de prueba
     test_email = "test@example.com"
     test_password = "testpassword"
     user_in = UsuarioCreate(

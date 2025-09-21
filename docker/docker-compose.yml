@@ -60,6 +60,8 @@ services:
       - POSTGRES_SERVER=db
       - REDIS_HOST=redis
       - TELEGRAM_WEBHOOK_URL=${TELEGRAM_WEBHOOK_URL}
+      # Prefer explicit DATABASE_URL; fallback to assemble from components
+      - DATABASE_URL=${DATABASE_URL:-postgresql+asyncpg://${POSTGRES_USER:-gad_user}:${POSTGRES_PASSWORD:-gad_password}@${POSTGRES_SERVER:-db}:5432/${POSTGRES_DB:-gad_db}}
     env_file:
       - ../.env
     ports:

@@ -10,9 +10,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.crud.crud_usuario import usuario as crud_usuario
 from src.api.dependencies import get_current_active_user
-from src.api.models.usuario import Usuario # Keep this import for the SQLAlchemy model
+from src.api.models.usuario import Usuario  # Keep this import for the SQLAlchemy model
 from src.core.database import get_db_session
-from src.schemas.usuario import Usuario as UsuarioSchema, UsuarioCreate, UsuarioUpdate # Renamed import
+from src.schemas.usuario import (
+    Usuario as UsuarioSchema,
+)
+from src.schemas.usuario import (
+    UsuarioCreate,
+    UsuarioUpdate,
+)
 
 router = APIRouter()
 

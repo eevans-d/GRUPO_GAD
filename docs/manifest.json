@@ -1,0 +1,65 @@
+{
+  "project": {
+    "name": "grupo_gad",
+    "version": "0.1.0",
+    "description": "Sistema de Gestión de Tareas para Personal Policial"
+  },
+  "dependencies": {
+    "allowlist": {
+      "npm": [],
+      "pypi": [
+        "fastapi",
+        "uvicorn",
+        "sqlalchemy",
+        "asyncpg",
+        "pydantic",
+        "pydantic-settings",
+        "email-validator",
+        "passlib",
+        "python-jose",
+        "python-telegram-bot",
+        "requests",
+        "redis",
+        "python-multipart",
+        "loguru",
+        "alembic",
+        "httpx",
+        "geopy"
+      ]
+    },
+    "dev_allowlist": {
+      "npm": [
+        "typescript",
+        "ts-node",
+        "eslint",
+        "@typescript-eslint/parser",
+        "@typescript-eslint/eslint-plugin",
+        "jest",
+        "ts-jest",
+        "@types/jest",
+        "supertest",
+        "@types/supertest"
+      ],
+      "pypi": [
+        "pytest",
+        "pytest-asyncio",
+        "ruff",
+        "black",
+        "mypy",
+        "pytest-cov",
+        "aiosqlite",
+        "pytest-env"
+      ]
+    }
+  },
+  "testing_policy": {
+    "unit_min_coverage_pct": 50,
+    "smoke_required": true
+  },
+  "invariants": [
+    "Validar inputs con esquemas cuando aplique",
+    "No dependencias fuera de allowlist sin justificación",
+    "Tests mínimos por módulo nuevo",
+    "Usar pyproject.toml / poetry para dependencias Python cuando aplique"
+  ]
+}

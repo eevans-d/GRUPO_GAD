@@ -3,7 +3,16 @@
 Clase base para las operaciones CRUD (Create, Read, Update, Delete).
 """
 
-from typing import Any, Dict, Generic, Optional, Type, TypeVar, Union, Sequence # Added Sequence
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    Optional,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -30,12 +39,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Obtiene un registro por su ID.
         """
-        result = await db.execute(select(self.model).filter(self.model.id == id)) # type: ignore # Added type: ignore
+        query = select(self.model).filter(self.model.id == id)  # type: ignore
+        result = await db.execute(query)
         return result.scalars().first()
 
     async def get_multi(
         self, db: AsyncSession, *, skip: int = 0, limit: int = 100
-    ) -> Sequence[ModelType]: # Changed return type
+    ) -> Sequence[ModelType]:
         """
         Obtiene múltiples registros con paginación.
         """
@@ -67,9 +77,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.model_dump(exclude_unset=True)
+            update_data = obj_in.model_dump(
+                exclude_unset=True
+            )
 
+        # Campos sensibles que nunca deben ser modificados por update
+        SENSITIVE_FIELDS = {"id", "uuid", "created_at", "updated_at", "deleted_at"}
         for field in update_data:
+            if field in SENSITIVE_FIELDS:
+                continue
             if hasattr(db_obj, field):
                 setattr(db_obj, field, update_data[field])
 
@@ -78,7 +94,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db.refresh(db_obj)
         return db_obj
 
-    async def remove(self, db: AsyncSession, *, id: int) -> Optional[ModelType]: # Changed return type
+    async def remove(
+        self, db: AsyncSession, *, id: int
+    ) -> Optional[ModelType]:
         """
         Elimina un registro.
         """

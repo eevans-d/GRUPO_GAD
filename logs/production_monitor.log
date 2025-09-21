@@ -1,0 +1,59 @@
+[2025-09-03 01:19:16] - --- INICIANDO CHEQUEO DE MONITOREO ---
+[2025-09-03 01:19:16] - Sección 1: Salud de Servicios y Recursos
+[2025-09-03 01:19:16] - Verificando endpoint de salud: http://localhost/api/v1/health/ping
+[2025-09-03 01:19:16] - [FAIL] Health endpoint falló. Código de respuesta: 000.
+[2025-09-03 01:19:16] - Verificando estado de los servicios Docker...
+./scripts/monitor_production.sh: line 72: /usr/bin/docker: Input/output error
+[2025-09-03 01:19:17] - Verificando uso de disco...
+[2025-09-03 01:19:17] - Filesystem      Size  Used Avail Use% Mounted on
+[2025-09-03 01:19:17] - Verificando estadísticas de recursos de contenedores...
+./scripts/monitor_production.sh: line 86: /usr/bin/docker: Input/output error
+[2025-09-03 01:19:17] - 
+Sección 2: Validación Funcional Diaria
+[2025-09-03 01:19:17] - Verificando carga del Dashboard: http://localhost/
+[2025-09-03 01:19:17] - [FAIL] Dashboard no parece estar cargando. Código de respuesta: 000.
+[2025-09-03 01:19:17] - Verificando backups recientes de la base de datos...
+[2025-09-03 01:19:17] - [WARN] No se encontraron backups recientes en /var/backups.
+[2025-09-03 01:19:17] - 
+Sección 3: Métricas Básicas de la Aplicación
+./scripts/monitor_production.sh: line 116: /usr/bin/docker: Input/output error
+[2025-09-03 01:19:17] - Métrica - Total de usuarios: 
+./scripts/monitor_production.sh: line 116: /usr/bin/docker: Input/output error
+[2025-09-03 01:19:17] - Métrica - Tareas creadas (últimas 24h): 
+[2025-09-03 01:19:17] - Métricas guardadas en logs/metrics.log
+[2025-09-03 01:19:17] - NOTA: El conteo de mensajes de Telegram y el login de admin no se pueden automatizar de forma simple en este script y deben ser verificados manualmente.
+[2025-09-03 01:19:17] - --- CHEQUEO DE MONITOREO FINALIZADO ---
+
+[2025-09-03 01:32:54] - --- INICIANDO CHEQUEO DE MONITOREO ---
+[2025-09-03 01:32:54] - Sección 1: Salud de Servicios y Recursos
+[2025-09-03 01:32:54] - Verificando endpoint de salud: http://localhost/api/v1/health/ping
+[2025-09-03 01:32:54] - [FAIL] Health endpoint falló. Código de respuesta: 000.
+[2025-09-03 01:32:54] - Verificando estado de los servicios Docker...
+time="2025-09-03T01:32:54-03:00" level=warning msg="The \"POSTGRES_USER\" variable is not set. Defaulting to a blank string."
+time="2025-09-03T01:32:54-03:00" level=warning msg="The \"POSTGRES_PASSWORD\" variable is not set. Defaulting to a blank string."
+time="2025-09-03T01:32:54-03:00" level=warning msg="The \"POSTGRES_DB\" variable is not set. Defaulting to a blank string."
+time="2025-09-03T01:32:54-03:00" level=warning msg="The \"POSTGRES_USER\" variable is not set. Defaulting to a blank string."
+time="2025-09-03T01:32:54-03:00" level=warning msg="The \"POSTGRES_DB\" variable is not set. Defaulting to a blank string."
+time="2025-09-03T01:32:54-03:00" level=warning msg="/home/eevan/ProyectosIA/GRUPO_GAD/docker/docker-compose.prod.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+env file /home/eevan/ProyectosIA/GRUPO_GAD/.env.production not found: stat /home/eevan/ProyectosIA/GRUPO_GAD/.env.production: no such file or directory
+[2025-09-03 01:32:54] - Verificando uso de disco...
+[2025-09-03 01:32:54] - Filesystem                                Size  Used Avail Use% Mounted on
+[2025-09-03 01:32:54] - Verificando estadísticas de recursos de contenedores...
+CONTAINER ID   NAME             CPU %     MEM USAGE / LIMIT     MEM %     NET I/O        BLOCK I/O        PIDS
+16b30461a496   vibe_core-db-1   0.00%     21.96MiB / 15.34GiB   0.14%     1.7kB / 126B   26.7MB / 102kB   6
+[2025-09-03 01:32:53] - 
+Sección 2: Validación Funcional Diaria
+[2025-09-03 01:32:53] - Verificando carga del Dashboard: http://localhost/
+[2025-09-03 01:32:53] - [FAIL] Dashboard no parece estar cargando. Código de respuesta: 000.
+[2025-09-03 01:32:53] - Verificando backups recientes de la base de datos...
+[2025-09-03 01:32:53] - [WARN] No se encontraron backups recientes en /var/backups.
+[2025-09-03 01:32:53] - 
+Sección 3: Métricas Básicas de la Aplicación
+Error response from daemon: No such container: postgres
+[2025-09-03 01:32:53] - Métrica - Total de usuarios: 
+Error response from daemon: No such container: postgres
+[2025-09-03 01:32:53] - Métrica - Tareas creadas (últimas 24h): 
+[2025-09-03 01:32:53] - Métricas guardadas en logs/metrics.log
+[2025-09-03 01:32:53] - NOTA: El conteo de mensajes de Telegram y el login de admin no se pueden automatizar de forma simple en este script y deben ser verificados manualmente.
+[2025-09-03 01:32:53] - --- CHEQUEO DE MONITOREO FINALIZADO ---
+

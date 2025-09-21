@@ -1,54 +1,53 @@
-# Etapa de construcción
-FROM python:3.11-slim as builder
+FROM python:3.12-slim AS builder
 
-# Variables de entorno
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    POETRY_VERSION=1.5.1
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# Instalar dependencias del sistema
-RUN apt-get update && apt-get install -y \
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && apt-get clean
 
-# Instalar Poetry
-RUN pip install "poetry==$POETRY_VERSION"
+# Install Python deps into a staging directory
+COPY requirements.lock /app/requirements.lock
+RUN python -m pip install --upgrade pip \
+    && pip install --no-cache-dir --prefix=/install -r requirements.lock
 
-# Copiar archivos de configuración de Poetry
-COPY pyproject.toml poetry.lock* ./
+# --- Runtime image ---
+FROM python:3.12-slim
 
-# Instalar dependencias
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
-
-# Etapa de producción
-FROM python:3.11-slim
-
-# Variables de entorno
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    APP_HOME=/app
+    PYTHONUNBUFFERED=1
 
-# Crear directorio de aplicación
-WORKDIR $APP_HOME
+WORKDIR /app
 
-# Copiar dependencias de la etapa de construcción
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+# Only runtime tools (curl for HEALTHCHECK)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/* && apt-get clean
 
-# Crear usuario no root
-RUN addgroup --system app && adduser --system --group app
+# Copy installed Python packages from builder
+COPY --from=builder /install /usr/local
 
-# Copiar código fuente
-COPY . .
+# Copy application code
+COPY alembic.ini /app/alembic.ini
+COPY alembic /app/alembic
+COPY config /app/config
+COPY src /app/src
+COPY dashboard /app/dashboard
+COPY scripts/start.sh /app/start.sh
 
-# Cambiar propietario
-RUN chown -R app:app $APP_HOME
-
-# Cambiar a usuario no root
+# Create non-root user
+RUN groupadd -r app && useradd -r -g app app \
+    && chown -R app:app /app
 USER app
 
-# Puerto expuesto
 EXPOSE 8000
 
-# Comando de inicio
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/app/start.sh"]
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -f http://localhost:8000/api/v1/health || exit 1

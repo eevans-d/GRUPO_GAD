@@ -1,42 +1,88 @@
+[project]
+name = "grupo_gad"
+version = "0.1.0"
+description = "Sistema de gestión administrativa gubernamental"
+authors = [{ name = "Equipo GAD", email = "dev@grupogad.com" }]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+license = { text = "MIT" }
+keywords = ["fastapi", "government", "administration", "gad"]
+packages = [{ include = "grupo_gad", from = "src" }]
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "grupo_gad"
 version = "0.1.0"
-description = "Sistema de Gestión de Tareas para Personal Policial"
-authors = ["Your Name <you@example.com>"]
+description = "Sistema de gestión administrativa gubernamental"
+authors = ["Equipo GAD <dev@grupogad.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{ include = "grupo_gad", from = "src" }]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-fastapi = "^0.103.0"
-uvicorn = {extras = ["standard"], version = "^0.23.2"}
-sqlalchemy = {extras = ["asyncio"], version = "^2.0.20"}
-asyncpg = "^0.28.0"
-pydantic = "^2.3.0"
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-python-telegram-bot = "^20.6"
-requests = "^2.31.0"
-redis = "^5.0.1"
-python-multipart = "^0.0.20"
-loguru = "^0.7.3"
-alembic = "^1.16.5"
+[tool.poetry.group.main.dependencies]
+fastapi = ">=0.115.0,<1.0.0"
+sqlalchemy = {version = ">=2.0.25,<3.0.0", extras = ["asyncio"]}
+alembic = ">=1.13.2,<2.0.0"
+pydantic = ">=2.8.0,<3.0.0"
+pydantic-settings = ">=2.2.1,<3.0.0"
+uvicorn = {version = ">=0.30.0,<1.0.0", extras = ["standard"]}
+python-jose = {version = ">=3.3.0,<4.0.0", extras = ["cryptography"]}
+passlib = {version = ">=1.7.4,<2.0.0", extras = ["bcrypt"]}
+asyncpg = ">=0.29.0,<1.0.0"
+
+python-dotenv = ">=1.0.0,<2.0.0"
+httpx = ">=0.27.0,<1.0.0"
+starlette = ">=0.47.2,<1.0.0"
+ecdsa = ">=0.18.0,<1.0.0"
+tenacity = ">=8.2.3,<9.0.0"
+requests = ">=2.32.0,<3.0.0"
+
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.4.1"
-pytest-asyncio = "^0.21.1"
-httpx = "^0.25.0"
-ruff = "^0.0.292"
-black = "^23.9.1"
-mypy = "^1.5.1"
-pytest-cov = "^6.2.1"
-aiosqlite = "^0.21.0"
-pytest-env = "^1.1.5"
+pytest-asyncio = "^1.2.0"
+pytest = "^8.4.2"
+pytest-cov = "^7.0.0"
+ruff = "^0.13.0"
+mypy = "^1.18.1"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+aiosqlite = "^0.21.0"
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+exclude = [
+	"alembic",
+	"src/bot",
+]
+
+[tool.ruff.lint]
+select = ["E", "F"]
 
 [tool.mypy]
-explicit_package_bases = true
+python_version = "3.12"
+strict = true
+files = ["src", "config"]
+exclude = [
+	"^tests/",
+	"^scripts/",
+	"^alembic/",
+]
 namespace_packages = true
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "--cov=src --cov-report=html --cov-report=term-missing --cov-fail-under=85"
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+env = [
+	"DATABASE_URL=sqlite+aiosqlite:///:memory:",
+]
+filterwarnings = [
+	"ignore:.*crypt.*:DeprecationWarning",
+	"ignore:.*python_multipart.*:PendingDeprecationWarning",
+]

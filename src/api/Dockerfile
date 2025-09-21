@@ -5,6 +5,7 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 
 WORKDIR /app
 
+
 # Copy requirements and install them
 COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

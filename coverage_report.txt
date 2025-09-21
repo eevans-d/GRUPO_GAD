@@ -1,0 +1,53 @@
+..............                                                           [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/formparsers.py:12
+  /home/eevan/ProyectosIA/GRUPO_GAD/.venv/lib/python3.12/site-packages/starlette/formparsers.py:12: PendingDeprecationWarning: Please use `import python_multipart` instead.
+    import multipart
+
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/eevan/ProyectosIA/GRUPO_GAD/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+---------- coverage: platform linux, python 3.12.3-final-0 -----------
+Name                                 Stmts   Miss  Cover   Missing
+------------------------------------------------------------------
+src/api/__init__.py                      0      0   100%
+src/api/crud/base.py                    43      2    95%   52-53
+src/api/crud/crud_tarea.py              11      0   100%
+src/api/crud/crud_usuario.py            27      1    96%   56
+src/api/database.py                     15     15     0%   1-25
+src/api/dependencies.py                 30     15    50%   31-44, 53-55, 64-68
+src/api/main.py                         54     10    81%   61-67, 86-87, 104-106, 115-116
+src/api/models.py                       52     52     0%   1-109
+src/api/models/__init__.py               8      0   100%
+src/api/models/associations.py           3      0   100%
+src/api/models/base.py                  50     20    60%   27, 43, 48-50, 53-55, 81-89, 93-97
+src/api/models/efectivo.py              30      0   100%
+src/api/models/historial_estado.py      20      1    95%   56
+src/api/models/metrica_tarea.py         24      1    96%   49
+src/api/models/tarea.py                 58      2    97%   142, 162
+src/api/models/usuario.py               54     11    80%   87, 92, 97-99, 104, 108, 112-113, 117, 120
+src/api/routers/__init__.py              7      0   100%
+src/api/routers/auth.py                 21      7    67%   22-23, 38-54
+src/api/routers/dashboard.py            11      4    64%   11-14
+src/api/routers/health.py                5      0   100%
+src/api/routers/tasks.py                37     18    51%   30-31, 44-45, 57-63, 77-84, 97-104
+src/api/routers/users.py                36     17    53%   34-35, 48-55, 65, 77-83, 97-104
+src/api/services/auth.py                14      5    64%   23-27
+src/api/test_api.py                      0      0   100%
+src/api/tests/__init__.py                0      0   100%
+src/api/web_router.py                    0      0   100%
+src/core/auth.py                         3      0   100%
+src/core/database.py                    56     31    45%   35, 62-65, 68-70, 73-80, 89-105
+src/core/security.py                    18      0   100%
+src/schemas/__init__.py                  3      0   100%
+src/schemas/tarea.py                    43      0   100%
+src/schemas/token.py                     7      0   100%
+src/schemas/usuario.py                  36      0   100%
+src/shared/constants.py                 33      0   100%
+------------------------------------------------------------------
+TOTAL                                  809    212    74%
+
+14 passed, 2 warnings in 4.42s

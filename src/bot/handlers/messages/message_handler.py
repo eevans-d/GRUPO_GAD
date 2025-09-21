@@ -4,21 +4,21 @@ Manejador para mensajes de texto genéricos.
 """
 
 import re
+
 from telegram import Update
-from telegram.ext import MessageHandler, filters, CallbackContext # Changed Filters to filters
+from telegram.ext import CallbackContext, MessageHandler, filters
+from typing import Any
 
-from src.bot.services.api import api_service
+from src.bot.services.api_service import ApiService
 
 
-async def message_handler_func(update: Update, context: CallbackContext) -> None: # Added async
+from telegram.ext import CallbackContext
+from telegram import Bot, Chat, User
+async def message_handler_func(update: Update, context: CallbackContext[Bot, Update, Chat, User]) -> None:
     """
     Procesa mensajes de texto para encontrar palabras clave.
     """
-    if update.message is None: # Added None check
-        return
-    if update.message.from_user is None: # Added None check
-        return
-    if update.message.text is None: # Added None check
+    if not update.message or not update.message.from_user or not update.message.text:
         return
 
     user_id = update.message.from_user.id
@@ -29,12 +29,20 @@ async def message_handler_func(update: Update, context: CallbackContext) -> None
     if match:
         codigo_tarea = match.group(1)
         try:
-            await api_service.finalize_task(task_code=codigo_tarea, telegram_id=user_id) # Added await
-            await update.message.reply_text( # Added await
+            from config.settings import settings
+            api_url = getattr(settings, "API_V1_STR", "/api/v1")
+            token = None  # Si tienes un token, obténlo aquí
+            api_service = ApiService(api_url, token)
+            api_service.finalize_task(
+                task_code=codigo_tarea, telegram_id=user_id
+            )
+            await update.message.reply_text(
                 f"Tarea '{codigo_tarea}' finalizada exitosamente."
             )
         except Exception as e:
-            await update.message.reply_text(f"Error al finalizar la tarea: {e}") # Added await
+            await update.message.reply_text(f"Error al finalizar la tarea: {e}")
 
 
-handler = MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler_func) # Changed to TEXT and COMMAND
+handler = MessageHandler(
+    filters.TEXT & ~filters.COMMAND, message_handler_func
+)

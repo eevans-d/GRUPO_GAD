@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "grupo_gad"
+version = "0.1.0"
+description = "Sistema de Gestión de Tareas para Personal Policial"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+
+python = "^3.11"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.20"}
+asyncpg = "^0.28.0"
+# SECURITY HARDENING: Force latest compatible versions
+fastapi = "^0.115.0"  # Latest with security patches
+starlette = "^0.40.0"  # Force patched version (may conflict - will resolve)
+uvicorn = {extras = ["standard"], version = "^0.32.0"}  # Latest
+
+pydantic = "^2.3.0"
+pydantic-settings = "^2.1.0"
+email-validator = "^2.1.1"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-telegram-bot = "^20.6"
+requests = "^2.31.0"
+redis = "^5.0.1"
+python-multipart = ">=0.0.20"  # Latest security patches
+loguru = "^0.7.3"
+alembic = "^1.16.5"
+httpx = "^0.25.0" # Para comunicación Bot-API
+geopy = "^2.4.1" # Para geocodificación del dashboard
+gunicorn = "^23.0.0"
+tenacity = "^8.2.3" # Retry/circuit breaker para DB
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+pytest-asyncio = "^0.21.1"
+ruff = "^0.0.292"
+black = "^24.3.0"
+mypy = "^1.5.1"
+pytest-cov = "^4.1.0"
+aiosqlite = "^0.21.0"
+pytest-env = "^1.1.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+explicit_package_bases = true
+namespace_packages = true

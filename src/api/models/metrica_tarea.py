@@ -3,14 +3,16 @@
 Modelo de MetricaTarea para el sistema GRUPO_GAD.
 """
 
-from typing import Optional
-from sqlalchemy import Integer, REAL, DECIMAL
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import ENUM
 from datetime import datetime, timezone
+from typing import Optional
+
+from sqlalchemy import DECIMAL, REAL, Integer
+from sqlalchemy.dialects.postgresql import ENUM
+from sqlalchemy.orm import Mapped, mapped_column
+
+from src.shared.constants import TaskPriority, TaskType
 
 from .base import Base
-from src.shared.constants import TaskType, TaskPriority
 
 
 class MetricaTarea(Base):
@@ -21,10 +23,10 @@ class MetricaTarea(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     tipo_tarea: Mapped[TaskType] = mapped_column(
-        ENUM(TaskType, name="tipo_tarea", schema="gad"), nullable=False
+    ENUM(TaskType, name="tipo_tarea"), nullable=False
     )
     prioridad: Mapped[TaskPriority] = mapped_column(
-        ENUM(TaskPriority, name="prioridad_tarea", schema="gad"), nullable=False
+    ENUM(TaskPriority, name="prioridad_tarea"), nullable=False
     )
 
     # Métricas acumuladas

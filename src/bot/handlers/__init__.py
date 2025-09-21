@@ -3,9 +3,13 @@
 Registra todos los manejadores de comandos y mensajes para el bot.
 """
 
-from telegram.ext import Dispatcher # type: ignore # Added type: ignore
+from telegram.ext import Dispatcher  # type: ignore # Added type: ignore
 
-from .commands import start, crear_tarea, finalizar_tarea # type: ignore # Added type: ignore
+from .commands import (  # type: ignore # Added type: ignore
+    crear_tarea,
+    finalizar_tarea,
+    start,
+)
 from .messages import message_handler
 
 

@@ -2,9 +2,10 @@
 """Modelo de Efectivo para el sistema GRUPO_GAD."""
 
 import enum
-from uuid import UUID, uuid4
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
+from typing import Any
+from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import ENUM as pg_ENUM
@@ -32,7 +33,7 @@ class Efectivo(Base):
     """Modelo de Efectivo del sistema."""
 
     __tablename__ = "efectivos"
-    __table_args__ = {"schema": "gad"}
+    # __table_args__ eliminado para compatibilidad con SQLite
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     uuid: Mapped[UUID] = mapped_column(
@@ -43,7 +44,7 @@ class Efectivo(Base):
         default=uuid4,
     )
     usuario_id: Mapped[int] = mapped_column(
-        ForeignKey("gad.usuarios.id"), unique=True, nullable=False
+        ForeignKey("usuarios.id"), unique=True, nullable=False
     )
     codigo_interno: Mapped[str] = mapped_column(
         String(50), unique=True, nullable=False, index=True
@@ -57,7 +58,7 @@ class Efectivo(Base):
             EstadoDisponibilidad,
             name="estado_disponibilidad",
             create_type=False,
-            schema="gad",
+            # schema eliminado para SQLite
         ),
         nullable=False,
         default=EstadoDisponibilidad.DISPONIBLE,
@@ -68,12 +69,13 @@ class Efectivo(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
-    extra_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSON)
+    extra_metadata: Mapped[Optional[dict[str, Any]]] = mapped_column("metadata", JSON)
 
     # --- Relationships ---
     usuario: Mapped["Usuario"] = relationship(back_populates="efectivo")
 
     tareas_asignadas: Mapped[List["Tarea"]] = relationship(
-        secondary="gad.tarea_efectivos",
+        secondary="tarea_efectivos",
         back_populates="efectivos",  # Corrected attribute name and back_populates
     )
+# Definir la tabla de asociación al final del archivo, fuera de la clase

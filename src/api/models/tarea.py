@@ -7,6 +7,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timedelta
 from typing import TYPE_CHECKING, List, Optional
+from typing import Any
 
 from sqlalchemy import (
     CheckConstraint,
@@ -46,10 +47,10 @@ class Tarea(Base):
         CheckConstraint(
             "(inicio_real IS NULL AND fin_real IS NULL) OR "
             "(inicio_real IS NOT NULL AND fin_real IS NULL) OR "
-            "(inicio_real IS NOT NULL AND fin_real IS NOT NULL AND fin_real >= inicio_real)",
+            "(inicio_real IS NOT NULL AND fin_real IS NOT NULL AND "
+            "fin_real >= inicio_real)",
             name="chk_tareas_fechas_reales",
         ),
-        {"schema": "gad"},
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -64,10 +65,10 @@ class Tarea(Base):
 
     # Clasificación
     tipo: Mapped[TaskType] = mapped_column(
-        ENUM(TaskType, name="tipo_tarea", schema="gad"), nullable=False
+    ENUM(TaskType, name="tipo_tarea"), nullable=False
     )
     prioridad: Mapped[TaskPriority] = mapped_column(
-        ENUM(TaskPriority, name="prioridad_tarea", schema="gad"),
+    ENUM(TaskPriority, name="prioridad_tarea"),
         default=TaskPriority.MEDIUM,
         nullable=False,
     )
@@ -84,17 +85,17 @@ class Tarea(Base):
 
     # Estados
     estado: Mapped[TaskStatus] = mapped_column(
-        ENUM(TaskStatus, name="estado_tarea", schema="gad"),
+    ENUM(TaskStatus, name="estado_tarea"),
         default=TaskStatus.PROGRAMMED,
         nullable=False,
     )
 
     # Relaciones
     delegado_usuario_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("gad.usuarios.id"), nullable=False
+    Integer, ForeignKey("usuarios.id"), nullable=False
     )
     creado_por_usuario_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("gad.usuarios.id"), nullable=False
+    Integer, ForeignKey("usuarios.id"), nullable=False
     )
 
     # Ubicación geográfica
@@ -109,8 +110,8 @@ class Tarea(Base):
     duracion_real_horas: Mapped[Optional[float]] = mapped_column(Numeric, nullable=True)
 
     # Metadata y notas
-    notas: Mapped[dict] = mapped_column(CustomJsonB, default={})
-    extra_data: Mapped[dict] = mapped_column(CustomJsonB, default={})
+    notas: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
+    extra_data: Mapped[dict[str, Any]] = mapped_column(CustomJsonB, default={})
 
     # Relaciones ORM
     delegado_usuario: Mapped["Usuario"] = relationship(

@@ -1,22 +1,20 @@
-# -*- coding: utf-8 -*-
 """
 Tests unitarios para las operaciones CRUD de Usuario.
 """
 
+# =======================
+# Tests unitarios: CRUD Usuario
+# =======================
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock
-
 from src.api.crud.crud_usuario import CRUDUsuario
 from src.api.models.usuario import Usuario
 from src.schemas.usuario import UsuarioCreate, UsuarioUpdate
 from src.core.security import get_password_hash, verify_password
 
-
 @pytest.fixture
 def mock_db_session():
-    """
-    Fixture que proporciona una sesión de base de datos mockeada.
-    """
     session = AsyncMock()
     session.execute = AsyncMock()
     session.commit = AsyncMock()
@@ -25,20 +23,12 @@ def mock_db_session():
     session.delete = AsyncMock()
     return session
 
-
 @pytest.fixture
 def crud_usuario_instance():
-    """
-    Fixture que proporciona una instancia de CRUDUsuario.
-    """
     return CRUDUsuario(Usuario)
-
 
 @pytest.mark.asyncio
 async def test_create_user(mock_db_session, crud_usuario_instance):
-    """
-    Test para crear un usuario.
-    """
     user_in = UsuarioCreate(
         email="test@example.com",
         password="testpassword",

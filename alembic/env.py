@@ -6,13 +6,29 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 
-# Import your models' Base and settings
-from src.api.models.base import Base
-from config.settings import settings
+# Importar todos los modelos para registrar las tablas y relaciones
+from src.api.models import Base, Usuario, Efectivo, Tarea, HistorialEstado, MetricaTarea, tarea_efectivos
+
+# Do not import Settings at module import time; import lazily inside functions
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+# Set the database URL from the settings object
+try:
+    # best-effort: if settings are available at import time use them, otherwise
+    # leave the config unset and compute the URL lazily in the migration runners.
+    from config.settings import get_settings
+
+    maybe_settings = get_settings()
+    if maybe_settings.assemble_db_url():
+        config.set_main_option("sqlalchemy.url", str(maybe_settings.assemble_db_url()))
+except Exception:
+    # Do not fail import if environment is incomplete; alembic commands will
+    # compute the URL at execution time.
+    pass
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -28,7 +44,6 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -41,7 +56,11 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = str(settings.DATABASE_URL)
+    # Lazily obtain DB URL to tolerate missing env vars at import time
+    from config.settings import get_settings
+
+    settings = get_settings()
+    url = str(settings.assemble_db_url() or "")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -67,7 +86,15 @@ async def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = create_async_engine(str(settings.DATABASE_URL), poolclass=pool.NullPool)
+    # Lazily instantiate settings and build engine only when running migrations
+    from config.settings import get_settings
+
+    settings = get_settings()
+    db_url = settings.assemble_db_url()
+    if not db_url:
+        raise RuntimeError("DATABASE_URL could not be determined for alembic migrations")
+
+    connectable = create_async_engine(str(db_url), poolclass=pool.NullPool)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
