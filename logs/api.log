@@ -1078,3 +1078,138 @@
 2025-09-21T03:28:57.784279+0000 INFO Response: 401 | Time: 1.29ms
 2025-09-21T03:28:57.786522+0000 INFO Request: POST http://test/api/v1/users/
 2025-09-21T03:28:57.788188+0000 INFO Response: 401 | Time: 1.67ms
+2025-09-21T00:56:37.368177-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T00:56:39.345133-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T04:02:12.333733+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T04:02:12.431836+0000 INFO Request: GET http://test/api/v1/health
+2025-09-21T04:02:12.432720+0000 INFO Response: 200 | Time: 0.89ms
+2025-09-21T04:02:12.748176+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.044223+0000 INFO Response: 200 | Time: 296.04ms
+2025-09-21T04:02:13.311942+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.544832+0000 INFO Response: 200 | Time: 232.89ms
+2025-09-21T04:02:13.548644+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.555208+0000 INFO Response: 401 | Time: 6.56ms
+2025-09-21T04:02:13.775994+0000 INFO Request: GET http://test/api/v1/users/
+2025-09-21T04:02:13.777020+0000 INFO Response: 403 | Time: 1.03ms
+2025-09-21T04:02:13.778647+0000 INFO Request: GET http://test/metrics
+2025-09-21T04:02:13.779082+0000 INFO Response: 200 | Time: 0.44ms
+2025-09-21T04:02:13.781336+0000 INFO Request: GET http://test/api/v1/health
+2025-09-21T04:02:13.781893+0000 INFO Response: 200 | Time: 0.56ms
+2025-09-21T04:02:13.783608+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.787094+0000 INFO Response: 200 | Time: 3.49ms
+2025-09-21T04:02:13.789771+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.793209+0000 INFO Response: 401 | Time: 3.44ms
+2025-09-21T04:02:13.798855+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:02:13.801144+0000 ERROR Validation error for request http://test/api/v1/auth/login: [{'type': 'missing', 'loc': ('body', 'password'), 'msg': 'Field required', 'input': None}]
+2025-09-21T04:02:13.801535+0000 INFO Response: 422 | Time: 2.69ms
+2025-09-21T04:02:13.803902+0000 INFO Request: GET http://test/dashboard
+2025-09-21T04:02:13.804780+0000 INFO Response: 401 | Time: 0.88ms
+2025-09-21T04:02:13.807057+0000 INFO Request: GET http://test/dashboard
+2025-09-21T04:02:13.810655+0000 INFO Response: 200 | Time: 3.60ms
+2025-09-21T04:02:13.813713+0000 INFO Request: GET http://test/api/v1/users/1
+2025-09-21T04:02:13.814725+0000 INFO Response: 401 | Time: 1.02ms
+2025-09-21T04:02:13.817184+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:02:13.818795+0000 INFO Response: 401 | Time: 1.61ms
+2025-09-21T04:02:13.821260+0000 INFO Request: PUT http://test/api/v1/users/1
+2025-09-21T04:02:13.822862+0000 INFO Response: 401 | Time: 1.60ms
+2025-09-21T04:02:13.825274+0000 INFO Request: GET http://test/api/v1/users/999
+2025-09-21T04:02:13.826592+0000 INFO Response: 404 | Time: 1.32ms
+2025-09-21T04:02:13.829101+0000 INFO Request: PUT http://test/api/v1/users/999
+2025-09-21T04:02:13.833611+0000 INFO Response: 404 | Time: 4.51ms
+2025-09-21T04:02:13.836300+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:02:13.839651+0000 INFO Response: 400 | Time: 3.35ms
+2025-09-21T04:02:13.842129+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:02:13.843052+0000 INFO Response: 401 | Time: 0.93ms
+2025-09-21T04:02:13.845540+0000 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-21T04:02:13.847214+0000 INFO Response: 401 | Time: 1.68ms
+2025-09-21T04:02:13.849636+0000 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-21T04:02:13.850579+0000 INFO Response: 401 | Time: 0.94ms
+2025-09-21T04:02:13.852924+0000 INFO Request: GET http://test/api/v1/tasks/999
+2025-09-21T04:02:13.854084+0000 INFO Response: 404 | Time: 1.16ms
+2025-09-21T04:02:13.856681+0000 INFO Request: PUT http://test/api/v1/tasks/999
+2025-09-21T04:02:13.859758+0000 INFO Response: 404 | Time: 3.08ms
+2025-09-21T04:02:13.862402+0000 INFO Request: DELETE http://test/api/v1/tasks/999
+2025-09-21T04:02:13.863557+0000 INFO Response: 404 | Time: 1.16ms
+2025-09-21T04:02:13.865894+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:02:13.867076+0000 INFO Response: 200 | Time: 1.18ms
+2025-09-21T04:02:13.869434+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:02:13.870367+0000 INFO Response: 401 | Time: 0.93ms
+2025-09-21T04:02:13.871951+0000 INFO Request: POST http://test/api/v1/tasks/
+2025-09-21T04:02:13.873608+0000 INFO Response: 401 | Time: 1.66ms
+2025-09-21T04:02:13.875350+0000 INFO Request: GET http://test/api/v1/users/
+2025-09-21T04:02:13.876316+0000 INFO Response: 401 | Time: 0.97ms
+2025-09-21T04:02:13.877904+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:02:13.879306+0000 INFO Response: 401 | Time: 1.40ms
+2025-09-21T01:04:15.034595-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:09:04.230382-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:10:30.727805-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:10:32.963539-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:12:03.824533-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:13:10.739186-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:13:15.442487-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:15:41.054283-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:15:47.838211-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:15:53.337260-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:16:47.326569-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:16:50.392582-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T01:16:52.064770-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T04:16:55.003237+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-21T04:16:55.129970+0000 INFO Request: GET http://test/api/v1/health
+2025-09-21T04:16:55.130937+0000 INFO Response: 200 | Time: 0.99ms
+2025-09-21T04:16:55.585179+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:55.917533+0000 INFO Response: 200 | Time: 332.36ms
+2025-09-21T04:16:56.190087+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:56.471183+0000 INFO Response: 200 | Time: 281.09ms
+2025-09-21T04:16:56.479825+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:56.491664+0000 INFO Response: 401 | Time: 11.85ms
+2025-09-21T04:16:56.727776+0000 INFO Request: GET http://test/api/v1/users/
+2025-09-21T04:16:56.729899+0000 INFO Response: 403 | Time: 2.13ms
+2025-09-21T04:16:56.732436+0000 INFO Request: GET http://test/metrics
+2025-09-21T04:16:56.733014+0000 INFO Response: 200 | Time: 0.58ms
+2025-09-21T04:16:56.736158+0000 INFO Request: GET http://test/api/v1/health
+2025-09-21T04:16:56.737017+0000 INFO Response: 200 | Time: 0.86ms
+2025-09-21T04:16:56.739366+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:56.744135+0000 INFO Response: 200 | Time: 4.77ms
+2025-09-21T04:16:56.748592+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:56.753957+0000 INFO Response: 401 | Time: 5.36ms
+2025-09-21T04:16:56.758915+0000 INFO Request: POST http://test/api/v1/auth/login
+2025-09-21T04:16:56.762118+0000 ERROR Validation error for request http://test/api/v1/auth/login: [{'type': 'missing', 'loc': ('body', 'password'), 'msg': 'Field required', 'input': None}]
+2025-09-21T04:16:56.762381+0000 INFO Response: 422 | Time: 3.47ms
+2025-09-21T04:16:56.766114+0000 INFO Request: GET http://test/dashboard
+2025-09-21T04:16:56.767103+0000 INFO Response: 401 | Time: 0.99ms
+2025-09-21T04:16:56.773705+0000 INFO Request: GET http://test/dashboard
+2025-09-21T04:16:56.780802+0000 INFO Response: 200 | Time: 7.10ms
+2025-09-21T04:16:56.785249+0000 INFO Request: GET http://test/api/v1/users/1
+2025-09-21T04:16:56.786766+0000 INFO Response: 401 | Time: 1.53ms
+2025-09-21T04:16:56.790852+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:16:56.793767+0000 INFO Response: 401 | Time: 2.91ms
+2025-09-21T04:16:56.798252+0000 INFO Request: PUT http://test/api/v1/users/1
+2025-09-21T04:16:56.800389+0000 INFO Response: 401 | Time: 2.14ms
+2025-09-21T04:16:56.803919+0000 INFO Request: GET http://test/api/v1/users/999
+2025-09-21T04:16:56.806924+0000 INFO Response: 404 | Time: 3.03ms
+2025-09-21T04:16:56.811227+0000 INFO Request: PUT http://test/api/v1/users/999
+2025-09-21T04:16:56.817832+0000 INFO Response: 404 | Time: 6.61ms
+2025-09-21T04:16:56.821515+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:16:56.828167+0000 INFO Response: 400 | Time: 6.63ms
+2025-09-21T04:16:56.833881+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:16:56.835268+0000 INFO Response: 401 | Time: 1.39ms
+2025-09-21T04:16:56.839080+0000 INFO Request: PUT http://test/api/v1/tasks/1
+2025-09-21T04:16:56.841913+0000 INFO Response: 401 | Time: 2.84ms
+2025-09-21T04:16:56.846926+0000 INFO Request: DELETE http://test/api/v1/tasks/1
+2025-09-21T04:16:56.849432+0000 INFO Response: 401 | Time: 2.50ms
+2025-09-21T04:16:56.853872+0000 INFO Request: GET http://test/api/v1/tasks/999
+2025-09-21T04:16:56.855904+0000 INFO Response: 404 | Time: 2.04ms
+2025-09-21T04:16:56.860555+0000 INFO Request: PUT http://test/api/v1/tasks/999
+2025-09-21T04:16:56.866137+0000 INFO Response: 404 | Time: 5.58ms
+2025-09-21T04:16:56.870461+0000 INFO Request: DELETE http://test/api/v1/tasks/999
+2025-09-21T04:16:56.872439+0000 INFO Response: 404 | Time: 1.98ms
+2025-09-21T04:16:56.876643+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:16:56.879363+0000 INFO Response: 200 | Time: 2.72ms
+2025-09-21T04:16:56.886759+0000 INFO Request: GET http://test/api/v1/tasks/
+2025-09-21T04:16:56.888547+0000 INFO Response: 401 | Time: 1.74ms
+2025-09-21T04:16:56.890361+0000 INFO Request: POST http://test/api/v1/tasks/
+2025-09-21T04:16:56.893312+0000 INFO Response: 401 | Time: 2.95ms
+2025-09-21T04:16:56.896692+0000 INFO Request: GET http://test/api/v1/users/
+2025-09-21T04:16:56.898256+0000 INFO Response: 401 | Time: 1.60ms
+2025-09-21T04:16:56.900299+0000 INFO Request: POST http://test/api/v1/users/
+2025-09-21T04:16:56.901568+0000 INFO Response: 401 | Time: 1.27ms

@@ -22,7 +22,7 @@ async_engine: Any = None
 AsyncSessionFactory: Any = None
 
 
-def init_db(db_url: str):
+def init_db(db_url: str) -> None:
     """
     Inicializa el motor de la base de datos y la fábrica de sesiones.
     Esta función se llama en el arranque de la aplicación.

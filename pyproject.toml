@@ -58,6 +58,14 @@ select = ["E", "F", "I"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
+files = ["src", "config"]
+exclude = [
+	"^tests/",
+	"^scripts/",
+	"^alembic/",
+]
+namespace_packages = true
+explicit_package_bases = true
 
 [tool.pytest.ini_options]
 minversion = "8.0"

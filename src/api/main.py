@@ -3,7 +3,7 @@
 Punto de entrada principal para la API de GRUPO_GAD.
 """
 import sys
-from typing import Any
+from typing import Any, Awaitable, Callable, AsyncIterator
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -49,7 +49,7 @@ import time
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """
     Gestiona los eventos de arranque y parada de la aplicación.
     """
@@ -81,7 +81,10 @@ MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
 
 
 @app.middleware("http")
-async def max_body_size_middleware(request: Request, call_next: Any):
+async def max_body_size_middleware(
+    request: Request, 
+    call_next: Callable[[Request], Awaitable[Response]],
+) -> Response:
     # Comprobar Content-Length si está presente
     content_length = request.headers.get("content-length")
     if content_length is not None:
@@ -128,7 +131,10 @@ import time
 
 
 @app.middleware("http")
-async def log_requests(request: Request, call_next: Any) -> Response:
+async def log_requests(
+    request: Request, 
+    call_next: Callable[[Request], Awaitable[Response]],
+) -> Response:
     start_time = time.time()
     logger.info(f"Request: {request.method} {request.url}")
     try:

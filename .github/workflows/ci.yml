@@ -71,9 +71,14 @@ jobs:
           poetry run ruff check .
         shell: bash
 
+      - name: Security scan (Semgrep)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/security-audit
+
       - name: Type check (mypy)
         run: |
-          poetry run mypy src tests || echo "mypy warnings allowed"
+          poetry run mypy
         shell: bash
 
       - name: Run tests (pytest + coverage)

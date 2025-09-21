@@ -149,8 +149,9 @@ print(resp.json())
 
 Este repositorio usa GitHub Actions con el workflow `CI`:
 - Python 3.12 y Poetry 2.x con cache local del entorno (`.venv`).
-- Lint con `ruff` y type-check con `mypy` (no bloqueante de momento).
+- Lint con `ruff` y type-check con `mypy` (bloqueante).
 - Pruebas con `pytest` y reporte de cobertura (HTML como artifact y `--cov-fail-under=85`).
+- Chequeo de seguridad básico con Semgrep (`p/security-audit`).
 - Base de datos en pruebas: `sqlite+aiosqlite:///:memory:` para velocidad y aislamiento.
 
 El estado de la build se muestra en el badge superior. Puedes ver las ejecuciones y descargar el artifact de cobertura en la pestaña Actions.
