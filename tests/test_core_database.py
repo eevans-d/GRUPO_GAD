@@ -1,5 +1,3 @@
-import pytest
-import asyncio
 from src.core import database
 from src.core.database import AsyncSessionFactory, DBCircuitBreaker
 
@@ -15,7 +13,7 @@ def test_circuit_breaker_open():
 
 def test_async_session_factory_error():
     try:
-        session = AsyncSessionFactory()
+        _ = AsyncSessionFactory()
     except Exception:
         pass  # Esperado si la configuración es inválida
 

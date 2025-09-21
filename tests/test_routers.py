@@ -33,7 +33,10 @@ async def test_auth_login_success(client, monkeypatch):
     monkeypatch.setattr(auth_service, "authenticate", mock_authenticate)
     monkeypatch.setattr("src.api.routers.auth.create_access_token", lambda subject: "fake_token_123")
     
-    response = await client.post(f"{API_PREFIX}/auth/login", data={"username": "test@test.com", "password": "good_password"})
+    response = await client.post(
+        f"{API_PREFIX}/auth/login",
+        data={"username": "test@test.com", "password": "good_password"},
+    )
     
     assert response.status_code == 200
     data = response.json()
@@ -50,7 +53,10 @@ async def test_auth_login_invalid_credentials(client, monkeypatch):
         
     monkeypatch.setattr(auth_service, "authenticate", mock_authenticate)
     
-    response = await client.post(f"{API_PREFIX}/auth/login", data={"username": "test@test.com", "password": "wrong_password"})
+    response = await client.post(
+        f"{API_PREFIX}/auth/login",
+        data={"username": "test@test.com", "password": "wrong_password"},
+    )
     
     assert response.status_code == 401
     assert "Incorrect email or password" in response.json().get("detail")
@@ -118,7 +124,15 @@ async def test_users_put_not_found(client, monkeypatch, db_session):
         return None
     monkeypatch.setattr(usuario, "get", mock_get_user_none)
     
-    response = await client.put(f"{API_PREFIX}/users/999", json={"username": "nuevo", "nombre": "Test", "apellido": "User", "dni": "12345678A"})
+    response = await client.put(
+        f"{API_PREFIX}/users/999",
+        json={
+            "username": "nuevo",
+            "nombre": "Test",
+            "apellido": "User",
+            "dni": "12345678A",
+        },
+    )
     app.dependency_overrides.clear()
     assert response.status_code == 404
 

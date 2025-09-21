@@ -15,11 +15,11 @@ async def test_create_task_and_dashboard(client: AsyncClient, db_session: AsyncS
     test_email = "admin@example.com"
     test_password = "adminpass"
     user_in = UsuarioCreate(email=test_email, password=test_password, nombre="Admin", apellido="User", dni="87654321Z")
-    user = await usuario.create(db_session, obj_in=user_in)
+    await usuario.create(db_session, obj_in=user_in)
     login_data = {"username": test_email, "password": test_password}
     login_resp = await client.post("/api/v1/auth/login", data=login_data)
     assert login_resp.status_code == 200
-    token = login_resp.json()["access_token"]
+    _ = login_resp.json()["access_token"]
 
 async def test_user_creation_and_login(client: AsyncClient, db_session: AsyncSession):
     test_email = "test@example.com"

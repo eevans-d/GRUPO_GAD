@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock
 from datetime import datetime
 from src.api.crud.crud_tarea import CRUDTarea
 from src.api.models.tarea import Tarea
-from src.schemas.tarea import TareaCreate, TareaUpdate
+from src.schemas.tarea import TareaUpdate
 from src.shared.constants import TaskStatus, TaskType
 
 @pytest.fixture

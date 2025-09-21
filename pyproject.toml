@@ -54,11 +54,8 @@ aiosqlite = "^0.21.0"
 target-version = "py312"
 line-length = 120
 exclude = [
-	"tests",
 	"alembic",
-	"scripts",
 	"src/bot",
-	"src/app",
 ]
 
 [tool.ruff.lint]

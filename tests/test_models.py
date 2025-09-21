@@ -14,7 +14,10 @@ from sqlalchemy import Table
 # queda sombreado y no se puede importar; en ese caso, saltamos estas pruebas
 MODELS_PKG_DIR = os.path.dirname(models_pkg_init)
 if os.path.isdir(MODELS_PKG_DIR) and os.path.isfile(os.path.join(MODELS_PKG_DIR, "__init__.py")):
-    pytest.skip("Paquete src/api/models presente; pruebas de models.py saltadas por conflicto de nombres.", allow_module_level=True)
+    pytest.skip(
+        "Paquete src/api/models presente; pruebas de models.py saltadas por conflicto de nombres.",
+        allow_module_level=True,
+    )
 
 # Test Efectivo model basic instantiation
 def test_efectivo_model_fields():
