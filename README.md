@@ -28,7 +28,11 @@ alembic upgrade head
 
 ### Tests
 ```bash
+# Ejecución rápida local
 pytest --disable-warnings -v
+
+# Opcional: con cobertura como en la CI
+pytest --disable-warnings -v --cov=src --cov-report=term-missing
 ```
 
 ## 3. Despliegue
