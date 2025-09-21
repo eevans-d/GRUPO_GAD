@@ -40,7 +40,7 @@ logger.add(
     enqueue=True,  # Hacerlo seguro para multiprocesamiento
     backtrace=True,
     diagnose=True,
-    format="{time} {level} {message}"
+    format="{time} {level} {message}",
 )
 
 from contextlib import asynccontextmanager
@@ -145,10 +145,14 @@ from fastapi.responses import PlainTextResponse
 
 
 @app.get("/metrics", response_class=PlainTextResponse, tags=["monitoring"])
-
 async def metrics() -> PlainTextResponse:
+    # Fallback si el lifespan aún no setea start_time (p.ej. pruebas con ASGITransport)
+    if not hasattr(app.state, "start_time"):
+        app.state.start_time = time.time()
     uptime = int(time.time() - app.state.start_time)
-    return PlainTextResponse(f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n")
+    return PlainTextResponse(
+        f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n"
+    )
 
 
 

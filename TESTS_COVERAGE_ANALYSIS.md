@@ -1,90 +1,58 @@
 # Análisis de tests y cobertura - GRUPO GAD (sept-2025)
 
-Este informe resume el estado actual de los tests, las causas de las fallas y las acciones recomendadas. No se realizaron cambios en el código fuente.
+Este informe refleja el estado actual tras estabilizar pruebas y modernizar la CI.
 
-## Resumen de ejecución
+## Resumen de ejecución actual
 - Comando: `pytest --cov=src --cov-report=term-missing --disable-warnings -v`
-- Resultado: 48 tests ejecutados, 45 OK, 3 FAIL, 1 SKIP
-- Cobertura total: 79% (umbral configurado en 85% en `[tool.pytest.ini_options].addopts`)
+- Resultado: suite verde con 1 SKIP esperado.
+- Cobertura total aproximada local: 74% (umbral CI configurado: 85%).
 
-## Fallas detectadas (3)
-Archivo: `tests/test_core_database.py`
+Notas:
+- El skip corresponde a `tests/test_models.py` por conflicto de nombres con `src/api/models`.
+- La CI sube el reporte HTML `htmlcov` como artifact para inspección detallada.
 
-1) test_async_session_factory_run
-- Error: `TypeError: 'NoneType' object is not callable`
-- Causa probable: `AsyncSessionFactory` es `None` en `src/core/database.py`.
+## Áreas con cobertura baja (o 0%) que conviene apuntar
+- `src/api/database.py` → 0%
+- `src/api/models.py` → 0% (probablemente contenedor/obsoleto)
+- `src/core/database.py` → ~45%
+- Routers con ramas sin cubrir (401/403/422): `auth.py`, `users.py`, `tasks.py`, `dashboard.py`.
+- `src/api/dependencies.py` con caminos de error (50%).
 
-2) test_async_engine_exists
-- Error: `assert None is not None`
-- Causa probable: `async_engine` es `None` en `src/core/database.py`.
+## Plan de subida a ≥85% (rápido y seguro)
+1) Smoke y salud del servicio (fácil +3-5%)
+   - Testear `/metrics` y `lifespan` de `src/api/main.py` con `TestClient`.
+   - Verificar CORS headers básicos en una petición simple.
 
-3) test_async_session_factory
-- Error: `assert callable(session_factory)` -> es `None`
-- Causa probable: Igual que (1): `AsyncSessionFactory` no inicializado correctamente.
+2) Ramas de error típicas (fácil +5-8%)
+   - `auth`: credenciales inválidas → 401.
+   - `users`/`tasks`: sin token → 401; token sin permisos (si aplica) → 403.
+   - Validaciones 422 en `create` y `update` con payloads inválidos.
 
-## Diagnóstico raíz
-`src/core/database.py` no está inicializando el motor asíncrono ni la fábrica de sesiones durante la importación de módulo (contexto de tests). Con SQLite asincrónico, la URL debe ser `sqlite+aiosqlite:///./dev.db` y se requiere tener instalado `aiosqlite` (ya instalado).
+3) Núcleo de base de datos (medio +5-7%)
+   - Tests directos sobre `src/core/database.py` verificando que `get_db_session` produce sesiones y cierra correctamente.
+   - Cobertura de inicialización por defecto con SQLite en memoria.
 
-Adicionalmente, los tests esperan que el módulo exponga:
-- `async_engine` (instancia creada)
-- `AsyncSessionFactory` (callable que retorna `AsyncSession`)
+4) Módulos a 0% (fácil +2-3%)
+   - `src/api/database.py` y `src/api/models.py`: confirmar si siguen en uso; si son puentes/legacy, añadir tests mínimos de import o plan de eliminación.
 
-## Recomendaciones (sin aplicar cambios)
+## Ejemplos de pruebas a añadir
+- `tests/test_health_and_metrics.py`
+  - GET `/metrics` → 200 y formato esperado.
+- `tests/test_auth_errors.py`
+  - POST `/auth/login` con credenciales inválidas → 401.
+- `tests/test_users_errors.py`
+  - GET `/users/` sin token → 401.
+  - POST `/users/` con payload incompleto → 422.
+- `tests/test_tasks_errors.py`
+  - GET `/tasks/` sin token → 401.
+  - POST `/tasks/` con payload inválido → 422.
 
-1) Inicialización segura en `src/core/database.py`
-- Asegurar fallback para entorno de test si `DATABASE_URL` no está seteada o si apunta a SQLite:
+## Consideraciones
+- Mantener tests deterministas: usar SQLite en memoria y dependencias sobreescritas (como en `tests/conftest.py`).
+- Evitar acoplar tests a implementación interna; probar contratos de endpoints y efectos observables.
+- Revisar si `mypy` puede pasar a “hard-fail” tras una ronda de ajuste de tipos.
 
-Sugerencia de implementación (referencia):
-
-```python
-# src/core/database.py
-from __future__ import annotations
-import os
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./dev.db")
-
-async_engine = create_async_engine(
-    DATABASE_URL,
-    echo=False,
-    future=True,
-)
-
-AsyncSessionFactory = async_sessionmaker(
-    bind=async_engine,
-    expire_on_commit=False,
-    class_=AsyncSession,
-)
-```
-
-2) Validar importación
-- Evitar inicializar a `None` y luego setear; crear directamente `async_engine` y `AsyncSessionFactory` como arriba.
-
-3) Ajustes de entorno para tests
-- Verificar que `DATABASE_URL` en `.env` (o variables de entorno del runner) use `sqlite+aiosqlite` durante tests.
-- Confirmar que `aiosqlite` está instalado (ya se hizo).
-
-4) Umbral de cobertura
-- Actualmente 79% < 85% (umbral). Aunque arreglemos los 3 tests, la ejecución fallará por cobertura si no se supera 85%.
-- Opciones:
-  - Aumentar cobertura con tests sobre `src/api/database.py`, `src/core/database.py`, `routers`, etc.
-  - Temporalmente bajar `--cov-fail-under` a 75-80% solo localmente (no recomendado para CI) hasta subir cobertura con nuevos tests.
-
-## Áreas con cobertura baja o 0%
-- `src/api/database.py` -> 0%
-- `src/api/models.py` -> 0% (archivo contenedor, quizá obsoleto)
-- `src/core/database.py` -> 64%
-- `src/api/main.py` -> 76%
-- Routers `tasks.py` (81%) y `users.py` (78%) pueden ganar 2-5% con tests adicionales
-
-## Sugerencias de tests rápidos para subir cobertura (sin tocar código)
-- Añadir pruebas de importación y smoke de `src/api/main.py` con `TestClient` validando `/health`.
-- Mock de `AsyncSessionFactory` para validar creación de sesión.
-- Tests de rutas `users` y `tasks` para ramas no cubiertas (errores 401/403, validaciones 422).
-
-## Próximos pasos propuestos
-1. Aplicar la inicialización segura en `src/core/database.py` (snippet anterior).
-2. Re-ejecutar tests; validar que los 3 FAIL pasan.
-3. Añadir 2-3 tests de smoke adicionales para superar el 85% o ajustar temporalmente el umbral local.
-
-Nota: Si deseas, puedo aplicar el cambio mínimo en `src/core/database.py` y agregar 2 tests pequeños para levantar cobertura, manteniendo consistencia con el proyecto.
+## Próximos pasos
+1. Añadir 5-8 pruebas según ejemplos de arriba para subir de ~74% a ≥85%.
+2. Confirmar en CI que el umbral se supera (artifact `htmlcov` debe reflejarlo).
+3. Decidir sobre `src/api/database.py` y `src/api/models.py`: cubrir o retirar si son legacy.
