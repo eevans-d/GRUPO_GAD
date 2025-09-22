@@ -1877,7 +1877,7 @@ version = "15.0.1"
 description = "An implementation of the WebSocket Protocol (RFC 6455 & 7692)"
 optional = false
 python-versions = ">=3.9"
-groups = ["main"]
+groups = ["main", "dev"]
 files = [
     {file = "websockets-15.0.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:d63efaa0cd96cf0c5fe4d581521d9fa87744540d4bc999ae6e08595a1014b45b"},
     {file = "websockets-15.0.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ac60e3b188ec7574cb761b08d50fcedf9d77f1530352db4eef1707fe9dee7205"},
@@ -1953,4 +1953,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "7cd6249ba364380b32f1e6f82fd70495f071ed99715698eaef40475c6323c98d"
+content-hash = "862bb470af6b6180a6f1f19cd299ad785d0a6717a721c01ea9665e53b5bb3a7a"

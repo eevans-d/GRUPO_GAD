@@ -2,7 +2,6 @@
 """
 Punto de entrada principal para la API de GRUPO_GAD.
 """
-import sys
 import time
 from contextlib import asynccontextmanager
 from typing import AsyncIterator, Awaitable, Callable
@@ -11,7 +10,6 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
-from loguru import logger
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
@@ -20,31 +18,23 @@ from starlette.responses import Response
 from config.settings import settings
 from src.api.routers import api_router
 from src.api.routers import dashboard as dashboard_router
+from src.api.routers import websockets as websockets_router
+from src.api.middleware.websockets import websocket_event_emitter
 from src.core.database import async_engine, init_db
-
-# --- Configuración de Loguru ---
-# Eliminar el handler por defecto para evitar duplicados en la consola
-logger.remove()
-# Añadir un handler para la consola con un formato simple
-logger.add(
-    sys.stdout,
-    colorize=True,
-    format=(
-        "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
-        "<level>{level: <8}</level> | "
-        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
-        "<level>{message}</level>"
-    ),
+from src.core.logging import setup_logging
+from src.core.websocket_integration import (
+    initialize_websocket_integrator,
+    start_websocket_integration,
+    stop_websocket_integration
 )
-# Añadir un handler para escribir logs a un archivo, con rotación y retención
-logger.add(
-    "logs/api.log",
-    rotation="10 MB",  # Rotar cuando el archivo alcance 10 MB
-    retention="7 days",  # Mantener logs por 7 días
-    enqueue=True,  # Hacerlo seguro para multiprocesamiento
-    backtrace=True,
-    diagnose=True,
-    format="{time} {level} {message}",
+
+# --- Configuración de Logging Mejorado ---
+api_logger = setup_logging(
+    service_name="api",
+    log_level=settings.LOG_LEVEL.upper() if hasattr(settings, 'LOG_LEVEL') else "INFO",
+    enable_console=True,
+    enable_file=True,
+    enable_json=getattr(settings, 'ENVIRONMENT', 'development') == 'production'
 )
 
 
@@ -54,18 +44,36 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     Gestiona los eventos de arranque y parada de la aplicación.
     """
     # Startup
-    logger.info("Iniciando aplicación y conexión a la base de datos...")
+    api_logger.info("Iniciando aplicación y conexión a la base de datos...")
     init_db(str(settings.DATABASE_URL))
     app.state.start_time = time.time()
-    logger.info("Conexión a la base de datos establecida.")
+    api_logger.info("Conexión a la base de datos establecida.")
+    
+    # Iniciar sistema de WebSockets
+    api_logger.info("Iniciando sistema de WebSockets...")
+    await websocket_event_emitter.start()
+    
+    # Inicializar integrador de WebSocket con modelos
+    api_logger.info("Inicializando integración WebSocket-Modelos...")
+    initialize_websocket_integrator(websocket_event_emitter)
+    await start_websocket_integration()
+    
+    api_logger.info("Sistema de WebSockets iniciado correctamente.")
     
     yield
     
     # Shutdown
-    logger.info("Cerrando conexión a la base de datos...")
+    api_logger.info("Deteniendo integración WebSocket-Modelos...")
+    await stop_websocket_integration()
+    
+    api_logger.info("Deteniendo sistema de WebSockets...")
+    await websocket_event_emitter.stop()
+    api_logger.info("Sistema de WebSockets detenido.")
+    
+    api_logger.info("Cerrando conexión a la base de datos...")
     if async_engine:
         await async_engine.dispose()
-    logger.info("Conexión a la base de datos cerrada.")
+    api_logger.info("Conexión a la base de datos cerrada.")
 
 
 app = FastAPI(
@@ -122,7 +130,12 @@ app.add_middleware(
 # --- Manejo de Errores Personalizado ---
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
-    logger.error(f"Validation error for request {request.url}: {exc.errors()}")
+    api_logger.error(
+        f"Validation error for request {request.url}",
+        validation_errors=exc.errors(),
+        method=request.method,
+        path=str(request.url.path)
+    )
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
@@ -141,14 +154,38 @@ async def log_requests(
     call_next: Callable[[Request], Awaitable[Response]],
 ) -> Response:
     start_time = time.time()
-    logger.info(f"Request: {request.method} {request.url}")
+    
+    # Log de request con información estructurada
+    api_logger.info(
+        f"Request: {request.method} {request.url}",
+        method=request.method,
+        url=str(request.url),
+        path=request.url.path,
+        client_ip=request.client.host if request.client else "unknown",
+        user_agent=request.headers.get("user-agent", "unknown")
+    )
+    
     try:
         response = await call_next(request)
     except Exception as exc:
-        logger.error(f"Error: {exc}")
+        process_time = (time.time() - start_time) * 1000
+        api_logger.error(
+            f"Request failed: {request.method} {request.url}",
+            error=exc,
+            method=request.method,
+            url=str(request.url),
+            duration_ms=round(process_time, 2)
+        )
         raise
+    
     process_time = (time.time() - start_time) * 1000
-    logger.info(f"Response: {getattr(response, 'status_code', 'N/A')} | Time: {process_time:.2f}ms")
+    api_logger.info(
+        f"Response: {response.status_code} | Time: {process_time:.2f}ms",
+        status_code=response.status_code,
+        duration_ms=round(process_time, 2),
+        method=request.method,
+        path=request.url.path
+    )
     return response
 
 # --- Endpoint de métricas básicas ---
@@ -171,6 +208,12 @@ app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")
 
 # Incluir routers
 app.include_router(dashboard_router.router)
+app.include_router(websockets_router.router)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-logger.info("API iniciada y lista para recibir peticiones.")
+api_logger.info(
+    "API iniciada y lista para recibir peticiones.",
+    project_name=settings.PROJECT_NAME,
+    version=settings.PROJECT_VERSION,
+    environment=getattr(settings, 'ENVIRONMENT', 'development')
+)

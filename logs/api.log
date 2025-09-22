@@ -1434,3 +1434,379 @@
 2025-09-22T04:20:23.464490+0000 INFO Response: 404 | Time: 0.89ms
 2025-09-22T04:20:24.657885+0000 INFO Request: GET http://localhost:8000/api/v1/health
 2025-09-22T04:20:24.658551+0000 INFO Response: 200 | Time: 0.68ms
+2025-09-22T04:31:13.331445+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-22T04:31:13.333091+0000 INFO Iniciando aplicación y conexión a la base de datos...
+2025-09-22T04:31:13.347269+0000 INFO Conexión a la base de datos establecida.
+2025-09-22T04:31:37.831675+0000 INFO Request: GET http://localhost:8000/dashboard?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758515498865
+2025-09-22T04:31:37.833626+0000 INFO Response: 401 | Time: 1.97ms
+2025-09-22T04:31:42.768345+0000 INFO Cerrando conexión a la base de datos...
+2025-09-22T04:31:42.769137+0000 INFO Conexión a la base de datos cerrada.
+2025-09-22T04:31:50.892968+0000 INFO API iniciada y lista para recibir peticiones.
+2025-09-22T04:31:50.893890+0000 INFO Iniciando aplicación y conexión a la base de datos...
+2025-09-22T04:31:50.915334+0000 INFO Conexión a la base de datos establecida.
+2025-09-22T04:32:07.124203+0000 INFO Cerrando conexión a la base de datos...
+2025-09-22T04:32:07.124940+0000 INFO Conexión a la base de datos cerrada.
+2025-09-22T01:33:58.476042-0300 INFO API iniciada y lista para recibir peticiones.
+2025-09-22 01:34:16.775 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:34:16.775515"}
+2025-09-22 01:34:31.995 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:34:31.995639"}
+2025-09-22 01:34:46.252 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:34:46.252116"}
+2025-09-22 01:35:03.860 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:35:03.860479"}
+2025-09-22 01:35:14.760 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:35:14.760290"}
+2025-09-22 01:35:14.779 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:35:45.995 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:35:45.995344"}
+2025-09-22 01:35:46.016 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:35:54.230 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:35:54.230777"}
+2025-09-22 01:35:54.247 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:01.120 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:01.120350"}
+2025-09-22 01:36:01.143 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:24.975 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:24.975689"}
+2025-09-22 01:36:24.993 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:33.462 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:33.462571"}
+2025-09-22 01:36:33.478 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:38.803 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:38.803177"}
+2025-09-22 01:36:38.820 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:46.551 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:46.551576"}
+2025-09-22 01:36:46.571 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:36:53.496 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:36:53.495956"}
+2025-09-22 01:36:53.509 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:37:08.815 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:37:08.815332"}
+2025-09-22 01:37:08.831 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:40:43.370 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:40:43.370055"}
+2025-09-22 01:40:43.392 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:41:01.181 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:41:01.181104"}
+2025-09-22 01:41:01.196 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:41:19.808 | INFO     | src.core.logging:info:50 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:41:19.808515"}
+2025-09-22 01:41:19.832 | INFO     | src.core.logging:info:50 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 04:41:53.670 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T04:41:53.670107"}
+2025-09-22 04:41:53.684 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 04:41:53.685 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 04:41:53.700 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 04:42:12.194 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 01:45:10.476 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:45:10.476803"}
+2025-09-22 01:45:10.491 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:45:20.875 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:45:20.875281"}
+2025-09-22 01:45:20.893 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:45:28.109 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:45:28.109159"}
+2025-09-22 01:45:28.126 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:46:19.539 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:46:19.539943"}
+2025-09-22 01:46:19.558 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:48:09.786 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:48:09.786785"}
+2025-09-22 01:48:09.800 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:48:19.612 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:48:19.612520"}
+2025-09-22 01:48:19.625 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:48:35.227 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:48:35.227743"}
+2025-09-22 01:48:35.245 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:48:42.126 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:48:42.126951"}
+2025-09-22 01:48:42.139 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:48:49.302 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:48:49.302266"}
+2025-09-22 01:48:49.319 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:49:02.000 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:49:02.000181"}
+2025-09-22 01:49:02.014 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:49:42.614 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:49:42.614559"}
+2025-09-22 01:49:42.627 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:49:57.970 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:49:57.970556"}
+2025-09-22 01:49:57.984 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:50:05.940 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:50:05.940483"}
+2025-09-22 01:50:05.955 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:51:15.648 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:51:15.647986"}
+2025-09-22 01:51:15.670 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:52:39.365 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:52:39.365251"}
+2025-09-22 01:52:39.378 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:53:55.195 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:53:55.195603"}
+2025-09-22 01:53:55.212 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:54:19.294 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:54:19.294246"}
+2025-09-22 01:54:19.320 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:54:32.799 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:54:32.799539"}
+2025-09-22 01:54:32.818 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:57:31.964 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:57:31.964760"}
+2025-09-22 01:57:31.983 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:58:15.481 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:58:15.481070"}
+2025-09-22 01:58:15.496 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:58:34.459 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:58:34.459950"}
+2025-09-22 01:58:34.475 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:58:51.899 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:58:51.899662"}
+2025-09-22 01:58:51.949 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:59:33.426 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:59:33.426304"}
+2025-09-22 01:59:33.475 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:59:42.516 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:59:42.516056"}
+2025-09-22 01:59:42.563 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 01:59:54.390 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T01:59:54.389970"}
+2025-09-22 01:59:54.446 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:00:26.723 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:00:26.723866"}
+2025-09-22 02:00:26.787 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:00:35.265 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:00:35.265900"}
+2025-09-22 02:00:35.306 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:00:40.842 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:00:40.842471"}
+2025-09-22 02:00:40.902 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:00:48.576 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:00:48.576152"}
+2025-09-22 02:00:48.618 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:00:56.891 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:00:56.891667"}
+2025-09-22 02:00:56.942 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:01:04.732 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:01:04.732160"}
+2025-09-22 02:01:04.785 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:01:11.710 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:01:11.710861"}
+2025-09-22 02:01:11.779 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:01:35.183 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:01:35.183169"}
+2025-09-22 05:01:35.221 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:01:35.223 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:01:35.265 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:01:35.266 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:01:35.272 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:01:35.279 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:03:26.872 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:03:26.872759"}
+2025-09-22 05:03:26.891 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:03:26.894 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:03:26.911 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:03:26.912 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:03:26.912 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:03:26.913 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:03:40.298 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/docs | Data: {"method": "GET", "url": "http://localhost:8000/docs", "path": "/docs", "client_ip": "127.0.0.1", "user_agent": "curl/8.5.0"}
+2025-09-22 05:03:40.300 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 2.14ms | Data: {"status_code": 200, "duration_ms": 2.14, "method": "GET", "path": "/docs"}
+2025-09-22 05:10:18.312 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758517819958 | Data: {"method": "GET", "url": "http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758517819958", "path": "/", "client_ip": "127.0.0.1", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.104.1 Chrome/138.0.7204.235 Electron/37.3.1 Safari/537.36"}
+2025-09-22 05:10:18.315 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 3.34ms | Data: {"status_code": 404, "duration_ms": 3.34, "method": "GET", "path": "/"}
+2025-09-22 05:10:26.917 | INFO     | src.core.logging:info:49 | Nueva conexión WebSocket establecida | Data: {"connection_id": "c99f684c-dc10-4b9c-951e-d51bd0ef9aa9", "user_id": null, "user_role": null, "total_connections": 1}
+2025-09-22 05:10:26.920 | INFO     | src.core.logging:info:49 | Conexión WebSocket establecida | Data: {"connection_id": "c99f684c-dc10-4b9c-951e-d51bd0ef9aa9", "user_id": null, "authenticated": false}
+2025-09-22 05:10:32.073 | INFO     | src.core.logging:info:51 | Cliente c99f684c-dc10-4b9c-951e-d51bd0ef9aa9 desconectado normalmente
+2025-09-22 05:10:32.073 | INFO     | src.core.logging:info:49 | Conexión WebSocket desconectada | Data: {"connection_id": "c99f684c-dc10-4b9c-951e-d51bd0ef9aa9", "user_id": null, "total_connections": 0}
+2025-09-22 05:10:32.232 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/ws/stats | Data: {"method": "GET", "url": "http://localhost:8000/ws/stats", "path": "/ws/stats", "client_ip": "127.0.0.1", "user_agent": "curl/8.5.0"}
+2025-09-22 05:10:32.233 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 0.91ms | Data: {"status_code": 200, "duration_ms": 0.91, "method": "GET", "path": "/ws/stats"}
+2025-09-22 05:10:40.270 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/ws/stats | Data: {"method": "GET", "url": "http://localhost:8000/ws/stats", "path": "/ws/stats", "client_ip": "127.0.0.1", "user_agent": "curl/8.5.0"}
+2025-09-22 05:10:40.271 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 0.79ms | Data: {"status_code": 200, "duration_ms": 0.79, "method": "GET", "path": "/ws/stats"}
+2025-09-22 05:11:39.222 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/static/websocket_test.html | Data: {"method": "GET", "url": "http://localhost:8000/static/websocket_test.html", "path": "/static/websocket_test.html", "client_ip": "127.0.0.1", "user_agent": "curl/8.5.0"}
+2025-09-22 05:11:39.234 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 12.97ms | Data: {"status_code": 200, "duration_ms": 12.97, "method": "GET", "path": "/static/websocket_test.html"}
+2025-09-22 02:12:23.396 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:12:23.396411"}
+2025-09-22 02:12:23.461 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:12:36.449 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:12:36.449548"}
+2025-09-22 02:12:36.508 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:13:22.159 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758518002448 | Data: {"method": "GET", "url": "http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758518002448", "path": "/", "client_ip": "127.0.0.1", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.104.1 Chrome/138.0.7204.235 Electron/37.3.1 Safari/537.36"}
+2025-09-22 05:13:22.161 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 1.45ms | Data: {"status_code": 404, "duration_ms": 1.45, "method": "GET", "path": "/"}
+2025-09-22 05:13:23.794 | INFO     | src.core.logging:info:49 | Request: GET http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758518004284 | Data: {"method": "GET", "url": "http://localhost:8000/?id=f6567726-0c93-41cc-a0b4-6742ba4f0680&vscodeBrowserReqId=1758518004284", "path": "/", "client_ip": "127.0.0.1", "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.104.1 Chrome/138.0.7204.235 Electron/37.3.1 Safari/537.36"}
+2025-09-22 05:13:23.795 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 1.46ms | Data: {"status_code": 404, "duration_ms": 1.46, "method": "GET", "path": "/"}
+2025-09-22 02:13:42.548 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:13:42.548175"}
+2025-09-22 02:13:42.596 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:13:57.775 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:13:57.775066"}
+2025-09-22 02:13:57.845 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:14:21.237 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:14:21.237470"}
+2025-09-22 02:14:21.304 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:14:30.568 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:14:30.568393"}
+2025-09-22 02:14:30.630 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:14:40.525 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:14:40.524944"}
+2025-09-22 02:14:40.602 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:14:47.107 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:14:47.107032"}
+2025-09-22 02:14:47.158 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:14:54.529 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:14:54.529458"}
+2025-09-22 02:14:54.607 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:15:03.176 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:15:03.176337"}
+2025-09-22 02:15:03.244 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:15:23.505 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:15:23.505903"}
+2025-09-22 02:15:23.564 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:15:28.962 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:15:28.962081"}
+2025-09-22 02:15:29.049 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:15:45.340 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:15:45.340308"}
+2025-09-22 02:15:45.405 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:16:02.295 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:16:02.295477"}
+2025-09-22 02:16:02.353 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:16:10.694 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:16:10.694606"}
+2025-09-22 02:16:10.764 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:16:18.625 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:16:18.625795"}
+2025-09-22 02:16:18.681 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:22:15.232 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:22:15.234 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:22:22.693 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:22:22.693277"}
+2025-09-22 05:22:22.720 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:22:22.721 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:22:22.740 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:22:22.740 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:22:22.740 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:22:22.740 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:22:22.740 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:22:22.741 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:23:04.275 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:23:04.275297"}
+2025-09-22 05:23:04.291 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:23:04.293 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:23:04.310 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:23:04.311 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:23:04.312 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:23:04.312 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:23:04.313 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:23:04.313 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:23:04.315 | INFO     | src.core.logging:info:51 | Event listeners de SQLAlchemy configurados para WebSockets
+2025-09-22 05:23:04.315 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos iniciada
+2025-09-22 05:23:04.317 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 02:23:04.802 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:23:04.802762"}
+2025-09-22 02:23:04.873 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:23:56.809 | INFO     | src.core.logging:info:51 | Deteniendo integración WebSocket-Modelos...
+2025-09-22 05:23:56.810 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos deshabilitada
+2025-09-22 05:23:56.811 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos detenida
+2025-09-22 05:23:56.811 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:23:56.811 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:23:56.812 | INFO     | src.core.logging:info:51 | Sistema de WebSockets detenido.
+2025-09-22 05:23:56.813 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 05:24:03.692 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:24:03.692656"}
+2025-09-22 05:24:03.720 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:24:03.721 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:24:03.751 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:24:03.751 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:24:03.752 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:24:03.753 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:24:03.754 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:24:03.754 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:24:03.755 | INFO     | src.core.logging:info:51 | Event listeners de SQLAlchemy configurados para WebSockets
+2025-09-22 05:24:03.755 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos iniciada
+2025-09-22 05:24:03.756 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:24:22.072 | INFO     | src.core.logging:info:51 | Deteniendo integración WebSocket-Modelos...
+2025-09-22 05:24:22.072 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos deshabilitada
+2025-09-22 05:24:22.073 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos detenida
+2025-09-22 05:24:22.074 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:24:22.075 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:24:22.076 | INFO     | src.core.logging:info:51 | Sistema de WebSockets detenido.
+2025-09-22 05:24:22.076 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 05:24:22.077 | INFO     | src.core.logging:info:51 | Conexión a la base de datos cerrada.
+2025-09-22 05:24:31.543 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:24:31.543606"}
+2025-09-22 05:24:31.564 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:24:31.565 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:24:31.582 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:24:31.583 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:24:31.583 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:24:31.583 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:24:31.583 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:24:31.584 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:24:31.584 | INFO     | src.core.logging:info:51 | Event listeners de SQLAlchemy configurados para WebSockets
+2025-09-22 05:24:31.585 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos iniciada
+2025-09-22 05:24:31.585 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:24:42.979 | INFO     | src.core.logging:info:51 | Deteniendo integración WebSocket-Modelos...
+2025-09-22 05:24:42.981 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos deshabilitada
+2025-09-22 05:24:42.982 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos detenida
+2025-09-22 05:24:42.983 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:24:42.984 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:24:42.985 | INFO     | src.core.logging:info:51 | Sistema de WebSockets detenido.
+2025-09-22 05:24:42.986 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 05:24:50.499 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:24:50.499399"}
+2025-09-22 05:24:50.514 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:24:50.515 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:24:50.529 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:24:50.530 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:24:50.530 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:24:50.531 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:24:50.531 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:24:50.531 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:24:50.531 | INFO     | src.core.logging:info:51 | Event listeners de SQLAlchemy configurados para WebSockets
+2025-09-22 05:24:50.531 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos iniciada
+2025-09-22 05:24:50.532 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:25:03.662 | INFO     | src.core.logging:info:51 | Deteniendo integración WebSocket-Modelos...
+2025-09-22 05:25:03.663 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos deshabilitada
+2025-09-22 05:25:03.664 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos detenida
+2025-09-22 05:25:03.665 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:25:03.667 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:25:03.668 | INFO     | src.core.logging:info:51 | Sistema de WebSockets detenido.
+2025-09-22 05:25:03.669 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 05:25:03.671 | INFO     | src.core.logging:info:51 | Conexión a la base de datos cerrada.
+2025-09-22 05:25:08.861 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:25:08.861426"}
+2025-09-22 05:25:08.881 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:25:08.883 | INFO     | src.core.logging:info:51 | Iniciando aplicación y conexión a la base de datos...
+2025-09-22 05:25:08.898 | INFO     | src.core.logging:info:51 | Conexión a la base de datos establecida.
+2025-09-22 05:25:08.898 | INFO     | src.core.logging:info:51 | Iniciando sistema de WebSockets...
+2025-09-22 05:25:08.899 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter iniciado
+2025-09-22 05:25:08.899 | INFO     | src.core.logging:info:51 | Inicializando integración WebSocket-Modelos...
+2025-09-22 05:25:08.899 | INFO     | src.core.logging:info:51 | Integrador WebSocket inicializado
+2025-09-22 05:25:08.899 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos habilitada
+2025-09-22 05:25:08.900 | INFO     | src.core.logging:info:51 | Event listeners de SQLAlchemy configurados para WebSockets
+2025-09-22 05:25:08.900 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos iniciada
+2025-09-22 05:25:08.901 | INFO     | src.core.logging:info:51 | Sistema de WebSockets iniciado correctamente.
+2025-09-22 05:25:22.776 | INFO     | src.core.logging:info:51 | Deteniendo integración WebSocket-Modelos...
+2025-09-22 05:25:22.777 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos deshabilitada
+2025-09-22 05:25:22.778 | INFO     | src.core.logging:info:51 | Integración WebSocket-Modelos detenida
+2025-09-22 05:25:22.780 | INFO     | src.core.logging:info:51 | Deteniendo sistema de WebSockets...
+2025-09-22 05:25:22.781 | INFO     | src.core.logging:info:51 | WebSocketEventEmitter detenido
+2025-09-22 05:25:22.782 | INFO     | src.core.logging:info:51 | Sistema de WebSockets detenido.
+2025-09-22 05:25:22.782 | INFO     | src.core.logging:info:51 | Cerrando conexión a la base de datos...
+2025-09-22 05:25:22.783 | INFO     | src.core.logging:info:51 | Conexión a la base de datos cerrada.
+2025-09-22 02:25:34.141 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:25:34.140958"}
+2025-09-22 02:25:34.221 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:28:47.962 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:28:47.962449"}
+2025-09-22 02:28:48.034 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 02:29:44.230 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T02:29:44.230519"}
+2025-09-22 02:29:44.292 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:29:51.256 | INFO     | src.core.logging:info:49 | Logging inicializado para api | Data: {"level": "INFO", "console": true, "file": true, "json": true, "timestamp": "2025-09-22T05:29:51.256725"}
+2025-09-22 05:29:51.286 | INFO     | src.core.logging:info:49 | API iniciada y lista para recibir peticiones. | Data: {"project_name": "GRUPO_GAD", "version": "1.0.0", "environment": "production"}
+2025-09-22 05:29:51.431 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/health | Data: {"method": "GET", "url": "http://test/api/v1/health", "path": "/api/v1/health", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:51.434 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 3.04ms | Data: {"status_code": 200, "duration_ms": 3.04, "method": "GET", "path": "/api/v1/health"}
+2025-09-22 05:29:51.738 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:51.742 | INFO     | src.core.logging:info:49 | Endpoint call: user_login | Data: {"operation": "user_login", "function": "login_for_access_token", "module": "src.api.routers.auth", "client_ip": "unknown"}
+2025-09-22 05:29:51.743 | INFO     | src.core.logging:info:49 | Intento de login para usuario: admin@example.com | Data: {"username": "admin@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.012 | INFO     | src.core.logging:info:49 | Auth event: successful_login | Data: {"event_type": "successful_login", "user_id": "1", "username": "admin@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.014 | INFO     | src.core.logging:info:49 | Endpoint success: user_login | Data: {"operation": "user_login", "duration_seconds": 0.271, "success": true}
+2025-09-22 05:29:52.016 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 277.14ms | Data: {"status_code": 200, "duration_ms": 277.14, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:52.480 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.485 | INFO     | src.core.logging:info:49 | Endpoint call: user_login | Data: {"operation": "user_login", "function": "login_for_access_token", "module": "src.api.routers.auth", "client_ip": "unknown"}
+2025-09-22 05:29:52.485 | INFO     | src.core.logging:info:49 | Intento de login para usuario: test@example.com | Data: {"username": "test@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.753 | INFO     | src.core.logging:info:49 | Auth event: successful_login | Data: {"event_type": "successful_login", "user_id": "1", "username": "test@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.754 | INFO     | src.core.logging:info:49 | Endpoint success: user_login | Data: {"operation": "user_login", "duration_seconds": 0.269, "success": true}
+2025-09-22 05:29:52.756 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 275.65ms | Data: {"status_code": 200, "duration_ms": 275.65, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:52.763 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.772 | INFO     | src.core.logging:info:49 | Endpoint call: user_login | Data: {"operation": "user_login", "function": "login_for_access_token", "module": "src.api.routers.auth", "client_ip": "unknown"}
+2025-09-22 05:29:52.772 | INFO     | src.core.logging:info:49 | Intento de login para usuario: bad@example.com | Data: {"username": "bad@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:52.779 | INFO     | src.core.logging:info:49 | Auth event: failed_login | Data: {"event_type": "failed_login", "user_id": null, "username": "bad@example.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1", "reason": "invalid_credentials"}
+2025-09-22 05:29:52.780 | WARNING  | src.core.logging:warning:70 | Security event: unauthorized_login_attempt | Data: {"event_type": "unauthorized_login_attempt", "severity": "WARNING", "username": "bad@example.com", "client_ip": "127.0.0.1"}
+2025-09-22 05:29:52.780 | ERROR    | src.core.logging:error:63 | Endpoint error: user_login | Error: {"operation": "user_login", "duration_seconds": 0.009, "success": false, "error_type": "HTTPException", "error_message": "401: Incorrect email or password"}
+2025-09-22 05:29:52.784 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 20.54ms | Data: {"status_code": 401, "duration_ms": 20.54, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:53.025 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/users/ | Data: {"method": "GET", "url": "http://test/api/v1/users/", "path": "/api/v1/users/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.027 | INFO     | src.core.logging:info:49 | Response: 403 | Time: 2.98ms | Data: {"status_code": 403, "duration_ms": 2.98, "method": "GET", "path": "/api/v1/users/"}
+2025-09-22 05:29:53.033 | INFO     | src.core.logging:info:49 | Request: GET http://test/metrics | Data: {"method": "GET", "url": "http://test/metrics", "path": "/metrics", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.034 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 1.36ms | Data: {"status_code": 200, "duration_ms": 1.36, "method": "GET", "path": "/metrics"}
+2025-09-22 05:29:53.037 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/health | Data: {"method": "GET", "url": "http://test/api/v1/health", "path": "/api/v1/health", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.038 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 0.92ms | Data: {"status_code": 200, "duration_ms": 0.92, "method": "GET", "path": "/api/v1/health"}
+2025-09-22 05:29:53.043 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.049 | INFO     | src.core.logging:info:49 | Endpoint call: user_login | Data: {"operation": "user_login", "function": "login_for_access_token", "module": "src.api.routers.auth", "client_ip": "unknown"}
+2025-09-22 05:29:53.049 | INFO     | src.core.logging:info:49 | Intento de login para usuario: test@test.com | Data: {"username": "test@test.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.050 | INFO     | src.core.logging:info:49 | Auth event: successful_login | Data: {"event_type": "successful_login", "user_id": "1", "username": "test@test.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.050 | INFO     | src.core.logging:info:49 | Endpoint success: user_login | Data: {"operation": "user_login", "duration_seconds": 0.001, "success": true}
+2025-09-22 05:29:53.050 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 7.23ms | Data: {"status_code": 200, "duration_ms": 7.23, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:53.056 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.059 | INFO     | src.core.logging:info:49 | Endpoint call: user_login | Data: {"operation": "user_login", "function": "login_for_access_token", "module": "src.api.routers.auth", "client_ip": "unknown"}
+2025-09-22 05:29:53.060 | INFO     | src.core.logging:info:49 | Intento de login para usuario: test@test.com | Data: {"username": "test@test.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.060 | INFO     | src.core.logging:info:49 | Auth event: failed_login | Data: {"event_type": "failed_login", "user_id": null, "username": "test@test.com", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1", "reason": "invalid_credentials"}
+2025-09-22 05:29:53.060 | WARNING  | src.core.logging:warning:70 | Security event: unauthorized_login_attempt | Data: {"event_type": "unauthorized_login_attempt", "severity": "WARNING", "username": "test@test.com", "client_ip": "127.0.0.1"}
+2025-09-22 05:29:53.061 | ERROR    | src.core.logging:error:63 | Endpoint error: user_login | Error: {"operation": "user_login", "duration_seconds": 0.001, "success": false, "error_type": "HTTPException", "error_message": "401: Incorrect email or password"}
+2025-09-22 05:29:53.062 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 6.18ms | Data: {"status_code": 401, "duration_ms": 6.18, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:53.068 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/auth/login | Data: {"method": "POST", "url": "http://test/api/v1/auth/login", "path": "/api/v1/auth/login", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.072 | ERROR    | src.core.logging:error:63 | Validation error for request http://test/api/v1/auth/login | Error: {"validation_errors": [{"type": "missing", "loc": ["body", "password"], "msg": "Field required", "input": null}], "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:53.074 | INFO     | src.core.logging:info:49 | Response: 422 | Time: 5.58ms | Data: {"status_code": 422, "duration_ms": 5.58, "method": "POST", "path": "/api/v1/auth/login"}
+2025-09-22 05:29:53.077 | INFO     | src.core.logging:info:49 | Request: GET http://test/dashboard | Data: {"method": "GET", "url": "http://test/dashboard", "path": "/dashboard", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.078 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 1.50ms | Data: {"status_code": 401, "duration_ms": 1.5, "method": "GET", "path": "/dashboard"}
+2025-09-22 05:29:53.085 | INFO     | src.core.logging:info:49 | Request: GET http://test/dashboard | Data: {"method": "GET", "url": "http://test/dashboard", "path": "/dashboard", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.089 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 4.14ms | Data: {"status_code": 200, "duration_ms": 4.14, "method": "GET", "path": "/dashboard"}
+2025-09-22 05:29:53.093 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/users/1 | Data: {"method": "GET", "url": "http://test/api/v1/users/1", "path": "/api/v1/users/1", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.095 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 1.46ms | Data: {"status_code": 401, "duration_ms": 1.46, "method": "GET", "path": "/api/v1/users/1"}
+2025-09-22 05:29:53.098 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/users/ | Data: {"method": "POST", "url": "http://test/api/v1/users/", "path": "/api/v1/users/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.102 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 4.48ms | Data: {"status_code": 401, "duration_ms": 4.48, "method": "POST", "path": "/api/v1/users/"}
+2025-09-22 05:29:53.107 | INFO     | src.core.logging:info:49 | Request: PUT http://test/api/v1/users/1 | Data: {"method": "PUT", "url": "http://test/api/v1/users/1", "path": "/api/v1/users/1", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.109 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 2.33ms | Data: {"status_code": 401, "duration_ms": 2.33, "method": "PUT", "path": "/api/v1/users/1"}
+2025-09-22 05:29:53.113 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/users/999 | Data: {"method": "GET", "url": "http://test/api/v1/users/999", "path": "/api/v1/users/999", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.115 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 2.11ms | Data: {"status_code": 404, "duration_ms": 2.11, "method": "GET", "path": "/api/v1/users/999"}
+2025-09-22 05:29:53.119 | INFO     | src.core.logging:info:49 | Request: PUT http://test/api/v1/users/999 | Data: {"method": "PUT", "url": "http://test/api/v1/users/999", "path": "/api/v1/users/999", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.125 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 5.51ms | Data: {"status_code": 404, "duration_ms": 5.51, "method": "PUT", "path": "/api/v1/users/999"}
+2025-09-22 05:29:53.131 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/users/ | Data: {"method": "POST", "url": "http://test/api/v1/users/", "path": "/api/v1/users/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.136 | INFO     | src.core.logging:info:49 | Response: 400 | Time: 5.06ms | Data: {"status_code": 400, "duration_ms": 5.06, "method": "POST", "path": "/api/v1/users/"}
+2025-09-22 05:29:53.141 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/tasks/ | Data: {"method": "GET", "url": "http://test/api/v1/tasks/", "path": "/api/v1/tasks/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.143 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 1.56ms | Data: {"status_code": 401, "duration_ms": 1.56, "method": "GET", "path": "/api/v1/tasks/"}
+2025-09-22 05:29:53.147 | INFO     | src.core.logging:info:49 | Request: PUT http://test/api/v1/tasks/1 | Data: {"method": "PUT", "url": "http://test/api/v1/tasks/1", "path": "/api/v1/tasks/1", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.149 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 2.47ms | Data: {"status_code": 401, "duration_ms": 2.47, "method": "PUT", "path": "/api/v1/tasks/1"}
+2025-09-22 05:29:53.153 | INFO     | src.core.logging:info:49 | Request: DELETE http://test/api/v1/tasks/1 | Data: {"method": "DELETE", "url": "http://test/api/v1/tasks/1", "path": "/api/v1/tasks/1", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.154 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 0.94ms | Data: {"status_code": 401, "duration_ms": 0.94, "method": "DELETE", "path": "/api/v1/tasks/1"}
+2025-09-22 05:29:53.157 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/tasks/999 | Data: {"method": "GET", "url": "http://test/api/v1/tasks/999", "path": "/api/v1/tasks/999", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.159 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 1.70ms | Data: {"status_code": 404, "duration_ms": 1.7, "method": "GET", "path": "/api/v1/tasks/999"}
+2025-09-22 05:29:53.165 | INFO     | src.core.logging:info:49 | Request: PUT http://test/api/v1/tasks/999 | Data: {"method": "PUT", "url": "http://test/api/v1/tasks/999", "path": "/api/v1/tasks/999", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.171 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 5.98ms | Data: {"status_code": 404, "duration_ms": 5.98, "method": "PUT", "path": "/api/v1/tasks/999"}
+2025-09-22 05:29:53.175 | INFO     | src.core.logging:info:49 | Request: DELETE http://test/api/v1/tasks/999 | Data: {"method": "DELETE", "url": "http://test/api/v1/tasks/999", "path": "/api/v1/tasks/999", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.178 | INFO     | src.core.logging:info:49 | Response: 404 | Time: 2.56ms | Data: {"status_code": 404, "duration_ms": 2.56, "method": "DELETE", "path": "/api/v1/tasks/999"}
+2025-09-22 05:29:53.182 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/tasks/ | Data: {"method": "GET", "url": "http://test/api/v1/tasks/", "path": "/api/v1/tasks/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.185 | INFO     | src.core.logging:info:49 | Response: 200 | Time: 2.07ms | Data: {"status_code": 200, "duration_ms": 2.07, "method": "GET", "path": "/api/v1/tasks/"}
+2025-09-22 05:29:53.188 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/tasks/ | Data: {"method": "GET", "url": "http://test/api/v1/tasks/", "path": "/api/v1/tasks/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.190 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 1.52ms | Data: {"status_code": 401, "duration_ms": 1.52, "method": "GET", "path": "/api/v1/tasks/"}
+2025-09-22 05:29:53.193 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/tasks/ | Data: {"method": "POST", "url": "http://test/api/v1/tasks/", "path": "/api/v1/tasks/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.196 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 2.85ms | Data: {"status_code": 401, "duration_ms": 2.85, "method": "POST", "path": "/api/v1/tasks/"}
+2025-09-22 05:29:53.198 | INFO     | src.core.logging:info:49 | Request: GET http://test/api/v1/users/ | Data: {"method": "GET", "url": "http://test/api/v1/users/", "path": "/api/v1/users/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.200 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 1.54ms | Data: {"status_code": 401, "duration_ms": 1.54, "method": "GET", "path": "/api/v1/users/"}
+2025-09-22 05:29:53.202 | INFO     | src.core.logging:info:49 | Request: POST http://test/api/v1/users/ | Data: {"method": "POST", "url": "http://test/api/v1/users/", "path": "/api/v1/users/", "client_ip": "127.0.0.1", "user_agent": "python-httpx/0.28.1"}
+2025-09-22 05:29:53.204 | INFO     | src.core.logging:info:49 | Response: 401 | Time: 2.10ms | Data: {"status_code": 401, "duration_ms": 2.1, "method": "POST", "path": "/api/v1/users/"}
