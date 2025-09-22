@@ -12,6 +12,7 @@ services:
     restart: always
 
   api:
+    image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
     volumes: [] # Eliminar los montajes de volumen para usar el código dentro de la imagen
     ports:
       # No exponer el puerto de la API directamente; Caddy es el punto de entrada

@@ -53,9 +53,8 @@ services:
         max-file: "3"
 
   api:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.api
+    image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
+    # pull_policy: always  # Descomenta si quieres forzar pull en cada 'up'
     container_name: gad_api_prod
     restart: unless-stopped
     env_file:
