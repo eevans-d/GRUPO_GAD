@@ -21,6 +21,8 @@ Thumbs.db
 # Secrets
 *.pem
 *.key
+# Allow versioned env examples in docs/
+!docs/env/.env.*.example
 
 # Local backups
 backups/
