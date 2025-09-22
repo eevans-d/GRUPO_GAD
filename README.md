@@ -198,6 +198,7 @@ docker run -d \
 Notas:
 - Mantén `requirements.lock` actualizado cuando cambies dependencias (regenera y commitea).
 - No incluyas secretos en el repositorio; utiliza `.env.production` en el servidor.
+- Template de variables de producción disponible en `docs/env/.env.production.example`.
 
 ## 8. Checklist de Entrega
 
