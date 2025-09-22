@@ -163,20 +163,39 @@ class Dashboard {
   async loadMapData() {
     try {
       const center = this.map.getCenter();
-      const url = `/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=10000`;
+      const radius = 10000;
+      
+      // Cargar tareas y efectivos en paralelo
+      const [tasksResponse, usersResponse] = await Promise.all([
+        this.network.request(`/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}`, { 
+          method: 'GET', 
+          headers: { 'Content-Type': 'application/json' } 
+        }),
+        this.network.request(`/api/v1/geo/efectivos/mock?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}&count=10`, { 
+          method: 'GET', 
+          headers: { 'Content-Type': 'application/json' } 
+        })
+      ]);
 
-      //usar NetworkManager para enviar cookies de sesión en lugar de Authorization header
-      const response = await this.network.request(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+      if (!tasksResponse.ok || !usersResponse.ok) {
+        throw new Error(`HTTP ${tasksResponse.status} / ${usersResponse.status}`);
       }
 
-      const data = await response.json();
-      this.updateMap(data);
-      this.updateCounters(data);
+      const tasksData = await tasksResponse.json();
+      const usersData = await usersResponse.json();
+      
+      // Combinar datos para el mapa
+      const combinedData = {
+        usuarios: usersData.usuarios || [],
+        tareas: tasksData.tareas || []
+      };
+      
+      this.updateMap(combinedData);
+      this.updateCounters(combinedData);
     } catch (error) {
       console.error('Error cargando mapa:', error);
+      // Fallback a datos vacíos si falla
+      this.updateMap({ usuarios: [], tareas: [] });
     }
   }
 
@@ -190,8 +209,14 @@ class Dashboard {
     if (data.usuarios && Array.isArray(data.usuarios)) {
       data.usuarios.forEach(user => {
         if (user.lat && user.lng) {
+          // Icon dinámico según estado
+          let icon = '👮';
+          if (user.estado === 'respondiendo') icon = '🚔';
+          else if (user.estado === 'patrullando') icon = '🚶';
+          else if (user.estado === 'en_base') icon = '🏢';
+          
           const marker = L.marker([user.lat, user.lng], {
-            icon: this.createIcon('👮')
+            icon: this.createIcon(icon)
           });
 
           marker.bindPopup(this.createPopupContent(
@@ -199,7 +224,9 @@ class Dashboard {
             user.lat,
             user.lng,
             user.entity_id,
-            user.distance_m
+            user.distance_m,
+            false,
+            user  // Pasar datos adicionales del efectivo
           ));
 
           this.markers.usuarios.addLayer(marker);
@@ -242,15 +269,30 @@ class Dashboard {
     });
   }
 
-  createPopupContent(title, lat, lng, id, dist, isEmergency = false) {
+  createPopupContent(title, lat, lng, id, dist, isEmergency = false, extraData = {}) {
     const distStr = Number.isFinite(dist) ? `${Math.round(dist)}m` : '-';
     const idStr = (id || '').substring(0, 8) + '...';
+    
+    // Info adicional para efectivos
+    let additionalInfo = '';
+    if (extraData.nombre) {
+      additionalInfo = `
+        <div style="border-top: 1px solid #eee; margin-top: 6px; padding-top: 6px; font-size: 11px;">
+          👤 <b>${extraData.nombre}</b><br>
+          📍 ${extraData.ubicacion || 'Sin ubicación'}<br>
+          📊 Estado: <span style="color: ${extraData.estado === 'disponible' ? 'green' : extraData.estado === 'respondiendo' ? 'red' : 'orange'};">${extraData.estado}</span><br>
+          ${extraData.rango ? `⭐ ${extraData.rango} - ${extraData.unidad || 'Sin unidad'}<br>` : ''}
+          📡 Radio: ${extraData.radio_activo ? '🟢 Activo' : '🔴 Inactivo'}
+        </div>
+      `;
+    }
 
     return `
       <div style="min-width: 220px;">
         <b>${isEmergency ? '🚨' : ''}${title}</b><br>
         ID: ${idStr}<br>
         Distancia: ${distStr}<br>
+        ${additionalInfo}
         
         <div style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px;">
           <a href="https://www.google.com/maps/@${lat},${lng},18z" target="_blank" class="btn btn-info btn-sm" style="font-size: 10px; text-decoration: none;">
