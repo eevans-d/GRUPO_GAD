@@ -77,7 +77,7 @@ app = FastAPI(
 )
 
 # Reconocer X-Forwarded-* cuando corremos detrás de un reverse proxy
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])  # type: ignore
 
 # --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
 MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
