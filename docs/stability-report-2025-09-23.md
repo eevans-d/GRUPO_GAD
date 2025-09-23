@@ -47,6 +47,19 @@ Clasificación (Barco anclado):
 Actualizaciones:
 - Backlog actualizado (docs/backlog-issues-2025-09-23.md) con “Normalizar ruff sin cambiar lógica”.
 
+## Health Check (Ciclo 3) — 2025-09-23
+
+Evidencias:
+- mypy: OK
+- pytest: OK (1 skip esperado)
+- ruff: mismos hallazgos no críticos que el ciclo anterior (F541, F401, E501) en archivos de middleware, routers, core y scripts.
+
+Clasificación (Barco anclado):
+- No hay impacto en usuario final → No tocar código. Mantener en backlog.
+
+Acciones:
+- Sin cambios. Workflow de estabilidad continúa activo.
+
 ## Referencias
 - Último commit:
   - Hash (abreviado y completo): `9e75584` / `538dba2d5df0bd0cae17e9b1539e755840a31aa9`
