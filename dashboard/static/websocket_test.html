@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,22 +12,22 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
-        
+
         .header {
             border-bottom: 2px solid #007bff;
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
-        
+
         .status {
             display: inline-block;
             padding: 5px 10px;
@@ -34,24 +35,24 @@
             font-weight: bold;
             margin-left: 10px;
         }
-        
+
         .status.connected {
             background-color: #d4edda;
             color: #155724;
         }
-        
+
         .status.disconnected {
             background-color: #f8d7da;
             color: #721c24;
         }
-        
+
         .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-        
+
         button {
             background-color: #007bff;
             color: white;
@@ -61,16 +62,16 @@
             cursor: pointer;
             font-size: 14px;
         }
-        
+
         button:hover {
             background-color: #0056b3;
         }
-        
+
         button:disabled {
             background-color: #6c757d;
             cursor: not-allowed;
         }
-        
+
         .messages {
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -81,60 +82,60 @@
             font-family: 'Courier New', monospace;
             font-size: 12px;
         }
-        
+
         .message {
             margin-bottom: 10px;
             padding: 5px;
             border-left: 3px solid #007bff;
             background-color: white;
         }
-        
+
         .message.error {
             border-left-color: #dc3545;
             background-color: #fff5f5;
         }
-        
+
         .message.ping {
             border-left-color: #28a745;
             background-color: #f0fff4;
         }
-        
+
         .message.notification {
             border-left-color: #ffc107;
             background-color: #fffef0;
         }
-        
+
         .timestamp {
             color: #6c757d;
             font-size: 11px;
         }
-        
+
         .stats {
             margin-top: 20px;
             padding: 15px;
             background-color: #e9ecef;
             border-radius: 4px;
         }
-        
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 10px;
         }
-        
+
         .stat-item {
             background: white;
             padding: 10px;
             border-radius: 4px;
             text-align: center;
         }
-        
+
         .stat-value {
             font-size: 24px;
             font-weight: bold;
             color: #007bff;
         }
-        
+
         .stat-label {
             font-size: 12px;
             color: #6c757d;
@@ -142,6 +143,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -150,7 +152,7 @@
             <span id="status" class="status disconnected">Desconectado</span>
             <span id="connectionId" style="margin-left: 15px; font-family: monospace; font-size: 12px;"></span>
         </div>
-        
+
         <div class="controls">
             <button id="connectBtn" onclick="connect()">🔌 Conectar</button>
             <button id="disconnectBtn" onclick="disconnect()" disabled>🔌 Desconectar</button>
@@ -159,9 +161,9 @@
             <button id="subscribeBtn" onclick="subscribe()" disabled>🔔 Suscribir</button>
             <button id="clearBtn" onclick="clearMessages()">🗑️ Limpiar</button>
         </div>
-        
+
         <div class="messages" id="messages"></div>
-        
+
         <div class="stats">
             <h3>📊 Estadísticas</h3>
             <div class="stats-grid" id="statsGrid">
@@ -206,17 +208,17 @@
 
             websocket = new WebSocket(wsUrl);
 
-            websocket.onopen = function(event) {
+            websocket.onopen = function (event) {
                 connectionStartTime = new Date();
                 updateStatus('connected', 'Conectado');
                 updateButtons(true);
                 addMessage('✅ Conexión WebSocket establecida', 'success');
-                
+
                 // Iniciar contador de uptime
                 uptimeInterval = setInterval(updateUptime, 1000);
             };
 
-            websocket.onmessage = function(event) {
+            websocket.onmessage = function (event) {
                 try {
                     const data = JSON.parse(event.data);
                     handleMessage(data);
@@ -227,14 +229,14 @@
                 }
             };
 
-            websocket.onclose = function(event) {
+            websocket.onclose = function (event) {
                 updateStatus('disconnected', 'Desconectado');
                 updateButtons(false);
                 if (uptimeInterval) {
                     clearInterval(uptimeInterval);
                     uptimeInterval = null;
                 }
-                
+
                 if (event.wasClean) {
                     addMessage('👋 Conexión cerrada limpiamente', 'info');
                 } else {
@@ -244,7 +246,7 @@
                 }
             };
 
-            websocket.onerror = function(error) {
+            websocket.onerror = function (error) {
                 addMessage(`❌ Error de WebSocket: ${error}`, 'error');
                 stats.errorCount++;
                 updateStats();
@@ -260,7 +262,7 @@
 
         function handleMessage(data) {
             stats.totalMessages++;
-            
+
             const eventType = data.event_type || 'unknown';
             const timestamp = data.timestamp || new Date().toISOString();
             const messageData = data.data || {};
@@ -363,13 +365,13 @@
             const messagesDiv = document.getElementById('messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
-            
+
             const timestamp = new Date().toLocaleTimeString();
             messageDiv.innerHTML = `
                 <div class="timestamp">${timestamp}</div>
                 <pre>${text}</pre>
             `;
-            
+
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -401,7 +403,7 @@
                 const diffSeconds = Math.floor(diffMs / 1000);
                 const minutes = Math.floor(diffSeconds / 60);
                 const seconds = diffSeconds % 60;
-                
+
                 document.getElementById('uptime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }
         }
@@ -421,9 +423,10 @@
         }
 
         // Conectar automáticamente al cargar la página
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             addMessage('🌐 Página cargada. Listo para conectar.', 'info');
         });
     </script>
 </body>
+
 </html>

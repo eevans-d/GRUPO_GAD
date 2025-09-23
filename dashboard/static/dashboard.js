@@ -164,16 +164,16 @@ class Dashboard {
     try {
       const center = this.map.getCenter();
       const radius = 10000;
-      
+
       // Cargar tareas y efectivos en paralelo
       const [tasksResponse, usersResponse] = await Promise.all([
-        this.network.request(`/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}`, { 
-          method: 'GET', 
-          headers: { 'Content-Type': 'application/json' } 
+        this.network.request(`/api/v1/geo/map/view?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
         }),
-        this.network.request(`/api/v1/geo/efectivos/mock?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}&count=10`, { 
-          method: 'GET', 
-          headers: { 'Content-Type': 'application/json' } 
+        this.network.request(`/api/v1/geo/efectivos/mock?center_lat=${center.lat}&center_lng=${center.lng}&radius_m=${radius}&count=10`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
         })
       ]);
 
@@ -183,13 +183,13 @@ class Dashboard {
 
       const tasksData = await tasksResponse.json();
       const usersData = await usersResponse.json();
-      
+
       // Combinar datos para el mapa
       const combinedData = {
         usuarios: usersData.usuarios || [],
         tareas: tasksData.tareas || []
       };
-      
+
       this.updateMap(combinedData);
       this.updateCounters(combinedData);
     } catch (error) {
@@ -214,7 +214,7 @@ class Dashboard {
           if (user.estado === 'respondiendo') icon = '🚔';
           else if (user.estado === 'patrullando') icon = '🚶';
           else if (user.estado === 'en_base') icon = '🏢';
-          
+
           const marker = L.marker([user.lat, user.lng], {
             icon: this.createIcon(icon)
           });
@@ -272,7 +272,7 @@ class Dashboard {
   createPopupContent(title, lat, lng, id, dist, isEmergency = false, extraData = {}) {
     const distStr = Number.isFinite(dist) ? `${Math.round(dist)}m` : '-';
     const idStr = (id || '').substring(0, 8) + '...';
-    
+
     // Info adicional para efectivos
     let additionalInfo = '';
     if (extraData.nombre) {
