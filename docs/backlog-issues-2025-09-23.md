@@ -15,3 +15,11 @@
   - Mantener `mypy` verde y `pytest` verde.
   - Confirmar que logs no exponen secretos (inspección manual básica + grep de patrones sensibles).
 - Etiquetas sugeridas: `backlog`, `tech-debt`, `low-priority`
+
+## 3) Backlog: Normalizar ruff (estilo) sin cambiar lógica
+- Descripción: Corregir hallazgos F541 (f-strings sin placeholders), F401 (imports no usados) y E501 (línea larga) únicamente donde no afecte comportamiento ni runtime.
+- Criterios de aceptación:
+  - PRs pequeños (micro-PR) que corrigen estilo sin tocar lógica/contratos.
+  - `ruff check` en verde sin deshabilitar reglas.
+  - Confirmar cero cambios de interfaz o mensajes funcionales.
+- Etiquetas sugeridas: `backlog`, `testing`, `style`, `low-priority`

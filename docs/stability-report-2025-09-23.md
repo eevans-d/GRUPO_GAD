@@ -30,6 +30,23 @@ Estado del proyecto: COMPLETADO ⚪ — Barco anclado (sistema estable, sin camb
 
 ---
 
+## Health Check (Ciclo 2) — 2025-09-23
+
+Evidencias actuales:
+- mypy: OK (sin issues en 50 archivos)
+- pytest: OK (todas las pruebas pasan; 1 skip esperado)
+- ruff: reportó hallazgos no críticos (estilo/no runtime):
+  - F541: f-strings sin placeholders (múltiples ubicaciones en `scripts/test_websockets.py`, `src/api/middleware/*`, `src/api/routers/websockets.py`, `src/core/websockets.py`)
+  - F401: imports no usados (en `src/api/middleware/logging.py`, `src/api/middleware/websockets.py`, `src/core/migrations.py`, `src/core/websocket_integration.py`, `src/core/websockets.py`, `src/api/routers/websockets.py`)
+  - E501: líneas largas (un caso en `src/api/utils/logging.py`)
+
+Clasificación (Barco anclado):
+- Pregunta filtro “¿Sin este cambio, el usuario promedio tendría problemas reales?” → NO
+- Acción: No tocar código. Se agrega al backlog de baja prioridad.
+
+Actualizaciones:
+- Backlog actualizado (docs/backlog-issues-2025-09-23.md) con “Normalizar ruff sin cambiar lógica”.
+
 ## Referencias
 - Último commit:
   - Hash (abreviado y completo): `9e75584` / `538dba2d5df0bd0cae17e9b1539e755840a31aa9`
