@@ -1,61 +1,61 @@
 {
-  "project": "GRUPO_GAD",
-  "date": "2025-09-23",
-  "healthScore": 84,
-  "findings": [
-    {
-      "id": "SEC-CORS-001",
-      "title": "CORS wildcard con credenciales",
-      "severity": "high",
-      "cvss": 7.5,
-      "evidence": "config/settings.py ALLOWED_HOSTS=['*']; src/api/main.py CORSMiddleware allow_credentials=True",
-      "recommendation": "Restringir allow_origins a dominios de producción y evaluar desactivar allow_credentials"
-    },
-    {
-      "id": "SEC-PROXY-002",
-      "title": "ProxyHeaders confiando en todos los hosts",
-      "severity": "high",
-      "cvss": 7.1,
-      "evidence": "src/api/main.py ProxyHeadersMiddleware trusted_hosts=['*']",
-      "recommendation": "Limitar trusted_hosts al reverse proxy confiable o remover si no es necesario"
-    },
-    {
-      "id": "SEC-WS-AUTH-003",
-      "title": "Autenticación WebSocket no implementada",
-      "severity": "high",
-      "cvss": 7.2,
-      "evidence": "src/api/routers/websockets.py get_user_from_token TODO, token opcional por query",
-      "recommendation": "Validar JWT en handshake y exigirlo en producción"
-    },
-    {
-      "id": "SEC-LOG-004",
-      "title": "Logging de URL completo puede exponer tokens",
-      "severity": "medium",
-      "cvss": 5.8,
-      "evidence": "src/api/main.py log_requests registra request.url; WS acepta token en query",
-      "recommendation": "Sanitizar parámetros sensibles en logs (token, Authorization)"
-    },
-    {
-      "id": "SEC-ENV-005",
-      "title": "Defaults de contraseñas en Docker Compose",
-      "severity": "medium",
-      "cvss": 6.5,
-      "evidence": "docker/docker-compose.yml POSTGRES_PASSWORD default gad_password",
-      "recommendation": "Eliminar defaults y usar env_file con secretos adecuados en prod"
-    },
-    {
-      "id": "PERF-WS-006",
-      "title": "Broadcast WS secuencial",
-      "severity": "low",
-      "cvss": 3.1,
-      "evidence": "src/core/websockets.py broadcast itera con await por conexión",
-      "recommendation": "Paralelizar envíos con asyncio.gather y semáforo"
+    "project": "GRUPO_GAD",
+    "date": "2025-09-23",
+    "healthScore": 84,
+    "findings": [
+        {
+            "id": "SEC-CORS-001",
+            "title": "CORS wildcard con credenciales",
+            "severity": "high",
+            "cvss": 7.5,
+            "evidence": "config/settings.py ALLOWED_HOSTS=['*']; src/api/main.py CORSMiddleware allow_credentials=True",
+            "recommendation": "Restringir allow_origins a dominios de producción y evaluar desactivar allow_credentials"
+        },
+        {
+            "id": "SEC-PROXY-002",
+            "title": "ProxyHeaders confiando en todos los hosts",
+            "severity": "high",
+            "cvss": 7.1,
+            "evidence": "src/api/main.py ProxyHeadersMiddleware trusted_hosts=['*']",
+            "recommendation": "Limitar trusted_hosts al reverse proxy confiable o remover si no es necesario"
+        },
+        {
+            "id": "SEC-WS-AUTH-003",
+            "title": "Autenticación WebSocket no implementada",
+            "severity": "high",
+            "cvss": 7.2,
+            "evidence": "src/api/routers/websockets.py get_user_from_token TODO, token opcional por query",
+            "recommendation": "Validar JWT en handshake y exigirlo en producción"
+        },
+        {
+            "id": "SEC-LOG-004",
+            "title": "Logging de URL completo puede exponer tokens",
+            "severity": "medium",
+            "cvss": 5.8,
+            "evidence": "src/api/main.py log_requests registra request.url; WS acepta token en query",
+            "recommendation": "Sanitizar parámetros sensibles en logs (token, Authorization)"
+        },
+        {
+            "id": "SEC-ENV-005",
+            "title": "Defaults de contraseñas en Docker Compose",
+            "severity": "medium",
+            "cvss": 6.5,
+            "evidence": "docker/docker-compose.yml POSTGRES_PASSWORD default gad_password",
+            "recommendation": "Eliminar defaults y usar env_file con secretos adecuados en prod"
+        },
+        {
+            "id": "PERF-WS-006",
+            "title": "Broadcast WS secuencial",
+            "severity": "low",
+            "cvss": 3.1,
+            "evidence": "src/core/websockets.py broadcast itera con await por conexión",
+            "recommendation": "Paralelizar envíos con asyncio.gather y semáforo"
+        }
+    ],
+    "summary": {
+        "total": 6,
+        "high": 3,
+        "medium": 2,
+        "low": 1
     }
-  ],
-  "summary": {
-    "total": 6,
-    "high": 3,
-    "medium": 2,
-    "low": 1
-  }
 }
