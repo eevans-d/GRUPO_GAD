@@ -9,6 +9,7 @@ import json
 from typing import Optional
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
 from fastapi.security import HTTPBearer
+from jose import jwt, JWTError
 from starlette.status import WS_1008_POLICY_VIOLATION
 
 from src.core.websockets import (
@@ -17,6 +18,7 @@ from src.core.websockets import (
     EventType
 )
 from src.core.logging import get_logger
+from config.settings import settings
 
 # Logger para el router WebSocket
 ws_router_logger = get_logger("websockets.router")
@@ -38,16 +40,19 @@ async def get_user_from_token(token: Optional[str] = None) -> Optional[dict]:
     Returns:
         dict: Información del usuario o None si no es válido
     """
-    if not token:
+    if not token: 
         return None
     
     try:
-        # TODO: Implementar validación JWT real
-        # Por ahora, simulamos un usuario válido
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])  # type: ignore[arg-type]
+        sub = payload.get("sub")
+        if not sub:
+            return None
+        # Nota: En una implementación real, recuperaríamos el usuario desde DB
         return {
-            "user_id": 1,
-            "email": "admin@grupogad.com",
-            "role": "LEVEL_1"
+            "user_id": int(sub) if str(sub).isdigit() else sub,
+            "email": payload.get("email", ""),
+            "role": payload.get("role", "LEVEL_1"),
         }
     except Exception as e:
         ws_router_logger.error(f"Error validando token: {str(e)}")
@@ -57,7 +62,7 @@ async def get_user_from_token(token: Optional[str] = None) -> Optional[dict]:
 @router.websocket("/connect")
 async def websocket_endpoint(
     websocket: WebSocket,
-    token: Optional[str] = Query(None, description="JWT token para autenticación")
+    token: Optional[str] = Query(None, description="JWT (opcional si Authorization header está presente)")
 ):
     """
     Endpoint principal de WebSocket.
@@ -75,10 +80,23 @@ async def websocket_endpoint(
     user_info: Optional[dict] = None
     
     try:
-        # Autenticar usuario si se proporciona token
-        if token:
-            user_info = await get_user_from_token(token)
-            if not user_info:
+        # Autenticar por header Authorization Bearer o query token
+        auth_header = websocket.headers.get("authorization") or websocket.headers.get("Authorization")
+        bearer = None
+        if auth_header and auth_header.lower().startswith("bearer "):
+            bearer = auth_header.split(" ", 1)[1].strip()
+
+        provided_token = bearer or token
+
+        # En producción, el token es obligatorio
+        require_token = (getattr(settings, 'ENVIRONMENT', 'development') == 'production')
+        if require_token and not provided_token:
+            await websocket.close(code=WS_1008_POLICY_VIOLATION, reason="Authentication required")
+            return
+
+        if provided_token:
+            user_info = await get_user_from_token(provided_token)
+            if not user_info and require_token:
                 ws_router_logger.warning("Token inválido en conexión WebSocket")
                 await websocket.close(code=WS_1008_POLICY_VIOLATION, reason="Invalid token")
                 return
@@ -94,7 +112,7 @@ async def websocket_endpoint(
             f"Conexión WebSocket establecida",
             connection_id=connection_id,
             user_id=user_info.get("user_id") if user_info else None,
-            authenticated=user_info is not None
+            authenticated=user_info is not None,
         )
         
         # Loop principal de mensajes

@@ -108,6 +108,10 @@ class Settings(BaseSettings):
     # === SEGURIDAD ===
     USERS_OPEN_REGISTRATION: bool = False
     ALLOWED_HOSTS: List[str] = ["*"]
+    # CORS y proxies (producción debe fijar orígenes explícitos)
+    CORS_ALLOWED_ORIGINS: List[str] = []
+    CORS_ALLOW_CREDENTIALS: bool = False
+    TRUSTED_PROXY_HOSTS: List[str] = ["localhost", "127.0.0.1"]
 
     # === LOGGING ===
     LOG_LEVEL: str = "INFO"
@@ -142,6 +146,14 @@ def get_settings() -> "Settings":
             for s in os.getenv("WHITELIST_IDS", "").replace("[", "").replace("]", "").split(",")
             if s.strip().isdigit()
         ],
+        # Listas separadas por coma para CORS/Proxies (p.ej. "https://app.example.com,https://admin.example.com")
+        CORS_ALLOWED_ORIGINS=[
+            s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s.strip()
+        ],
+        CORS_ALLOW_CREDENTIALS=os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() in {"1", "true", "yes"},
+        TRUSTED_PROXY_HOSTS=[
+            s.strip() for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") if s.strip()
+        ],
     )
 
 
@@ -167,6 +179,13 @@ class _LazySettingsProxy:
                         int(s.strip())
                         for s in os.getenv("WHITELIST_IDS", "").replace("[", "").replace("]", "").split(",")
                         if s.strip().isdigit()
+                    ],
+                    CORS_ALLOWED_ORIGINS=[
+                        s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s.strip()
+                    ],
+                    CORS_ALLOW_CREDENTIALS=os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() in {"1", "true", "yes"},
+                    TRUSTED_PROXY_HOSTS=[
+                        s.strip() for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") if s.strip()
                     ],
                 )
             except Exception:

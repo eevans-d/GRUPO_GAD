@@ -76,6 +76,11 @@ jobs:
         with:
           config: p/security-audit
 
+      - name: Dependency audit (pip-audit)
+        run: |
+          poetry run pip-audit -r requirements.lock || true
+        shell: bash
+
       - name: Type check (mypy)
         run: |
           poetry run mypy
@@ -86,6 +91,12 @@ jobs:
           DATABASE_URL: "sqlite+aiosqlite:///:memory:"
         run: |
           poetry run pytest --disable-warnings -v
+        shell: bash
+
+      - name: Coverage summary
+        if: always()
+        run: |
+          if [ -f htmlcov/index.html ]; then echo "Coverage HTML generated"; fi
         shell: bash
 
       - name: Upload coverage HTML report

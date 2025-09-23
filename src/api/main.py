@@ -85,7 +85,9 @@ app = FastAPI(
 )
 
 # Reconocer X-Forwarded-* cuando corremos detrás de un reverse proxy
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=["*"])  # type: ignore
+# Confiar solo en proxies explícitos (configurable por entorno)
+trusted_hosts = getattr(settings, 'TRUSTED_PROXY_HOSTS', ["localhost", "127.0.0.1"])  # type: ignore
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=trusted_hosts)  # type: ignore
 
 # --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
 MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
@@ -119,10 +121,12 @@ async def max_body_size_middleware(
     return response
 
 # --- Middleware CORS ---
+cors_origins = getattr(settings, 'CORS_ALLOWED_ORIGINS', []) or getattr(settings, 'ALLOWED_HOSTS', [])
+cors_credentials = bool(getattr(settings, 'CORS_ALLOW_CREDENTIALS', False))
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_HOSTS,  # Usar la configuración de ALLOWED_HOSTS
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=cors_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -156,13 +160,15 @@ async def log_requests(
     start_time = time.time()
     
     # Log de request con información estructurada
+    # Sanitizar logs: evitar imprimir query completa y headers sensibles
+    redacted_query = "<redacted>" if request.url.query else ""
     api_logger.info(
-        f"Request: {request.method} {request.url}",
+        f"Request: {request.method} {request.url.path}",
         method=request.method,
-        url=str(request.url),
         path=request.url.path,
+        query=redacted_query,
         client_ip=request.client.host if request.client else "unknown",
-        user_agent=request.headers.get("user-agent", "unknown")
+        user_agent=request.headers.get("user-agent", "unknown"),
     )
     
     try:
@@ -170,11 +176,11 @@ async def log_requests(
     except Exception as exc:
         process_time = (time.time() - start_time) * 1000
         api_logger.error(
-            f"Request failed: {request.method} {request.url}",
+            f"Request failed: {request.method} {request.url.path}",
             error=exc,
             method=request.method,
-            url=str(request.url),
-            duration_ms=round(process_time, 2)
+            path=request.url.path,
+            duration_ms=round(process_time, 2),
         )
         raise
     
