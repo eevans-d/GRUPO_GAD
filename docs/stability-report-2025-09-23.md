@@ -164,6 +164,19 @@ Clasificación (Barco anclado):
 Acciones:
 - Documentación de vigilancia únicamente. Política de cambios cero en lógica mantenida.
 
+## Health Check (Ciclo 12) — 2025-09-23
+
+Evidencias:
+- mypy: OK (sin issues; 50 archivos analizados).
+- pytest: OK (todas las pruebas; 1 skip esperado). DeprecationWarning de Pydantic se mantiene (informativo; sin impacto operativo).
+- ruff: mismos hallazgos no críticos (F541, F401, E501) en scripts/middleware/routers/core; sin impacto en runtime/UX.
+
+Clasificación (Barco anclado):
+- NO crítico. Sin cambios de código. Mantener backlog de estilo.
+
+Acciones:
+- Solo documentación de vigilancia. Sin modificaciones de lógica ni dependencias.
+
 ## Referencias
 - Último commit:
   - Hash (abreviado y completo): `9e75584` / `538dba2d5df0bd0cae17e9b1539e755840a31aa9`
