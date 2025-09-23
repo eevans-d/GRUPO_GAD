@@ -145,9 +145,15 @@ print(resp.json())
 
 ### Estado actual
 
-COMPLETADO ⚪ — Barco anclado (2025-09-23). Sin cambios pendientes.
+COMPLETADO ⚪ — Barco anclado (2025-09-23).
 
-Consulta el reporte de estabilidad: `docs/stability-report-2025-09-23.md`.
+- Hardening aplicado hoy (no intrusivo): CORS/Proxies/Logs y autenticación WS en producción.
+- Modo anclado: sin cambios funcionales; sólo documentación/CI/seguridad de bajo riesgo.
+
+Referencias:
+- Cierre de jornada: `docs/daily/2025-09-23-CIERRE.md`
+- Informe de auditoría: `docs/audit/AUDIT_REPORT_2025-09-23.md`
+- Resumen de estabilidad: `docs/stability-report-2025-09-23.md`
 
 Este repositorio usa GitHub Actions con el workflow `CI`:
 - Python 3.12 y Poetry 2.x con cache local del entorno (`.venv`).
