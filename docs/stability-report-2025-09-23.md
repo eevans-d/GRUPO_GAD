@@ -60,6 +60,19 @@ Clasificación (Barco anclado):
 Acciones:
 - Sin cambios. Workflow de estabilidad continúa activo.
 
+## Health Check (Ciclo 4) — 2025-09-23
+
+Evidencias:
+- mypy: OK
+- pytest: OK (1 skip esperado)
+- ruff: persisten hallazgos no críticos (F541, F401, E501) en áreas ya registradas (scripts, middleware, routers y core). Sin impacto en runtime.
+
+Clasificación (Barco anclado):
+- NO crítico. No tocar código. Mantener en backlog de estilo.
+
+Acciones:
+- Solo documentación de vigilancia; sin cambios de lógica.
+
 ## Referencias
 - Último commit:
   - Hash (abreviado y completo): `9e75584` / `538dba2d5df0bd0cae17e9b1539e755840a31aa9`
