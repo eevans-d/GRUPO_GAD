@@ -135,22 +135,22 @@ print(resp.json())
 
 ## 6. Migraciones y Base de Datos
 
-- Alembic configurado para SQLite y PostgreSQL
-- Migraciones reproducibles y seguras
 
 ## 7. Auditoría y Calidad
 
-- Linter: ruff
-- Tipado: mypy
-- Tests: pytest (umbral de cobertura en CI: 85%)
-- Script de auditoría de seguridad incluido
 
 ### CI/CD
 
+## Estado del Proyecto
+
+### Estado actual
+
+COMPLETADO ⚪ — Barco anclado (2025-09-23). Sin cambios pendientes.
+
+Consulta el reporte de estabilidad: `docs/stability-report-2025-09-23.md`.
+
 Este repositorio usa GitHub Actions con el workflow `CI`:
 - Python 3.12 y Poetry 2.x con cache local del entorno (`.venv`).
-- Lint con `ruff` y type-check con `mypy` (bloqueante).
-- Pruebas con `pytest` y reporte de cobertura (HTML como artifact y `--cov-fail-under=85`).
 - Chequeo de seguridad básico con Semgrep (`p/security-audit`).
 - Base de datos en pruebas: `sqlite+aiosqlite:///:memory:` para velocidad y aislamiento.
 
