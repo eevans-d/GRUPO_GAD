@@ -86,6 +86,19 @@ Clasificación (Barco anclado):
 Acciones:
 - Actualización de reporte únicamente. Backlog de estilo vigente.
 
+## Health Check (Ciclo 6) — 2025-09-23
+
+Evidencias:
+- mypy: OK (sin issues).
+- pytest: OK (1 skip esperado).
+- ruff: mismos hallazgos no críticos (F541, F401, E501) en scripts/middleware/routers/core; sin impacto en runtime ni UX.
+
+Clasificación (Barco anclado):
+- NO crítico. Mantener vigilancia y backlog.
+
+Acciones:
+- Documentación de vigilancia; sin cambios de código ni dependencias.
+
 ## Referencias
 - Último commit:
   - Hash (abreviado y completo): `9e75584` / `538dba2d5df0bd0cae17e9b1539e755840a31aa9`
