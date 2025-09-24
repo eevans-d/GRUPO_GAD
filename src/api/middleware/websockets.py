@@ -60,6 +60,16 @@ class WebSocketEventEmitter:
                 await self._processing_task
             except asyncio.CancelledError:
                 pass
+            except RuntimeError as e:  # Diferente event loop entre tests (escenario de TestClient)
+                # En entorno de pruebas multi-loop (pytest + TestClient + uvicorn en hilo)
+                # puede intentarse await de una tarea ligada a otro loop.
+                ws_middleware_logger.debug(
+                    "Ignorando RuntimeError al detener emitter (loop distinto)",
+                    error=str(e)
+                )
+            finally:
+                # Evitar reuso de la misma tarea en otro loop posterior
+                self._processing_task = None
         
         ws_middleware_logger.info("WebSocketEventEmitter detenido")
     

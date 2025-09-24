@@ -16,7 +16,6 @@ import os
 from typing import Any
 
 import pytest
-from jose import jwt
 from starlette.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
@@ -24,23 +23,9 @@ from starlette.websockets import WebSocketDisconnect
 from config.settings import settings as global_settings
 from src.api.main import app
 
-ALGORITHM = "HS256"
-
-
-def _make_token(sub: Any) -> str:
-    # Usar exactamente el mismo secreto (aunque esté vacío) que tendrá el router
-    secret = getattr(global_settings, "SECRET_KEY", "")
-    if not secret:
-        # Para consistencia futura, si el secreto está vacío (escenario de test),
-        # lo fijamos también en el entorno antes de generar el token.
-        os.environ["SECRET_KEY"] = ""
-    payload = {"sub": str(sub)}
-    return jwt.encode(payload, secret, algorithm=ALGORITHM)
-
-
-def test_websocket_handshake_with_token():
+def test_websocket_handshake_with_token(token_factory):
     """Debe devolver un mensaje CONNECTION_ACK cuando el token es válido."""
-    token = _make_token(123)
+    token = token_factory(123)
     with TestClient(app) as client:
         with client.websocket_connect(f"/ws/connect?token={token}") as ws:
             ack = ws.receive_json()

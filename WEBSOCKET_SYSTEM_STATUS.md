@@ -14,8 +14,8 @@ El sistema de WebSockets tiempo real ha sido **exitosamente implementado** con l
 - ✅ Logging estructurado para debugging
 
 #### 2. **WebSocket Router** (`src/api/routers/websockets.py`)
-- ✅ Endpoint `/api/v1/ws/connect` para conexiones WebSocket
-- ✅ Endpoint `/api/v1/ws/stats` para estadísticas en tiempo real
+- ✅ Endpoint `/ws/connect` para conexiones WebSocket
+- ✅ Endpoint `/ws/stats` para estadísticas en tiempo real
 - ✅ Autenticación JWT integrada
 - ✅ Manejo de ciclo de vida de conexiones
 - ✅ Procesamiento de mensajes bidireccional
@@ -59,7 +59,7 @@ El sistema de WebSockets tiempo real ha sido **exitosamente implementado** con l
 
 #### **Conexión desde Cliente**
 ```javascript
-const ws = new WebSocket('ws://localhost:8002/api/v1/ws/connect?token=JWT_TOKEN');
+const ws = new WebSocket('ws://localhost:8002/ws/connect?token=JWT_TOKEN');
 
 ws.onmessage = function(event) {
     const data = JSON.parse(event.data);
@@ -140,7 +140,7 @@ INFO | Sistema de WebSockets iniciado correctamente
 Estas facilidades existen exclusivamente para entornos de desarrollo / test. No deben habilitarse ni invocarse en producción.
 
 ### Endpoint Interno de Broadcast
-`POST /api/v1/ws/_test/broadcast`
+`POST /ws/_test/broadcast`
 
 - Permite disparar un `EventType.NOTIFICATION` a todas las conexiones activas.
 - Requiere que `ENVIRONMENT != production`.
@@ -166,7 +166,7 @@ Estas facilidades existen exclusivamente para entornos de desarrollo / test. No 
     }
     ```
 
-### Métricas en `/api/v1/ws/stats`
+### Métricas en `/ws/stats`
 Incluye ahora:
 ```json
 {
@@ -187,6 +187,39 @@ Incluye ahora:
     "timestamp": "..."
 }
 ```
+
+### Nueva Fixture de Test: `token_factory`
+
+Se añadió una fixture de PyTest (`tests/conftest.py`) para generar tokens JWT coherentes con el `SECRET_KEY` usado por el router. Uso:
+
+```python
+def test_algo(token_factory, client):
+    token = token_factory(123, role="LEVEL_1")
+    # usar token en conexión o petición
+```
+
+Características:
+- Si `SECRET_KEY` está vacío en el entorno de test, fija un valor de prueba consistente.
+- Permite añadir claims extra (`role=...`, `email=...`).
+- Evita duplicación de lógica en múltiples archivos de pruebas.
+
+### Métricas Añadidas (Runtime Internas)
+
+Dentro de `stats.metrics` ahora se exponen:
+- `total_messages_sent`: Conteo acumulado de mensajes enviados (unicast + broadcast)
+- `total_broadcasts`: Número de invocaciones exitosas a broadcast
+- `total_send_errors`: Errores al intentar enviar (problemas de conexión / runtime)
+- `last_broadcast_at`: Timestamp ISO del último broadcast (o `null` si aún no hay)
+
+Estas métricas permiten diagnosticar actividad y salud del subsistema sin exponer datos sensibles.
+
+### Pruebas Relacionadas
+- `tests/test_websocket_stats.py`: Verifica estructura básica de `/ws/stats`.
+- `tests/test_websocket_broadcast_metrics.py`: En entornos no producción verifica incremento de métricas tras un broadcast.
+
+### Consideración de Rutas
+
+Las rutas documentadas previamente con prefijo `/api/v1/ws/...` fueron un vestigio; el router actual se monta directamente en `/ws/*`. Actualizado en este documento para evitar confusión.
 
 ### Consideraciones de Seguridad
 - El endpoint `_test/broadcast` devuelve `{ "status": "forbidden" }` en producción.
