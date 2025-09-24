@@ -353,3 +353,27 @@ async def get_websocket_stats():
         "stats": stats,
         "timestamp": "2025-09-22T04:55:00Z"
     }
+
+
+@router.post("/_test/broadcast")
+async def test_trigger_broadcast(payload: dict):  # pragma: no cover - cubierto en test E2E dedicado
+    """Dispara un broadcast manual en entornos no productivos.
+
+    Este endpoint existe únicamente para facilitar pruebas E2E del sistema
+    WebSocket sin incurrir en lógica de cross-loop desde los tests. No debe
+    habilitarse en producción.
+    """
+    from config.settings import settings as _s
+    if getattr(_s, 'ENVIRONMENT', 'development') == 'production':
+        return {"status": "forbidden"}
+
+    message = WSMessage(
+        event_type=EventType.NOTIFICATION,
+        data={
+            "title": payload.get("title", "Test Broadcast"),
+            "content": payload.get("content", "Mensaje de prueba"),
+            "level": payload.get("level", "info")
+        }
+    )
+    sent = await websocket_manager.broadcast(message)
+    return {"status": "ok", "sent": sent, "metrics": websocket_manager.get_stats().get("metrics", {})}

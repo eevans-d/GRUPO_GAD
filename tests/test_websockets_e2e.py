@@ -76,7 +76,49 @@ async def test_ws_connect_with_token(ws_server: str):
             pytest.fail("No se recibió CONNECTION_ACK tras 2 mensajes iniciales")
 
 
-@pytest.mark.skip(reason="Pendiente: disparador de broadcast dentro del event loop del servidor (evitar cross-loop) en modo anclado")
 @pytest.mark.asyncio
-async def test_ws_broadcast_reaches_all_clients(ws_server: str):  # pragma: no cover - placeholder
-    pass
+async def test_ws_broadcast_reaches_all_clients(ws_server: str):
+    settings = get_settings()
+    if getattr(settings, "ENVIRONMENT", "development") == "production":
+        pytest.skip("Broadcast test saltado en producción (endpoint de prueba deshabilitado)")
+
+    # Abrir conexiones reales
+    uri = f"{ws_server}/ws/connect"
+    connections = []
+    for _ in range(3):
+        ws = await ws_connect(uri)
+        # Consumir hasta obtener ACK (ignorando PING inicial)
+        for _ in range(2):
+            raw = await asyncio.wait_for(ws.recv(), timeout=2)
+            data = json.loads(raw)
+            if data["event_type"] == EventType.PING:
+                continue
+            break
+        connections.append(ws)
+
+    try:
+        # Disparar broadcast vía endpoint HTTP (mismo loop)
+        import httpx
+        async with httpx.AsyncClient() as client_http:
+            resp = await client_http.post(f"{ws_server.replace('ws://', 'http://')}/ws/_test/broadcast", json={
+                "title": "BroadcastTest",
+                "content": "Contenido de broadcast"
+            })
+            assert resp.status_code == 200
+            data_resp = resp.json()
+            assert data_resp.get("status") == "ok"
+        received = 0
+        for ws in connections:
+            raw = await asyncio.wait_for(ws.recv(), timeout=3)
+            data = json.loads(raw)
+            # Saltar pings adicionales
+            if data["event_type"] == EventType.PING:
+                raw = await asyncio.wait_for(ws.recv(), timeout=3)
+                data = json.loads(raw)
+            assert data["event_type"] == EventType.NOTIFICATION
+            assert data["data"].get("title") == "BroadcastTest"
+            received += 1
+        assert received == 3
+    finally:
+        for ws in connections:
+            await ws.close()
