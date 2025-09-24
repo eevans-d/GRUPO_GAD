@@ -102,8 +102,13 @@ class WebSocketManager:
         # Task para heartbeat
         self._heartbeat_task: Optional[asyncio.Task] = None
         self._heartbeat_interval: int = 30  # segundos
+        # Métricas básicas (reinician por proceso)
+        self.total_messages_sent = 0
+        self.total_broadcasts = 0
+        self.total_send_errors = 0
+        self.last_broadcast_at: Optional[datetime] = None
         
-        ws_logger.info("WebSocketManager inicializado")
+    ws_logger.info("WebSocketManager inicializado")
     
     async def connect(self, websocket: WebSocket, user_id: Optional[int] = None, 
                      user_role: Optional[str] = None) -> str:
@@ -237,6 +242,9 @@ class WebSocketManager:
                 event_type=message.event_type,
                 message_id=message.message_id
             )
+
+            # Métricas
+            self.total_messages_sent += 1
             
             return True
             
@@ -246,6 +254,7 @@ class WebSocketManager:
             )
             # Desconectar conexión problemática
             await self.disconnect(connection_id)
+            self.total_send_errors += 1
             return False
     
     async def send_to_user(self, user_id: int, message: WSMessage) -> int:
@@ -268,7 +277,9 @@ class WebSocketManager:
         for connection_id in connection_ids:
             if await self.send_to_connection(connection_id, message):
                 sent_count += 1
-        
+        if sent_count:
+            self.total_broadcasts += 1
+            self.last_broadcast_at = datetime.now()
         return sent_count
     
     async def send_to_role(self, role: str, message: WSMessage) -> int:
@@ -359,7 +370,13 @@ class WebSocketManager:
             },
             "unique_users": len(self.user_connections),
             "heartbeat_active": self._heartbeat_task is not None,
-            "heartbeat_interval": self._heartbeat_interval
+            "heartbeat_interval": self._heartbeat_interval,
+            "metrics": {
+                "total_messages_sent": self.total_messages_sent,
+                "total_broadcasts": self.total_broadcasts,
+                "total_send_errors": self.total_send_errors,
+                "last_broadcast_at": self.last_broadcast_at.isoformat() if self.last_broadcast_at else None,
+            }
         }
 
 
