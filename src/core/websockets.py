@@ -76,8 +76,9 @@ class ConnectionInfo(BaseModel):
     connected_at: datetime = Field(default_factory=datetime.now)
     last_ping: datetime = Field(default_factory=datetime.now)
     
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = {
+        "arbitrary_types_allowed": True
+    }
 
 
 class WebSocketManager:
