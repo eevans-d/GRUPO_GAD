@@ -132,3 +132,68 @@ INFO | Sistema de WebSockets iniciado correctamente
 ---
 
 **🎉 El sistema WebSocket está completamente funcional y listo para uso en producción.**
+
+---
+
+## 🧪 Utilidades de Prueba y Observabilidad (Modo No Producción)
+
+Estas facilidades existen exclusivamente para entornos de desarrollo / test. No deben habilitarse ni invocarse en producción.
+
+### Endpoint Interno de Broadcast
+`POST /api/v1/ws/_test/broadcast`
+
+- Permite disparar un `EventType.NOTIFICATION` a todas las conexiones activas.
+- Requiere que `ENVIRONMENT != production`.
+- Cuerpo JSON opcional:
+    ```json
+    {
+        "title": "BroadcastTest",
+        "content": "Mensaje de prueba",
+        "level": "info"
+    }
+    ```
+- Respuesta ejemplo:
+    ```json
+    {
+        "status": "ok",
+        "sent": 3,
+        "metrics": {
+            "total_messages_sent": 15,
+            "total_broadcasts": 2,
+            "total_send_errors": 0,
+            "last_broadcast_at": "2025-09-24T04:20:15.123456"
+        }
+    }
+    ```
+
+### Métricas en `/api/v1/ws/stats`
+Incluye ahora:
+```json
+{
+    "status": "ok",
+    "stats": {
+        "total_connections": 1,
+        "connections_by_role": {},
+        "unique_users": 1,
+        "heartbeat_active": true,
+        "heartbeat_interval": 30,
+        "metrics": {
+            "total_messages_sent": 42,
+            "total_broadcasts": 5,
+            "total_send_errors": 0,
+            "last_broadcast_at": "2025-09-24T04:20:15.123456"
+        }
+    },
+    "timestamp": "..."
+}
+```
+
+### Consideraciones de Seguridad
+- El endpoint `_test/broadcast` devuelve `{ "status": "forbidden" }` en producción.
+- No exponer este endpoint detrás de un proxy público.
+- Las métricas no incluyen datos sensibles (solo contadores y timestamps). 
+
+### Próximas Mejoras Potenciales
+- Exponer métricas Prometheus (si `PROMETHEUS_ENABLED=true`).
+- Añadir histograma de latencia de envío y colas.
+- Incorporar etiquetas por tipo de evento enviado.
