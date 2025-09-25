@@ -131,6 +131,18 @@ INFO | Sistema de WebSockets iniciado correctamente
 
 ---
 
+## 📄 Documentación Complementaria Añadida (Modo "Barco Anclado")
+
+Se incorporaron documentos auxiliares orientados a observabilidad y preparación operativa sin modificar lógica de runtime:
+
+- `docs/COBERTURA_NOTAS.md`: Explica el warning de coverage para ejecuciones selectivas y la mitigación temporal mediante test de import.
+- `docs/PROMETHEUS_METRICAS_DISENO.md`: Diseño propuesto de métricas Prometheus (baja cardinalidad, sin datos sensibles) pendiente de implementación post-desanclaje.
+- `docs/CHECKLIST_PRE_DEPLOY.md`: Lista de verificación previa a despliegue enfocada en configuración, seguridad, pruebas y observabilidad.
+
+Estos documentos sirven de base para futuras fases sin introducir cambios funcionales durante el congelamiento actual.
+
+---
+
 **🎉 El sistema WebSocket está completamente funcional y listo para uso en producción.**
 
 ---
