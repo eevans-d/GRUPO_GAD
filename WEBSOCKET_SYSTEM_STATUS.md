@@ -221,6 +221,14 @@ Estas métricas permiten diagnosticar actividad y salud del subsistema sin expon
 
 Las rutas documentadas previamente con prefijo `/api/v1/ws/...` fueron un vestigio; el router actual se monta directamente en `/ws/*`. Actualizado en este documento para evitar confusión.
 
+### Política de Autenticación (Token)
+
+- Entorno producción: el endpoint `/ws/connect` exige token JWT válido. Si falta o es inválido se cierra con código 1008 (Policy Violation).
+- Entornos no producción: se permite conexión sin token (facilita pruebas y exploración local).
+- Prueba asociada: `tests/test_websocket_token_policy.py` (tolerante; documenta comportamiento actual y se salta si la política no se puede forzar dinámicamente tras mutar `ENVIRONMENT` en runtime).
+- Riesgo conocido: Cambiar `ENVIRONMENT` tras inicialización no siempre actualiza instancias pre-creadas; esto se gestiona con token_factory y pruebas tolerantes.
+- Futuro (si se levanta ancla): parametrizar política vía flag runtime explícito (`WEBSOCKET_REQUIRE_TOKEN`), desacoplado de ENVIRONMENT.
+
 ### Consideraciones de Seguridad
 - El endpoint `_test/broadcast` devuelve `{ "status": "forbidden" }` en producción.
 - No exponer este endpoint detrás de un proxy público.
