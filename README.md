@@ -221,6 +221,8 @@ Se ha incorporado un Playbook universal para cerrar la “última milla” de pr
 - Documento principal: `docs/PLAYBOOK_FINALIZACION.md`
 - Complementos relacionados: `docs/CHECKLIST_PRE_DEPLOY.md`, `docs/COBERTURA_NOTAS.md`, `docs/PROMETHEUS_METRICAS_DISENO.md`
 	- Nuevos artefactos: `docs/PLAYBOOK_TRIAGE_MATRIX.md`, `docs/PLAYBOOK_RISK_SCORE_TEMPLATE.md`, `docs/PLAYBOOK_ROLLBACK_RUNBOOK.md`
+	- Índice general de documentación: `docs/INDEX.md`
+	- Ejemplos: `docs/risk_score_example.json`, `docs/triage_example.json`
 
 Objetivo: acelerar transición de “casi listo” → “en producción y aprendiendo”, con foco en triage brutal, decisiones data-driven y reversibilidad.
 

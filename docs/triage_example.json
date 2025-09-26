@@ -1,0 +1,17 @@
+{
+  "alpha": [
+    { "id": "ISSUE-123", "titulo": "Crash al iniciar API", "criterio": "Bloquea flujo core", "estado": "pendiente" }
+  ],
+  "beta": [
+    { "id": "ISSUE-140", "titulo": "Optimizar consulta de tareas", "criterio": "Mejora performance sub-óptima", "estado": "en progreso" }
+  ],
+  "gamma": [
+    { "id": "ISSUE-155", "titulo": "Refactor naming internos", "criterio": "No impacta usuario final", "estado": "diferido" }
+  ],
+  "metadata": {
+    "fecha_freeze": "2025-09-26",
+    "responsable": "tech_lead",
+    "version_objetivo": "v1.0.0",
+    "notas": "Scope congelado; sólo Alpha bloquea release."
+  }
+}
