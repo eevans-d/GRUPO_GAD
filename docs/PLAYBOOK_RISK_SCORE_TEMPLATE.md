@@ -37,6 +37,19 @@ Fórmula: `RISK_SCORE = Σ(escala * peso)` → Normalizado a 1–5.
 2. Registrar score y fecha en changelog / ticket.
 3. Ajustar modo operativo si score cambia >0.5 tras nuevos hallazgos.
 
+### Herramienta CLI
+Incluida utilería `scripts/risk_score_calculator.py`.
+
+Ejemplos:
+```bash
+python scripts/risk_score_calculator.py --file docs/risk_score_example.json
+python scripts/risk_score_calculator.py --file docs/risk_score_example.yaml
+```
+
+Salida (JSON): muestra score, clasificación, modo sugerido y contribuciones.
+
+Si deseas usar YAML instala `pyyaml` (no obligatorio en modo anclado).
+
 ## Anti-Patrones
 - Inflar valores para frenar despliegue sin argumento técnico.
 - Minimizar riesgos por presión externa.

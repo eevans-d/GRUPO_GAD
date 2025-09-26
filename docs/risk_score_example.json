@@ -1,0 +1,8 @@
+{
+  "impacto_usuario": 4,
+  "complejidad_tecnica": 3,
+  "superficie_seguridad": 2,
+  "reversibilidad": 4,
+  "dependencias_externas": 2,
+  "madurez_pruebas": 3
+}
