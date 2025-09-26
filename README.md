@@ -214,6 +214,18 @@ Notas:
 - [x] Documentación actualizada
 - [x] Listo para producción
 
+## 10. Playbook de Finalización
+
+Se ha incorporado un Playbook universal para cerrar la “última milla” de proyectos:
+
+- Documento principal: `docs/PLAYBOOK_FINALIZACION.md`
+- Complementos relacionados: `docs/CHECKLIST_PRE_DEPLOY.md`, `docs/COBERTURA_NOTAS.md`, `docs/PROMETHEUS_METRICAS_DISENO.md`
+
+Objetivo: acelerar transición de “casi listo” → “en producción y aprendiendo”, con foco en triage brutal, decisiones data-driven y reversibilidad.
+
+Próximos artefactos sugeridos (no aún presentes): matrices de triage, plantilla de risk score y runbook de rollback.
+
+
 ## 9. Troubleshooting Docker
 
 - Caddy no levanta o muestra error de montaje: asegúrate que el archivo `Caddyfile` existe y tiene contenido válido. Si persiste, ejecuta `docker compose down -v` y vuelve a levantar.
