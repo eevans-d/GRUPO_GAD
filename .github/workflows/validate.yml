@@ -1,0 +1,48 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  gate-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          pip install --upgrade pip
+          pip install poetry
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-${{ runner.os }}-
+
+      - name: Install deps (best-effort)
+        run: |
+          if [ -f pyproject.toml ]; then poetry install --with dev || true; fi
+
+      - name: Fast Gate P1
+        run: |
+          chmod +x scripts/fast_gate_check.sh scripts/validate_complete.sh || true
+          bash scripts/fast_gate_check.sh
+
+      - name: Validate Complete (non-blocking extras)
+        run: |
+          bash scripts/validate_complete.sh || true
+
+      - name: Pytest (best-effort)
+        run: |
+          if [ -f pyproject.toml ] && [ -d tests ]; then poetry run pytest -q || true; else echo "No tests found"; fi

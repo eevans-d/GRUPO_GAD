@@ -9,7 +9,19 @@ services:
     restart: always
 
   redis:
+    image: redis:7-alpine
+    container_name: grupo_gad_redis
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
     restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   api:
     image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
@@ -39,3 +51,6 @@ services:
       - "443:443"
       - "443:443/udp"
     restart: always
+
+volumes:
+  redis-data:
