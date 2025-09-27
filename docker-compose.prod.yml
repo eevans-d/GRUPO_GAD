@@ -1,41 +1,104 @@
-version: '3.9'
-
 services:
   db:
+    image: postgis/postgis:15-3.3
+    container_name: grupo_gad_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db-data:/var/lib/postgresql/data
     ports:
-      # No exponer el puerto de la BD a la red host en producción
-      # La comunicación es a través de la red interna de Docker.
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:5432:5432"  # no exponer públicamente
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - gad-network
 
   redis:
+    image: redis:7-alpine
+    container_name: grupo_gad_redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:6379:6379"
     restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - gad-network
 
   api:
     image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
-    volumes: [] # Eliminar los montajes de volumen para usar el código dentro de la imagen
-    ports:
-      # No exponer el puerto de la API directamente; Caddy es el punto de entrada
-      - "127.0.0.1:8000:8000"
+    container_name: grupo_gad_api
     env_file:
       - .env.production
+    ports:
+      - "127.0.0.1:8000:8000"  # Caddy como punto de entrada
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/api/v1/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
+    networks:
+      - gad-network
 
   bot:
-    volumes: [] # Eliminar montajes de volumen
+    # mantener configuración existente si ya hay imagen; si no, usar build local
+    image: ghcr.io/eevans-d/grupo_gad/bot:v1.0.0
+    container_name: grupo_gad_bot
     env_file:
       - .env.production
     restart: always
+    depends_on:
+      api:
+        condition: service_started
+    healthcheck:
+      # healthcheck básico (no intrusivo). Ajustar a comando real si existe endpoint.
+      test: ["CMD-SHELL", "echo 'ok'"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    networks:
+      - gad-network
 
   caddy:
+    image: caddy:2.8
+    container_name: grupo_gad_caddy
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     restart: always
+    networks:
+      - gad-network
+
+networks:
+  gad-network:
+    driver: bridge
+
+volumes:
+  db-data:
+  redis-data:
+  caddy_data:
+  caddy_config:
