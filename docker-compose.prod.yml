@@ -1,41 +1,124 @@
-version: '3.9'
-
 services:
   db:
-    ports:
-      # No exponer el puerto de la BD a la red host en producción
-      # La comunicación es a través de la red interna de Docker.
-      - "127.0.0.1:5432:5432"
-    restart: always
+    image: postgis/postgis:15-3.4-alpine
+    container_name: gad_db_prod
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    networks:
+      - gad-network-prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
-    restart: always
+    image: redis:7-alpine
+    container_name: gad_redis_prod
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data_prod:/data
+    networks:
+      - gad-network-prod
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   api:
     image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
-    volumes: [] # Eliminar los montajes de volumen para usar el código dentro de la imagen
-    ports:
-      # No exponer el puerto de la API directamente; Caddy es el punto de entrada
-      - "127.0.0.1:8000:8000"
+    container_name: gad_api_prod
+    restart: unless-stopped
     env_file:
       - .env.production
-    restart: always
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - gad-network-prod
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 60s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   bot:
-    volumes: [] # Eliminar montajes de volumen
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.bot
+    container_name: gad_bot_prod
+    restart: unless-stopped
     env_file:
       - .env.production
-    restart: always
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - gad-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   caddy:
+    image: caddy:2.8
+    container_name: gad_caddy_prod
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-    restart: always
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data_prod:/data
+      - caddy_config_prod:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - gad-network-prod
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  gad-network-prod:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
+  redis_data_prod:
+  caddy_data_prod:
+  caddy_config_prod:
