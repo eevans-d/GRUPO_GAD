@@ -147,10 +147,6 @@ class WebSocketManager:
                 self.role_connections[user_role] = set()
             self.role_connections[user_role].add(connection_id)
         
-        # Iniciar heartbeat si es la primera conexión
-        if len(self.active_connections) == 1 and not self._heartbeat_task:
-            self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
-        
         ws_logger.info(
             "Nueva conexión WebSocket establecida",
             connection_id=connection_id,
@@ -171,6 +167,10 @@ class WebSocketManager:
                 }
             )
         )
+        
+        # Iniciar heartbeat si es la primera conexión (después de enviar ACK)
+        if len(self.active_connections) == 1 and not self._heartbeat_task:
+            self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
         
         return connection_id
     
@@ -244,8 +244,9 @@ class WebSocketManager:
                 message_id=message.message_id
             )
 
-            # Métricas
-            self.total_messages_sent += 1
+            # Métricas: ignorar ACK y PING para total_messages_sent
+            if message.event_type not in (EventType.CONNECTION_ACK, EventType.PING):
+                self.total_messages_sent += 1
             
             return True
             
@@ -328,13 +329,19 @@ class WebSocketManager:
         for connection_id in connection_ids:
             if await self.send_to_connection(connection_id, message):
                 sent_count += 1
-        
+        # Actualizar métricas si hubo envíos
+        if sent_count:
+            self.total_broadcasts += 1
+            self.last_broadcast_at = datetime.now()
+
         return sent_count
     
     async def _heartbeat_loop(self):
         """Loop de heartbeat para mantener conexiones vivas."""
         while self.active_connections:
             try:
+                # Espera inicial para evitar enviar PING antes del ACK inicial
+                await asyncio.sleep(self._heartbeat_interval)
                 current_time = datetime.now()
                 ping_message = WSMessage(
                     event_type=EventType.PING,

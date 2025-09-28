@@ -7,6 +7,7 @@ en todos los endpoints de la aplicación.
 """
 
 import functools
+import inspect
 import time
 from typing import Any, Callable, Dict
 
@@ -73,6 +74,8 @@ def log_endpoint_call(operation: str = ""):
                 
                 raise
         
+        # Preservar firma original para compatibilidad con FastAPI (dependencias)
+        wrapper.__signature__ = inspect.signature(func)  # type: ignore[attr-defined]
         return wrapper
     return decorator
 
@@ -127,6 +130,8 @@ def log_database_operation(operation: str, table: str = ""):
                 
                 raise
         
+        # Preservar firma original
+        wrapper.__signature__ = inspect.signature(func)  # type: ignore[attr-defined]
         return wrapper
     return decorator
 

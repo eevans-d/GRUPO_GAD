@@ -8,6 +8,12 @@ from src.core.websockets import websocket_manager
 
 
 def test_websocket_module_import_structure():
+    # Aislar métricas por si otras pruebas corrieron antes en el mismo proceso
+    websocket_manager.total_messages_sent = 0
+    websocket_manager.total_broadcasts = 0
+    websocket_manager.total_send_errors = 0
+    websocket_manager.last_broadcast_at = None
+
     stats = websocket_manager.get_stats()
     # Estructura base
     assert set(stats.keys()) == {
