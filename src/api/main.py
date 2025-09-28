@@ -94,6 +94,32 @@ MAX_REQUEST_BODY_SIZE = 10 * 1024 * 1024  # 10 MiB
 
 
 @app.middleware("http")
+async def security_headers_middleware(
+    request: Request,
+    call_next: Callable[[Request], Awaitable[Response]],
+) -> Response:
+    """Add security headers to all responses."""
+    response = await call_next(request)
+    
+    # Security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    
+    # Content Security Policy for API
+    if request.url.path.startswith("/api/"):
+        response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
+    
+    # Remove server header for security
+    if "server" in response.headers:
+        del response.headers["server"]
+    
+    return response
+
+
+@app.middleware("http")
 async def max_body_size_middleware(
     request: Request, 
     call_next: Callable[[Request], Awaitable[Response]],
@@ -115,9 +141,6 @@ async def max_body_size_middleware(
     # verificar sin consumir el body; confiamos en proxies frontales y límites
     # adicionales en producción para esa protección.
     response = await call_next(request)
-    # Ocultar cabecera 'server' por seguridad básica
-    if "server" in response.headers:
-        del response.headers["server"]
     return response
 
 # --- Middleware CORS ---
@@ -185,6 +208,16 @@ async def log_requests(
         raise
     
     process_time = (time.time() - start_time) * 1000
+    
+    # Record performance metrics
+    from src.core.performance import performance_middleware
+    performance_middleware.record_request(
+        method=request.method,
+        path=request.url.path,
+        duration=process_time / 1000,  # Convert to seconds
+        status_code=response.status_code
+    )
+    
     api_logger.info(
         f"Response: {response.status_code} | Time: {process_time:.2f}ms",
         status_code=response.status_code,
