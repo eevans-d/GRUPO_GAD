@@ -1,6 +1,5 @@
 import json
 import asyncio
-import os
 import pytest
 import httpx
 from websockets.asyncio.client import connect as ws_connect
@@ -38,7 +37,8 @@ async def test_broadcast_metrics_increment(ws_server: str):
             m_before = before_metrics['total_messages_sent']
 
             # Disparar broadcast de prueba
-            rb = await c.post(f"{ws_server.replace('ws://', 'http://')}/ws/_test/broadcast", json={'title': 'MetricaTest'})
+            ws_http_url = ws_server.replace('ws://', 'http://')
+            rb = await c.post(f"{ws_http_url}/ws/_test/broadcast", json={'title': 'MetricaTest'})
             assert rb.status_code == 200
 
             # Consumir mensajes (podría llegar PING intercalado)

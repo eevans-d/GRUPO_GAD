@@ -93,7 +93,14 @@ def main() -> int:
             "score": score,
             "clasificacion": classify(score),
             "modo_sugerido": classify(score).split()[1].strip("()")[:1],
-            "detalles": {k: {"valor": data[k], "peso": WEIGHTS[k], "contribucion": round(data[k]*WEIGHTS[k],2)} for k in WEIGHTS}
+            "detalles": {
+                k: {
+                    "valor": data[k], 
+                    "peso": WEIGHTS[k], 
+                    "contribucion": round(data[k]*WEIGHTS[k], 2)
+                } 
+                for k in WEIGHTS
+            }
         }, ensure_ascii=False, indent=2))
         return 0
     except Exception as e:  # pragma: no cover - CLI path

@@ -7,7 +7,6 @@ Define fixtures para crear un entorno de prueba aislado y consistente:
 - Sobrescribe las dependencias de la aplicación para usar la base de datos de prueba.
 - Ofrece un cliente (`TestClient`) para interactuar con la API.
 """
-import asyncio
 
 import pytest
 import pytest_asyncio

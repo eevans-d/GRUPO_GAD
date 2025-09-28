@@ -87,7 +87,7 @@ class WebSocketTestClient:
         timestamp = data.get("timestamp", "")
         message_data = data.get("data", {})
         
-        print(f"\n📥 Mensaje recibido:")
+        print("\n📥 Mensaje recibido:")
         print(f"   🏷️  Tipo: {event_type}")
         print(f"   🕐 Tiempo: {timestamp}")
         
@@ -96,7 +96,7 @@ class WebSocketTestClient:
             print(f"   ⏰ Conectado en: {message_data.get('connected_at')}")
         
         elif event_type == "ping":
-            print(f"   💓 Ping del servidor")
+            print("   💓 Ping del servidor")
             # Responder con pong
             asyncio.create_task(self.send_pong(message_data.get("server_time")))
         
@@ -106,7 +106,7 @@ class WebSocketTestClient:
             print(f"   📊 Nivel: {message_data.get('level', 'info')}")
         
         elif event_type == "dashboard_update":
-            print(f"   📊 Actualización del dashboard:")
+            print("   📊 Actualización del dashboard:")
             for key, value in message_data.items():
                 print(f"      - {key}: {value}")
         

@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import math
 from pathlib import Path
 from typing import Dict, Any
 
@@ -77,10 +76,10 @@ def main() -> int:
     # ETA heurística: número de Beta pendientes * 0.5 días (ejemplo)
     beta_pendientes = sum(1 for i in triage.get("beta", []) if i.get("estado") != "resuelto")
     eta_dias = round(beta_pendientes * 0.5, 1)
-    print(f"# Release Readiness Report\n")
-    print(f"## Resumen de Riesgo\n")
+    print("# Release Readiness Report\n")
+    print("## Resumen de Riesgo\n")
     print(f"Score de Riesgo: **{score}** — {classify(score)}\n")
-    print(f"## Triage Actual\n")
+    print("## Triage Actual\n")
     print(f"Alpha: {triage_counts['alpha']} | Beta: {triage_counts['beta']} | Gamma: {triage_counts['gamma']}\n")
     print(f"Alpha todos resueltos: {'Sí' if alpha_ok else 'No'}\n")
     print(f"ETA (heurística) para Beta pendientes: ~{eta_dias} días\n")

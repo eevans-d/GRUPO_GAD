@@ -11,12 +11,12 @@ Proporciona comunicación en tiempo real para:
 
 import json
 import asyncio
-from typing import Dict, List, Set, Optional, Any, Union
+from typing import Dict, Set, Optional, Any
 from datetime import datetime
 from enum import Enum
 import uuid
 
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket
 from pydantic import BaseModel, Field
 
 from src.core.logging import get_logger
@@ -152,7 +152,7 @@ class WebSocketManager:
             self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
         
         ws_logger.info(
-            f"Nueva conexión WebSocket establecida",
+            "Nueva conexión WebSocket establecida",
             connection_id=connection_id,
             user_id=user_id,
             user_role=user_role,
@@ -208,7 +208,7 @@ class WebSocketManager:
             self._heartbeat_task = None
         
         ws_logger.info(
-            f"Conexión WebSocket desconectada",
+            "Conexión WebSocket desconectada",
             connection_id=connection_id,
             user_id=connection_info.user_id,
             total_connections=len(self.active_connections)

@@ -10,12 +10,10 @@ from typing import Optional, Dict, Any
 import asyncio
 from datetime import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 
 from src.api.middleware.websockets import WebSocketEventEmitter
-from src.core.websockets import WebSocketManager
 from src.core.logging import get_logger
 
 # Logger para integración
@@ -91,7 +89,7 @@ class WebSocketModelIntegrator:
             instance_data = event["instance_data"]
             
             integration_logger.debug(
-                f"Procesando evento de modelo",
+                "Procesando evento de modelo",
                 model=model_name,
                 event_type=event_type,
                 instance_id=instance_data.get("id")
@@ -176,7 +174,7 @@ class WebSocketModelIntegrator:
         try:
             # Simular datos del dashboard
             # TODO: Implementar consulta real a la base de datos
-            dashboard_data = {
+            _dashboard_data = {
                 "total_tasks": 25,
                 "active_tasks": 12,
                 "completed_tasks": 8,
