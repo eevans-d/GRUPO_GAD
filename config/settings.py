@@ -185,7 +185,9 @@ class _LazySettingsProxy:
                     ],
                     CORS_ALLOW_CREDENTIALS=os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() in {"1", "true", "yes"},
                     TRUSTED_PROXY_HOSTS=[
-                        s.strip() for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") if s.strip()
+                        s.strip() 
+                        for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") 
+                        if s.strip()
                     ],
                 )
             except Exception:

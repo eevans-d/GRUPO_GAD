@@ -18,8 +18,7 @@ from src.core.websockets import (
     WSMessage,
     EventType,
     notify_dashboard_update,
-    send_system_alert,
-    send_notification
+    send_system_alert
 )
 from src.core.logging import get_logger
 
@@ -228,7 +227,7 @@ class WebSocketEventEmitter:
             sent_count = await websocket_manager.broadcast(message)
         
         ws_middleware_logger.debug(
-            f"Evento de tarea enviado",
+            "Evento de tarea enviado",
             task_id=task_id,
             event_type=sub_event_type,
             sent_to_connections=sent_count
@@ -257,7 +256,7 @@ class WebSocketEventEmitter:
         sent_count = await websocket_manager.broadcast(message)
         
         ws_middleware_logger.debug(
-            f"Evento de efectivo enviado",
+            "Evento de efectivo enviado",
             efectivo_id=efectivo_id,
             event_type=sub_event_type,
             sent_to_connections=sent_count
@@ -272,7 +271,7 @@ class WebSocketEventEmitter:
         await send_system_alert(title, content, level)
         
         ws_middleware_logger.info(
-            f"Evento del sistema enviado",
+            "Evento del sistema enviado",
             title=title,
             level=level
         )

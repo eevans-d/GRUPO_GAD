@@ -8,7 +8,7 @@ de performance con información estructurada para debugging y monitoreo.
 
 import time
 import uuid
-from typing import Callable, Awaitable
+from typing import Callable
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -164,7 +164,7 @@ class PerformanceLoggingMiddleware(BaseHTTPMiddleware):
             process_time = time.time() - start_time
             
             middleware_logger.error(
-                f"Performance middleware error",
+                "Performance middleware error",
                 error=exc,
                 method=request.method,
                 path=request.url.path,
@@ -197,7 +197,7 @@ class DatabaseLoggingMiddleware(BaseHTTPMiddleware):
                 query_count = len(request.app.state.db_queries)
                 if query_count > 10:  # Threshold configurable
                     middleware_logger.warning(
-                        f"High database query count detected",
+                        "High database query count detected",
                         path=request.url.path,
                         method=request.method,
                         query_count=query_count,
@@ -208,7 +208,7 @@ class DatabaseLoggingMiddleware(BaseHTTPMiddleware):
             
         except Exception as exc:
             middleware_logger.error(
-                f"Database middleware error",
+                "Database middleware error",
                 error=exc,
                 path=request.url.path,
                 method=request.method

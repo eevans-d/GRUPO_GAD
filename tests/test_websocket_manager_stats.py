@@ -1,4 +1,3 @@
-import pytest
 
 from src.core.websockets import websocket_manager
 

@@ -177,7 +177,12 @@ def log_security_event(event_type: str, severity: str = "INFO", details: Dict[st
     )
 
 
-def log_business_event(event_type: str, entity_type: str = "", entity_id: str = "", details: Dict[str, Any] | None = None):
+def log_business_event(
+    event_type: str, 
+    entity_type: str = "", 
+    entity_id: str = "", 
+    details: Dict[str, Any] | None = None
+):
     """
     Log eventos de negocio importantes.
     

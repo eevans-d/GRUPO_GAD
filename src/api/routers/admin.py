@@ -9,7 +9,7 @@ All operations are audited and logged for security compliance.
 from typing import Any, Dict
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 

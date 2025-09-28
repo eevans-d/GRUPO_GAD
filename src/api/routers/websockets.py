@@ -7,9 +7,9 @@ Maneja los endpoints WebSocket y la lógica de conexión/desconexión.
 
 import json
 from typing import Optional
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
 from fastapi.security import HTTPBearer
-from jose import jwt, JWTError
+from jose import jwt
 from starlette.status import WS_1008_POLICY_VIOLATION
 
 from src.core.websockets import (
@@ -109,7 +109,7 @@ async def websocket_endpoint(
         )
         
         ws_router_logger.info(
-            f"Conexión WebSocket establecida",
+            "Conexión WebSocket establecida",
             connection_id=connection_id,
             user_id=user_info.get("user_id") if user_info else None,
             authenticated=user_info is not None,
@@ -146,7 +146,7 @@ async def websocket_endpoint(
                 break
                 
     except WebSocketDisconnect:
-        ws_router_logger.info(f"Cliente desconectado durante handshake")
+        ws_router_logger.info("Cliente desconectado durante handshake")
         
     except Exception as e:
         ws_router_logger.error(
@@ -174,7 +174,7 @@ async def handle_client_message(connection_id: str, message_data: dict,
         data = message_data.get("data", {})
         
         ws_router_logger.debug(
-            f"Procesando mensaje de cliente",
+            "Procesando mensaje de cliente",
             connection_id=connection_id,
             event_type=event_type,
             user_id=user_info.get("user_id") if user_info else None

@@ -12,14 +12,13 @@ from __future__ import annotations
 
 import json
 import asyncio
-from typing import List
 
 import pytest
 from websockets.asyncio.client import connect as ws_connect  # websockets>=14 API moderna
 # La fixture ws_server ahora proviene de conftest.py (consolidada)
 
-from config.settings import get_settings, settings as global_settings
-from src.core.websockets import websocket_manager, WSMessage, EventType
+from config.settings import get_settings
+from src.core.websockets import EventType
 
 @pytest.fixture
 def token(token_factory):

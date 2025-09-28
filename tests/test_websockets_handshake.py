@@ -11,16 +11,11 @@ en el loop de la app); se cubrirá más adelante con diseño dedicado.
 """
 from __future__ import annotations
 
-import json
-import os
-from typing import Any
 
-import pytest
 from starlette.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
 # Usar el proxy global de settings que utiliza realmente el router WebSocket
-from config.settings import settings as global_settings
 from src.api.main import app
 
 def test_websocket_handshake_with_token(token_factory):
