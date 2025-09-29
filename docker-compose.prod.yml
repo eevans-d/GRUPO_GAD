@@ -3,7 +3,7 @@ version: "3.9"
 services:
   db:
     image: postgis/postgis:15-3.4-alpine
-    container_name: gad_db_dev
+    container_name: grupo_gad_db
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -19,7 +19,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    restart: unless-stopped
+    restart: always
     networks:
       - gad-network
 
@@ -42,9 +42,9 @@ services:
 
   api:
     image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
-    volumes: [] # Eliminar los montajes de volumen para usar el código dentro de la imagen
+    container_name: grupo_gad_api
+    volumes: []
     ports:
-      # No exponer el puerto de la API directamente; Caddy es el punto de entrada
       - "127.0.0.1:8000:8000"
     env_file:
       - .env.production
@@ -55,20 +55,27 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+    depends_on:
+      - db
+      - redis
     networks:
       - gad-network
 
   bot:
     image: ghcr.io/eevans-d/grupo_gad/bot:v1.0.0
-    volumes: [] # Eliminar montajes de volumen
+    container_name: grupo_gad_bot
+    volumes: []
     env_file:
       - .env.production
     restart: always
+    depends_on:
+      - api
     networks:
       - gad-network
 
   caddy:
     image: caddy:2.8
+    container_name: grupo_gad_caddy
     ports:
       - "80:80"
       - "443:443"
@@ -78,6 +85,8 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
+    depends_on:
+      - api
     networks:
       - gad-network
 
