@@ -36,12 +36,12 @@ jobs:
 
       - name: Fast Gate P1
         run: |
-          chmod +x scripts/fast_gate_check.sh scripts/validate_complete.sh || true
-          bash scripts/fast_gate_check.sh
+          chmod +x scripts/pr_fast_gate_check.sh scripts/pr_validate_complete.sh || true
+          bash scripts/pr_fast_gate_check.sh
 
       - name: Validate Complete (non-blocking extras)
         run: |
-          bash scripts/validate_complete.sh || true
+          bash scripts/pr_validate_complete.sh || true
 
       - name: Pytest (best-effort)
         run: |
