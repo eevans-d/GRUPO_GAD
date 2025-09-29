@@ -35,6 +35,12 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_PORT: int = 5432
     
+    # Configuración avanzada de pool de conexiones para producción
+    DB_POOL_SIZE: int = 10
+    DB_MAX_OVERFLOW: int = 20
+    DB_POOL_TIMEOUT: int = 30
+    DB_POOL_RECYCLE: int = 3600  # Reciclar conexiones cada hora
+    
     # La URL de la base de datos se construye dinámicamente si no se provee.
     # Prioridad: 1. DATABASE_URL, 2. DB_URL (legado), 3. Componentes POSTGRES_*.
     DATABASE_URL: Optional[str] = None

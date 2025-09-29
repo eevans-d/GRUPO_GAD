@@ -24,11 +24,12 @@ def init_db(db_url: str) -> None:
     """
     global async_engine, AsyncSessionFactory
 
-    # Configuración avanzada de pooling y timeout
-    POOL_SIZE = getattr(settings, "DB_POOL_SIZE", 5)
-    MAX_OVERFLOW = getattr(settings, "DB_MAX_OVERFLOW", 10)
+    # Configuración avanzada de pooling y timeout optimizada para producción
+    POOL_SIZE = getattr(settings, "DB_POOL_SIZE", 10)  # Incrementado para mejor concurrencia
+    MAX_OVERFLOW = getattr(settings, "DB_MAX_OVERFLOW", 20)  # Más conexiones en picos
     POOL_TIMEOUT = getattr(settings, "DB_POOL_TIMEOUT", 30)
-
+    POOL_RECYCLE = getattr(settings, "DB_POOL_RECYCLE", 3600)  # Reciclar conexiones cada hora
+    
     connect_args: dict[str, Any] = {}
     if db_url.startswith("sqlite"):
         # SQLite requiere este argumento para funcionar correctamente con asyncio
@@ -48,6 +49,15 @@ def init_db(db_url: str) -> None:
             **create_kwargs,
         )
     else:
+        # Configuración PostgreSQL optimizada para producción
+        if "postgresql" in db_url:
+            connect_args.update({
+                "server_settings": {
+                    "application_name": "grupo_gad_api",
+                    "jit": "off",  # Desactivar JIT para consultas rápidas
+                }
+            })
+
         async_engine = create_async_engine(
             db_url,
             pool_pre_ping=True,
@@ -55,6 +65,11 @@ def init_db(db_url: str) -> None:
             pool_size=POOL_SIZE,
             max_overflow=MAX_OVERFLOW,
             pool_timeout=POOL_TIMEOUT,
+            pool_recycle=POOL_RECYCLE,
+            connect_args=connect_args,
+            # Configuraciones adicionales para optimización
+            isolation_level="READ_COMMITTED",  # Nivel de aislamiento óptimo
+            query_cache_size=1200,  # Cache de queries compiladas
         )
 
     # Crear una fábrica de sesiones asíncronas
@@ -62,6 +77,8 @@ def init_db(db_url: str) -> None:
         bind=async_engine,
         class_=AsyncSession,
         expire_on_commit=False,
+        # Configuración de sesión optimizada
+        autoflush=False,  # Control manual de flush para mejor performance
     )
 
 
