@@ -1,6 +1,4 @@
-# Production overrides for docker-compose.yml
-# This file contains production-specific configurations that override the base docker-compose.yml
-# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+version: '3.9'
 
 services:
   db:
@@ -15,7 +13,7 @@ services:
     container_name: grupo_gad_redis
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
     volumes:
-      - redis_data_prod:/data
+      - redis-data:/data
     ports:
       - "127.0.0.1:6379:6379"
     restart: always
@@ -55,4 +53,4 @@ services:
     restart: always
 
 volumes:
-  redis_data_prod:
+  redis-data:
