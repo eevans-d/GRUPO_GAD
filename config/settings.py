@@ -206,40 +206,10 @@ class _LazySettingsProxy:
             except Exception:
                 # Last-resort: construct without validation to avoid import errors
                 # Provide minimal defaults so attribute access doesn't crash in tests/tools
-                self._inst = Settings.model_construct(
-                    **{
-                        "PROJECT_NAME": "GRUPO_GAD",
-                        "PROJECT_VERSION": "1.0.0",
-                        "PROJECT_DESCRIPTION": "Sistema de Gestión de Tareas para Personal Policial",
-                        "DEBUG": False,
-                        "API_V1_STR": "/api/v1",
-                        "SECRET_KEY": os.getenv("SECRET_KEY", "test-secret-key"),
-                        "ACCESS_TOKEN_EXPIRE_MINUTES": 30,
-                        "POSTGRES_SERVER": os.getenv("POSTGRES_SERVER", "db"),
-                        "POSTGRES_USER": os.getenv("POSTGRES_USER", ""),
-                        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
-                        "POSTGRES_DB": os.getenv("POSTGRES_DB", ""),
-                        "POSTGRES_PORT": int(os.getenv("POSTGRES_PORT", "5432")),
-                        "DATABASE_URL": os.getenv("DATABASE_URL"),
-                        "REDIS_HOST": os.getenv("REDIS_HOST", "redis"),
-                        "REDIS_PORT": int(os.getenv("REDIS_PORT", "6379")),
-                        "REDIS_DB": int(os.getenv("REDIS_DB", "0")),
-                        "REDIS_PASSWORD": os.getenv("REDIS_PASSWORD"),
-                        "TELEGRAM_TOKEN": os.getenv("TELEGRAM_TOKEN", ""),
-                        "ADMIN_CHAT_ID": os.getenv("ADMIN_CHAT_ID", "0"),
-                        "WHITELIST_IDS": [],
-                        "TZ": os.getenv("TZ", "UTC"),
-                        "ENVIRONMENT": os.getenv("ENVIRONMENT", "development"),
-                        "USERS_OPEN_REGISTRATION": False,
-                        "ALLOWED_HOSTS": ["*"],
-                        "CORS_ALLOWED_ORIGINS": [],
-                        "CORS_ALLOW_CREDENTIALS": False,
-                        "TRUSTED_PROXY_HOSTS": ["localhost", "127.0.0.1"],
-                        "LOG_LEVEL": os.getenv("LOG_LEVEL", "INFO"),
-                        "LOG_FILE": None,
-                        "PROMETHEUS_ENABLED": True,
-                    }
-                )
+                # mypy: construir con kwargs desde un dict variable para evitar error de tipo
+                # Crear instancia mínima sin cargar de .env para evitar errores en import-time
+                # y sin requerir kwargs tipeados (mypy friendly)
+                self._inst = Settings.model_validate({}, from_attributes=False)
         return self._inst
 
     def __getattr__(self, name: str) -> Any:
