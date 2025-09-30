@@ -17,13 +17,9 @@ if [ "$WORKERS" -lt 3 ]; then
 	WORKERS=3
 fi
 
-exec gunicorn \
+exec uvicorn \
 	src.api.main:app \
 	--workers "$WORKERS" \
-	--worker-class uvicorn.workers.UvicornWorker \
-	--bind 0.0.0.0:8000 \
-	--timeout 60 \
-	--graceful-timeout 30 \
-	--keep-alive 5 \
-		--log-level info \
-		--access-logfile -
+	--host 0.0.0.0 \
+	--port 8000 \
+	--log-level info

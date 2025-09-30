@@ -89,25 +89,57 @@ def get_database_url() -> Optional[str]:
             migration_logger.info("Usando URL de DATABASE_URL")
         return url
     
-    # 3. Construir desde componentes de entorno
-    db_components = {
-        'host': os.getenv("DB_HOST", "localhost"),
-        'port': os.getenv("DB_PORT", "5432"),
-        'name': os.getenv("DB_NAME", "vibe_db"),  # Usar la BD que está corriendo
-        'user': os.getenv("DB_USER", "user"),     # Credenciales del contenedor actual
-        'password': os.getenv("DB_PASSWORD", "pass")
-    }
-    
-    url = f"postgresql://{db_components['user']}:{db_components['password']}@{db_components['host']}:{db_components['port']}/{db_components['name']}"
-    
-    if use_structured_logging:
-        migration_logger.info(
-            f"URL construida desde componentes: {db_components['host']}:{db_components['port']}/{db_components['name']}"
+    # 3. Tomar del alembic.ini si está seteado (por código más arriba)
+    try:
+        ini_url = config.get_main_option("sqlalchemy.url")
+        if ini_url:
+            if use_structured_logging:
+                migration_logger.info("Usando URL de alembic.ini (sqlalchemy.url)")
+            else:
+                migration_logger.info("Usando URL de alembic.ini (sqlalchemy.url)")
+            return ini_url
+    except Exception:
+        pass
+
+    # 4. Usar settings de la aplicación si están disponibles
+    try:
+        from config.settings import get_settings  # import local para evitar efectos en import-time
+        s = get_settings()
+        assembled = s.assemble_db_url()
+        if assembled:
+            if use_structured_logging:
+                migration_logger.info("Usando URL ensamblada desde settings")
+            else:
+                migration_logger.info("Usando URL ensamblada desde settings")
+            return assembled
+    except Exception:
+        pass
+
+    # 5. Construir desde componentes DB_* SOLO si DB_HOST está definido explícitamente
+    if os.getenv("DB_HOST"):
+        db_components = {
+            'host': os.getenv("DB_HOST"),
+            'port': os.getenv("DB_PORT", "5432"),
+            'name': os.getenv("DB_NAME", "postgres"),
+            'user': os.getenv("DB_USER", "postgres"),
+            'password': os.getenv("DB_PASSWORD", "")
+        }
+        url = (
+            f"postgresql://{db_components['user']}:{db_components['password']}@"
+            f"{db_components['host']}:{db_components['port']}/{db_components['name']}"
         )
-    else:
-        migration_logger.info(f"URL construida desde componentes: {db_components['host']}:{db_components['port']}/{db_components['name']}")
-    
-    return url
+        if use_structured_logging:
+            migration_logger.info(
+                f"URL construida desde DB_*: {db_components['host']}:{db_components['port']}/{db_components['name']}"
+            )
+        else:
+            migration_logger.info(
+                f"URL construida desde DB_*: {db_components['host']}:{db_components['port']}/{db_components['name']}"
+            )
+        return url
+
+    # No se pudo determinar una URL
+    return None
 
 
 def validate_database_connection(url: str) -> bool:
@@ -281,11 +313,8 @@ async def run_migrations_online() -> None:
     if not db_url:
         raise RuntimeError("DATABASE_URL could not be determined for alembic migrations")
     
-    # Validar conexión antes de proceder
-    sync_url = db_url.replace("postgresql+asyncpg://", "postgresql://")
-    if not validate_database_connection(sync_url):
-        raise RuntimeError("No se pudo validar la conexión a la base de datos")
-    
+    # Ya no validamos con un driver sync; confiaremos en la conexión async abajo
+
     if use_structured_logging:
         migration_logger.info("Creando motor async para migraciones")
     else:

@@ -3,6 +3,8 @@ Configuración y gestión de la sesión de la base de datos.
 """
 
 import asyncio
+import importlib
+import os
 from typing import Any, AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -91,6 +93,18 @@ def _ensure_initialized_default() -> None:
     """
     global async_engine, AsyncSessionFactory
     if async_engine is None or AsyncSessionFactory is None:
+        # Si el entorno ya define una URL de BD no-sqlite, no inicializar fallback
+        db_url_env = os.getenv("DATABASE_URL", "")
+        if db_url_env and not db_url_env.startswith("sqlite"):
+            return
+
+        # Intentar fallback solo si aiosqlite está disponible
+        try:
+            importlib.import_module("aiosqlite")
+        except ImportError:
+            # En entornos de runtime (docker) puede no estar instalado; init_db() se encargará
+            return
+
         async_engine = create_async_engine(
             "sqlite+aiosqlite:///:memory:",
             echo=False,

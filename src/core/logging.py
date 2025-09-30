@@ -8,6 +8,7 @@ del proyecto con diferentes niveles, formateo estructurado y múltiples outputs.
 
 import sys
 from pathlib import Path
+import os
 from typing import Optional
 import json
 from datetime import datetime
@@ -124,47 +125,62 @@ def setup_logging(
     
     # Handler para archivo principal del servicio
     if enable_file:
-        log_file = LOGS_DIR / f"{service_name}.log"
-        logger.add(
-            str(log_file),
-            rotation="10 MB",
-            retention="30 days",
-            compression="zip",
-            format=FILE_FORMAT,
-            level=log_level,
-            enqueue=True,
-            backtrace=True,
-            diagnose=True,
-        )
+        try:
+            log_file = LOGS_DIR / f"{service_name}.log"
+            # Verificar permiso de escritura en el directorio
+            if os.access(LOGS_DIR, os.W_OK):
+                logger.add(
+                    str(log_file),
+                    rotation="10 MB",
+                    retention="30 days",
+                    compression="zip",
+                    format=FILE_FORMAT,
+                    level=log_level,
+                    enqueue=True,
+                    backtrace=True,
+                    diagnose=True,
+                )
+            else:
+                # Sin permiso de escritura, deshabilitar file logging
+                enable_file = False
+        except Exception:
+            enable_file = False
     
     # Handler para archivo de errores
     if enable_file:
-        error_log_file = LOGS_DIR / f"{service_name}_errors.log"
-        logger.add(
-            str(error_log_file),
-            rotation="5 MB",
-            retention="30 days",
-            compression="zip",
-            format=FILE_FORMAT,
-            level="ERROR",
-            enqueue=True,
-            backtrace=True,
-            diagnose=True,
-        )
+        try:
+            error_log_file = LOGS_DIR / f"{service_name}_errors.log"
+            if os.access(LOGS_DIR, os.W_OK):
+                logger.add(
+                    str(error_log_file),
+                    rotation="5 MB",
+                    retention="30 days",
+                    compression="zip",
+                    format=FILE_FORMAT,
+                    level="ERROR",
+                    enqueue=True,
+                    backtrace=True,
+                    diagnose=True,
+                )
+        except Exception:
+            pass
     
     # Handler para JSON (producción)
-    if enable_json:
-        json_log_file = LOGS_DIR / f"{service_name}_structured.jsonl"
-        logger.add(
-            str(json_log_file),
-            rotation="50 MB",
-            retention="30 days",
-            compression="zip",
-            format=JSON_FORMAT,
-            level=log_level,
-            serialize=True,  # Output en formato JSON
-            enqueue=True,
-        )
+    if enable_json and os.access(LOGS_DIR, os.W_OK):
+        try:
+            json_log_file = LOGS_DIR / f"{service_name}_structured.jsonl"
+            logger.add(
+                str(json_log_file),
+                rotation="50 MB",
+                retention="30 days",
+                compression="zip",
+                format=JSON_FORMAT,
+                level=log_level,
+                serialize=True,  # Output en formato JSON
+                enqueue=True,
+            )
+        except Exception:
+            pass
     
     # Logger inicial con información del sistema
     structured_logger = StructuredLogger(service_name)
