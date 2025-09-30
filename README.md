@@ -189,6 +189,20 @@ El estado de la build se muestra en el badge superior. Puedes ver las ejecucione
  - Arranque de la API: `scripts/start.sh` ejecuta Uvicorn y calcula dinámicamente el número de workers (1 en dev; en prod (2xCPU)+1, mínimo 3, configurable con `UVICORN_WORKERS`).
  - Imagen publicada en GHCR: `ghcr.io/eevans-d/grupo_gad/api:v1.0.0` (también `:latest`).
 
+### WebSockets en Producción (cross-worker)
+
+Para que los broadcasts WebSocket lleguen a todos los clientes en escenarios multi-worker, se habilitó integración con Redis Pub/Sub.
+
+- Variables (en `.env.production`):
+	- `REDIS_HOST=redis`
+	- `REDIS_PORT=6379` (opcional)
+	- `REDIS_DB=0` (opcional)
+	- `REDIS_PASSWORD=` (opcional)
+
+Con estas variables, la app publica en un canal Redis y todos los workers lo consumen, reenviando a sus conexiones locales. No se re-publican PING.
+
+Si no defines REDIS_HOST, el sistema opera localmente (un solo proceso recomendado o sesiones sticky).
+
 Desplegar con Docker Compose (producción):
 
 ```bash
@@ -202,6 +216,14 @@ make prod-ps         # estado
 make prod-logs-api   # logs de API
 make prod-migrate    # alembic upgrade head
 make prod-smoke      # /metrics y /api/v1/health
+```
+
+Stack de producción local (construcción local de la imagen y puerto 8001):
+```bash
+make prod-down-local
+make prod-up-local
+make prod-ps
+make prod-smoke-local
 ```
 
 Usar imagen publicada en GHCR (opcional, tras merge/tag):
@@ -234,6 +256,7 @@ Notas:
 - Mantén `requirements.lock` actualizado cuando cambies dependencias (regenera y commitea).
 - No incluyas secretos en el repositorio; utiliza `.env.production` en el servidor.
 - Template de variables de producción disponible en `docs/env/.env.production.example`.
+ - Para WebSockets con múltiples workers, define `REDIS_HOST` para habilitar Pub/Sub y difusión global.
 
 ## 8. Checklist de Entrega
 

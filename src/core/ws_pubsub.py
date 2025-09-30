@@ -8,33 +8,40 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Optional
+from typing import Any, Optional, Protocol, cast
 
 from src.core.logging import get_logger
 
 ws_pubsub_logger = get_logger("websockets.pubsub")
 
 
+class _BroadcastManager(Protocol):
+    async def broadcast_local_dict(self, message_dict: dict[str, Any]) -> None:  # pragma: no cover - protocolo mínimo
+        ...
+
+
 class RedisWebSocketPubSub:
     def __init__(self, redis_url: str, channel: str = "ws_broadcast"):
         self.redis_url = redis_url
         self.channel = channel
-        self._redis = None  # type: ignore[assignment]
-        self._subscriber_task: Optional[asyncio.Task] = None
+        # Cliente Redis asíncrono (tipo dinámico del paquete redis.asyncio)
+        self._redis: Optional[Any] = None
+        self._subscriber_task: Optional[asyncio.Task[None]] = None
         self._running = False
-        self._manager = None
+        self._manager: Optional[_BroadcastManager] = None
 
-    async def start(self, manager) -> None:
+    async def start(self, manager: _BroadcastManager) -> None:
         """Conecta a Redis y arranca la tarea de suscripción."""
         try:
             # Import local para no obligar dependencia en paths que no lo usen
-            from redis import asyncio as redis  # type: ignore
+            from redis import asyncio as redis
         except Exception as e:  # pragma: no cover - dependencia opcional
             ws_pubsub_logger.error(f"Redis client no disponible: {e}")
             return
 
         self._manager = manager
-        self._redis = redis.from_url(self.redis_url)
+        # from_url devuelve un cliente dinámico; lo tipamos como Any para mypy
+        self._redis = cast(Any, redis).from_url(self.redis_url)
         self._running = True
         self._subscriber_task = asyncio.create_task(self._subscriber_loop())
         ws_pubsub_logger.info("RedisWebSocketPubSub iniciado", channel=self.channel)
@@ -50,20 +57,20 @@ class RedisWebSocketPubSub:
             self._subscriber_task = None
         if self._redis is not None:
             try:
-                await self._redis.aclose()  # type: ignore[attr-defined]
+                await self._redis.aclose()
             except Exception:
                 pass
             self._redis = None
         ws_pubsub_logger.info("RedisWebSocketPubSub detenido")
 
-    async def publish(self, message_dict: dict) -> None:
+    async def publish(self, message_dict: dict[str, Any]) -> None:
         """Publica un mensaje en el canal compartido."""
         if not self._redis:
             ws_pubsub_logger.warning("Redis no inicializado; no se publica broadcast")
             return
         try:
             payload = json.dumps(message_dict)
-            await self._redis.publish(self.channel, payload)  # type: ignore[union-attr]
+            await self._redis.publish(self.channel, payload)
         except Exception as e:
             ws_pubsub_logger.error(f"Error publicando broadcast en Redis: {e}")
 
@@ -71,11 +78,11 @@ class RedisWebSocketPubSub:
         """Consume mensajes del canal y los reenvía a conexiones locales."""
         assert self._redis is not None
         try:
-            pubsub = self._redis.pubsub()  # type: ignore[union-attr]
+            pubsub = self._redis.pubsub()
             await pubsub.subscribe(self.channel)
             ws_pubsub_logger.info("Suscrito a canal Redis", channel=self.channel)
 
-            async for raw in pubsub.listen():  # type: ignore[attr-defined]
+            async for raw in pubsub.listen():
                 if not self._running:
                     break
                 try:
