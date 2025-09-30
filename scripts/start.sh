@@ -10,11 +10,22 @@ alembic upgrade head
 # Start the application
 echo "Starting Uvicorn server..."
 
-# Calculate workers: (2 x CPU) + 1, minimum 3
-CPU_COUNT=$(getconf _NPROCESSORS_ONLN || echo 2)
-WORKERS=$((CPU_COUNT * 2 + 1))
-if [ "$WORKERS" -lt 3 ]; then
-	WORKERS=3
+# Decide workers count
+# - En desarrollo: 1 worker (WebSockets necesitan un solo proceso si no hay pub/sub)
+# - En producción: (2 x CPU) + 1, mínimo 3, a menos que UVICORN_WORKERS esté definido
+ENVIRONMENT=${ENVIRONMENT:-development}
+if [ -n "$UVICORN_WORKERS" ]; then
+	WORKERS=$UVICORN_WORKERS
+else
+	if [ "$ENVIRONMENT" = "production" ]; then
+		CPU_COUNT=$(getconf _NPROCESSORS_ONLN || echo 2)
+		WORKERS=$((CPU_COUNT * 2 + 1))
+		if [ "$WORKERS" -lt 3 ]; then
+			WORKERS=3
+		fi
+	else
+		WORKERS=1
+	fi
 fi
 
 exec uvicorn \
