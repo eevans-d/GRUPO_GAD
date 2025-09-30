@@ -7,7 +7,7 @@ from typing import Any, List
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field, confloat
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.crud.crud_tarea import tarea as crud_tarea
@@ -24,8 +24,8 @@ router = APIRouter()
 class EmergencyRequest(BaseModel):
     """Request model for emergency endpoint."""
     telegram_id: int
-    lat: confloat(ge=-90, le=90) = Field(..., description="Latitude between -90 and 90")
-    lng: confloat(ge=-180, le=180) = Field(..., description="Longitude between -180 and 180")
+    lat: float = Field(..., description="Latitude between -90 and 90", ge=-90, le=90)
+    lng: float = Field(..., description="Longitude between -180 and 180", ge=-180, le=180)
 
 
 class EmergencyResponse(BaseModel):

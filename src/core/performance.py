@@ -8,8 +8,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Any, AsyncGenerator, Dict, List, Optional
 
-from sqlalchemy import event, text
-from sqlalchemy.engine import Engine
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.logging import get_logger
@@ -27,7 +26,7 @@ class QueryPerformanceTracker:
         self.slow_query_threshold = 1.0  # 1 second threshold for slow queries
         self.query_stats: Dict[str, Dict[str, Any]] = {}
     
-    def record_query(self, query: str, duration: float, error: Optional[str] = None):
+    def record_query(self, query: str, duration: float, error: Optional[str] = None) -> None:
         """Record query execution statistics."""
         if not self.enabled:
             return
@@ -55,7 +54,7 @@ class QueryPerformanceTracker:
         if duration > self.slow_query_threshold:
             stats["slow_queries"] += 1
             performance_logger.warning(
-                f"Slow query detected",
+                "Slow query detected",
                 query_type=query_type,
                 duration=duration,
                 query=query[:200] + "..." if len(query) > 200 else query
@@ -64,10 +63,10 @@ class QueryPerformanceTracker:
         if error:
             stats["errors"] += 1
             performance_logger.error(
-                f"Query error",
+                "Query error",
                 query_type=query_type,
-                error=error,
-                query=query[:200] + "..." if len(query) > 200 else query
+                error=Exception(error) if isinstance(error, str) else error,
+                query=query[:200] + "..." if len(query) > 200 else query,
             )
     
     def get_statistics(self) -> Dict[str, Any]:
@@ -79,7 +78,7 @@ class QueryPerformanceTracker:
             "timestamp": datetime.utcnow().isoformat()
         }
     
-    def reset_statistics(self):
+    def reset_statistics(self) -> None:
         """Reset all performance statistics."""
         self.query_stats.clear()
 
@@ -99,14 +98,14 @@ async def track_query_performance(session: AsyncSession, operation_name: str = "
     try:
         yield
     except Exception as e:
-        error_occurred = str(e)
+        error_occurred = e
         raise
     finally:
         duration = time.time() - start_time
         query_tracker.record_query(
             query=f"OPERATION:{operation_name}",
             duration=duration,
-            error=error_occurred
+            error=str(error_occurred) if error_occurred is not None else None,
         )
 
 
@@ -192,7 +191,12 @@ async def suggest_database_indexes(session: AsyncSession) -> List[Dict[str, Any]
                     "sequential_tuples_read": row.seq_tup_read,
                     "avg_tuples_per_scan": round(row.avg_seq_tup_read, 2),
                     "recommendation": f"Consider adding indexes to frequently queried columns in {row.tablename}",
-                    "index_coverage": round((row.idx_tup_fetch or 0) / max(row.seq_tup_read + (row.idx_tup_fetch or 0), 1) * 100, 2)
+                    "index_coverage": round(
+                        (row.idx_tup_fetch or 0)
+                        / max(row.seq_tup_read + (row.idx_tup_fetch or 0), 1)
+                        * 100,
+                        2,
+                    )
                 })
         
         return suggestions
@@ -207,10 +211,10 @@ class PerformanceMiddleware:
     Middleware to track API endpoint performance.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         self.endpoint_stats: Dict[str, Dict[str, Any]] = {}
     
-    def record_request(self, method: str, path: str, duration: float, status_code: int):
+    def record_request(self, method: str, path: str, duration: float, status_code: int) -> None:
         """Record API request performance."""
         endpoint_key = f"{method} {path}"
         

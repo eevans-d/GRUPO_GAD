@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
 from httpx import AsyncClient, ASGITransport
-from unittest.mock import AsyncMock
 
 from src.api.main import app
 from src.core.database import get_db_session

@@ -9,14 +9,13 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-
-# Add project paths
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
-sys.path.insert(0, str(project_root / "src"))
-
-from typing import Dict, Any, List
+from typing import Dict, Any
 from datetime import datetime
+
+# Add project paths (import hack for script execution outside package context)
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))  # noqa: E402
+sys.path.insert(0, str(project_root / "src"))  # noqa: E402
 
 
 async def analyze_health_endpoints() -> Dict[str, Any]:
@@ -24,7 +23,7 @@ async def analyze_health_endpoints() -> Dict[str, Any]:
     print("🔍 Analyzing Health Endpoints...")
     
     try:
-        from src.api.routers.health import health_check, liveness_check, readiness_check
+        from src.api.routers.health import health_check, liveness_check
         
         results = {}
         
@@ -218,11 +217,16 @@ def generate_optimization_report() -> Dict[str, Any]:
     
     implementation_rate = (implemented_features / total_features) * 100
     
+    status_label = (
+        "🎯 EXCELLENT" if implementation_rate >= 90
+        else "✅ GOOD" if implementation_rate >= 75
+        else "⚠️ NEEDS WORK"
+    )
     report["analysis_summary"] = {
         "total_features_analyzed": total_features,
         "implemented_features": implemented_features,
         "implementation_rate": f"{implementation_rate:.1f}%",
-        "status": "🎯 EXCELLENT" if implementation_rate >= 90 else "✅ GOOD" if implementation_rate >= 75 else "⚠️ NEEDS WORK"
+        "status": status_label,
     }
     
     # Recommendations
@@ -253,7 +257,7 @@ async def main():
     
     try:
         # Test health endpoints
-        health_results = await analyze_health_endpoints()
+        await analyze_health_endpoints()
         print()
         
         # Generate comprehensive report

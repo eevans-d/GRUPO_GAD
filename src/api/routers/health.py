@@ -22,7 +22,8 @@ async def health_check() -> Dict[str, Any]:
     """
     Basic health check endpoint for load balancers.
     """
-    return {"status": "ok", "timestamp": datetime.utcnow().isoformat()}
+    # Mantener respuesta mínima para compatibilidad con tests y balancers
+    return {"status": "ok"}
 
 
 @router.get("/health/detailed")
@@ -31,7 +32,7 @@ async def detailed_health_check() -> Dict[str, Any]:
     Comprehensive health check with database and system status.
     """
     start_time = time.time()
-    health_status = {
+    health_status: Dict[str, Any] = {
         "status": "ok",
         "timestamp": datetime.utcnow().isoformat(),
         "checks": {}
@@ -54,19 +55,24 @@ async def detailed_health_check() -> Dict[str, Any]:
         db_error = str(e)
         health_status["status"] = "degraded"
 
-    health_status["checks"]["database"] = {
+    db_check: Dict[str, Any] = {
         "status": db_status,
         "response_time_ms": db_response_time,
         "circuit_breaker_open": db_circuit_breaker.open,
         "circuit_breaker_failures": db_circuit_breaker.failures,
         "error": db_error
     }
+    health_status["checks"]["database"] = db_check
 
     # System checks
-    health_status["checks"]["system"] = {
+    # Cálculo de uptime en dos pasos para mantener líneas cortas
+    _start = getattr(health_check, "_start_time", 0)
+    uptime = int(time.time() - _start) if _start else 0
+    system_check: Dict[str, Any] = {
         "status": "ok",
-        "uptime_seconds": getattr(health_check, '_start_time', 0) and int(time.time() - getattr(health_check, '_start_time', 0)) or 0
+        "uptime_seconds": uptime,
     }
+    health_status["checks"]["system"] = system_check
 
     # Overall response time
     health_status["response_time_ms"] = round((time.time() - start_time) * 1000, 2)
@@ -142,5 +148,5 @@ async def performance_metrics() -> Dict[str, Any]:
     return metrics
 
 
-# Initialize start time for uptime calculation
-health_check._start_time = time.time()
+# Initialize start time for uptime calculation (dynamic attribute for uptime)
+health_check._start_time = time.time()  # type: ignore[attr-defined]

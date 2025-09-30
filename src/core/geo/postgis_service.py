@@ -101,7 +101,7 @@ async def find_nearest_efectivo(
     except Exception as e:
         logger.error(
             "Error executing PostGIS query",
-            error=str(e),
+            error=e,
             lat=lat,
             lng=lng,
             limit=limit

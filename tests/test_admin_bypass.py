@@ -69,7 +69,8 @@ def test_admin_command_forbidden_for_normal_user(client, token_factory, mock_nor
     async def _stub_db():
         return MagicMock()
     app.dependency_overrides[get_db_session] = _stub_db
-    app.dependency_overrides[get_current_active_superuser] = lambda: (_ for _ in ()).throw(HTTPException(status_code=400, detail="The user doesn't have enough privileges"))
+    # noqa: E501 - lambda compacta intencional para simular error de privilegios
+    app.dependency_overrides[get_current_active_superuser] = lambda: (_ for _ in ()).throw(HTTPException(status_code=400, detail="The user doesn't have enough privileges"))  # noqa: E501
 
     try:
         response = client.post(
