@@ -15,7 +15,7 @@ from starlette.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from starlette.responses import Response
 
-from config.settings import settings
+from config.settings import get_settings, settings
 from src.api.routers import api_router
 from src.api.routers import dashboard as dashboard_router
 from src.api.routers import websockets as websockets_router
@@ -45,7 +45,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """
     # Startup
     api_logger.info("Iniciando aplicación y conexión a la base de datos...")
-    db_url = settings.assemble_db_url() if hasattr(settings, "assemble_db_url") else None
+    # Obtener una instancia validada de Settings para evitar atributos faltantes del proxy
+    _settings = get_settings()
+    db_url = _settings.assemble_db_url() if hasattr(_settings, "assemble_db_url") else None
     if not db_url:
         # Fallback a variable de entorno directa si existe
         import os
@@ -94,7 +96,7 @@ app = FastAPI(
 
 # Reconocer X-Forwarded-* cuando corremos detrás de un reverse proxy
 # Confiar solo en proxies explícitos (configurable por entorno)
-trusted_hosts = getattr(settings, 'TRUSTED_PROXY_HOSTS', ["localhost", "127.0.0.1"])  # type: ignore
+trusted_hosts = getattr(settings, 'trusted_proxy_hosts_list', ["localhost", "127.0.0.1"])  # type: ignore
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=trusted_hosts)  # type: ignore
 
 # --- Middleware de limitación de tamaño de petición (mitigación DoS multipart) ---
@@ -152,7 +154,7 @@ async def max_body_size_middleware(
     return response
 
 # --- Middleware CORS ---
-cors_origins = getattr(settings, 'CORS_ALLOWED_ORIGINS', []) or getattr(settings, 'ALLOWED_HOSTS', [])
+cors_origins = getattr(settings, 'cors_origins_list', []) or getattr(settings, 'ALLOWED_HOSTS', [])
 cors_credentials = bool(getattr(settings, 'CORS_ALLOW_CREDENTIALS', False))
 app.add_middleware(
     CORSMiddleware,

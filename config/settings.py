@@ -85,9 +85,14 @@ class Settings(BaseSettings):
         if legacy_db_url:
             return legacy_db_url
 
-        # Use components if available
-        if self.POSTGRES_USER and self.POSTGRES_PASSWORD and self.POSTGRES_DB:
-            return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        # Use components if available (be tolerant if attributes are missing when constructed without validation)
+        user = getattr(self, "POSTGRES_USER", None)
+        password = getattr(self, "POSTGRES_PASSWORD", None)
+        db = getattr(self, "POSTGRES_DB", None)
+        server = getattr(self, "POSTGRES_SERVER", "db")
+        port = getattr(self, "POSTGRES_PORT", 5432)
+        if user and password and db:
+            return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
 
         return None
 
@@ -115,9 +120,10 @@ class Settings(BaseSettings):
     USERS_OPEN_REGISTRATION: bool = False
     ALLOWED_HOSTS: List[str] = ["*"]
     # CORS y proxies (producción debe fijar orígenes explícitos)
-    CORS_ALLOWED_ORIGINS: List[str] = []
+    # Notas: mantener como strings para permitir carga desde .env con formato "a,b,c"
+    CORS_ALLOWED_ORIGINS: str = ""
     CORS_ALLOW_CREDENTIALS: bool = False
-    TRUSTED_PROXY_HOSTS: List[str] = ["localhost", "127.0.0.1"]
+    TRUSTED_PROXY_HOSTS: str = "localhost,127.0.0.1"
 
     # === LOGGING ===
     LOG_LEVEL: str = "INFO"
@@ -132,6 +138,17 @@ class Settings(BaseSettings):
             env_file_encoding="utf-8",
             extra="ignore",
         )
+
+    # Helpers derivados
+    @property
+    def cors_origins_list(self) -> List[str]:
+        raw = getattr(self, "CORS_ALLOWED_ORIGINS", "") or ""
+        return [s.strip() for s in raw.split(",") if s.strip()]
+
+    @property
+    def trusted_proxy_hosts_list(self) -> List[str]:
+        raw = getattr(self, "TRUSTED_PROXY_HOSTS", "") or ""
+        return [s.strip() for s in raw.split(",") if s.strip()] or ["localhost", "127.0.0.1"]
 
 def get_settings() -> "Settings":
     """Return a fresh Settings instance.
@@ -153,13 +170,9 @@ def get_settings() -> "Settings":
             if s.strip().isdigit()
         ],
         # Listas separadas por coma para CORS/Proxies (p.ej. "https://app.example.com,https://admin.example.com")
-        CORS_ALLOWED_ORIGINS=[
-            s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s.strip()
-        ],
+        CORS_ALLOWED_ORIGINS=os.getenv("CORS_ALLOWED_ORIGINS", ""),
         CORS_ALLOW_CREDENTIALS=os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() in {"1", "true", "yes"},
-        TRUSTED_PROXY_HOSTS=[
-            s.strip() for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") if s.strip()
-        ],
+        TRUSTED_PROXY_HOSTS=os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1"),
     )
 
 
@@ -186,19 +199,47 @@ class _LazySettingsProxy:
                         for s in os.getenv("WHITELIST_IDS", "").replace("[", "").replace("]", "").split(",")
                         if s.strip().isdigit()
                     ],
-                    CORS_ALLOWED_ORIGINS=[
-                        s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s.strip()
-                    ],
+                    CORS_ALLOWED_ORIGINS=os.getenv("CORS_ALLOWED_ORIGINS", ""),
                     CORS_ALLOW_CREDENTIALS=os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() in {"1", "true", "yes"},
-                    TRUSTED_PROXY_HOSTS=[
-                        s.strip() 
-                        for s in os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1").split(",") 
-                        if s.strip()
-                    ],
+                    TRUSTED_PROXY_HOSTS=os.getenv("TRUSTED_PROXY_HOSTS", "localhost,127.0.0.1"),
                 )
             except Exception:
                 # Last-resort: construct without validation to avoid import errors
-                self._inst = Settings.construct()
+                # Provide minimal defaults so attribute access doesn't crash in tests/tools
+                self._inst = Settings.model_construct(
+                    **{
+                        "PROJECT_NAME": "GRUPO_GAD",
+                        "PROJECT_VERSION": "1.0.0",
+                        "PROJECT_DESCRIPTION": "Sistema de Gestión de Tareas para Personal Policial",
+                        "DEBUG": False,
+                        "API_V1_STR": "/api/v1",
+                        "SECRET_KEY": os.getenv("SECRET_KEY", "test-secret-key"),
+                        "ACCESS_TOKEN_EXPIRE_MINUTES": 30,
+                        "POSTGRES_SERVER": os.getenv("POSTGRES_SERVER", "db"),
+                        "POSTGRES_USER": os.getenv("POSTGRES_USER", ""),
+                        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
+                        "POSTGRES_DB": os.getenv("POSTGRES_DB", ""),
+                        "POSTGRES_PORT": int(os.getenv("POSTGRES_PORT", "5432")),
+                        "DATABASE_URL": os.getenv("DATABASE_URL"),
+                        "REDIS_HOST": os.getenv("REDIS_HOST", "redis"),
+                        "REDIS_PORT": int(os.getenv("REDIS_PORT", "6379")),
+                        "REDIS_DB": int(os.getenv("REDIS_DB", "0")),
+                        "REDIS_PASSWORD": os.getenv("REDIS_PASSWORD"),
+                        "TELEGRAM_TOKEN": os.getenv("TELEGRAM_TOKEN", ""),
+                        "ADMIN_CHAT_ID": os.getenv("ADMIN_CHAT_ID", "0"),
+                        "WHITELIST_IDS": [],
+                        "TZ": os.getenv("TZ", "UTC"),
+                        "ENVIRONMENT": os.getenv("ENVIRONMENT", "development"),
+                        "USERS_OPEN_REGISTRATION": False,
+                        "ALLOWED_HOSTS": ["*"],
+                        "CORS_ALLOWED_ORIGINS": [],
+                        "CORS_ALLOW_CREDENTIALS": False,
+                        "TRUSTED_PROXY_HOSTS": ["localhost", "127.0.0.1"],
+                        "LOG_LEVEL": os.getenv("LOG_LEVEL", "INFO"),
+                        "LOG_FILE": None,
+                        "PROMETHEUS_ENABLED": True,
+                    }
+                )
         return self._inst
 
     def __getattr__(self, name: str) -> Any:
