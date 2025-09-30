@@ -4,7 +4,7 @@ SHELL := /bin/bash
 COMPOSE := docker compose
 API_CONTAINER := gad_api_dev
 
-.PHONY: up down ps logs-api migrate smoke ws-smoke test lint type fmt
+.PHONY: up down ps logs-api migrate smoke ws-smoke test test-cov lint type fmt
 
 up:
 	$(COMPOSE) up -d db redis api
@@ -34,6 +34,10 @@ ws-smoke:
 
 test:
 	python -m pytest -q
+
+test-cov:
+	# Ejecuta pytest con reporte de cobertura (config en pyproject.toml/pytest.ini)
+	python -m pytest --cov=src --cov-report=term-missing
 
 lint:
 	ruff check .
