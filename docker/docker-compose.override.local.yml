@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    image: ghcr.io/eevans-d/grupo_gad/api:v1.0.0
+    ports:
+      - "127.0.0.1:8001:8000"

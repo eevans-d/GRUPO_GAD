@@ -45,7 +45,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """
     # Startup
     api_logger.info("Iniciando aplicación y conexión a la base de datos...")
-    init_db(str(settings.DATABASE_URL))
+    db_url = settings.assemble_db_url() if hasattr(settings, "assemble_db_url") else None
+    if not db_url:
+        # Fallback a variable de entorno directa si existe
+        import os
+        db_url = os.getenv("DATABASE_URL")
+    if not db_url:
+        api_logger.error("DATABASE_URL no configurada y no se pudo ensamblar desde POSTGRES_*.")
+        raise RuntimeError("DATABASE_URL no configurada")
+    init_db(db_url)
     app.state.start_time = time.time()
     api_logger.info("Conexión a la base de datos establecida.")
     
