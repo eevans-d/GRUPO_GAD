@@ -70,6 +70,26 @@ docker compose up -d --build
 ```
 
 
+### Atajos con Makefile (dev)
+```bash
+# Servicios
+make up            # levanta db, redis, api
+make ps            # estado de contenedores
+make logs-api      # logs de la API
+make migrate       # alembic upgrade head en el contenedor api
+
+# Validaciones
+make smoke         # /metrics y /api/v1/health
+make ws-smoke      # prueba E2E de WebSocket broadcast
+
+# Calidad
+make test          # pytest
+make test-cov      # pytest con cobertura
+make lint          # ruff
+make type          # mypy
+```
+
+
 ## 4. Endpoints Principales
 
 - `/auth/login` - Autenticación de usuarios
@@ -166,13 +186,22 @@ El estado de la build se muestra en el badge superior. Puedes ver las ejecucione
 
 - Imagen: el Dockerfile de la API (`docker/Dockerfile.api`) instala dependencias desde `requirements.lock` (pin de versiones) para builds reproducibles.
 - Orquestación: usa `docker/docker-compose.prod.yml` con un `.env.production`.
-- Arranque de la API: `scripts/start.sh` calcula `workers` dinámicamente y fija timeouts/keepalive de Gunicorn.
+ - Arranque de la API: `scripts/start.sh` ejecuta Uvicorn y calcula dinámicamente el número de workers (1 en dev; en prod (2xCPU)+1, mínimo 3, configurable con `UVICORN_WORKERS`).
  - Imagen publicada en GHCR: `ghcr.io/eevans-d/grupo_gad/api:v1.0.0` (también `:latest`).
 
 Desplegar con Docker Compose (producción):
 
 ```bash
 docker compose -f docker/docker-compose.prod.yml up -d --build
+```
+
+Atajos con Makefile (prod):
+```bash
+make prod-up         # levanta stack de producción local
+make prod-ps         # estado
+make prod-logs-api   # logs de API
+make prod-migrate    # alembic upgrade head
+make prod-smoke      # /metrics y /api/v1/health
 ```
 
 Usar imagen publicada en GHCR (opcional, tras merge/tag):
