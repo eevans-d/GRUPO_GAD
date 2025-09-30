@@ -27,6 +27,8 @@ from src.core.websocket_integration import (
     start_websocket_integration,
     stop_websocket_integration
 )
+from src.core.websockets import websocket_manager
+from src.core.ws_pubsub import RedisWebSocketPubSub  # opcional si hay Redis
 
 # --- Configuración de Logging Mejorado ---
 api_logger = setup_logging(
@@ -69,6 +71,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await start_websocket_integration()
     
     api_logger.info("Sistema de WebSockets iniciado correctamente.")
+
+    # Iniciar pub/sub Redis para broadcast cross-worker si está configurado
+    app.state.ws_pubsub = None
+    try:
+        redis_host = getattr(_settings, 'REDIS_HOST', None) or None
+        redis_port = getattr(_settings, 'REDIS_PORT', 6379)
+        redis_db = getattr(_settings, 'REDIS_DB', 0)
+        redis_password = getattr(_settings, 'REDIS_PASSWORD', None)
+        if redis_host:
+            scheme = "redis"
+            auth = f":{redis_password}@" if redis_password else ""
+            redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
+            pubsub = RedisWebSocketPubSub(redis_url)
+            websocket_manager.set_pubsub(pubsub)
+            await pubsub.start(websocket_manager)
+            app.state.ws_pubsub = pubsub
+            api_logger.info("Pub/Sub Redis para WebSockets habilitado", redis=redis_url)
+    except Exception as e:
+        api_logger.error(f"No se pudo iniciar pub/sub Redis: {e}")
     
     yield
     
@@ -79,6 +100,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     api_logger.info("Deteniendo sistema de WebSockets...")
     await websocket_event_emitter.stop()
     api_logger.info("Sistema de WebSockets detenido.")
+
+    # Detener pub/sub si estaba habilitado
+    try:
+        _pubsub = getattr(app.state, 'ws_pubsub', None)
+        if _pubsub is not None:
+            await _pubsub.stop()
+    except Exception:
+        pass
     
     api_logger.info("Cerrando conexión a la base de datos...")
     if async_engine:

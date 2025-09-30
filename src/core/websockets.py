@@ -108,8 +108,10 @@ class WebSocketManager:
         self.total_broadcasts = 0
         self.total_send_errors = 0
         self.last_broadcast_at: Optional[datetime] = None
+        # Pub/Sub (opcional): se inyecta en runtime
+        self._pubsub = None
         
-    ws_logger.info("WebSocketManager inicializado")
+        ws_logger.info("WebSocketManager inicializado")
     
     async def connect(self, websocket: WebSocket, user_id: Optional[int] = None, 
                      user_role: Optional[str] = None) -> str:
@@ -333,8 +335,53 @@ class WebSocketManager:
         if sent_count:
             self.total_broadcasts += 1
             self.last_broadcast_at = datetime.now()
+        # Publicar en pub/sub para otros workers (si está configurado)
+        try:
+            if self._pubsub is not None and message.event_type != EventType.PING:
+                await self._pubsub.publish(message.model_dump(mode='json'))
+        except Exception:
+            # No afectar envío local por errores de pub/sub
+            pass
 
         return sent_count
+
+    async def broadcast_local_dict(self, message_dict: Dict[str, Any]) -> int:
+        """Broadcast local desde un dict (usado por pub/sub) sin republicar.
+
+        Retorna el número de conexiones locales a las que se envió.
+        """
+        try:
+            evt = EventType(message_dict.get("event_type"))
+        except Exception:
+            return 0
+        if evt == EventType.PING:
+            # Evitar meter PINGs desde pub/sub
+            return 0
+        # Normalizar timestamp iso si falta
+        if "timestamp" not in message_dict:
+            message_dict["timestamp"] = datetime.now().isoformat()
+
+        exclude_connections: Set[str] = set()
+        sent_count = 0
+        for cid, info in list(self.active_connections.items()):
+            if cid in exclude_connections:
+                continue
+            try:
+                await info.websocket.send_text(json.dumps(message_dict))
+                if evt not in (EventType.CONNECTION_ACK, EventType.PING):
+                    self.total_messages_sent += 1
+                sent_count += 1
+            except Exception:
+                await self.disconnect(cid)
+                self.total_send_errors += 1
+        if sent_count:
+            self.total_broadcasts += 1
+            self.last_broadcast_at = datetime.now()
+        return sent_count
+
+    def set_pubsub(self, pubsub) -> None:
+        """Inyecta el bridge de pub/sub (por ejemplo, Redis)."""
+        self._pubsub = pubsub
     
     async def _heartbeat_loop(self):
         """Loop de heartbeat para mantener conexiones vivas."""
