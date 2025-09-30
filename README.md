@@ -187,7 +187,7 @@ El estado de la build se muestra en el badge superior. Puedes ver las ejecucione
 - Imagen: el Dockerfile de la API (`docker/Dockerfile.api`) instala dependencias desde `requirements.lock` (pin de versiones) para builds reproducibles.
 - Orquestación: usa `docker/docker-compose.prod.yml` con un `.env.production`.
  - Arranque de la API: `scripts/start.sh` ejecuta Uvicorn y calcula dinámicamente el número de workers (1 en dev; en prod (2xCPU)+1, mínimo 3, configurable con `UVICORN_WORKERS`).
- - Imagen publicada en GHCR: `ghcr.io/eevans-d/grupo_gad/api:v1.0.0` (también `:latest`).
+ - Imagen publicada en GHCR: `ghcr.io/eevans-d/grupo_gad/api:v1.1.0` (también `:latest`).
 
 ### WebSockets en Producción (cross-worker)
 
