@@ -1,0 +1,1755 @@
+{
+  "generated_at": "2025-10-01T09:05:08.452826",
+  "repository": "eevans-d/GRUPO_GAD",
+  "analysis_version": "1.0.0",
+  "note": "Análisis exhaustivo de 16 prompts para GRUPO_GAD",
+  "prompt_1_project_metadata": {
+    "project_metadata": {
+      "name": "GRUPO_GAD",
+      "version": "0.1.0",
+      "description": "Sistema de Gestión de Tareas para Personal Policial y Gestión Administrativa Gubernamental",
+      "repository_structure": {
+        "total_files": 114,
+        "total_lines_of_code": 12034,
+        "main_directories": [
+          {
+            "name": "src/api",
+            "purpose": "API endpoints, routers, middleware, services"
+          },
+          {
+            "name": "src/core",
+            "purpose": "Funcionalidades centrales: DB, WebSocket, logging, performance"
+          },
+          {
+            "name": "src/bot",
+            "purpose": "Bot de Telegram con handlers y comandos"
+          },
+          {
+            "name": "src/schemas",
+            "purpose": "Modelos Pydantic para validación de datos"
+          },
+          {
+            "name": "src/api/models",
+            "purpose": "Modelos SQLAlchemy ORM"
+          },
+          {
+            "name": "config",
+            "purpose": "Configuración centralizada (settings.py)"
+          },
+          {
+            "name": "alembic",
+            "purpose": "Migraciones de base de datos Alembic"
+          },
+          {
+            "name": "tests",
+            "purpose": "Suite de pruebas pytest"
+          },
+          {
+            "name": "docker",
+            "purpose": "Dockerfiles y docker-compose configs"
+          },
+          {
+            "name": "dashboard",
+            "purpose": "Frontend estático HTML/JS/CSS"
+          },
+          {
+            "name": "scripts",
+            "purpose": "Scripts de utilidad y automatización"
+          },
+          {
+            "name": "docs",
+            "purpose": "Documentación técnica y deployment"
+          }
+        ]
+      },
+      "primary_language": "Python",
+      "secondary_languages": [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "SQL",
+        "Shell"
+      ],
+      "build_system": "Poetry 2.x",
+      "package_manager": "Poetry / pip"
+    },
+    "evidence": {
+      "name_source": "pyproject.toml line 2, config/settings.py line 21, README.md",
+      "version_source": "pyproject.toml line 3, config/settings.py line 22",
+      "lines_of_code": "wc -l analysis on all .py files",
+      "structure_source": "Directory tree inspection"
+    }
+  },
+  "prompt_2_architecture": {
+    "architecture": {
+      "pattern": "Monolito modular con separación de servicios",
+      "justification": "Aplicación FastAPI principal con componentes separados (Bot, Cache Redis, DB PostGIS) orquestados via Docker Compose. No microservicios puros pero alta modularidad.",
+      "components": [
+        {
+          "name": "API FastAPI",
+          "type": "backend",
+          "location": "src/api/",
+          "primary_file": "src/api/main.py",
+          "language": "Python 3.12+",
+          "framework": "FastAPI >=0.115.0",
+          "purpose": "API REST principal, gestión de tareas, usuarios, autenticación, WebSockets",
+          "entry_point": "app = FastAPI(...) en main.py línea 118",
+          "dependencies_internal": [
+            "core.database",
+            "core.websockets",
+            "core.logging",
+            "api.routers"
+          ],
+          "dependencies_external": [
+            "PostgreSQL",
+            "Redis",
+            "Telegram API"
+          ],
+          "state_management": "stateless (excepto WebSocket connections)",
+          "estimated_lines_of_code": 8000
+        },
+        {
+          "name": "WebSocket System",
+          "type": "service",
+          "location": "src/core/websockets.py",
+          "primary_file": "src/core/websockets.py",
+          "language": "Python 3.12+",
+          "framework": "FastAPI WebSockets + Redis Pub/Sub",
+          "purpose": "Real-time notifications, dashboard updates, task status changes",
+          "entry_point": "websocket_manager instance (singleton)",
+          "dependencies_internal": [
+            "core.ws_pubsub",
+            "core.logging"
+          ],
+          "dependencies_external": [
+            "Redis (optional for multi-worker)"
+          ],
+          "state_management": "stateful - active connections in memory",
+          "estimated_lines_of_code": 600
+        },
+        {
+          "name": "Telegram Bot",
+          "type": "bot",
+          "location": "src/bot/",
+          "primary_file": "src/bot/main.py",
+          "language": "Python 3.12+",
+          "framework": "python-telegram-bot >=20.6",
+          "purpose": "Command interface and notifications via Telegram",
+          "entry_point": "bot application in main.py",
+          "dependencies_internal": [],
+          "dependencies_external": [
+            "Telegram Bot API",
+            "API Backend (HTTP)"
+          ],
+          "state_management": "stateless",
+          "estimated_lines_of_code": 2000
+        },
+        {
+          "name": "Database Layer",
+          "type": "database",
+          "location": "src/core/database.py, src/api/models/",
+          "primary_file": "src/core/database.py",
+          "language": "Python 3.12+",
+          "framework": "SQLAlchemy 2.0+ Async ORM",
+          "purpose": "Async DB connections, models, queries",
+          "entry_point": "init_db(), get_db_session() dependency",
+          "dependencies_internal": [
+            "config.settings",
+            "api.models.*"
+          ],
+          "dependencies_external": [
+            "PostgreSQL 15+",
+            "PostGIS 3.4",
+            "asyncpg"
+          ],
+          "state_management": "stateless with connection pooling",
+          "estimated_lines_of_code": 1500
+        },
+        {
+          "name": "Authentication Module",
+          "type": "module",
+          "location": "src/api/routers/auth.py",
+          "primary_file": "src/api/routers/auth.py",
+          "language": "Python 3.12+",
+          "framework": "python-jose (JWT), passlib (bcrypt)",
+          "purpose": "JWT tokens, password hashing, user authentication",
+          "entry_point": "/auth/login endpoint",
+          "dependencies_internal": [
+            "api.models.usuario",
+            "schemas"
+          ],
+          "dependencies_external": [],
+          "state_management": "stateless (JWT)",
+          "estimated_lines_of_code": 400
+        }
+      ],
+      "communication_patterns": [
+        {
+          "from": "API",
+          "to": "PostgreSQL",
+          "type": "Database queries",
+          "protocol": "PostgreSQL wire (asyncpg)",
+          "evidence": "src/core/database.py"
+        },
+        {
+          "from": "API",
+          "to": "Redis",
+          "type": "Cache + Pub/Sub",
+          "protocol": "Redis protocol",
+          "evidence": "src/core/ws_pubsub.py, src/api/main.py:86"
+        },
+        {
+          "from": "Bot",
+          "to": "API",
+          "type": "REST",
+          "protocol": "HTTP/HTTPS",
+          "evidence": "src/bot/services/"
+        },
+        {
+          "from": "Dashboard",
+          "to": "API",
+          "type": "REST + WebSocket",
+          "protocol": "HTTP + WS",
+          "evidence": "dashboard/static/"
+        }
+      ]
+    }
+  },
+  "prompt_3_agents": {
+    "agents": [],
+    "rag_system": {
+      "present": false
+    },
+    "note": "No AI agents, LLM components, or RAG systems detected. Traditional web application."
+  },
+  "prompt_4_dependencies": {
+    "dependencies": {
+      "production": [
+        {
+          "name": "fastapi",
+          "version": ">=0.115.0,<1.0.0",
+          "purpose": "Web framework",
+          "criticality": "critical"
+        },
+        {
+          "name": "sqlalchemy[asyncio]",
+          "version": ">=2.0.25,<3.0.0",
+          "purpose": "Async ORM",
+          "criticality": "critical"
+        },
+        {
+          "name": "pydantic",
+          "version": ">=2.8.0,<3.0.0",
+          "purpose": "Data validation",
+          "criticality": "critical"
+        },
+        {
+          "name": "pydantic-settings",
+          "version": ">=2.2.1,<3.0.0",
+          "purpose": "Settings management",
+          "criticality": "critical"
+        },
+        {
+          "name": "uvicorn[standard]",
+          "version": ">=0.30.0,<1.0.0",
+          "purpose": "ASGI server",
+          "criticality": "critical"
+        },
+        {
+          "name": "asyncpg",
+          "version": ">=0.29.0,<1.0.0",
+          "purpose": "PostgreSQL async driver",
+          "criticality": "critical"
+        },
+        {
+          "name": "alembic",
+          "version": ">=1.13.2,<2.0.0",
+          "purpose": "DB migrations",
+          "criticality": "high"
+        },
+        {
+          "name": "python-jose[cryptography]",
+          "version": ">=3.3.0,<4.0.0",
+          "purpose": "JWT tokens",
+          "criticality": "high"
+        },
+        {
+          "name": "passlib[bcrypt]",
+          "version": ">=1.7.4,<2.0.0",
+          "purpose": "Password hashing",
+          "criticality": "high"
+        },
+        {
+          "name": "redis",
+          "version": ">=5.0.0,<6.0.0",
+          "purpose": "Cache and pub/sub",
+          "criticality": "high"
+        },
+        {
+          "name": "httpx",
+          "version": ">=0.27.0,<1.0.0",
+          "purpose": "HTTP client",
+          "criticality": "medium"
+        },
+        {
+          "name": "loguru",
+          "version": ">=0.7.2,<1.0.0",
+          "purpose": "Enhanced logging",
+          "criticality": "medium"
+        },
+        {
+          "name": "gunicorn",
+          "version": ">=22.0.0,<23.0.0",
+          "purpose": "Production WSGI server",
+          "criticality": "high"
+        },
+        {
+          "name": "tenacity",
+          "version": ">=8.2.3,<9.0.0",
+          "purpose": "Retry logic",
+          "criticality": "medium"
+        }
+      ],
+      "development": [
+        {
+          "name": "pytest",
+          "version": "^8.4.2",
+          "purpose": "Testing framework"
+        },
+        {
+          "name": "pytest-asyncio",
+          "version": "^1.2.0",
+          "purpose": "Async test support"
+        },
+        {
+          "name": "pytest-cov",
+          "version": "^7.0.0",
+          "purpose": "Coverage reporting"
+        },
+        {
+          "name": "ruff",
+          "version": "^0.13.0",
+          "purpose": "Linting"
+        },
+        {
+          "name": "mypy",
+          "version": "^1.18.1",
+          "purpose": "Static type checking"
+        },
+        {
+          "name": "websockets",
+          "version": "^15.0.1",
+          "purpose": "WebSocket client testing"
+        },
+        {
+          "name": "aiosqlite",
+          "version": "^0.21.0",
+          "purpose": "SQLite async for tests"
+        }
+      ],
+      "system_dependencies": [
+        {
+          "name": "PostgreSQL",
+          "version": "15+",
+          "purpose": "Primary database",
+          "evidence": "docker-compose.yml"
+        },
+        {
+          "name": "PostGIS",
+          "version": "3.4",
+          "purpose": "Geospatial extension",
+          "evidence": "docker image postgis/postgis:15-3.4"
+        },
+        {
+          "name": "Redis",
+          "version": "7.2",
+          "purpose": "Cache and pub/sub",
+          "evidence": "docker-compose.yml"
+        },
+        {
+          "name": "Docker",
+          "version": "latest",
+          "purpose": "Containerization",
+          "evidence": "Dockerfiles"
+        },
+        {
+          "name": "Python",
+          "version": "3.12+",
+          "purpose": "Runtime",
+          "evidence": "pyproject.toml requires-python"
+        }
+      ]
+    },
+    "frameworks_and_libraries": {
+      "web_framework": "FastAPI >=0.115.0",
+      "ai_frameworks": [],
+      "database_orm": "SQLAlchemy 2.0+ Async",
+      "testing_framework": "pytest 8.4+",
+      "async_framework": "asyncio (built-in), uvicorn"
+    },
+    "infrastructure": {
+      "containerization": "Docker",
+      "orchestration": "Docker Compose",
+      "ci_cd": "GitHub Actions",
+      "evidence_files": [
+        "docker-compose.yml",
+        "docker/Dockerfile.api",
+        ".github/workflows/ci.yml"
+      ]
+    }
+  },
+  "prompt_5_interfaces": {
+    "interfaces": [
+      {
+        "type": "REST API",
+        "endpoint_or_topic": "/api/v1/auth/login",
+        "method": "POST",
+        "location": "src/api/routers/auth.py:20-40",
+        "input_schema": {
+          "description": "OAuth2 form with username and password",
+          "parameters": [
+            {
+              "name": "username",
+              "type": "string",
+              "required": true,
+              "validation": "non-empty string"
+            },
+            {
+              "name": "password",
+              "type": "string",
+              "required": true,
+              "validation": "non-empty string"
+            }
+          ],
+          "schema_location": "OAuth2PasswordRequestForm (FastAPI)"
+        },
+        "output_schema": {
+          "description": "JWT access token",
+          "schema_location": "schemas (Token model)"
+        },
+        "authentication": {
+          "required": false,
+          "method": "none",
+          "location": "N/A (login endpoint)"
+        },
+        "rate_limiting": {
+          "present": false,
+          "limits": "N/A",
+          "location": "N/A"
+        },
+        "error_handling": {
+          "status_codes": [
+            "200",
+            "401",
+            "422"
+          ],
+          "error_format": "{detail: string, errors: array}",
+          "location": "src/api/main.py:198-211 (validation handler)"
+        }
+      },
+      {
+        "type": "REST API",
+        "endpoint_or_topic": "/api/v1/tasks/",
+        "method": "GET, POST",
+        "location": "src/api/routers/tasks.py",
+        "input_schema": {
+          "description": "Task creation/retrieval",
+          "parameters": [
+            {
+              "name": "titulo",
+              "type": "string",
+              "required": true,
+              "validation": "Pydantic validation"
+            },
+            {
+              "name": "tipo",
+              "type": "enum",
+              "required": true,
+              "validation": "TipoTarea enum"
+            },
+            {
+              "name": "delegado_usuario_id",
+              "type": "int",
+              "required": true,
+              "validation": "FK to users"
+            }
+          ],
+          "schema_location": "src/schemas/ (TareaCreate)"
+        },
+        "output_schema": {
+          "description": "Task model",
+          "schema_location": "schemas (Tarea)"
+        },
+        "authentication": {
+          "required": true,
+          "method": "JWT",
+          "location": "Depends(get_current_user)"
+        },
+        "rate_limiting": {
+          "present": false,
+          "limits": "N/A",
+          "location": "N/A"
+        },
+        "error_handling": {
+          "status_codes": [
+            "200",
+            "201",
+            "401",
+            "403",
+            "404",
+            "422"
+          ],
+          "error_format": "{detail: string}",
+          "location": "src/api/main.py validation handler"
+        }
+      },
+      {
+        "type": "WebSocket",
+        "endpoint_or_topic": "/ws/connect",
+        "method": "N/A",
+        "location": "src/api/routers/websockets.py:60-120",
+        "input_schema": {
+          "description": "WebSocket connection, optional JWT token in query param",
+          "parameters": [
+            {
+              "name": "token",
+              "type": "string (query)",
+              "required": false,
+              "validation": "JWT if ENVIRONMENT=production"
+            }
+          ],
+          "schema_location": "N/A (connection)"
+        },
+        "output_schema": {
+          "description": "WSMessage model with event_type and data",
+          "schema_location": "src/core/websockets.py:60-68 (WSMessage)"
+        },
+        "authentication": {
+          "required": "In production only",
+          "method": "JWT",
+          "location": "src/api/routers/websockets.py:70-85"
+        },
+        "rate_limiting": {
+          "present": false,
+          "limits": "N/A",
+          "location": "N/A"
+        },
+        "error_handling": {
+          "status_codes": [
+            "N/A (WebSocket)"
+          ],
+          "error_format": "Disconnection on error",
+          "location": "websockets.py try/except blocks"
+        }
+      },
+      {
+        "type": "REST API",
+        "endpoint_or_topic": "/metrics",
+        "method": "GET",
+        "location": "src/api/main.py:272-280",
+        "input_schema": {
+          "description": "No parameters",
+          "parameters": [],
+          "schema_location": "N/A"
+        },
+        "output_schema": {
+          "description": "Prometheus-style metrics text",
+          "schema_location": "PlainTextResponse"
+        },
+        "authentication": {
+          "required": false,
+          "method": "none",
+          "location": "N/A"
+        },
+        "rate_limiting": {
+          "present": false,
+          "limits": "N/A",
+          "location": "N/A"
+        },
+        "error_handling": {
+          "status_codes": [
+            "200"
+          ],
+          "error_format": "N/A",
+          "location": "N/A"
+        }
+      }
+    ],
+    "internal_contracts": [
+      {
+        "from": "routers",
+        "to": "database",
+        "function_or_method": "get_db_session()",
+        "parameters": "None (dependency)",
+        "return_type": "AsyncSession",
+        "location": "src/core/database.py:80-95"
+      },
+      {
+        "from": "routers",
+        "to": "auth",
+        "function_or_method": "get_current_user()",
+        "parameters": "token: str",
+        "return_type": "Usuario model",
+        "location": "src/api/routers/auth.py"
+      }
+    ]
+  },
+  "prompt_6_critical_flows": {
+    "critical_flows": [
+      {
+        "name": "User Authentication Flow",
+        "description": "Usuario inicia sesión, recibe JWT token",
+        "business_criticality": "high",
+        "estimated_frequency": "frequent (every user session start)",
+        "trigger": "POST /api/v1/auth/login",
+        "entry_point": {
+          "file": "src/api/routers/auth.py",
+          "function": "login",
+          "line": "20-40 (approx)"
+        },
+        "steps": [
+          {
+            "step_number": 1,
+            "component": "auth.router",
+            "action": "Validate username/password form data",
+            "file_location": "src/api/routers/auth.py",
+            "function": "login",
+            "external_calls": [],
+            "database_operations": [
+              "SELECT user by username"
+            ],
+            "decision_points": [
+              "if user not found -> 401",
+              "if password invalid -> 401"
+            ],
+            "error_handling": "HTTPException on invalid credentials"
+          },
+          {
+            "step_number": 2,
+            "component": "auth service",
+            "action": "Verify password hash with bcrypt",
+            "file_location": "src/api/routers/auth.py",
+            "function": "verify_password",
+            "external_calls": [],
+            "database_operations": [],
+            "decision_points": [
+              "if hash doesn't match -> False"
+            ],
+            "error_handling": "Return False on mismatch"
+          },
+          {
+            "step_number": 3,
+            "component": "auth service",
+            "action": "Generate JWT token with user info",
+            "file_location": "src/api/routers/auth.py",
+            "function": "create_access_token",
+            "external_calls": [],
+            "database_operations": [],
+            "decision_points": [],
+            "error_handling": "N/A (encoding should not fail)"
+          }
+        ],
+        "data_flow": [
+          {
+            "from": "Client",
+            "to": "API",
+            "transformation": "form data",
+            "validation": "OAuth2PasswordRequestForm"
+          },
+          {
+            "from": "API",
+            "to": "Database",
+            "transformation": "query",
+            "validation": "N/A"
+          },
+          {
+            "from": "Database",
+            "to": "API",
+            "transformation": "User record",
+            "validation": "N/A"
+          },
+          {
+            "from": "API",
+            "to": "Client",
+            "transformation": "JWT token",
+            "validation": "N/A"
+          }
+        ],
+        "dependencies": {
+          "internal_components": [
+            "database",
+            "usuario model"
+          ],
+          "external_services": [],
+          "databases": [
+            "PostgreSQL"
+          ],
+          "caches": []
+        },
+        "sla_requirements": {
+          "documented": false,
+          "max_latency_ms": null,
+          "min_availability": null,
+          "source": "N/A"
+        }
+      },
+      {
+        "name": "Task Creation and WebSocket Broadcast",
+        "description": "Usuario crea tarea, se broadcast a dashboard via WebSocket",
+        "business_criticality": "high",
+        "estimated_frequency": "medium (multiple times per day)",
+        "trigger": "POST /api/v1/tasks/",
+        "entry_point": {
+          "file": "src/api/routers/tasks.py",
+          "function": "create_task",
+          "line": "30-70 (approx)"
+        },
+        "steps": [
+          {
+            "step_number": 1,
+            "component": "tasks.router",
+            "action": "Validate task data with Pydantic",
+            "file_location": "src/api/routers/tasks.py",
+            "function": "create_task",
+            "external_calls": [],
+            "database_operations": [
+              "INSERT task"
+            ],
+            "decision_points": [
+              "if validation fails -> 422"
+            ],
+            "error_handling": "Pydantic ValidationError -> 422"
+          },
+          {
+            "step_number": 2,
+            "component": "database layer",
+            "action": "Insert task into DB and commit",
+            "file_location": "src/api/routers/tasks.py",
+            "function": "create_task",
+            "external_calls": [],
+            "database_operations": [
+              "INSERT",
+              "COMMIT"
+            ],
+            "decision_points": [
+              "if DB error -> rollback"
+            ],
+            "error_handling": "SQLAlchemy exception handling"
+          },
+          {
+            "step_number": 3,
+            "component": "websocket middleware",
+            "action": "Broadcast TASK_CREATED event to all WebSocket clients",
+            "file_location": "src/api/middleware/websockets.py",
+            "function": "emit_task_event",
+            "external_calls": [
+              "Redis pub if multi-worker"
+            ],
+            "database_operations": [],
+            "decision_points": [],
+            "error_handling": "Log error if broadcast fails, don't block response"
+          }
+        ],
+        "data_flow": [
+          {
+            "from": "Client",
+            "to": "API",
+            "transformation": "JSON task data",
+            "validation": "TareaCreate schema"
+          },
+          {
+            "from": "API",
+            "to": "Database",
+            "transformation": "INSERT query",
+            "validation": "N/A"
+          },
+          {
+            "from": "API",
+            "to": "WebSocket Manager",
+            "transformation": "WSMessage",
+            "validation": "WSMessage schema"
+          },
+          {
+            "from": "WebSocket Manager",
+            "to": "All WS clients",
+            "transformation": "JSON event",
+            "validation": "N/A"
+          }
+        ],
+        "dependencies": {
+          "internal_components": [
+            "database",
+            "websocket_manager",
+            "schemas"
+          ],
+          "external_services": [
+            "Redis (if multi-worker)"
+          ],
+          "databases": [
+            "PostgreSQL"
+          ],
+          "caches": [
+            "Redis"
+          ]
+        },
+        "sla_requirements": {
+          "documented": false,
+          "max_latency_ms": null,
+          "min_availability": null,
+          "source": "N/A"
+        }
+      },
+      {
+        "name": "Geolocation Query",
+        "description": "Find nearby efectivos using PostGIS spatial queries",
+        "business_criticality": "medium",
+        "estimated_frequency": "low to medium",
+        "trigger": "GET /api/v1/geo/nearby",
+        "entry_point": {
+          "file": "src/api/routers/geo.py",
+          "function": "find_nearby",
+          "line": "50-100 (approx)"
+        },
+        "steps": [
+          {
+            "step_number": 1,
+            "component": "geo.router",
+            "action": "Validate lat/lng parameters",
+            "file_location": "src/api/routers/geo.py",
+            "function": "find_nearby",
+            "external_calls": [],
+            "database_operations": [],
+            "decision_points": [
+              "if invalid coords -> 422"
+            ],
+            "error_handling": "Pydantic validation"
+          },
+          {
+            "step_number": 2,
+            "component": "database layer",
+            "action": "Execute PostGIS ST_DWithin query",
+            "file_location": "src/api/routers/geo.py",
+            "function": "find_nearby",
+            "external_calls": [],
+            "database_operations": [
+              "SELECT with spatial query"
+            ],
+            "decision_points": [],
+            "error_handling": "SQLAlchemy exception"
+          }
+        ],
+        "data_flow": [
+          {
+            "from": "Client",
+            "to": "API",
+            "transformation": "lat, lng, radius params",
+            "validation": "query params"
+          },
+          {
+            "from": "API",
+            "to": "Database",
+            "transformation": "PostGIS query",
+            "validation": "N/A"
+          },
+          {
+            "from": "Database",
+            "to": "API",
+            "transformation": "List of efectivos",
+            "validation": "N/A"
+          },
+          {
+            "from": "API",
+            "to": "Client",
+            "transformation": "JSON array",
+            "validation": "N/A"
+          }
+        ],
+        "dependencies": {
+          "internal_components": [
+            "database",
+            "geo models"
+          ],
+          "external_services": [],
+          "databases": [
+            "PostgreSQL with PostGIS"
+          ],
+          "caches": []
+        },
+        "sla_requirements": {
+          "documented": false,
+          "max_latency_ms": null,
+          "min_availability": null,
+          "source": "N/A"
+        }
+      }
+    ],
+    "use_cases": [
+      {
+        "name": "Officer Task Assignment",
+        "description": "Admin assigns patrol task to officer",
+        "actor": "Admin user",
+        "flows_involved": [
+          "User Authentication Flow",
+          "Task Creation and WebSocket Broadcast"
+        ],
+        "evidence": "tests/, docs/FUNCTIONAL_ANALYSIS.md"
+      },
+      {
+        "name": "Real-time Dashboard Monitoring",
+        "description": "Supervisor monitors active tasks and officer locations",
+        "actor": "Supervisor user",
+        "flows_involved": [
+          "User Authentication Flow",
+          "WebSocket connection",
+          "Geolocation Query"
+        ],
+        "evidence": "dashboard/static/, docs/"
+      }
+    ]
+  },
+  "prompt_7_configuration": {
+    "configuration": {
+      "config_files": [
+        {
+          "file": ".env",
+          "format": ".env",
+          "purpose": "Environment variables (not in repo)",
+          "contains_secrets": true,
+          "environment_specific": "all"
+        },
+        {
+          "file": ".env.example",
+          "format": ".env",
+          "purpose": "Template for env vars",
+          "contains_secrets": false,
+          "environment_specific": "all"
+        },
+        {
+          "file": "config/settings.py",
+          "format": "Python",
+          "purpose": "Pydantic Settings class",
+          "contains_secrets": false,
+          "environment_specific": "all"
+        },
+        {
+          "file": "alembic.ini",
+          "format": "INI",
+          "purpose": "Alembic migration config",
+          "contains_secrets": false,
+          "environment_specific": "all"
+        },
+        {
+          "file": "docker-compose.yml",
+          "format": "YAML",
+          "purpose": "Dev environment orchestration",
+          "contains_secrets": false,
+          "environment_specific": "development"
+        },
+        {
+          "file": "docker-compose.prod.yml",
+          "format": "YAML",
+          "purpose": "Production orchestration",
+          "contains_secrets": false,
+          "environment_specific": "production"
+        },
+        {
+          "file": "pytest.ini",
+          "format": "INI",
+          "purpose": "Test configuration",
+          "contains_secrets": false,
+          "environment_specific": "development"
+        },
+        {
+          "file": "pyproject.toml",
+          "format": "TOML",
+          "purpose": "Poetry dependencies and tool configs",
+          "contains_secrets": false,
+          "environment_specific": "all"
+        }
+      ],
+      "environment_variables": [
+        {
+          "name": "DATABASE_URL",
+          "required": true,
+          "default_value": null,
+          "purpose": "Primary DB connection string",
+          "locations_used": [
+            "config/settings.py",
+            "src/core/database.py",
+            "alembic/env.py"
+          ],
+          "appears_to_be_secret": true
+        },
+        {
+          "name": "SECRET_KEY",
+          "required": true,
+          "default_value": null,
+          "purpose": "JWT signing key",
+          "locations_used": [
+            "config/settings.py",
+            "src/api/routers/auth.py"
+          ],
+          "appears_to_be_secret": true
+        },
+        {
+          "name": "POSTGRES_USER",
+          "required": true,
+          "default_value": null,
+          "purpose": "PostgreSQL username",
+          "locations_used": [
+            "config/settings.py",
+            "docker-compose.yml"
+          ],
+          "appears_to_be_secret": false
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "required": true,
+          "default_value": null,
+          "purpose": "PostgreSQL password",
+          "locations_used": [
+            "config/settings.py",
+            "docker-compose.yml"
+          ],
+          "appears_to_be_secret": true
+        },
+        {
+          "name": "POSTGRES_DB",
+          "required": true,
+          "default_value": null,
+          "purpose": "PostgreSQL database name",
+          "locations_used": [
+            "config/settings.py",
+            "docker-compose.yml"
+          ],
+          "appears_to_be_secret": false
+        },
+        {
+          "name": "REDIS_HOST",
+          "required": false,
+          "default_value": "redis",
+          "purpose": "Redis server host",
+          "locations_used": [
+            "config/settings.py",
+            "src/api/main.py"
+          ],
+          "appears_to_be_secret": false
+        },
+        {
+          "name": "REDIS_PASSWORD",
+          "required": false,
+          "default_value": null,
+          "purpose": "Redis password",
+          "locations_used": [
+            "config/settings.py"
+          ],
+          "appears_to_be_secret": true
+        },
+        {
+          "name": "TELEGRAM_TOKEN",
+          "required": true,
+          "default_value": null,
+          "purpose": "Telegram bot token",
+          "locations_used": [
+            "config/settings.py",
+            "src/bot/"
+          ],
+          "appears_to_be_secret": true
+        },
+        {
+          "name": "ENVIRONMENT",
+          "required": false,
+          "default_value": "development",
+          "purpose": "Environment name (dev/staging/prod)",
+          "locations_used": [
+            "config/settings.py",
+            "src/api/main.py"
+          ],
+          "appears_to_be_secret": false
+        },
+        {
+          "name": "LOG_LEVEL",
+          "required": false,
+          "default_value": "INFO",
+          "purpose": "Logging verbosity",
+          "locations_used": [
+            "config/settings.py",
+            "src/core/logging.py"
+          ],
+          "appears_to_be_secret": false
+        },
+        {
+          "name": "CORS_ALLOWED_ORIGINS",
+          "required": false,
+          "default_value": "",
+          "purpose": "CORS allowed origins (comma-separated)",
+          "locations_used": [
+            "config/settings.py",
+            "src/api/main.py"
+          ],
+          "appears_to_be_secret": false
+        }
+      ],
+      "secrets_management": {
+        "method": "environment variables loaded from .env files",
+        "evidence": "python-dotenv loads .env, Pydantic Settings reads from environment",
+        "hardcoded_secrets_found": false,
+        "locations": []
+      },
+      "database_config": {
+        "connection_string_location": "config/settings.py DATABASE_URL field",
+        "connection_pooling": "Yes, configured with DB_POOL_SIZE=10, DB_MAX_OVERFLOW=20",
+        "migrations_present": true,
+        "migrations_location": "alembic/"
+      },
+      "logging_config": {
+        "framework": "loguru + Python logging",
+        "log_levels": [
+          "DEBUG",
+          "INFO",
+          "WARNING",
+          "ERROR",
+          "CRITICAL"
+        ],
+        "log_destinations": [
+          "console",
+          "file (optional via LOG_FILE)"
+        ],
+        "structured_logging": true,
+        "sensitive_data_filtering": "Partial - query params redacted in request logs (src/api/main.py:226)"
+      }
+    }
+  },
+  "prompt_8_error_handling": {
+    "error_handling": {
+      "global_error_handlers": [
+        {
+          "type": "Exception handler decorator",
+          "location": "src/api/main.py:197-211",
+          "handles": [
+            "RequestValidationError (Pydantic)"
+          ],
+          "action": "Return 422 with structured error details"
+        },
+        {
+          "type": "Middleware",
+          "location": "src/api/main.py:217-267 (log_requests middleware)",
+          "handles": [
+            "All exceptions during request processing"
+          ],
+          "action": "Log error with context, re-raise exception"
+        }
+      ],
+      "exception_patterns": [
+        {
+          "pattern": "try-except with logging",
+          "frequency": "common (50+ occurrences estimated)",
+          "common_locations": [
+            "src/api/routers/*",
+            "src/core/*",
+            "src/bot/handlers/*"
+          ]
+        },
+        {
+          "pattern": "HTTPException raises",
+          "frequency": "very common in routers",
+          "common_locations": [
+            "src/api/routers/auth.py",
+            "src/api/routers/tasks.py"
+          ]
+        }
+      ],
+      "unhandled_exception_risks": [
+        {
+          "location": "src/core/websockets.py - WebSocket send operations",
+          "risk": "send() can raise RuntimeError if connection closed",
+          "exception_types": [
+            "RuntimeError",
+            "ConnectionClosed"
+          ]
+        },
+        {
+          "location": "src/api/routers/websockets.py - WebSocket accept",
+          "risk": "accept() can fail if protocol mismatch",
+          "exception_types": [
+            "WebSocketException"
+          ]
+        }
+      ],
+      "silent_failures": [
+        {
+          "location": "src/api/middleware/websockets.py",
+          "pattern": "Exception logged but not raised in background tasks",
+          "severity": "medium"
+        }
+      ],
+      "timeout_handling": {
+        "http_requests": {
+          "default_timeout": "Not explicitly configured (httpx default)",
+          "locations": [
+            "src/bot/services/ - HTTP calls to API"
+          ]
+        },
+        "database_queries": {
+          "timeout_configured": false,
+          "location": "N/A - relies on asyncpg defaults"
+        },
+        "agent_execution": {
+          "timeout_configured": false,
+          "location": "N/A - no agents"
+        }
+      },
+      "retry_mechanisms": [
+        {
+          "location": "N/A",
+          "strategy": "No explicit retry decorators found",
+          "max_retries": 0,
+          "applies_to": "N/A"
+        }
+      ]
+    }
+  },
+  "prompt_9_security": {
+    "security": {
+      "input_validation": [
+        {
+          "endpoint_or_function": "/api/v1/auth/login",
+          "validation_method": "OAuth2PasswordRequestForm (FastAPI/Pydantic)",
+          "validates": [
+            "username",
+            "password"
+          ],
+          "location": "src/api/routers/auth.py:20",
+          "sanitization": true
+        },
+        {
+          "endpoint_or_function": "/api/v1/tasks/ (POST)",
+          "validation_method": "Pydantic schemas (TareaCreate)",
+          "validates": [
+            "titulo",
+            "tipo",
+            "delegado_usuario_id",
+            "dates"
+          ],
+          "location": "src/api/routers/tasks.py",
+          "sanitization": true
+        },
+        {
+          "endpoint_or_function": "All API endpoints",
+          "validation_method": "Pydantic v2 with automatic validation",
+          "validates": [
+            "Request body, query params, path params"
+          ],
+          "location": "FastAPI + Pydantic integration",
+          "sanitization": true
+        }
+      ],
+      "authentication": {
+        "method": "JWT (JSON Web Tokens)",
+        "implementation": "python-jose library",
+        "location": "src/api/routers/auth.py",
+        "password_hashing": "bcrypt via passlib",
+        "token_expiration": "30 minutes (ACCESS_TOKEN_EXPIRE_MINUTES)"
+      },
+      "authorization": {
+        "method": "Simple role checks, dependency injection",
+        "implementation": "get_current_user dependency checks user existence",
+        "location": "src/api/routers/auth.py, routers use Depends(get_current_user)"
+      },
+      "sql_injection_protection": {
+        "orm_used": true,
+        "parameterized_queries": true,
+        "raw_sql_locations": []
+      },
+      "xss_protection": {
+        "output_escaping": "Yes - Pydantic models serialize safely to JSON",
+        "csp_headers": true,
+        "location": "src/api/main.py:150-152 (CSP header for /api/*)"
+      },
+      "cors_configuration": {
+        "configured": true,
+        "allowed_origins": "Configurable via CORS_ALLOWED_ORIGINS env var",
+        "location": "src/api/main.py:186-194"
+      },
+      "secrets_in_code": {
+        "found": false,
+        "locations": [],
+        "types": []
+      },
+      "dependencies_vulnerabilities": {
+        "scan_needed": true,
+        "known_issues": []
+      }
+    }
+  },
+  "prompt_10_testing": {
+    "testing": {
+      "test_framework": "pytest 8.4.2",
+      "test_structure": {
+        "unit_tests_directory": "tests/",
+        "integration_tests_directory": "tests/ (mixed with unit)",
+        "e2e_tests_directory": "tests/ (some E2E tests present)"
+      },
+      "test_coverage": {
+        "coverage_tool": "pytest-cov",
+        "coverage_config_file": "pytest.ini, pyproject.toml",
+        "last_coverage_report": "85% minimum required (pytest.ini line 95)"
+      },
+      "test_statistics": {
+        "total_test_files": 30,
+        "estimated_total_tests": "150+ (based on 30 test files)",
+        "critical_flows_tested": [
+          "Authentication",
+          "Task CRUD",
+          "WebSocket connections"
+        ]
+      },
+      "test_types_present": {
+        "unit_tests": true,
+        "integration_tests": true,
+        "e2e_tests": true,
+        "property_based_tests": false,
+        "performance_tests": false,
+        "security_tests": false
+      },
+      "mocking_strategy": {
+        "mocking_library": "pytest fixtures, unittest.mock",
+        "external_services_mocked": true,
+        "database_mocked": "Yes - SQLite in-memory for tests (pytest.ini env DATABASE_URL=sqlite+aiosqlite:///:memory:)"
+      },
+      "ci_cd_integration": {
+        "tests_run_on_ci": true,
+        "ci_config_file": ".github/workflows/ci.yml",
+        "test_commands": [
+          "pytest --disable-warnings -v --cov=src --cov-report=term-missing"
+        ]
+      }
+    },
+    "code_quality": {
+      "linters_configured": [
+        {
+          "tool": "ruff",
+          "config_file": "pyproject.toml",
+          "rules_customized": true
+        }
+      ],
+      "formatters_configured": [
+        {
+          "tool": "ruff (also formats)",
+          "config_file": "pyproject.toml"
+        }
+      ],
+      "static_analysis": [
+        {
+          "tool": "mypy",
+          "config_file": "pyproject.toml"
+        }
+      ],
+      "pre_commit_hooks": {
+        "configured": true,
+        "hooks": [
+          "ruff",
+          "mypy (likely)"
+        ],
+        "config_file": ".pre-commit-config.yaml"
+      }
+    }
+  },
+  "prompt_11_performance": {
+    "performance": {
+      "monitoring_tools": {
+        "apm_tool": "none (basic metrics only)",
+        "logging_service": "loguru + file logs",
+        "metrics_exported": true,
+        "evidence": "/metrics endpoint (src/api/main.py:272-280), prometheus format"
+      },
+      "performance_metrics_in_code": [
+        {
+          "metric_type": "latency",
+          "location": "src/api/main.py:217-267 (request timing middleware)",
+          "tool": "time.time() for duration tracking"
+        },
+        {
+          "metric_type": "uptime",
+          "location": "src/api/main.py:/metrics endpoint",
+          "tool": "app_uptime_seconds metric"
+        },
+        {
+          "metric_type": "request metrics",
+          "location": "src/core/performance.py (performance_middleware.record_request)",
+          "tool": "Custom metrics recording"
+        }
+      ],
+      "caching": {
+        "cache_used": "Redis",
+        "cache_locations": [
+          "Available but not heavily used in code review"
+        ],
+        "cache_invalidation_strategy": "N/A - cache primarily for pub/sub",
+        "ttl_configured": false
+      },
+      "database_optimization": {
+        "indexes_defined": true,
+        "query_optimization": "SQLAlchemy ORM with async, relationship lazy loading",
+        "connection_pooling": true,
+        "evidence": "config/settings.py DB_POOL_SIZE, DB_MAX_OVERFLOW, src/core/database.py"
+      },
+      "async_processing": {
+        "async_framework": "asyncio",
+        "background_jobs": false,
+        "queue_system": "none",
+        "locations": [
+          "All routers use async def, database is async"
+        ]
+      },
+      "rate_limiting": {
+        "implemented": false,
+        "method": "N/A",
+        "limits": "N/A",
+        "location": "N/A"
+      }
+    },
+    "scalability": {
+      "horizontal_scaling_ready": "Partially - needs Redis for WebSocket in multi-worker",
+      "stateless_design": "Mostly stateless except WebSocket connections",
+      "database_sharding": false,
+      "load_balancing": "Not configured in code, would be external (Caddy/nginx)"
+    }
+  },
+  "prompt_12_logging": {
+    "logging": {
+      "logging_framework": "loguru + Python logging",
+      "log_levels_used": [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR",
+        "CRITICAL"
+      ],
+      "structured_logging": true,
+      "log_format": "JSON in production (src/api/main.py:39), text in development",
+      "sensitive_data_in_logs": {
+        "risk": "low",
+        "evidence": "Query params are redacted in main.py:226"
+      },
+      "log_locations": {
+        "development": "console",
+        "production": "console + optional file (LOG_FILE env var)",
+        "configuration": "src/core/logging.py, src/api/main.py:34-40"
+      }
+    },
+    "historical_issues": {
+      "error_patterns_in_logs": [],
+      "todo_fixme_comments": [
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/api/routers/websockets.py:246",
+          "content": "# TODO: Implementar lógica real de dashboard",
+          "type": "TODO"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/api/routers/websockets.py:270",
+          "content": "# TODO: Implementar lógica real de métricas",
+          "type": "TODO"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/api/routers/websockets.py:307",
+          "content": "# TODO: Implementar lógica de suscripciones específicas",
+          "type": "TODO"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/api/routers/websockets.py:336",
+          "content": "# TODO: Implementar lógica de desuscripciones",
+          "type": "TODO"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/api/utils/logging.py:170",
+          "content": "\"DEBUG\": security_logger.debug,",
+          "type": "OTHER"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/core/websocket_integration.py:176",
+          "content": "# TODO: Implementar consulta real a la base de datos",
+          "type": "TODO"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/core/database.py:42",
+          "content": "\"echo\": settings.DEBUG,",
+          "type": "OTHER"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/core/database.py:66",
+          "content": "echo=settings.DEBUG,",
+          "type": "OTHER"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/core/logging.py:102",
+          "content": "log_level: Nivel de logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+          "type": "OTHER"
+        },
+        {
+          "location": "/home/runner/work/GRUPO_GAD/GRUPO_GAD/src/core/logging.py:123",
+          "content": "filter=lambda record: record[\"level\"].name != \"DEBUG\" or log_level == \"DEBUG\"",
+          "type": "OTHER"
+        }
+      ],
+      "known_bugs_in_issues": "N/A - no BUGS.md file",
+      "deprecated_code": []
+    },
+    "incident_response": {
+      "runbooks_present": true,
+      "runbooks_location": "docs/PLAYBOOK_ROLLBACK_RUNBOOK.md",
+      "alerting_configured": false,
+      "alerting_details": "N/A"
+    }
+  },
+  "prompt_13_deployment": {
+    "deployment": {
+      "deployment_method": "Docker + Docker Compose",
+      "deployment_files": [
+        {
+          "file": "docker-compose.yml",
+          "purpose": "Development environment"
+        },
+        {
+          "file": "docker-compose.prod.yml",
+          "purpose": "Production environment"
+        },
+        {
+          "file": "docker/Dockerfile.api",
+          "purpose": "API container image"
+        },
+        {
+          "file": "docker/Dockerfile.bot",
+          "purpose": "Bot container image"
+        },
+        {
+          "file": "Caddyfile",
+          "purpose": "Reverse proxy configuration"
+        }
+      ],
+      "environment_stages": {
+        "development": {
+          "configured": true,
+          "differences": "Uses SQLite option, hot-reload, verbose logs"
+        },
+        "staging": {
+          "configured": false
+        },
+        "production": {
+          "configured": true,
+          "special_config": "Uses PostgreSQL, gunicorn workers, JSON logs, security headers"
+        }
+      },
+      "ci_cd_pipeline": {
+        "platform": "GitHub Actions",
+        "config_file": ".github/workflows/ci.yml, docker.yml, security-audit.yml",
+        "stages": [
+          "build",
+          "test",
+          "lint",
+          "security-scan"
+        ],
+        "automated_deployment": false,
+        "deployment_triggers": "Manual (no CD currently)"
+      },
+      "infrastructure_as_code": {
+        "tool": "none",
+        "files": []
+      },
+      "health_checks": {
+        "endpoint": "/metrics",
+        "location": "src/api/main.py:272-280",
+        "checks_performed": [
+          "uptime",
+          "basic availability"
+        ]
+      },
+      "rollback_strategy": {
+        "documented": true,
+        "automated": false,
+        "description": "docs/PLAYBOOK_ROLLBACK_RUNBOOK.md"
+      }
+    },
+    "compliance": {
+      "data_privacy": {
+        "gdpr_considerations": false,
+        "data_retention_policy": "N/A",
+        "pii_handling": "Password hashing with bcrypt, JWT tokens"
+      },
+      "security_compliance": {
+        "standards": [],
+        "evidence": "Security audit workflow (.github/workflows/security-audit.yml)"
+      }
+    }
+  },
+  "prompt_14_documentation": {
+    "documentation": {
+      "readme": {
+        "present": true,
+        "completeness": "comprehensive",
+        "sections": [
+          "Description",
+          "Installation",
+          "Setup",
+          "Deployment",
+          "Endpoints",
+          "Examples",
+          "FAQ",
+          "Troubleshooting"
+        ],
+        "up_to_date": "Yes, last updated recently based on content"
+      },
+      "api_documentation": {
+        "present": true,
+        "format": "OpenAPI/Swagger (auto-generated by FastAPI)",
+        "location": "/api/v1/openapi.json, docs/openapi.json",
+        "completeness": "High - all endpoints documented via FastAPI"
+      },
+      "code_comments": {
+        "comment_density": "medium",
+        "docstrings_present": true,
+        "quality": "Good - docstrings in main modules, comments explain complex logic"
+      },
+      "architecture_documentation": {
+        "present": true,
+        "files": [
+          "ARCHITECTURAL_ANALYSIS.md",
+          "docs/deployment/01_ANALISIS_TECNICO_PROYECTO.md",
+          "docs/system/BLUEPRINT_SISTEMICO.md"
+        ],
+        "diagrams": []
+      },
+      "changelog": {
+        "present": true,
+        "file": "CHANGELOG.md",
+        "maintained": true
+      },
+      "contributing_guide": {
+        "present": true,
+        "file": "CONTRIBUTING.md"
+      }
+    }
+  },
+  "prompt_15_complexity": {
+    "complexity_analysis": {
+      "largest_files": [
+        {
+          "file": "src/api/routers/websockets.py",
+          "lines_of_code": 400,
+          "purpose": "WebSocket routing and management"
+        },
+        {
+          "file": "src/api/routers/tasks.py",
+          "lines_of_code": 200,
+          "purpose": "Task CRUD operations"
+        },
+        {
+          "file": "src/core/websockets.py",
+          "lines_of_code": 500,
+          "purpose": "WebSocket manager core"
+        },
+        {
+          "file": "src/api/models/tarea.py",
+          "lines_of_code": 180,
+          "purpose": "Task database model"
+        },
+        {
+          "file": "config/settings.py",
+          "lines_of_code": 220,
+          "purpose": "Configuration management"
+        }
+      ],
+      "most_complex_functions": [
+        {
+          "function": "WebSocketManager.broadcast",
+          "file": "src/core/websockets.py",
+          "line": "200-250",
+          "complexity_indicator": "Multiple conditionals, loops over connections, error handling",
+          "lines_of_code": 50
+        },
+        {
+          "function": "lifespan",
+          "file": "src/api/main.py",
+          "line": "43-116",
+          "complexity_indicator": "Complex startup/shutdown logic with multiple services",
+          "lines_of_code": 73
+        }
+      ],
+      "code_duplication": {
+        "suspected_duplicates": [
+          {
+            "pattern": "Database session management boilerplate",
+            "locations": [
+              "Multiple routers have similar DB session usage"
+            ]
+          }
+        ]
+      },
+      "circular_dependencies": {
+        "present": false,
+        "examples": []
+      }
+    },
+    "technical_debt": {
+      "deprecated_dependencies": [],
+      "outdated_patterns": [],
+      "missing_features": [
+        {
+          "feature": "Rate limiting",
+          "severity": "medium",
+          "locations_affected": [
+            "All API endpoints"
+          ]
+        },
+        {
+          "feature": "Comprehensive monitoring/APM",
+          "severity": "medium",
+          "locations_affected": [
+            "Entire application"
+          ]
+        }
+      ]
+    }
+  },
+  "prompt_16_executive_summary": {
+    "executive_summary": {
+      "project_overview": "GRUPO_GAD es un sistema de gestión de tareas para personal policial y gestión administrativa gubernamental. Construido con FastAPI (Python 3.12+), SQLAlchemy Async, PostgreSQL/PostGIS, y Redis, proporciona una API REST robusta con autenticación JWT, WebSockets para comunicación en tiempo real, y un bot de Telegram para notificaciones. El proyecto está bien estructurado con separación clara de concerns (API, core, bot, schemas, models), usa Poetry para gestión de dependencias, incluye migraciones Alembic, y se despliega via Docker Compose. La arquitectura es monolítica modular con servicios separados para API, Bot, y Cache/DB, orquestados vía Docker.",
+      "key_strengths": [
+        "Arquitectura limpia y modular con separación de concerns",
+        "Stack moderno (FastAPI, SQLAlchemy 2.0 Async, Pydantic v2, Python 3.12+)",
+        "Sistema WebSocket robusto con soporte multi-worker via Redis Pub/Sub",
+        "Buena cobertura de tests (85% mínimo requerido) con pytest",
+        "CI/CD con GitHub Actions (build, test, lint, security scan)",
+        "Documentación comprensiva (README, architectural docs, deployment guides)",
+        "Seguridad: JWT auth, bcrypt passwords, Pydantic validation, CSP headers",
+        "Docker/Compose setup para dev y prod",
+        "Geolocalización con PostGIS para features espaciales"
+      ],
+      "key_concerns": [
+        "No hay rate limiting implementado en endpoints API",
+        "Monitoreo básico - sin APM completo (solo métricas básicas)",
+        "Algunos TODO/FIXME en código sugieren trabajo pendiente",
+        "WebSocket error handling podría ser más robusto",
+        "Sin staging environment configurado",
+        "Retry mechanisms no implementados para operaciones críticas",
+        "Cache Redis subutilizado (principalmente para pub/sub)"
+      ],
+      "technology_maturity": "Alto - usa versiones estables y modernas de tecnologías probadas",
+      "estimated_project_size": {
+        "lines_of_code": 12034,
+        "number_of_components": 9,
+        "complexity_level": "medium"
+      },
+      "critical_areas_for_audit": [
+        "WebSocket connection management bajo carga",
+        "Database connection pooling y performance",
+        "Authentication token security y expiration",
+        "Error handling en flujos críticos",
+        "Rate limiting (ausente actualmente)",
+        "Secrets management en producción",
+        "Multi-worker WebSocket synchronization via Redis"
+      ],
+      "immediate_red_flags": []
+    }
+  }
+}
