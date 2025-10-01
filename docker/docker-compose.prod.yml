@@ -3,14 +3,16 @@ version: '3.8'
 # Archivo de Docker Compose para el entorno de PRODUCCIÓN.
 # Diferencias clave con el docker-compose.yml de desarrollo:
 # - Utiliza un archivo .env.production para las variables de entorno.
+# - Usa PostGIS (postgis/postgis:15-3.4-alpine) para capacidades geoespaciales.
 # - No expone los puertos de la base de datos (PostgreSQL) ni de Redis al host.
-#   La comunicación con estos servicios debe ocurrir a través de la red interna de Docker.
-# - El puerto de la API (8000) se mantiene expuesto para que un reverse proxy (como Nginx o Traefik)
-#   pueda redirigir el tráfico externo hacia él.
+# - La API no se expone directamente al host; toda comunicación externa pasa por Caddy.
+# - Incluye Caddy como proxy inverso y punto de entrada HTTPS único.
+# - Todos los servicios tienen healthchecks y logging configurado.
+# - Los 5 servicios (db, redis, api, bot, caddy) están orquestados en una red privada.
 
 services:
   db:
-    image: postgres:15-alpine
+    image: postgis/postgis:15-3.4-alpine
     container_name: gad_db_prod
     restart: unless-stopped
     env_file:
@@ -19,6 +21,7 @@ services:
       POSTGRES_INITDB_ARGS: "-E UTF8"
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
+      - ./init_postgis.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - gad-network-prod
     healthcheck:
@@ -59,8 +62,8 @@ services:
     restart: unless-stopped
     env_file:
       - ../.env.production
-    ports:
-      - "8000:8000" # Exponer para el reverse proxy
+    # En producción, la API NO debe exponerse directamente al host
+    # Toda comunicación externa pasa por Caddy
     volumes:
       - ../logs:/app/logs
     depends_on:
@@ -101,6 +104,34 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  caddy:
+    image: caddy:2.8-alpine
+    container_name: gad_caddy_prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3 support
+    volumes:
+      - ../Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data_prod:/data
+      - caddy_config_prod:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - gad-network-prod
+    healthcheck:
+      test: ["CMD", "caddy", "version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
 networks:
   gad-network-prod:
     driver: bridge
@@ -108,3 +139,5 @@ networks:
 volumes:
   postgres_data_prod:
   redis_data_prod:
+  caddy_data_prod:
+  caddy_config_prod:
