@@ -84,9 +84,8 @@ exclude = [
 	# Módulos de logging/migraciones en revisión de tipado
 	"^src/core/logging\\.py$",
 	"^src/core/migrations\\.py$",
-	# Archivos con integración de ciclo de vida y auth pendientes de tipado
+	# Archivos con integración de ciclo de vida pendientes de tipado
 	"^src/api/main\\.py$",
-	"^src/api/routers/auth\\.py$",
 ]
 namespace_packages = true
 explicit_package_bases = true

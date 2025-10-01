@@ -3,14 +3,19 @@
 Endpoints de autenticación para la API.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status, Request
-from typing import Any, Dict
+from typing import Annotated, Any, Dict
+
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.settings import settings
 from src.api.services.auth import auth_service
-from src.api.utils.logging import log_endpoint_call, log_authentication_event, log_security_event
+from src.api.utils.logging import (
+    log_authentication_event,
+    log_endpoint_call,
+    log_security_event,
+)
 from src.core.database import get_db_session
 from src.core.logging import get_logger
 from src.core.security import create_access_token
@@ -21,11 +26,12 @@ auth_logger = get_logger("api.auth")
 
 router = APIRouter()
 
+
 @router.post("/logout")
 @log_endpoint_call("user_logout")
 async def logout(request: Request, response: Response) -> Dict[str, Any]:
     """Eliminar cookie de sesión (logout)."""
-    client_ip = request.client.host if request.client else "unknown"
+    client_ip: str = request.client.host if request.client else "unknown"
     
     # Log evento de logout
     log_authentication_event(
@@ -47,14 +53,14 @@ async def logout(request: Request, response: Response) -> Dict[str, Any]:
 async def login_for_access_token(
     request: Request,
     response: Response,
-    db: AsyncSession = Depends(get_db_session),
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Annotated[AsyncSession, Depends(get_db_session)],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     """
     Endpoint para obtener un token de acceso JWT.
     """
-    client_ip = request.client.host if request.client else "unknown"
-    user_agent = request.headers.get("user-agent", "unknown")
+    client_ip: str = request.client.host if request.client else "unknown"
+    user_agent: str = request.headers.get("user-agent", "unknown")
     
     auth_logger.info(
         f"Intento de login para usuario: {form_data.username}",
@@ -95,7 +101,7 @@ async def login_for_access_token(
         )
     
     # Login exitoso
-    access_token = create_access_token(subject=user.id)
+    access_token: str = create_access_token(subject=user.id)
     
     log_authentication_event(
         "successful_login",
