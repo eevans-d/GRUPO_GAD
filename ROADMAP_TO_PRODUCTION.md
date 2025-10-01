@@ -57,8 +57,8 @@ Este checklist detalla las fases y tareas requeridas para pasar del estado actua
 ### ☑️ **Fase 1: Estabilización del Entorno Local (Desbloqueo)**
 
 *   [x] **1.1. Analizar la arquitectura completa del sistema.**
-*   [x] **1.2. Reconstruir `docker-compose.yml`:** Actualizado `docker/docker-compose.yml` con PostGIS y los 5 servicios (`api`, `db`, `redis`, `bot`, `caddy`) correctamente orquestados para desarrollo local.
-*   [x] **1.3. Reconstruir `docker-compose.prod.yml`:** Actualizado `docker/docker-compose.prod.yml` con PostGIS, Caddy como único punto de entrada, y configuración de alto rendimiento y seguridad para producción.
+*   [ ] **1.2. Reconstruir `docker-compose.yml`:** Crear un archivo que orqueste correctamente los 5 servicios (`api`, `db`, `redis`, `bot`, `caddy`) para desarrollo local.
+*   [ ] **1.3. Reconstruir `docker-compose.prod.yml`:** Crear un archivo de overlay para producción que configure el entorno para alto rendimiento y seguridad.
 *   [ ] **1.4. Ejecutar Auditoría Dinámica:** Con el entorno funcionando, realizar `curl` a los endpoints de la API y `docker exec` a la base de datos para validar el comportamiento en tiempo de ejecución.
 *   [ ] **1.5. Generar Informe Final de Cumplimiento:** Documentar los resultados de la auditoría dinámica.
 
