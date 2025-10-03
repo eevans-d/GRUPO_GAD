@@ -193,6 +193,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Middleware de Rate Limiting Gubernamental ---
+# Protección DoS para servicios ciudadanos
+from src.api.middleware.government_rate_limiting import setup_government_rate_limiting
+
+# Verificar si rate limiting está habilitado (por defecto: sí, salvo config explícita)
+rate_limiting_enabled = getattr(settings, 'RATE_LIMITING_ENABLED', True)
+if rate_limiting_enabled:
+    setup_government_rate_limiting(app)
+    api_logger.info("Rate limiting gubernamental activado para protección ciudadana")
+else:
+    api_logger.warning("Rate limiting deshabilitado - solo usar en desarrollo")
+
 # --- Manejo de Errores Personalizado ---
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
