@@ -46,8 +46,10 @@ htmlcov/
 
 # Temporary directories
 outputs/
-workflows/
+/workflows/
 b/
 
 # Audit reports (regenerate as needed)
 pip_audit_report*.json
+audit-*.csv
+audit-*.md
