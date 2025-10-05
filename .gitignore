@@ -9,6 +9,7 @@ __pycache__/
 *.pyc
 venv/
 .env
+*.egg-info/
 
 # VS Code
 .vscode/
@@ -17,6 +18,7 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+*:Zone.Identifier
 
 # Secrets
 *.pem
@@ -27,6 +29,25 @@ Thumbs.db
 # Local backups
 backups/
 .venv/
+*.bak
 
 # Logs
 logs/
+
+# Build/Test artifacts
+*.db
+.coverage
+coverage_report.txt
+ruff_report.txt
+htmlcov/
+.pytest_cache/
+*.lock
+!poetry.lock
+
+# Temporary directories
+outputs/
+workflows/
+b/
+
+# Audit reports (regenerate as needed)
+pip_audit_report*.json
