@@ -21,10 +21,16 @@ Utilidades:
 - Ejemplos: `docs/risk_score_example.json`, `docs/risk_score_example.yaml`.
 - Nueva plantilla triage: `docs/triage_example.json`.
 
-## 4. Seguridad y Operaciones
+## 4. Sistema Multi-Agente IA
+- `docs/agents/README.md`: Índice del sistema de agentes IA.
+- `docs/agents/PROMPTS_AGENTES_IA_PARTE_1.md`: Agentes Core y Arquitectura (Coordinator, Architect, Developer).
+- (Próximo) PARTE 2/3: Agentes de Calidad y Seguridad (QA, Security, Performance).
+- (Próximo) PARTE 3/3: Agentes de Documentación y Operaciones (Documentation, DevOps).
+
+## 5. Seguridad y Operaciones
 - (Pendiente) Documentos de hardening y pipeline (futuros).
 
-## 5. Próximos Artefactos (Sugeridos)
+## 6. Próximos Artefactos (Sugeridos)
 - Plantillas para incident reviews.
 - Índice de decisiones de arquitectura.
 
