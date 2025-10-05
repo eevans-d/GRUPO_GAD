@@ -14,9 +14,11 @@ Este directorio contiene el **sistema multi-agente especializado** para GitHub C
 
 Proporcionar prompts estructurados que guíen a GitHub Copilot para actuar como agentes especializados en diferentes aspectos del desarrollo, **siempre contextualizados** a la arquitectura, tecnologías y convenciones de GRUPO_GAD.
 
-## 🤖 Agentes Disponibles (Parte 1/3)
+## 🤖 Agentes Disponibles
 
-### 1. Project Coordinator Agent
+### Parte 1/3: Agentes Core y Arquitectura
+
+#### 1. Project Coordinator Agent
 **Archivo:** `01_PROJECT_COORDINATOR.md`  
 **Rol:** Coordinador central de proyectos
 
@@ -92,6 +94,86 @@ JWT existente sin romper la arquitectura en capas actual.
 @developer Implementa el diseño de NotificationService especificado en el documento de
 arquitectura. Incluye CRUD operations, service layer, endpoints REST, y tests con cobertura
 >= 85%. Seguir patrones existentes en src/api/services/auth.py
+```
+
+---
+
+### Parte 2/3: Agentes de Calidad y Seguridad
+
+#### 4. Quality Assurance (QA) Agent
+**Archivo:** `04_QA_AGENT.md`  
+**Rol:** Especialista en aseguramiento de calidad
+
+**Responsabilidades:**
+- Analizar estrategia de testing actual (pytest, fixtures, cobertura)
+- Diseñar test plans exhaustivos con casos edge
+- Validar cobertura de código >= 85%
+- Identificar gaps de testing y escenarios no cubiertos
+- Asegurar que tests reflejan requisitos de negocio
+
+**Cuándo usar:**
+- Necesitas diseñar test suite completo para nuevo feature
+- Validar cobertura de tests existentes
+- Identificar casos edge no testeados
+- Crear test plans con happy path, validaciones, errores
+- Review de calidad de tests
+
+**Ejemplo de invocación:**
+```markdown
+@qa Diseña test plan completo para el sistema de notificaciones, incluyendo
+validaciones, autenticación, casos edge, y performance tests. Cobertura objetivo >= 90%
+```
+
+---
+
+#### 5. Security Agent
+**Archivo:** `05_SECURITY_AGENT.md`  
+**Rol:** Especialista en seguridad
+
+**Responsabilidades:**
+- Analizar código en busca de vulnerabilidades OWASP Top 10
+- Validar autenticación JWT y autorización RBAC
+- Revisar manejo de datos sensibles (passwords, secrets)
+- Verificar protección contra SQL injection, XSS, CSRF
+- Asegurar configuraciones seguras (CORS, headers, secrets)
+
+**Cuándo usar:**
+- Security review de nuevo código
+- Auditoría de endpoints para auth/authz
+- Validar manejo de secrets y datos sensibles
+- Detectar vulnerabilidades OWASP
+- Implementar controles de seguridad
+
+**Ejemplo de invocación:**
+```markdown
+@security Revisa el módulo de autenticación para vulnerabilidades. Valida que JWT
+es seguro, passwords están hasheados con bcrypt, y no hay IDOR en los endpoints.
+```
+
+---
+
+#### 6. Performance Agent
+**Archivo:** `06_PERFORMANCE_AGENT.md`  
+**Rol:** Especialista en optimización de performance
+
+**Responsabilidades:**
+- Analizar performance actual con profiling
+- Identificar cuellos de botella (N+1 queries, missing indexes)
+- Optimizar queries DB y connection pooling
+- Implementar caching strategies con Redis
+- Asegurar cumplimiento de SLAs (< 200ms p95)
+
+**Cuándo usar:**
+- Endpoint lento que necesita optimización
+- Implementar caching para datos frecuentes
+- Revisar queries DB para N+1 problems
+- Load testing y profiling
+- Validar SLAs de performance
+
+**Ejemplo de invocación:**
+```markdown
+@performance El endpoint GET /users es lento (800ms). Analiza cuellos de botella,
+identifica N+1 queries, propón optimizaciones con caching y eager loading.
 ```
 
 ---
@@ -341,12 +423,17 @@ docker compose up -d --build
 
 ## 🚀 Próximos Pasos
 
-### Parte 2/3: Agentes de Calidad y Seguridad (Próximamente)
-- **QA Agent:** Testing exhaustivo, casos edge, performance
-- **Security Agent:** Análisis de vulnerabilidades, best practices
-- **Performance Agent:** Optimización, profiling, caching
+### ✅ Parte 1/3: Agentes Core (Completado)
+- Project Coordinator
+- Solution Architect
+- Software Developer
 
-### Parte 3/3: Agentes de Operaciones (Próximamente)
+### ✅ Parte 2/3: Agentes de Calidad y Seguridad (Completado)
+- Quality Assurance (QA) Agent
+- Security Agent
+- Performance Agent
+
+### Parte 3/3: Agentes de Operaciones (Futuro)
 - **DevOps Agent:** Deployment, CI/CD, monitoring
 - **Documentation Agent:** Docs técnicas, user guides, API docs
 
@@ -374,7 +461,17 @@ Si un agente da instrucciones incorrectas:
 
 ## 📝 Changelog
 
-### v1.0.0 (2025-01-04)
+### v2.0.0 (2025-01-05) - Part 2/3
+- ✅ **Parte 2/3 completada:** Agentes de Calidad y Seguridad
+  - Quality Assurance (QA) Agent
+  - Security Agent
+  - Performance Agent
+- ✅ Testing strategies contextualizadas a pytest + GRUPO_GAD
+- ✅ Security best practices (OWASP Top 10, JWT, bcrypt)
+- ✅ Performance optimization patterns (N+1, caching, async)
+- ✅ Examples y checklists exhaustivos
+
+### v1.0.0 (2025-01-04) - Part 1/3
 - ✅ **Parte 1/3 completada:** Agentes Core
   - Project Coordinator Agent
   - Solution Architect Agent
