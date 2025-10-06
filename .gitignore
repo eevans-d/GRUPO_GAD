@@ -197,3 +197,13 @@ htmlcov/
 # Logs grandes
 logs/*.jsonl
 logs/*.log
+
+# Temporary directories
+outputs/
+/workflows/
+b/
+
+# Audit reports (regenerate as needed)
+pip_audit_report*.json
+audit-*.csv
+audit-*.md

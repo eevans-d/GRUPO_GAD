@@ -1,0 +1,36 @@
+name: Repo Size Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      top_history:
+        description: "Número de blobs más grandes del historial a listar"
+        required: false
+        default: "200"
+      top_worktree:
+        description: "Número de archivos más grandes del working tree a listar"
+        required: false
+        default: "100"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run audit
+        run: |
+          chmod +x scripts/list-largest-blobs.sh
+          ./scripts/list-largest-blobs.sh "${{ github.event.inputs.top_history || '200' }}" "${{ github.event.inputs.top_worktree || '100' }}"
+
+      - name: Upload audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-size-audit
+          path: |
+            audit-history-top.csv
+            audit-worktree-top.csv
+            audit-summary.md
