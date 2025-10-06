@@ -1,0 +1,28 @@
+# Datos y modelos
+data/
+datasets/
+models/
+*.csv
+*.xlsx
+*.json
+*.pkl
+*.h5
+
+# Dependencias
+node_modules/
+.venv/
+venv/
+
+# Logs y temporales
+*.log
+*.tmp
+__pycache__/
+
+# Documentaci0n generada
+docs/_build/
+site/
+
+# Tests y coverage
+.pytest_cache/
+htmlcov/
+.coverage

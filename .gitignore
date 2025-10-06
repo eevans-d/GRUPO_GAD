@@ -1,53 +1,188 @@
-# Node
-node_modules/
-dist/
-.env
-npm-debug.log*
-
+# ===========================
 # Python
+# ===========================
 __pycache__/
-*.pyc
-venv/
-.env
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
 *.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
 
-# VS Code
-.vscode/
-.history/
-
-# OS
-.DS_Store
-Thumbs.db
-*:Zone.Identifier
-
-# Secrets
-*.pem
-*.key
-# Allow versioned env examples in docs/
-!docs/env/.env.*.example
-
-# Local backups
-backups/
+# ===========================
+# Virtual Environment
+# ===========================
 .venv/
-*.bak
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+pyvenv.cfg
 
-# Logs
-logs/
-
-# Build/Test artifacts
-*.db
-.coverage
-coverage_report.txt
-ruff_report.txt
-htmlcov/
+# ===========================
+# Testing
+# ===========================
 .pytest_cache/
-*.lock
-!poetry.lock
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytype/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+nosetests.xml
+test-results/
 
-# Temporary directories
-outputs/
-workflows/
-b/
+# ===========================
+# Jupyter Notebook
+# ===========================
+.ipynb_checkpoints
+*.ipynb
+profile_default/
+ipython_config.py
 
-# Audit reports (regenerate as needed)
-pip_audit_report*.json
+# ===========================
+# Database
+# ===========================
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+db.sqlite3
+db.sqlite3-journal
+
+# ===========================
+# Logs
+# ===========================
+*.log
+logs/
+*.log.*
+log/
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===========================
+# IDE
+# ===========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# ===========================
+# Environment variables
+# ===========================
+.env
+.env.local
+.env.*.local
+.envrc
+*.env
+
+# ===========================
+# FastAPI/Uvicorn specific
+# ===========================
+instance/
+.webassets-cache
+
+# ===========================
+# Data & Models (Machine Learning)
+# ===========================
+data/
+datasets/
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.ckpt
+models/
+checkpoints/
+
+# ===========================
+# Documentation builds
+# ===========================
+docs/_build/
+site/
+.doctrees
+
+# ===========================
+# Backup files
+# ===========================
+*.bak
+*.backup
+*.old
+*.orig
+*~
+
+# ===========================
+# Temporary files
+# ===========================
+tmp/
+temp/
+*.tmp
+
+# ===========================
+# Node (si usas frontend)
+# ===========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===========================
+# Archivos grandes
+# ===========================
+*.csv
+*.xlsx
+*.xls
+*.pdf
+*.zip
+*.tar.gz
+*.mp4
+*.mp3
+*.avi
+
+# ===========================
+# Git
+# ===========================
+.git/
+*.patch
+*.diff
