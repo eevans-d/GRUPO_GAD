@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-10-06
+
+### Added
+- Métricas Prometheus para el subsistema WebSocket.
+- Endpoints `/metrics` (básico) y `/api/v1/metrics/prometheus` (completo) para monitoreo.
+- Documentación detallada en `docs/PROMETHEUS_METRICAS_IMPLEMENTACION.md`.
+
+### Changed
+- WebSocketManager ahora registra métricas en tiempo real.
+
 ## [1.1.0] - 2025-09-30
 
 ### Added

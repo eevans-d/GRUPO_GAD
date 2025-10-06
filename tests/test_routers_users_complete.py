@@ -7,7 +7,6 @@ Objetivo: Aumentar cobertura del 53% al 85%
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from unittest.mock import AsyncMock, MagicMock
 
 from src.api.models.usuario import Usuario
 from src.shared.constants import UserLevel
@@ -54,9 +53,9 @@ async def mock_admin_user(db_session):
 
 
 @pytest.fixture
-def auth_headers(token_factory):
+def auth_headers(token_factory, mock_user):
     """Fixture para headers de autenticación de usuario regular."""
-    token = token_factory(1)
+    token = token_factory(mock_user.id)
     return {"Authorization": f"Bearer {token}"}
 
 

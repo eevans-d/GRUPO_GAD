@@ -21,6 +21,20 @@ from pydantic import BaseModel, Field
 
 from src.core.logging import get_logger
 
+# Intentar importar métricas si están disponibles
+try:
+    from src.observability.metrics import (
+        connection_established, 
+        connection_closed,
+        message_sent, 
+        send_error, 
+        heartbeat_completed,
+        update_user_count
+    )
+    METRICS_ENABLED = True
+except ImportError:
+    METRICS_ENABLED = False
+
 # Logger para WebSockets
 ws_logger = get_logger("websockets")
 
@@ -148,6 +162,10 @@ class WebSocketManager:
             if user_role not in self.role_connections:
                 self.role_connections[user_role] = set()
             self.role_connections[user_role].add(connection_id)
+            
+        # Registrar métricas de conexión si están disponibles
+        if METRICS_ENABLED:
+            connection_established(user_id, user_role)
         
         ws_logger.info(
             "Nueva conexión WebSocket establecida",
@@ -201,8 +219,18 @@ class WebSocketManager:
                 if not self.role_connections[connection_info.user_role]:
                     del self.role_connections[connection_info.user_role]
         
+        # Capturar info antes de eliminar para métricas
+        user_id = connection_info.user_id
+        user_role = connection_info.user_role
+        
         # Remover conexión
         del self.active_connections[connection_id]
+        
+        # Registrar métricas de desconexión si están disponibles
+        if METRICS_ENABLED:
+            connection_closed(user_id, user_role)
+            # Actualizar conteo de usuarios activos
+            update_user_count(len(self.user_connections))
         
         # Detener heartbeat si no hay conexiones
         if not self.active_connections and self._heartbeat_task:
@@ -212,7 +240,7 @@ class WebSocketManager:
         ws_logger.info(
             "Conexión WebSocket desconectada",
             connection_id=connection_id,
-            user_id=connection_info.user_id,
+            user_id=user_id,
             total_connections=len(self.active_connections)
         )
     
@@ -249,6 +277,9 @@ class WebSocketManager:
             # Métricas: ignorar ACK y PING para total_messages_sent
             if message.event_type not in (EventType.CONNECTION_ACK, EventType.PING):
                 self.total_messages_sent += 1
+                # Registrar en métricas Prometheus si están habilitadas
+                if METRICS_ENABLED:
+                    message_sent(is_broadcast=False)
             
             return True
             
@@ -259,6 +290,11 @@ class WebSocketManager:
             # Desconectar conexión problemática
             await self.disconnect(connection_id)
             self.total_send_errors += 1
+            
+            # Registrar error en métricas Prometheus
+            if METRICS_ENABLED:
+                send_error()
+                
             return False
     
     async def send_to_user(self, user_id: int, message: WSMessage) -> int:
@@ -335,6 +371,9 @@ class WebSocketManager:
         if sent_count:
             self.total_broadcasts += 1
             self.last_broadcast_at = datetime.now()
+            # Registrar en métricas Prometheus
+            if METRICS_ENABLED:
+                message_sent(is_broadcast=True)
         # Publicar en pub/sub para otros workers (si está configurado)
         try:
             if self._pubsub is not None and message.event_type != EventType.PING:
@@ -397,6 +436,10 @@ class WebSocketManager:
                 
                 # Enviar ping a todas las conexiones
                 await self.broadcast(ping_message)
+                
+                # Actualizar métricas Prometheus si están habilitadas
+                if METRICS_ENABLED:
+                    heartbeat_completed()
                 
                 ws_logger.debug(
                     f"Heartbeat enviado a {len(self.active_connections)} conexiones"

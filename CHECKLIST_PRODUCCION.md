@@ -29,6 +29,8 @@
 | [ ] **/admin/telegram/send probado** | `OK` | `POST` envía mensaje de prueba a un canal |
 | [ ] **Geolocalización PostGIS funcional** | `OK` | Crear/consultar tarea con ubicación |
 | [ ] **WebSocket dashboard conecta** | `OK` | El dashboard recibe actualizaciones en tiempo real |
+| [ ] **Métricas Prometheus disponibles** | `OK` | `curl /api/v1/metrics/prometheus` devuelve datos |
+| [ ] **Grafana conectado** | `OK` | Panel de Grafana muestra datos recientes |
 
 ---
 

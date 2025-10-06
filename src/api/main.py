@@ -20,6 +20,7 @@ from src.api.routers import api_router
 from src.api.routers import dashboard as dashboard_router
 from src.api.routers import websockets as websockets_router
 from src.api.middleware.websockets import websocket_event_emitter
+from src.api.middleware.government_rate_limiting import setup_government_rate_limiting
 from src.core.database import async_engine, init_db
 from src.core.logging import setup_logging
 from src.core.websocket_integration import (
@@ -29,6 +30,13 @@ from src.core.websocket_integration import (
 )
 from src.core.websockets import websocket_manager
 from src.core.ws_pubsub import RedisWebSocketPubSub  # opcional si hay Redis
+
+# Importar métricas Prometheus si están disponibles
+try:
+    from src.observability.metrics import initialize_metrics
+    METRICS_ENABLED = True
+except ImportError:
+    METRICS_ENABLED = False
 
 # --- Configuración de Logging Mejorado ---
 api_logger = setup_logging(
@@ -69,6 +77,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     api_logger.info("Inicializando integración WebSocket-Modelos...")
     initialize_websocket_integrator(websocket_event_emitter)
     await start_websocket_integration()
+    
+    # Inicializar métricas Prometheus si están disponibles
+    if METRICS_ENABLED:
+        api_logger.info("Inicializando métricas Prometheus...")
+        initialize_metrics()
+        api_logger.info("Métricas Prometheus inicializadas")
     
     api_logger.info("Sistema de WebSockets iniciado correctamente.")
 
@@ -195,7 +209,6 @@ app.add_middleware(
 
 # --- Middleware de Rate Limiting Gubernamental ---
 # Protección DoS para servicios ciudadanos
-from src.api.middleware.government_rate_limiting import setup_government_rate_limiting
 
 # Verificar si rate limiting está habilitado (por defecto: sí, salvo config explícita)
 rate_limiting_enabled = getattr(settings, 'RATE_LIMITING_ENABLED', True)
@@ -287,9 +300,26 @@ async def metrics() -> PlainTextResponse:
     if not hasattr(app.state, "start_time"):
         app.state.start_time = time.time()
     uptime = int(time.time() - app.state.start_time)
-    return PlainTextResponse(
-        f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n"
-    )
+    
+    # Versión simple para compatibilidad hacia atrás
+    # Las métricas detalladas están disponibles en /api/v1/metrics/prometheus
+    metrics_text = f"# HELP app_uptime_seconds Uptime in seconds\napp_uptime_seconds {uptime}\n"
+    
+    # Añadir métricas básicas de WebSockets
+    stats = websocket_manager.get_stats()
+    connections_count = len(stats.get('connections_by_role', {}))
+    metrics_text += "\n# HELP ws_connections_active Active WebSocket connections\n"
+    metrics_text += f"ws_connections_active {connections_count}\n"
+    
+    messages_sent = stats.get('metrics', {}).get('total_messages_sent', 0)
+    metrics_text += "\n# HELP ws_messages_sent Total WebSocket messages sent\n"
+    metrics_text += f"ws_messages_sent {messages_sent}\n"
+    
+    broadcasts_total = stats.get('metrics', {}).get('total_broadcasts', 0)
+    metrics_text += "\n# HELP ws_broadcasts_total Total WebSocket broadcasts\n"
+    metrics_text += f"ws_broadcasts_total {broadcasts_total}\n"
+    
+    return PlainTextResponse(metrics_text)
 
 
 

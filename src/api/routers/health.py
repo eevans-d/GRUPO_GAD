@@ -9,7 +9,7 @@ import time
 import psutil
 import shutil
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import text

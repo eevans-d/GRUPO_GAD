@@ -1,0 +1,77 @@
+# Ejemplo de configuración de Prometheus para GRUPO_GAD
+#
+# Este archivo muestra cómo configurar Prometheus para recopilar métricas
+# del subsistema WebSocket de GRUPO_GAD.
+#
+# Úsalo como plantilla para tu configuración de monitoreo.
+
+global:
+  scrape_interval: 15s     # Frecuencia de recopilación de métricas
+  evaluation_interval: 15s # Frecuencia de evaluación de reglas de alerta
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Reglas de carga dinámica y alertas
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# Configuración de recopilación de métricas
+scrape_configs:
+  # Configuración para la API de GRUPO_GAD
+  - job_name: 'grupogad_api'
+    metrics_path: '/api/v1/metrics/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['api:8000']  # Ajusta según tu configuración
+        labels:
+          environment: 'production'
+          service: 'api'
+
+  # Ejemplo con configuración básica adicional
+  - job_name: 'grupogad_api_basic'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['api:8000']  # Ajusta según tu configuración
+        labels:
+          environment: 'production'
+          service: 'api_legacy'
+
+# Ejemplos de reglas de alerta (para usar con Alertmanager)
+# Guardar en un archivo separado y referenciarlo en rule_files
+# 
+# groups:
+# - name: GRUPO_GAD Alerts
+#   rules:
+#   - alert: HighErrorRate
+#     expr: rate(ggrt_send_errors_total[5m]) > 0.1
+#     for: 5m
+#     labels:
+#       severity: warning
+#     annotations:
+#       summary: "Alta tasa de errores en envío de mensajes WebSocket"
+#       description: "El servicio API está experimentando errores al enviar mensajes WebSocket: {{ $value }}"
+#
+#   - alert: ConnectionLoss
+#     expr: delta(ggrt_active_connections[5m]) < -10
+#     for: 2m
+#     labels:
+#       severity: warning
+#     annotations:
+#       summary: "Pérdida repentina de conexiones WebSocket"
+#       description: "Se han perdido más de 10 conexiones WebSocket en los últimos 5 minutos"
+#
+#   - alert: HeartbeatFailure
+#     expr: time() - ggrt_heartbeat_last_timestamp > 120
+#     for: 1m
+#     labels:
+#       severity: critical
+#     annotations:
+#       summary: "Fallo en heartbeat de WebSocket"
+#       description: "El último heartbeat de WebSocket fue hace más de 2 minutos"

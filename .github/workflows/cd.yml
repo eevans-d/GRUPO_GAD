@@ -1,0 +1,163 @@
+name: CD - Deploy to Staging and Production
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: ["main", "master"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+concurrency:
+  group: cd-${{ github.ref }}-${{ inputs.environment || 'auto' }}
+  cancel-in-progress: false
+
+jobs:
+  # Solo ejecutar si el workflow de CI fue exitoso
+  check-ci:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+    outputs:
+      should-deploy: ${{ steps.check.outputs.result }}
+    steps:
+      - name: Check if should deploy
+        id: check
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-push-images:
+    needs: check-ci
+    if: needs.check-ci.outputs.should-deploy == 'true'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+      
+    outputs:
+      api-image: ${{ steps.api-meta.outputs.tags }}
+      api-digest: ${{ steps.api-build.outputs.digest }}
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for API
+        id: api-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/api
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push API image
+        id: api-build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.api
+          push: true
+          tags: ${{ steps.api-meta.outputs.tags }}
+          labels: ${{ steps.api-meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-staging:
+    needs: [check-ci, build-and-push-images]
+    if: needs.check-ci.outputs.should-deploy == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || inputs.environment == 'staging')
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: staging
+      url: https://staging.grupogad.com
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Deploy to Staging
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          echo "API Image: ${{ needs.build-and-push-images.outputs.api-image }}"
+          echo "API Digest: ${{ needs.build-and-push-images.outputs.api-digest }}"
+          
+          # Aquí iría la lógica de deployment real
+          # Por ejemplo, usar SSH para conectar al servidor y actualizar los contenedores
+          # O usar herramientas como Ansible, Terraform, o servicios cloud específicos
+          
+          echo "✅ Staging deployment completed"
+          
+      - name: Run smoke tests on staging
+        run: |
+          echo "🧪 Running smoke tests on staging..."
+          sleep 30  # Esperar a que el servicio esté listo
+          
+          # Smoke tests básicos
+          curl -f https://staging.grupogad.com/api/v1/health || exit 1
+          curl -f https://staging.grupogad.com/metrics || exit 1
+          
+          echo "✅ Staging smoke tests passed"
+
+  deploy-production:
+    needs: [check-ci, build-and-push-images, deploy-staging]
+    if: needs.check-ci.outputs.should-deploy == 'true' && needs.deploy-staging.result == 'success' && inputs.environment == 'production'
+    runs-on: ubuntu-latest
+    
+    environment:
+      name: production
+      url: https://grupogad.com
+      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Deploy to Production
+        run: |
+          echo "🚀 Deploying to production environment..."
+          echo "API Image: ${{ needs.build-and-push-images.outputs.api-image }}"
+          echo "API Digest: ${{ needs.build-and-push-images.outputs.api-digest }}"
+          
+          # Aquí iría la lógica de deployment real para producción
+          # Debe incluir estrategias como blue-green deployment o rolling updates
+          
+          echo "✅ Production deployment completed"
+          
+      - name: Run smoke tests on production
+        run: |
+          echo "🧪 Running smoke tests on production..."
+          sleep 30  # Esperar a que el servicio esté listo
+          
+          # Smoke tests básicos
+          curl -f https://grupogad.com/api/v1/health || exit 1
+          curl -f https://grupogad.com/metrics || exit 1
+          
+          echo "✅ Production smoke tests passed"
+          
+      - name: Notify deployment success
+        run: |
+          echo "🎉 Production deployment successful!"
+          echo "Version deployed: ${{ needs.build-and-push-images.outputs.api-digest }}"

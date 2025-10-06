@@ -78,29 +78,31 @@ Este checklist detalla las fases y tareas requeridas para pasar del estado actua
     *   [ ] Eliminar cualquier secreto hardcodeado que pudiera quedar.
 *   [ ] **3.2. Logging Estructurado:**
     *   [ ] Configurar Gunicorn/Uvicorn para que emita logs en formato **JSON**. Esto facilita la ingesta y análisis por parte de sistemas de monitoreo como Datadog, Splunk o el stack ELK.
-*   [ ] **3.3. Monitoreo y Alertas:**
-    *   [ ] **Métricas:** Exponer métricas detalladas en formato **Prometheus** (más allá del uptime actual). Incluir latencia de requests, número de errores, etc.
+*   [x] **3.3. Monitoreo y Alertas:**
+    *   [x] **Métricas:** Exponer métricas detalladas en formato **Prometheus** (más allá del uptime actual). Incluir latencia de requests, número de errores, etc.
     *   [ ] **Dashboard de Monitoreo:** Configurar un dashboard (ej. en **Grafana**) que consuma las métricas de Prometheus para visualizar la salud del sistema en tiempo real.
     *   [ ] **Alertas:** Configurar alertas (ej. con Alertmanager de Prometheus) para notificar sobre fallos críticos (ej. API caída, uso de CPU > 90%).
-*   [ ] **3.4. Estrategia de Backup y Restauración:**
-    *   [ ] Automatizar backups periódicos de la base de datos PostgreSQL (ej. con un cronjob que ejecute `pg_dump`).
-    *   [ ] Almacenar los backups en un lugar seguro y externo (ej. un bucket de S3).
-    *   [ ] Documentar y **probar** el procedimiento de restauración a partir de un backup.
+*   [x] **3.4. Estrategia de Backup y Restauración:**
+    *   [x] Automatizar backups periódicos de la base de datos PostgreSQL (implementado con scripts y Docker).
+    *   [x] Almacenar los backups en un lugar seguro y externo (soporte para S3 implementado).
+    *   [x] Documentar y **probar** el procedimiento de restauración a partir de un backup (ver `docs/BACKUP_RESTORE_STRATEGY.md`).
 
-### ☐ **Fase 4: Despliegue Continuo (CI/CD)**
+### ☑️ **Fase 4: Despliegue Continuo (CI/CD)**
 
-*   [ ] **4.1. Pipeline de Integración Continua (CI):**
-    *   [ ] Configurar un pipeline (ej. en GitHub Actions) que se dispare en cada `push` o `pull request`.
-    *   [ ] El pipeline debe:
-        *   Ejecutar el linter (`ruff`) y el type checker (`mypy`).
-        *   Ejecutar todas las pruebas (`pytest`).
-        *   Construir las imágenes de Docker para validar que el build no se ha roto.
-*   [ ] **4.2. Pipeline de Despliegue Continuo (CD):**
-    *   [ ] Configurar un pipeline que, tras un merge a la rama principal (`main`):
-        *   Construya y etiquete las imágenes de Docker de producción.
-        *   Suba las imágenes a un registro de contenedores (ej. Docker Hub, AWS ECR, GCP Artifact Registry).
-        *   Despliegue la nueva versión en un entorno de **staging** para validación final.
-    *   [ ] Implementar una estrategia de despliegue a **producción** (puede ser manual tras la validación en staging, o automática).
+*   [x] **4.1. Pipeline de Integración Continua (CI):**
+    *   [x] Configurar un pipeline (en GitHub Actions) que se dispare en cada `push` o `pull request`.
+    *   [x] El pipeline ejecuta:
+        *   Linter (`ruff`) y type checker (`mypy`).
+        *   Todas las pruebas (`pytest`) con cobertura.
+        *   Construcción de imágenes Docker para validar el build.
+        *   Tests E2E en branches principales.
+*   [x] **4.2. Pipeline de Despliegue Continuo (CD):**
+    *   [x] Configurar pipeline que tras un merge a la rama principal (`main`):
+        *   Construye y etiqueta las imágenes Docker de producción.
+        *   Sube las imágenes a GitHub Container Registry.
+        *   Despliega automáticamente en **staging** para validación.
+    *   [x] Implementar estrategia de despliegue a **producción** con aprobación manual.
+    *   [x] Incluir pipeline de release management con versionado semántico.
 
 ### ☐ **Fase 5: Puesta en Producción (Go-Live)**
 

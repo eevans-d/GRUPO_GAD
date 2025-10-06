@@ -64,9 +64,6 @@ async def override_get_db_session() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-app.dependency_overrides[get_db_session] = override_get_db_session
-
-
 # --- Fixture para generación de tokens JWT consistentes ---
 @pytest.fixture(scope="session")
 def token_factory():
@@ -139,10 +136,20 @@ async def client(db_session: AsyncSession):
     """
     Fixture que proporciona un AsyncClient de httpx para cada prueba.
     """
+    # Override the database dependency to use the test session
+    async def override_db():
+        yield db_session
+    
+    app.dependency_overrides[get_db_session] = override_db
+    
     from httpx import ASGITransport
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
+    
+    # Clean up override after test
+    if get_db_session in app.dependency_overrides:
+        del app.dependency_overrides[get_db_session]
 
 
 # --- Fixture de servidor WebSocket real (para E2E) ---

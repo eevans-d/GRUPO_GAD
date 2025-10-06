@@ -5,13 +5,10 @@ Objetivo: Aumentar cobertura del 50% al 85%
 """
 
 import pytest
-import pytest_asyncio
 from fastapi import HTTPException, status
-from jose import jwt
 from jose.exceptions import JWTError
-from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 from src.api.dependencies import (
     get_current_user,

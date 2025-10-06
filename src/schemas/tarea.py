@@ -5,8 +5,9 @@ Esquemas para el modelo de Tarea.
 
 from datetime import datetime
 from typing import List, Optional
+from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 from src.shared.constants import TaskPriority, TaskStatus, TaskType
 
@@ -53,8 +54,12 @@ class TareaUpdate(BaseModel):
 # Propiedades compartidas por los modelos en la BD
 class TareaInDBBase(TareaBase):
     id: int
-    uuid: str
+    uuid: UUID
     estado: TaskStatus
+
+    @field_serializer('uuid')
+    def serialize_uuid(self, value: UUID) -> str:
+        return str(value)
 
     model_config = ConfigDict(from_attributes=True)
 

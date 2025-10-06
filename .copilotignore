@@ -26,3 +26,15 @@ site/
 .pytest_cache/
 htmlcov/
 .coverage
+
+# Cache de herramientas
+.mypy_cache/
+.ruff_cache/
+
+# Logs y backups
+logs/
+backups/
+
+# Coverage
+htmlcov/
+.coverage

@@ -8,7 +8,6 @@ import pytest
 import pytest_asyncio
 from datetime import datetime, timedelta
 from httpx import AsyncClient
-from unittest.mock import AsyncMock, MagicMock, patch
 
 from src.api.models.tarea import Tarea as TareaModel
 from src.api.models.usuario import Usuario
@@ -58,9 +57,9 @@ async def mock_task(db_session, mock_user):
 
 
 @pytest.fixture
-def auth_headers(token_factory):
+def auth_headers(token_factory, mock_user):
     """Fixture para headers de autenticación."""
-    token = token_factory(1)  # User ID 1
+    token = token_factory(mock_user.id)
     return {"Authorization": f"Bearer {token}"}
 
 

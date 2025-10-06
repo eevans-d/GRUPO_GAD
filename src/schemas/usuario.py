@@ -4,8 +4,9 @@ Esquemas para el modelo de Usuario.
 """
 
 from typing import Optional
+from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, field_serializer
 
 from src.shared.constants import UserLevel
 
@@ -47,7 +48,11 @@ class UsuarioUpdate(BaseModel):
 # Propiedades compartidas por los modelos en la BD
 class UsuarioInDBBase(UsuarioBase):
     id: int
-    uuid: str
+    uuid: UUID
+
+    @field_serializer('uuid')
+    def serialize_uuid(self, value: UUID) -> str:
+        return str(value)
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -147,6 +147,35 @@ print(resp.json())
 - Haz backup de la base de datos antes de cambios mayores.
 - Usa Docker para producción si es posible.
 
+## 4.3. Monitoreo y Métricas
+
+### Métricas Prometheus
+El sistema incluye soporte para métricas Prometheus, especialmente para el subsistema WebSocket:
+
+```bash
+# Endpoint de métricas básicas (legacy)
+curl http://localhost:8000/metrics
+
+# Endpoint de métricas Prometheus completas
+curl http://localhost:8000/api/v1/metrics/prometheus
+```
+
+Las métricas disponibles incluyen:
+- `ggrt_active_connections`: Conexiones WebSocket activas
+- `ggrt_messages_sent_total`: Total de mensajes WebSocket enviados
+- `ggrt_broadcasts_total`: Total de broadcasts realizados
+- Y más (ver `docs/PROMETHEUS_METRICAS_IMPLEMENTACION.md`)
+
+Para integrar con Prometheus, añade a tu `prometheus.yml`:
+```yaml
+scrape_configs:
+  - job_name: 'grupogad_api'
+    metrics_path: '/api/v1/metrics/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['api:8000']
+```
+
 ## 5. Seguridad
 
 - Validación de campos sensibles en actualizaciones

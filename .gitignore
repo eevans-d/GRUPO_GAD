@@ -186,3 +186,14 @@ yarn-error.log*
 .git/
 *.patch
 *.diff
+# Cache adicionales
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.pytest_cache/
+*.cover
+.coverage
+
+# Logs grandes
+logs/*.jsonl
+logs/*.log

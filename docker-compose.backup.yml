@@ -1,0 +1,58 @@
+# Este docker-compose define un servicio para backups programados
+# Puede ejecutarse junto al docker-compose principal o como un servicio separado
+
+version: '3.8'
+
+services:
+  backup:
+    image: postgres:15-alpine
+    container_name: grupogad_backup_service
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_NAME=grupogad
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - BACKUP_DIR=/backups
+      - RETENTION_DAYS=7
+      # Opcional para S3
+      - S3_BUCKET=${S3_BUCKET:-}
+      - S3_PREFIX=${S3_PREFIX:-grupogad/backups/}
+      - S3_RETENTION_DAYS=30
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup:/scripts
+    # Instalar herramientas necesarias y ejecutar cron para backups programados
+    entrypoint: |
+      sh -c "
+        echo 'Instalando herramientas para backup...'
+        apk add --no-cache bash aws-cli
+        
+        echo '0 1 * * * bash /scripts/postgres_backup.sh >> /backups/cron.log 2>&1' > /tmp/crontab
+        echo '30 13 * * * bash /scripts/postgres_backup.sh >> /backups/cron.log 2>&1' >> /tmp/crontab
+        crontab /tmp/crontab
+        
+        echo 'Ejecutando backup inicial...'
+        bash /scripts/postgres_backup.sh
+        
+        echo 'Iniciando servicio cron...'
+        crond -f -l 8
+      "
+    networks:
+      - gad_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    # Usamos una referencia a la base de datos ya definida en el docker-compose principal
+    extends:
+      file: docker-compose.yml
+      service: db
+
+networks:
+  gad_network:
+    external: true  # Asume que la red ya existe creada por docker-compose principal

@@ -7,9 +7,9 @@ Protección contra DoS y abuso en servicios ciudadanos.
 import time
 from typing import Dict, Callable
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from fastapi import Request, HTTPException, status
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
