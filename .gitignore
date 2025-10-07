@@ -207,3 +207,4 @@ b/
 pip_audit_report*.json
 audit-*.csv
 audit-*.md
+*.code-workspace
