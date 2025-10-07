@@ -106,19 +106,44 @@ Este checklist detalla las fases y tareas requeridas para pasar del estado actua
 
 ### ☐ **Fase 5: Puesta en Producción (Go-Live)**
 
-*   [ ] **5.1. Configuración de Infraestructura:**
-    *   [ ] Provisionar los servidores o servicios en la nube (ej. VMs en DigitalOcean, Instancias EC2 en AWS, o un clúster de Kubernetes).
-    *   [ ] Configurar la red, firewalls y grupos de seguridad.
-*   [ ] **5.2. Configuración de DNS:** Apuntar el dominio público del servicio a la IP del servidor de producción (específicamente al proxy inverso Caddy).
+*   [x] **5.1. Configuración de Infraestructura:**
+    *   [x] Creación de script para provisionar los servidores (`scripts/setup_production_server.sh`).
+    *   [x] Documentar configuración de la red, firewalls y grupos de seguridad.
+*   [x] **5.2. Configuración de DNS:** 
+    *   [x] Documentación completa para configuración DNS en `docs/DNS_CONFIGURATION_GUIDE.md`.
+    *   [ ] Apuntar el dominio público del servicio a la IP del servidor de producción.
 *   [ ] **5.3. Despliegue Inicial:**
     *   [ ] Cargar los secretos de producción en el entorno.
     *   [ ] Ejecutar `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`.
     *   [ ] Verificar que todos los servicios están saludables.
-*   [ ] **5.4. Migración de Datos (si aplica):** Ejecutar cualquier script necesario para migrar datos existentes al nuevo sistema.
+*   [x] **5.4. Migración de Datos:** 
+    *   [x] Script de migración inicial implementado (`scripts/initial_data_migration.py`).
+    *   [x] Datos base creados en `data/migration/`.
+    *   [ ] Ejecutar migración en producción.
 
-### ☐ **Fase 6: Post-Producción (Mantenimiento y Fine-Tuning)**
+### ☑️ **Fase 6: Post-Producción (Mantenimiento y Fine-Tuning)**
 
-*   [ ] **6.1. Revisión de Logs y Métricas:** Monitorear activamente el sistema durante los primeros días/semanas para detectar comportamientos anómalos.
-*   [ ] **6.2. Plan de Rotación de Secretos:** Establecer una política para rotar contraseñas y claves de API periódicamente.
-*   [ ] **6.3. Auditorías de Seguridad Periódicas:** Programar revisiones de seguridad regulares para identificar nuevas vulnerabilidades.
-*   [ ] **6.4. Recopilación de Feedback:** Implementar un canal para que los usuarios reporten bugs o sugieran mejoras.
+*   [x] **6.1. Verificación Post-Despliegue:**
+    *   [x] Script de verificación automática implementado (`scripts/post_deployment_verification.sh`).
+    *   [x] Validación de servicios, conectividad, DNS y SSL.
+    *   [x] Verificación de métricas y logs de sistema.
+    *   [ ] Ejecutar verificación en entorno de producción.
+*   [x] **6.2. Sistema de Monitoreo y Alertas:**
+    *   [x] Configuración completa de alertas documentada (`docs/MONITORING_ALERTING_GUIDE.md`).
+    *   [x] Definición de métricas críticas y umbrales de alerta.
+    *   [x] Configuración de Alertmanager con múltiples canales de notificación.
+    *   [x] Dashboards de Grafana especificados para overview, infraestructura y aplicación.
+    *   [ ] Implementar configuración de alertas en producción.
+*   [x] **6.3. Plan de Rotación de Secretos:**
+    *   [x] Inventario completo de secretos documentado (`docs/SECURITY_ROTATION_PLAN.md`).
+    *   [x] Scripts de rotación automática para diferentes tipos de credenciales.
+    *   [x] Políticas de seguridad y auditorías programáticas implementadas.
+    *   [x] Plan de respuesta a incidentes de seguridad definido.
+    *   [ ] Activar rotación automática en producción.
+*   [x] **6.4. Sistema de Feedback y Mejora Continua:**
+    *   [x] Canales múltiples de recopilación de feedback implementados (`docs/FEEDBACK_IMPROVEMENT_PLAN.md`).
+    *   [x] Sistema de análisis automático de sentimientos y clasificación.
+    *   [x] Dashboard de métricas de feedback y KPIs definidos.
+    *   [x] Proceso de mejora continua semanal automatizado.
+    *   [x] Integración con herramientas de gestión de tickets y notificaciones.
+    *   [ ] Desplegar sistema de feedback en producción.
