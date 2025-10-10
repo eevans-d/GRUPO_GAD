@@ -1,7 +1,47 @@
 # 📚 GRUPO_GAD - Índice de Documentación
 
 **Sistema de Gestión Administrativa Gubernamental**  
-Versión: 1.0.0 | FastAPI + PostgreSQL + WebSockets + Google Cloud Platform
+Versión: 1.0.0 | FastAPI + PostgreSQL + WebSockets + Telegram Bot + Google Cloud Platform
+
+---
+
+## ⭐ PLANES ACTIVOS Y DEFINITIVOS
+
+### 🤖 Bot de Telegram: Botones Interactivos (NUEVO - 2025-10-10)
+
+**DOCUMENTO MAESTRO DE REFERENCIA:**
+
+- **[docs/TELEGRAM_INTERACTIVE_BUTTONS_PLAN.md](TELEGRAM_INTERACTIVE_BUTTONS_PLAN.md)** 🎯 **PLAN DEFINITIVO v2.0**
+  - Plan completo con TODAS las correcciones aplicadas (1,100+ líneas)
+  - **Estado:** ✅✅✅ LISTO PARA IMPLEMENTACIÓN INMEDIATA
+  - Timeline: 16 horas (2 días)
+  - 3 Fases: MVP (3h) + Wizard Crear (5h) + Finalizar (3h)
+  - **Correcciones aplicadas:** 4/4 (100%)
+    - ✅ python-telegram-bot version pinned (20.6-20.9)
+    - ✅ Type hints corregidos (Application)
+    - ✅ ApiService extendido (get_user_pending_tasks)
+    - ✅ Directorio utils/ creado
+  - Código completo de implementación incluido
+  - Tests unitarios y de integración
+  - Rollback strategy documentada
+
+- **[docs/TELEGRAM_BUTTONS_VERIFICATION_REPORT.md](TELEGRAM_BUTTONS_VERIFICATION_REPORT.md)** 🔍 **VERIFICACIÓN**
+  - Reporte exhaustivo de verificación y simulación (850+ líneas)
+  - Análisis de conflictos detectados
+  - Validación de compatibilidad
+  - Tests de simulación
+  - Confianza: 98%
+
+**Archivos de código modificados (Pre-Requisitos COMPLETADOS):**
+- ✅ `docker/requirements.bot.txt` - Versión pinned
+- ✅ `src/bot/handlers/__init__.py` - Type hints corregidos
+- ✅ `src/bot/services/api_service.py` - Método agregado
+- ✅ `src/bot/utils/__init__.py` - Directorio creado
+
+**Archivos pendientes de crear (Fase 1-3):**
+- `src/bot/handlers/callback_handler.py` - Router de callbacks
+- `src/bot/utils/keyboards.py` - Factory de teclados
+- Modificaciones en `start.py`, `crear_tarea.py`, `finalizar_tarea.py`
 
 ---
 
@@ -233,9 +273,43 @@ Objetivo: **>85%** | Actual: Ver `coverage_report.txt`
 
 ## 📜 Licencia
 
-MIT License - Ver [LICENSE](LICENSE) para más detalles.
+MIT License - Ver [LICENSE](../LICENSE) para más detalles.
 
 ---
 
-**Última actualización**: 2024
+**Última actualización**: 10 de Octubre, 2025  
 **Mantenido por**: Equipo GAD
+
+---
+
+## 🎯 RESUMEN EJECUTIVO PARA AGENTES IA
+
+### Documentos de Referencia Obligatoria
+
+**Siempre consultar PRIMERO estos documentos:**
+
+1. **[.github/copilot-instructions.md](../.github/copilot-instructions.md)** - Guía base para agentes IA
+2. **[docs/TELEGRAM_INTERACTIVE_BUTTONS_PLAN.md](TELEGRAM_INTERACTIVE_BUTTONS_PLAN.md)** - Plan activo bot Telegram
+3. **[docs/cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md](cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md)** - Plan activo GCP
+4. **[docs/PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)** - Overview técnico general
+
+### Estado de Proyectos Activos
+
+| Proyecto | Documento | Estado | Progreso |
+|----------|-----------|--------|----------|
+| **Bot Telegram Interactivo** | TELEGRAM_INTERACTIVE_BUTTONS_PLAN.md | ✅ Listo | Pre-req: 100% |
+| **Migración GCP** | GOOGLE_CLOUD_MIGRATION_PLAN.md | 📋 Planificado | 0% |
+| **WebSockets** | guides/WEBSOCKET_SYSTEM_STATUS.md | ✅ Funcional | 100% |
+
+### Correcciones Aplicadas Recientemente (2025-10-10)
+
+```bash
+# Bot Telegram
+✅ docker/requirements.bot.txt → python-telegram-bot>=20.6,<21.0
+✅ src/bot/handlers/__init__.py → Application (no Dispatcher)
+✅ src/bot/services/api_service.py → get_user_pending_tasks()
+✅ src/bot/utils/ → Directorio creado
+
+# Próximos pasos
+🚀 Implementar Fase 1: MVP (3 horas)
+```

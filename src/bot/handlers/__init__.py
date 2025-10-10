@@ -3,7 +3,7 @@
 Registra todos los manejadores de comandos y mensajes para el bot.
 """
 
-from telegram.ext import Dispatcher  # type: ignore # Added type: ignore
+from telegram.ext import Application
 
 from .commands import (  # type: ignore # Added type: ignore
     crear_tarea,
@@ -13,11 +13,14 @@ from .commands import (  # type: ignore # Added type: ignore
 from .messages import message_handler
 
 
-def register_handlers(dp: Dispatcher) -> None:
+def register_handlers(app: Application) -> None:
     """
-    Registra todos los manejadores en el dispatcher.
+    Registra todos los manejadores en la aplicación del bot.
+    
+    Args:
+        app: Instancia de Application de python-telegram-bot v20.x
     """
-    dp.add_handler(start.start_handler)
-    dp.add_handler(crear_tarea.crear_tarea_handler)
-    dp.add_handler(finalizar_tarea.finalizar_tarea_handler)
-    dp.add_handler(message_handler.handler)
+    app.add_handler(start.start_handler)
+    app.add_handler(crear_tarea.crear_tarea_handler)
+    app.add_handler(finalizar_tarea.finalizar_tarea_handler)
+    app.add_handler(message_handler.handler)

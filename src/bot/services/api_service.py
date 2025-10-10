@@ -49,3 +49,12 @@ class ApiService:
         data = {"task_code": task_code, "telegram_id": telegram_id}
         response = self._post("/tasks/finalize", data)
         return Tarea(**response)
+
+    def get_user_pending_tasks(self, telegram_id: int) -> List[Tarea]:
+        """Obtiene tareas pendientes de un usuario por telegram_id."""
+        try:
+            response = self._get(f"/tasks/user/telegram/{telegram_id}?status=pending")
+            return [Tarea(**t) for t in response]
+        except requests.exceptions.RequestException:
+            return []
+        return Tarea(**response)
