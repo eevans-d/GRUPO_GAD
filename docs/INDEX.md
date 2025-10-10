@@ -1,7 +1,37 @@
 # 📚 GRUPO_GAD - Índice de Documentación
 
 **Sistema de Gestión Administrativa Gubernamental**  
-Versión: 0.1.0 | FastAPI + PostgreSQL + WebSockets
+Versión: 1.0.0 | FastAPI + PostgreSQL + WebSockets + Google Cloud Platform
+
+---
+
+## 🚀 NUEVO: Migración a Google Cloud Platform
+
+### 🌐 Documentación Cloud (AÑADIDA 2025-10-10)
+
+#### Guías de Migración GCP
+- **[docs/cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md](cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md)** ⭐ **PLAN MAESTRO**
+  - Plan completo de migración en 8 fases (1,579 líneas)
+  - Timeline: 7-10 semanas
+  - Arquitectura serverless con Cloud Run
+  - Costos estimados por escenario ($121 - $5,902/mes)
+  - 120+ comandos gcloud documentados
+  
+- **[docs/cloud/QUICKSTART_GCP.md](cloud/QUICKSTART_GCP.md)** ⚡ **INICIO RÁPIDO**
+  - Guía de 5 minutos para deployment inmediato (333 líneas)
+  - Comandos esenciales
+  - Troubleshooting común
+  
+- **[docs/cloud/POSTGIS_CLOUD_SQL_GUIDE.md](cloud/POSTGIS_CLOUD_SQL_GUIDE.md)** 🗺️ **PostGIS en Cloud SQL**
+  - Configuración PostgreSQL + PostGIS en Cloud SQL (595 líneas)
+  - Optimización de queries espaciales
+  - Backups y restauración
+  - Migración de datos geoespaciales
+
+#### Infraestructura como Código
+- **[cloudbuild.yaml](../cloudbuild.yaml)** - Pipeline CI/CD completo (10 steps)
+- **[docker/Dockerfile.cloudrun](../docker/Dockerfile.cloudrun)** - Dockerfile optimizado para Cloud Run
+- **[scripts/cloud/deploy_gcp.sh](../scripts/cloud/deploy_gcp.sh)** - Script de deployment automatizado
 
 ---
 
@@ -10,43 +40,47 @@ Versión: 0.1.0 | FastAPI + PostgreSQL + WebSockets
 ### 👨‍💻 Para Desarrolladores
 
 #### Empezando
-- [**README.md**](README.md) - Instalación rápida y guía de inicio
-- [**CONTRIBUTING.md**](CONTRIBUTING.md) - Guía de contribución al proyecto
+- [**README.md**](../README.md) - Instalación rápida y guía de inicio
+- [**CONTRIBUTING.md**](../CONTRIBUTING.md) - Guía de contribución al proyecto
+- [**CHANGELOG.md**](../CHANGELOG.md) - Historial de cambios
 
 #### Arquitectura y Diseño
-- [**docs/PROJECT_OVERVIEW.md**](docs/PROJECT_OVERVIEW.md) - Visión general técnica del proyecto
-- [**ARCHITECTURAL_ANALYSIS.md**](ARCHITECTURAL_ANALYSIS.md) - Análisis arquitectónico detallado
-- [**FUNCTIONAL_ANALYSIS.md**](FUNCTIONAL_ANALYSIS.md) - Análisis funcional del sistema
-- [**ESPECIFICACION_TECNICA.md**](ESPECIFICACION_TECNICA.md) - Especificaciones técnicas
+- [**docs/PROJECT_OVERVIEW.md**](PROJECT_OVERVIEW.md) - Visión general técnica del proyecto
+- [**docs/analysis/ARCHITECTURAL_ANALYSIS.md**](analysis/ARCHITECTURAL_ANALYSIS.md) - Análisis arquitectónico detallado
+- [**docs/analysis/FUNCTIONAL_ANALYSIS.md**](analysis/FUNCTIONAL_ANALYSIS.md) - Análisis funcional del sistema
 
 #### WebSockets
-- [**WEBSOCKET_SYSTEM_STATUS.md**](WEBSOCKET_SYSTEM_STATUS.md) - Estado y documentación del sistema WebSocket
+- [**docs/guides/WEBSOCKET_SYSTEM_STATUS.md**](guides/WEBSOCKET_SYSTEM_STATUS.md) - Estado y documentación del sistema WebSocket
 - `src/core/websockets.py` - Implementación del WebSocket Manager
 - `src/api/routers/websockets.py` - Endpoints WebSocket
 - `dashboard/static/websocket_test.html` - UI de prueba para WebSockets
 
 #### Guías de Desarrollo
-- [**REFACTORING_PLAN.md**](REFACTORING_PLAN.md) - Plan de refactorización
-- [**OPTIMIZATION_SUMMARY.md**](OPTIMIZATION_SUMMARY.md) - Resumen de optimizaciones
-- [**DEPENDENCY_AUDIT.md**](DEPENDENCY_AUDIT.md) - Auditoría de dependencias
+- [**docs/guides/REFACTORING_PLAN.md**](guides/REFACTORING_PLAN.md) - Plan de refactorización
+- [**docs/guides/OPTIMIZATION_SUMMARY.md**](guides/OPTIMIZATION_SUMMARY.md) - Resumen de optimizaciones
+- [**docs/analysis/DEPENDENCY_AUDIT.md**](analysis/DEPENDENCY_AUDIT.md) - Auditoría de dependencias
 
 #### Copilot Instructions
-- [**.github/copilot-instructions.md**](.github/copilot-instructions.md) - Guía para Agentes de IA
+- [**.github/copilot-instructions.md**](../.github/copilot-instructions.md) - Guía para Agentes de IA
 
 ---
 
 ### 🚀 Para DevOps
 
-#### Despliegue
-- [**docs/DEPLOYMENT_GUIDE.md**](docs/DEPLOYMENT_GUIDE.md) - Guía completa de despliegue (si existe)
-- [**BLUEPRINT_DESPLIEGUE_EJECUTIVO.md**](BLUEPRINT_DESPLIEGUE_EJECUTIVO.md) - Blueprint ejecutivo de despliegue
-- [**DIAGNOSTICO_FINAL_DESPLIEGUE.md**](DIAGNOSTICO_FINAL_DESPLIEGUE.md) - Diagnóstico final pre-despliegue
-- [**ROADMAP_TO_PRODUCTION.md**](ROADMAP_TO_PRODUCTION.md) - Roadmap a producción
+#### Despliegue Local/Docker
+- [**ROADMAP_TO_PRODUCTION.md**](../ROADMAP_TO_PRODUCTION.md) - Roadmap a producción (Docker)
+- [**docs/deployment/DEPLOYMENT_GUIDE.md**](deployment/DEPLOYMENT_GUIDE.md) - Guía completa de despliegue
+- [**docs/deployment/BLUEPRINT_DESPLIEGUE_EJECUTIVO.md**](deployment/BLUEPRINT_DESPLIEGUE_EJECUTIVO.md) - Blueprint ejecutivo
+
+#### Despliegue en Google Cloud Platform ⭐ NUEVO
+- **[docs/cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md](cloud/GOOGLE_CLOUD_MIGRATION_PLAN.md)** - Plan maestro de migración
+- **[docs/cloud/QUICKSTART_GCP.md](cloud/QUICKSTART_GCP.md)** - Quick start GCP
+- **[docs/cloud/POSTGIS_CLOUD_SQL_GUIDE.md](cloud/POSTGIS_CLOUD_SQL_GUIDE.md)** - PostGIS en Cloud SQL
 
 #### Checklists y Playbooks
-- [**CHECKLIST_PRODUCCION.md**](CHECKLIST_PRODUCCION.md) - Checklist pre-producción
-- [**docs/PLAYBOOK_ROLLBACK_RUNBOOK.md**](docs/PLAYBOOK_ROLLBACK_RUNBOOK.md) - Procedimiento de rollback (si existe)
-- [**docs/PLAYBOOK_FINALIZACION.md**](docs/PLAYBOOK_FINALIZACION.md) - Playbook de finalización (si existe)
+- [**CHECKLIST_PRODUCCION.md**](../CHECKLIST_PRODUCCION.md) - Checklist pre-producción
+- [**docs/deployment/PLAYBOOK_ROLLBACK_RUNBOOK.md**](deployment/PLAYBOOK_ROLLBACK_RUNBOOK.md) - Procedimiento de rollback
+- [**docs/deployment/PLAYBOOK_FINALIZACION.md**](deployment/PLAYBOOK_FINALIZACION.md) - Playbook de finalización
 
 #### Infraestructura
 - [**docker-compose.yml**](docker-compose.yml) - Configuración Docker para desarrollo
