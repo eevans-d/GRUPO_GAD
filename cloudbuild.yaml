@@ -1,0 +1,257 @@
+# cloudbuild.yaml
+# Google Cloud Build Configuration para CI/CD
+# Proyecto: GRUPO_GAD
+
+# Sustituciones personalizadas
+substitutions:
+  _SERVICE_NAME: grupo-gad-api
+  _REGION: us-central1
+  _ARTIFACT_REGISTRY: us-central1-docker.pkg.dev
+  _IMAGE_NAME: api
+
+# Opciones globales
+options:
+  machineType: 'N1_HIGHCPU_8'
+  substitutionOption: 'ALLOW_LOOSE'
+  logging: CLOUD_LOGGING_ONLY
+  dynamicSubstitutions: true
+
+# Steps del pipeline
+steps:
+  # ============================================
+  # STEP 1: Configurar entorno Python
+  # ============================================
+  - name: 'python:3.11-slim'
+    id: 'setup-python'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🐍 Configurando entorno Python..."
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        echo "✓ Entorno configurado"
+
+  # ============================================
+  # STEP 2: Ejecutar Linters
+  # ============================================
+  - name: 'python:3.11-slim'
+    id: 'run-linters'
+    entrypoint: 'bash'
+    waitFor: ['setup-python']
+    args:
+      - '-c'
+      - |
+        echo "🔍 Ejecutando linters..."
+        pip install ruff mypy
+        
+        # Ruff (fast linter)
+        echo "  → Ruff..."
+        ruff check src/ tests/ --output-format=github || true
+        
+        # MyPy (type checker)
+        echo "  → MyPy..."
+        mypy src/ --ignore-missing-imports || true
+        
+        echo "✓ Linters completados"
+
+  # ============================================
+  # STEP 3: Ejecutar Tests Unitarios
+  # ============================================
+  - name: 'python:3.11-slim'
+    id: 'run-tests'
+    entrypoint: 'bash'
+    waitFor: ['setup-python']
+    env:
+      - 'ENVIRONMENT=test'
+      - 'DATABASE_URL=sqlite+aiosqlite:///:memory:'
+    args:
+      - '-c'
+      - |
+        echo "🧪 Ejecutando tests..."
+        python -m pytest tests/ \
+          -v \
+          --tb=short \
+          --cov=src \
+          --cov-report=term-missing \
+          --cov-report=xml \
+          --junitxml=test-results.xml
+        echo "✓ Tests completados"
+
+  # ============================================
+  # STEP 4: Security Audit
+  # ============================================
+  - name: 'python:3.11-slim'
+    id: 'security-audit'
+    entrypoint: 'bash'
+    waitFor: ['-']
+    args:
+      - '-c'
+      - |
+        echo "🔒 Ejecutando auditoría de seguridad..."
+        pip install pip-audit safety
+        
+        # Pip-audit (vulnerabilidades en dependencias)
+        echo "  → pip-audit..."
+        pip-audit -r requirements.txt --format json --output pip-audit-report.json || true
+        
+        # Safety (base de datos de vulnerabilidades)
+        echo "  → safety..."
+        safety check -r requirements.txt --json --output safety-report.json || true
+        
+        echo "✓ Auditoría completada"
+
+  # ============================================
+  # STEP 5: Construir Imagen Docker
+  # ============================================
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-image'
+    waitFor: ['run-tests', 'run-linters', 'security-audit']
+    args:
+      - 'build'
+      - '-f'
+      - 'docker/Dockerfile.cloudrun'
+      - '--build-arg'
+      - 'BUILD_DATE=${BUILD_ID}'
+      - '--build-arg'
+      - 'VERSION=${TAG_NAME}'
+      - '--build-arg'
+      - 'COMMIT=${SHORT_SHA}'
+      - '-t'
+      - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${SHORT_SHA}'
+      - '-t'
+      - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${TAG_NAME}'
+      - '-t'
+      - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:latest'
+      - '.'
+
+  # ============================================
+  # STEP 6: Escanear Vulnerabilidades en Imagen
+  # ============================================
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'scan-image'
+    waitFor: ['build-image']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🔍 Escaneando vulnerabilidades en imagen..."
+        gcloud artifacts docker images scan \
+          ${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${SHORT_SHA} \
+          --location=${_REGION} || true
+        echo "✓ Escaneo completado"
+
+  # ============================================
+  # STEP 7: Push a Artifact Registry
+  # ============================================
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-image'
+    waitFor: ['scan-image']
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}'
+
+  # ============================================
+  # STEP 8: Deploy a Cloud Run (solo en main)
+  # ============================================
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy-cloudrun'
+    waitFor: ['push-image']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [[ "${BRANCH_NAME}" == "main" || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "🚀 Desplegando a Cloud Run..."
+          
+          gcloud run deploy ${_SERVICE_NAME} \
+            --image=${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${SHORT_SHA} \
+            --region=${_REGION} \
+            --platform=managed \
+            --service-account=grupo-gad-api@${PROJECT_ID}.iam.gserviceaccount.com \
+            --allow-unauthenticated \
+            --min-instances=1 \
+            --max-instances=10 \
+            --cpu=2 \
+            --memory=4Gi \
+            --timeout=300 \
+            --concurrency=80 \
+            --port=8080 \
+            --set-env-vars=ENVIRONMENT=production,PROJECT_NAME=GRUPO_GAD,API_V1_STR=/api/v1 \
+            --quiet
+          
+          echo "✓ Deployment completado"
+        else
+          echo "⏭️  Saltando deployment (no es branch main o tag de versión)"
+        fi
+
+  # ============================================
+  # STEP 9: Smoke Tests Post-Deployment
+  # ============================================
+  - name: 'gcr.io/cloud-builders/curl'
+    id: 'smoke-tests'
+    waitFor: ['deploy-cloudrun']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [[ "${BRANCH_NAME}" == "main" || "${TAG_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "🧪 Ejecutando smoke tests..."
+          
+          SERVICE_URL=$(gcloud run services describe ${_SERVICE_NAME} \
+            --region=${_REGION} \
+            --format='get(status.url)')
+          
+          # Test 1: Health check
+          echo "  → Health check..."
+          curl -sf "${SERVICE_URL}/api/v1/health" || exit 1
+          
+          # Test 2: Metrics
+          echo "  → Metrics endpoint..."
+          curl -sf "${SERVICE_URL}/metrics" || echo "Warning: Metrics endpoint failed"
+          
+          echo "✓ Smoke tests completados"
+        else
+          echo "⏭️  Saltando smoke tests (no es deployment)"
+        fi
+
+  # ============================================
+  # STEP 10: Notificación de Éxito
+  # ============================================
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'notify-success'
+    waitFor: ['smoke-tests']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "  ✅ BUILD EXITOSO"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "  📦 Commit:    ${SHORT_SHA}"
+        echo "  🏷️  Tag:       ${TAG_NAME}"
+        echo "  🌿 Branch:    ${BRANCH_NAME}"
+        echo "  🆔 Build ID:  ${BUILD_ID}"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Timeout total del build
+timeout: '1800s'
+
+# Imágenes a pushear al registry
+images:
+  - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${SHORT_SHA}'
+  - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:${TAG_NAME}'
+  - '${_ARTIFACT_REGISTRY}/${PROJECT_ID}/grupo-gad-images/${_IMAGE_NAME}:latest'
+
+# Artifacts a almacenar
+artifacts:
+  objects:
+    location: 'gs://${PROJECT_ID}_cloudbuild/artifacts'
+    paths:
+      - 'test-results.xml'
+      - 'coverage.xml'
+      - 'pip-audit-report.json'
+      - 'safety-report.json'

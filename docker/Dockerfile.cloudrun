@@ -1,0 +1,90 @@
+# Dockerfile optimizado para Google Cloud Run
+# Proyecto: GRUPO_GAD
+
+# Build stage
+FROM python:3.11-slim as builder
+
+WORKDIR /build
+
+# Instalar dependencias de build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY requirements.txt .
+
+# Crear virtualenv e instalar dependencias
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Runtime stage
+FROM python:3.11-slim
+
+# Metadatos
+ARG BUILD_DATE
+ARG VERSION
+ARG COMMIT
+LABEL org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.revision="${COMMIT}" \
+      org.opencontainers.image.title="GRUPO_GAD API" \
+      org.opencontainers.image.description="Sistema de Gestión de Tareas para Personal Policial"
+
+# Variables de entorno
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PATH="/opt/venv/bin:$PATH" \
+    PORT=8080
+
+# Instalar dependencias runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Crear usuario no-root para seguridad
+RUN useradd -m -u 1000 -s /bin/bash appuser && \
+    mkdir -p /app/logs && \
+    chown -R appuser:appuser /app
+
+# Copiar virtualenv desde builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar código fuente (con ownership correcto)
+COPY --chown=appuser:appuser . .
+
+# Cambiar a usuario no-root
+USER appuser
+
+# Health check nativo de Docker
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/api/v1/health || exit 1
+
+# Exponer puerto (Cloud Run lo sobreescribe con PORT env var)
+EXPOSE ${PORT}
+
+# Punto de entrada con Gunicorn + Uvicorn workers
+# Cloud Run automáticamente pasa el puerto via $PORT
+CMD exec gunicorn src.api.main:app \
+    --workers ${GUNICORN_WORKERS:-2} \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --bind :${PORT} \
+    --timeout ${GUNICORN_TIMEOUT:-60} \
+    --graceful-timeout ${GUNICORN_GRACEFUL_TIMEOUT:-30} \
+    --keep-alive ${GUNICORN_KEEPALIVE:-5} \
+    --access-logfile - \
+    --error-logfile - \
+    --log-level ${LOG_LEVEL:-info} \
+    --access-logformat '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s' \
+    --worker-tmp-dir /dev/shm
