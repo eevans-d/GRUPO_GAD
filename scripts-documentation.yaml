@@ -1,0 +1,119 @@
+scripts_by_category:
+  setup:
+    - script_path: "scripts/setup_production_server.sh"
+      language: "bash"
+      purpose: "Configura un servidor Ubuntu nuevo para producción, instalando Docker, UFW, Fail2ban, y creando un usuario de despliegue."
+      usage: "sudo bash scripts/setup_production_server.sh"
+      parameters: []
+      dependencies:
+        external: ["apt", "ufw", "systemctl", "docker"]
+        internal: []
+      execution_context:
+        working_directory: "/"
+        environment_variables: []
+      examples:
+        - command: "sudo bash scripts/setup_production_server.sh"
+          description: "Ejecuta el script de configuración completo en un nuevo servidor."
+
+    - script_path: "scripts/initial_data_migration.py"
+      language: "python"
+      purpose: "Puebla la base de datos con datos iniciales como categorías, roles y permisos desde archivos CSV."
+      usage: "python scripts/initial_data_migration.py"
+      parameters: []
+      dependencies:
+        external: ["psycopg2", "csv"]
+        internal: ["src.core.database"]
+      execution_context:
+        working_directory: "/home/eevan/ProyectosIA/GRUPO_GAD"
+        environment_variables: ["DATABASE_URL"]
+
+  development:
+    - script_path: "scripts/ws_smoke_test.py"
+      language: "python"
+      purpose: "Realiza una prueba rápida de conexión al endpoint de WebSocket para verificar que está activo."
+      usage: "python scripts/ws_smoke_test.py"
+      parameters: []
+      dependencies:
+        external: ["websockets"]
+        internal: []
+
+  testing:
+    - script_path: "scripts/fast_gate_check.sh"
+      language: "bash"
+      purpose: "Ejecuta una serie rápida de validaciones (linting, tests) como una puerta de calidad antes de un commit o push."
+      usage: "bash scripts/fast_gate_check.sh"
+      parameters: []
+      dependencies:
+        external: ["make"]
+        internal: []
+
+  deployment:
+    - script_path: "src/scripts/deploy.sh"
+      language: "bash"
+      purpose: "(Vacío) Presumiblemente destinado a contener la lógica de despliegue de la aplicación."
+      usage: "N/A"
+      parameters: []
+      dependencies: {}
+
+    - script_path: "scripts/emergency_rollback.sh"
+      language: "bash"
+      purpose: "Revierte el despliegue a una versión anterior en caso de un fallo crítico en producción."
+      usage: "bash scripts/emergency_rollback.sh <version_tag>"
+      parameters:
+        - name: "version_tag"
+          type: "string"
+          required: true
+          description: "El tag de la imagen de Docker a la que se debe revertir."
+
+  maintenance:
+    - script_path: "scripts/backup/postgres_backup.sh"
+      language: "bash"
+      purpose: "Realiza un backup de la base de datos PostgreSQL, lo comprime, y opcionalmente lo sube a S3. También gestiona la rotación de backups."
+      usage: "bash scripts/backup/postgres_backup.sh"
+      parameters: []
+      dependencies:
+        external: ["pg_dump", "gzip", "aws-cli"]
+        internal: []
+
+    - script_path: "scripts/monitor_production.sh"
+      language: "bash"
+      purpose: "Ejecuta una serie de chequeos de salud sobre el entorno de producción, incluyendo endpoints HTTP, estado de contenedores y métricas básicas de la base de datos."
+      usage: "bash scripts/monitor_production.sh"
+      parameters: []
+      dependencies:
+        external: ["curl", "docker", "psql"]
+        internal: []
+
+    - script_path: "cleanup_repo.sh"
+      language: "bash"
+      purpose: "Limpia el repositorio de archivos temporales, cache, y optimiza el repositorio de Git con 'git gc'."
+      usage: "bash cleanup_repo.sh"
+      parameters: []
+      dependencies:
+        external: ["git", "find", "rm"]
+        internal: []
+
+command_overlay:
+  canonical_commands:
+    setup: "make migrate"
+    run: "make up"
+    test: "make test"
+    build: "make build-api"
+    deploy: "make prod-up"
+    clean: "make down"
+
+script_dependencies_graph:
+  - script: "scripts/setup_production_server.sh"
+    depends_on: []
+    used_by:
+      - "docs/DEPLOYMENT_GUIDE.md"
+
+  - script: "make prod-up"
+    depends_on:
+      - "docker/docker-compose.prod.yml"
+      - "make build-api"
+    used_by: []
+
+validation_needed:
+  - "El propósito del script 'src/scripts/deploy.sh' es ambiguo ya que está vacío."
+  - "Las dependencias exactas entre los scripts de 'scripts/migration' no están claras."

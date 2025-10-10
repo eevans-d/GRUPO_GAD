@@ -1,0 +1,120 @@
+system_overview:
+  architecture_type: "Centralizado (API-driven)"
+  orchestration_pattern: "Request-Response con Notificaciones WebSocket"
+  total_agents: 1
+  agent_communication: "Llamadas HTTP (Bot -> API), WebSockets (API -> Clientes)"
+agents:
+  - id: "telegram_bot"
+    name: "Bot de Telegram para Gestión de Tareas"
+    type: "executor"
+    llm_configuration:
+      provider: null
+      model: null
+      temperature: null
+      max_tokens: null
+      custom_parameters: {}
+    system_prompts:
+      primary: null
+      fallback: null
+    capabilities:
+      - capability: "Crear Tareas"
+        implementation: "Procesa el comando `/crear` y envía una solicitud POST al endpoint de la API para crear una nueva tarea."
+      - capability: "Finalizar Tareas"
+        implementation: "Procesa mensajes de texto con el formato `listo <codigo_tarea>` y envía una solicitud POST a la API para marcar una tarea como finalizada."
+    tools_available:
+      - tool_name: "api_service.create_task"
+        description: "Llama a la API interna para crear una nueva tarea."
+        parameters:
+          - "task_in: TareaCreate"
+        implementation_file: "src/bot/services/api_service.py"
+      - tool_name: "api_service.finalize_task"
+        description: "Llama a la API interna para finalizar una tarea existente."
+        parameters:
+          - "task_code: str"
+          - "telegram_id: int"
+        implementation_file: "src/bot/services/api_service.py"
+    memory_management:
+      type: "none"
+      storage: "N/A"
+      persistence: false
+    state_management:
+      stateful: false
+      state_variables: []
+      state_persistence: "none"
+    interaction_patterns:
+      receives_from:
+        - "Usuario de Telegram"
+      sends_to:
+        - "API de GRUPO_GAD"
+        - "Usuario de Telegram"
+      message_format: "Texto plano (comandos y mensajes)"
+    error_handling:
+      retry_strategy: "none"
+      fallback_behavior: "Responde al usuario de Telegram con un mensaje de error."
+      escalation_path: "none"
+operational_flows:
+  - flow_name: "Creación de Tarea vía Bot"
+    trigger: "Usuario envía mensaje `/crear <código> <título> <tipo> <id_delegado> <id_asignado1> ...`"
+    description: "Un usuario de Telegram crea una nueva tarea en el sistema a través de un comando."
+    steps:
+      - step: 1
+        agent: "telegram_bot"
+        action: "Parsear el comando y sus argumentos."
+        input: "Mensaje de texto de Telegram."
+        output: "Argumentos validados para la creación de la tarea."
+        next_step_condition: "Los argumentos son correctos y suficientes."
+      - step: 2
+        agent: "telegram_bot"
+        action: "Invocar `api_service.create_task` con los datos de la tarea."
+        input: "Objeto `TareaCreate`."
+        output: "Solicitud HTTP POST al endpoint `/tasks/create` de la API."
+        next_step_condition: "La API responde con un código 2xx."
+      - step: 3
+        agent: "telegram_bot"
+        action: "Enviar mensaje de confirmación al usuario."
+        input: "Respuesta exitosa de la API."
+        output: "Mensaje de texto 'Tarea creada exitosamente' a Telegram."
+        next_step_condition: "Fin del flujo."
+    error_scenarios:
+      - error_type: "Argumentos de comando inválidos"
+        handling: "El bot responde al usuario con un mensaje de error detallando el formato correcto."
+        recovery: "El usuario debe reenviar el comando con los argumentos corregidos."
+      - error_type: "Fallo en la llamada a la API (ej. 4xx, 5xx)"
+        handling: "El bot responde al usuario con un mensaje de error genérico 'Error al crear la tarea: <detalle>'."
+        recovery: "Manual. Requiere intervención para diagnosticar el problema en la API."
+tool_ecosystem:
+  - tool_name: "GRUPO_GAD_API_Service"
+    type: "internal_api_wrapper"
+    purpose: "Abstraer la comunicación HTTP con la API interna del sistema para el bot."
+    used_by_agents:
+      - "telegram_bot"
+    implementation:
+      language: "Python"
+      file: "src/bot/services/api_service.py"
+      dependencies:
+        - "requests"
+        - "pydantic"
+    configuration:
+      parameters:
+        - "api_url"
+        - "token"
+      authentication: "Bearer Token (opcional)"
+prompt_management:
+  storage_location: null
+  versioning: false
+  templating_engine: null
+  dynamic_prompts: false
+  prompt_examples: []
+performance_characteristics:
+  average_response_time: null
+  concurrent_agent_limit: null
+  resource_requirements:
+    memory: null
+    cpu: null
+  scalability_constraints:
+    - "Dependiente de la escalabilidad de la API de Telegram."
+    - "El bot corre en un solo proceso, no está diseñado para alta concurrencia."
+validation_questions:
+  - "La arquitectura del 'bot' es simple y no utiliza frameworks de agentes ni LLMs. ¿Es esta la implementación final o un prototipo?"
+  - "El bot no parece tener una estrategia de reintentos para las llamadas a la API. ¿Es este el comportamiento esperado?"
+  - "La autenticación del bot con la API parece opcional (`token=None`). ¿Cuál es la estrategia de seguridad para la comunicación bot-api en producción?"

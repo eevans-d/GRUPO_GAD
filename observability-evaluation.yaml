@@ -1,0 +1,94 @@
+logging:
+  framework: "Loguru"
+  configuration_file: "src/core/logging.py"
+  log_levels:
+    - level: "DEBUG"
+      usage: "Información detallada para diagnóstico."
+    - level: "INFO"
+      usage: "Eventos importantes del flujo normal de la aplicación."
+    - level: "WARNING"
+      usage: "Situaciones inesperadas que no son errores críticos."
+    - level: "ERROR"
+      usage: "Errores que impiden que una operación se complete."
+    - level: "CRITICAL"
+      usage: "Errores graves que pueden detener la aplicación."
+  log_destinations:
+    - destination: "stdout"
+      format: "Texto con colores para desarrollo."
+      retention: "Depende de la configuración del contenedor."
+    - destination: "logs/{service_name}.log"
+      format: "Texto plano con timestamp."
+      retention: "30 días"
+    - destination: "logs/{service_name}_errors.log"
+      format: "Texto plano para errores."
+      retention: "30 días"
+    - destination: "logs/{service_name}_structured.jsonl"
+      format: "JSONL"
+      retention: "30 días"
+  agent_logging:
+    - agent_id: "telegram_bot"
+      log_components: ["main", "handlers", "services"]
+      log_level: "INFO"
+  structured_logging:
+    enabled: true
+    fields: ["time", "level", "name", "function", "line", "message", "service", "data"]
+monitoring:
+  tools: ["Prometheus"]
+  metrics_tracked:
+    system_metrics:
+      - metric: "ggrt_active_connections"
+        collection_method: "Gauge"
+        frequency: "En tiempo real"
+      - metric: "ggrt_connections_total"
+        collection_method: "Counter"
+        frequency: "En tiempo real"
+      - metric: "ggrt_messages_sent_total"
+        collection_method: "Counter"
+        frequency: "En tiempo real"
+      - metric: "ggrt_heartbeat_last_timestamp"
+        collection_method: "Gauge"
+        frequency: "Por ciclo de heartbeat"
+      - metric: "ggrt_send_errors_total"
+        collection_method: "Counter"
+        frequency: "En tiempo real"
+    agent_metrics:
+      - metric: "ggrt_role_connections"
+        scope: "per-agent-role"
+        aggregation: "Gauge"
+      - metric: "ggrt_user_active"
+        scope: "system-wide"
+        aggregation: "Gauge"
+    llm_metrics: []
+  dashboards:
+    - name: "Admin Dashboard"
+      platform: "Web (FastAPI + HTML/JS)"
+      metrics_displayed:
+        - "total_tasks"
+        - "active_tasks"
+        - "active_efectivos"
+        - "alerts_count"
+  alerting:
+    alert_name: null
+    condition: "Configuración no disponible en el repositorio. La documentación sugiere que existe."
+    notification: null
+llm_evaluation:
+  evaluation_framework: null
+  test_datasets: []
+  evaluation_metrics: []
+  evaluation_pipeline:
+    frequency: null
+    automation: false
+    scripts: []
+  benchmark_results: []
+  human_evaluation:
+    enabled: false
+    process: null
+    metrics: []
+tracing:
+  enabled: false
+  tool: null
+  trace_components: []
+cost_tracking:
+  enabled: false
+  tracked_by: null
+  reporting: null

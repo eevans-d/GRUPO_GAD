@@ -1,0 +1,78 @@
+configuration_management:
+  config_files:
+    - file: "pyproject.toml"
+      purpose: "Definición de dependencias y configuración de herramientas de desarrollo (ruff, mypy, pytest)."
+      format: "TOML"
+      environment_specific: false
+    - file: "alembic.ini"
+      purpose: "Configuración para migraciones de base de datos con Alembic."
+      format: "INI"
+      environment_specific: true
+    - file: "Caddyfile"
+      purpose: "Configuración del servidor web y proxy inverso Caddy."
+      format: "Caddyfile"
+      environment_specific: true
+    - file: ".env"
+      purpose: "Almacenamiento de variables de entorno y secretos para desarrollo local."
+      format: "KEY=VALUE"
+      environment_specific: true
+  environment_variables:
+    required:
+      - name: "POSTGRES_USER"
+        description: "Usuario para la base de datos PostgreSQL."
+        type: "string"
+      - name: "POSTGRES_PASSWORD"
+        description: "Contraseña para la base de datos PostgreSQL."
+        type: "secret"
+      - name: "POSTGRES_DB"
+        description: "Nombre de la base de datos en PostgreSQL."
+        type: "string"
+      - name: "TELEGRAM_TOKEN"
+        description: "Token de autenticación para la API de Telegram."
+        type: "secret"
+      - name: "SECRET_KEY"
+        description: "Clave secreta para la firma de tokens JWT."
+        type: "secret"
+  secrets_management:
+    method: "env_files"
+    secrets_list: ["POSTGRES_PASSWORD", "TELEGRAM_TOKEN", "SECRET_KEY"]
+    rotation_policy: "Manual. Existe un script 'rotate_secrets.sh' pero el proceso no está automatizado."
+  multi_environment:
+    environments: ["development", "production"]
+    differences: ["Uso de diferentes archivos docker-compose (docker-compose.yml vs docker-compose.prod.yml)", "Configuraciones de logging", "Exposición de puertos"]
+deployment:
+  deployment_method: "ci_cd"
+  containerization:
+    enabled: true
+    dockerfile_location: "docker/Dockerfile.api, docker/Dockerfile.bot"
+    base_images:
+      - "python:3.12-slim"
+      - "python:3.11-slim"
+    orchestration: "Docker Compose"
+  ci_cd:
+    platform: "GitHub Actions"
+    workflows:
+      - name: "ci-enhanced.yml"
+        trigger: "push, pull_request"
+        steps: ["static-analysis", "test", "docker-build", "e2e-test"]
+      - name: "cd.yml"
+        trigger: "workflow_run (on ci success), manual"
+        steps: ["build-and-push-images", "deploy-staging", "deploy-production"]
+  infrastructure:
+    hosting: "Servidor Linux genérico (basado en script 'setup_production_server.sh')"
+    scaling: "Manual"
+    resources:
+      memory: null
+      cpu: null
+      storage: null
+dependencies_installation:
+  package_manager: "Poetry"
+  installation_command: "poetry install"
+  lock_file: "poetry.lock"
+startup_procedures:
+  initialization_script: "scripts/start.sh (para el contenedor de la API)"
+  health_checks:
+    - "API: curl -f http://localhost:8000/api/v1/health"
+    - "DB: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+    - "Caddy: curl -f http://localhost/metrics"
+  startup_time: null

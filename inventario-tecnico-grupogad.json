@@ -1,0 +1,196 @@
+{
+  "project_metadata": {
+    "name": "grupo_gad",
+    "scan_date": "2025-10-09T12:00:00Z",
+    "total_files_analyzed": null,
+    "excluded_patterns": [
+      "__pycache__/",
+      "backups/",
+      "logs/",
+      "*.lock",
+      "*.gz",
+      "alembic/",
+      "tests/",
+      "scripts/"
+    ]
+  },
+  "technical_stack": {
+    "languages": {
+      "primary": "Python",
+      "secondary": [
+        "Shell",
+        "SQL"
+      ],
+      "versions": {
+        "Python": ">=3.12,<4.0"
+      }
+    },
+    "agent_frameworks": [],
+    "llm_providers": [],
+    "dependencies": {
+      "package_manager": "Poetry",
+      "lock_files": [
+        "poetry.lock",
+        "requirements.lock"
+      ],
+      "total_dependencies": 26,
+      "critical_dependencies": [
+        "fastapi",
+        "sqlalchemy",
+        "asyncpg",
+        "pydantic",
+        "redis"
+      ]
+    }
+  },
+  "architecture": {
+    "project_structure": {
+      "source_directory": "src/",
+      "config_directory": "config/",
+      "data_directory": "data/",
+      "tests_directory": "tests/",
+      "scripts_directory": "scripts/"
+    },
+    "agent_components": [
+      {
+        "name": "bot",
+        "type": "Executor",
+        "location": "src/bot/",
+        "responsibilities": [
+          "Interactuar con una plataforma de mensajería (tipo no especificado)",
+          "Recibir comandos de usuarios",
+          "Comunicarse con la API interna para ejecutar acciones"
+        ],
+        "dependencies": [
+          "api"
+        ]
+      }
+    ],
+    "orchestration_pattern": "Centralizado (API-driven)",
+    "communication_method": "Llamadas API (HTTP) y WebSockets"
+  },
+  "rag_infrastructure": {
+    "implemented": false,
+    "vector_store": null,
+    "embedding_model": null,
+    "data_sources": [],
+    "ingestion_scripts": [],
+    "retrieval_strategy": null
+  },
+  "data_flow": {
+    "input_sources": [
+      "Usuario final a través de Bot",
+      "Llamadas directas a la API"
+    ],
+    "processing_pipeline": [
+      "Recepción de comando en Bot",
+      "Llamada del Bot a la API",
+      "Procesamiento de la lógica de negocio en la API",
+      "Persistencia en base de datos PostGIS"
+    ],
+    "output_destinations": [
+      "Respuesta del Bot al usuario",
+      "Datos en PostGIS",
+      "Métricas a Prometheus",
+      "Logs a ficheros y stdout"
+    ],
+    "storage_systems": [
+      "PostgreSQL/PostGIS",
+      "Redis"
+    ]
+  },
+  "automation": {
+    "task_runner": "Make",
+    "available_commands": {
+      "setup": [
+        "make migrate"
+      ],
+      "run": [
+        "make up",
+        "make prod-up"
+      ],
+      "test": [
+        "make test",
+        "make test-cov",
+        "make smoke",
+        "make ws-smoke"
+      ],
+      "deploy": [
+        "make prod-up"
+      ]
+    },
+    "ci_cd": {
+      "platform": "GitHub Actions",
+      "workflows": [
+        ".github/workflows/ci-enhanced.yml",
+        ".github/workflows/cd.yml",
+        ".github/workflows/release.yml"
+      ],
+      "quality_gates": [
+        "static-analysis (ruff, mypy, semgrep, pip-audit)",
+        "test (unit, integration)",
+        "docker-build",
+        "e2e-test"
+      ]
+    }
+  },
+  "observability": {
+    "logging": {
+      "framework": "Logging nativo de Python con configuración personalizada",
+      "log_levels": [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR"
+      ],
+      "log_destinations": [
+        "stdout (Docker)",
+        "logs/api.log",
+        "logs/api_structured.jsonl"
+      ]
+    },
+    "monitoring": {
+      "tools": [
+        "Prometheus"
+      ],
+      "metrics_tracked": null
+    },
+    "llm_evaluation": {
+      "frameworks": [],
+      "evaluation_datasets": [],
+      "metrics": []
+    }
+  },
+  "configuration_management": {
+    "config_files": [
+      "pyproject.toml",
+      "alembic.ini",
+      "Caddyfile",
+      ".env"
+    ],
+    "environment_variables": [
+      "POSTGRES_USER",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_DB"
+    ],
+    "secrets_management": "Ficheros .env (documentación sugiere una guía más robusta en 'SECRETS_MANAGEMENT_GUIDE.md')",
+    "multi_environment": true
+  },
+  "security_posture": {
+    "dependency_scanning": true,
+    "secret_detection": null,
+    "code_analysis": true,
+    "prompt_injection_protection": false
+  },
+  "gaps_identified": [
+    "Los archivos de workflow de CI/CD están documentados pero no existen en el repositorio.",
+    "La dependencia de la plataforma de mensajería del bot no está definida explícitamente en pyproject.toml.",
+    "La gestión de secretos en producción depende de .env, lo cual es una mala práctica, aunque la documentación sugiere un método mejor."
+  ],
+  "unresolved_questions": [
+    "¿Cuál es el número total exacto de archivos analizados?",
+    "¿Qué métricas específicas se registran en 'src/observability/metrics.py'?",
+    "¿Se utiliza alguna herramienta de detección de secretos en el pipeline de CI/CD?",
+    "¿Con qué plataforma de mensajería específica se integra el componente 'src/bot'?"
+  ]
+}

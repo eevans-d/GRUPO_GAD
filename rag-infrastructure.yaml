@@ -1,0 +1,4 @@
+rag_implemented: false
+analysis_notes: "El análisis del código fuente y las dependencias del proyecto GRUPO_GAD no ha revelado ninguna implementación de una arquitectura RAG (Retrieval-Augmented Generation). El sistema no utiliza bases de datos vectoriales, modelos de embedding, ni tiene pipelines de ingesta de documentos para búsqueda semántica."
+missing_information:
+  - "Toda la información relacionada con RAG es inaplicable ya que el sistema no está implementado."
