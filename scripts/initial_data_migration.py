@@ -58,7 +58,7 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 class MigrationTask:
     """Representa una tarea de migración con su dependencia y prioridad."""
     
-    def __init__(self, name: str, description: str, dependencies: List[str] = None, 
+    def __init__(self, name: str, description: str, dependencies: Optional[List[str]] = None, 
                  priority: int = 100, sql_file: Optional[str] = None, 
                  csv_file: Optional[str] = None, table_name: Optional[str] = None):
         self.name = name
@@ -164,7 +164,7 @@ class MigrationResult:
             "tasks": {name: task.to_dict() for name, task in self.tasks.items()}
         }
         
-    def save_report(self, filename: str = None):
+    def save_report(self, filename: Optional[str] = None):
         """Guarda un informe de la migración en formato JSON."""
         if not filename:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -214,7 +214,9 @@ async def execute_sql_file(engine: AsyncEngine, sql_file: Path, dry_run: bool = 
         
     async with engine.begin() as conn:
         for stmt in statements:
-            await conn.execute(stmt)
+            # Usar text() para ejecutar SQL crudo
+            from sqlalchemy import text
+            await conn.execute(text(stmt))
 
 
 async def import_csv_data(engine: AsyncEngine, table_name: str, csv_file: Path, 
@@ -373,9 +375,11 @@ async def execute_migration_task(engine: AsyncEngine, task: MigrationTask,
         sql_path = DATA_DIR / task.sql_file
         await execute_sql_file(engine, sql_path, dry_run)
     
-    if task.csv_file:
+    if task.csv_file and task.table_name:
         csv_path = DATA_DIR / task.csv_file
         await import_csv_data(engine, task.table_name, csv_path, dry_run)
+    elif task.csv_file and not task.table_name:
+        logger.warning(f"Tarea {task.name} tiene csv_file pero no table_name, saltando importación CSV")
 
 
 async def run_migration(db_url: str, dry_run: bool = False) -> MigrationResult:

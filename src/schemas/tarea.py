@@ -28,16 +28,23 @@ class TareaBase(BaseModel):
 
 
 # Propiedades para la creación
-class TareaCreate(TareaBase):
+class TareaCreate(BaseModel):
+    # Campos obligatorios
     codigo: str
     titulo: str
     tipo: TaskType
     inicio_programado: datetime
     delegado_usuario_id: int
     creado_por_usuario_id: int
+    
+    # Campos opcionales
+    descripcion: Optional[str] = None
+    prioridad: Optional[TaskPriority] = TaskPriority.MEDIUM
+    fin_programado: Optional[datetime] = None
+    efectivos_asignados: Optional[List[int]] = []
 
 
-# Propiedades para la actualización
+# Propiedades para la actualización (todos opcionales)
 class TareaUpdate(BaseModel):
     codigo: Optional[str] = None
     titulo: Optional[str] = None
@@ -52,10 +59,22 @@ class TareaUpdate(BaseModel):
 
 
 # Propiedades compartidas por los modelos en la BD
-class TareaInDBBase(TareaBase):
+class TareaInDBBase(BaseModel):
+    # Campos requeridos en BD
     id: int
     uuid: UUID
+    codigo: str
+    titulo: str
     estado: TaskStatus
+    tipo: TaskType
+    prioridad: TaskPriority
+    delegado_usuario_id: int
+    creado_por_usuario_id: int
+    inicio_programado: datetime
+    
+    # Campos opcionales
+    descripcion: Optional[str] = None
+    fin_programado: Optional[datetime] = None
 
     @field_serializer('uuid')
     def serialize_uuid(self, value: UUID) -> str:
