@@ -58,3 +58,21 @@ class ApiService:
         except requests.exceptions.RequestException:
             return []
         return Tarea(**response)
+    
+    def get_users(self, role: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Obtiene lista de usuarios, opcionalmente filtrados por rol.
+        
+        Args:
+            role: Rol a filtrar ('delegado', 'agente', etc.) o None para todos
+        
+        Returns:
+            Lista de usuarios con estructura {'id': int, 'nombre': str, 'role': str}
+        """
+        try:
+            endpoint = "/users" if not role else f"/users?role={role}"
+            response = self._get(endpoint)
+            return response if isinstance(response, list) else []
+        except requests.exceptions.RequestException:
+            # En caso de error, retornar lista vacía
+            return []
