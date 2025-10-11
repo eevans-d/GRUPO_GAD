@@ -8,6 +8,7 @@ from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram import Bot, Chat, User
 from loguru import logger
 
+from config.settings import settings
 from src.bot.utils.keyboards import KeyboardFactory
 
 
@@ -105,15 +106,9 @@ async def handle_menu_action(
         )
     
     elif entity == "finalizar":
-        # Mostrar mensaje temporal (se implementa en Fase 3)
-        keyboard = KeyboardFactory.back_button()
-        await query.edit_message_text(
-            "✅ *Finalizar Tarea*\n\n"
-            "🚧 Esta función se implementará en la Fase 3.\n"
-            "Por ahora, usa el comando `/finalizar <codigo>`",
-            reply_markup=keyboard,
-            parse_mode="Markdown"
-        )
+        # Iniciar flujo de finalización (Fase 3)
+        # Llamar directamente a la lista de tareas pendientes
+        await handle_finalizar_action(query, context, "list", [])
     
     elif entity == "tareas":
         # Mostrar lista de tareas (MVP: mensaje temporal)
@@ -378,21 +373,59 @@ async def handle_finalizar_action(
     Args:
         query: CallbackQuery de Telegram
         context: Contexto de la conversación
-        entity: Acción (select, confirm)
+        entity: Acción (list, select, confirm, cancel)
         params: Parámetros adicionales
     """
-    # MVP: Solo mensaje temporal
-    keyboard = KeyboardFactory.back_button()
-    await query.edit_message_text(
-        "✅ *Finalizar Tarea*\n\n"
-        "🚧 Se implementará en la Fase 3.\n"
-        "Incluirá:\n"
-        "• Lista de tareas pendientes\n"
-        "• Selector con botones\n"
-        "• Confirmación antes de finalizar",
-        reply_markup=keyboard,
-        parse_mode="Markdown"
-    )
+    from src.bot.services.api_service import ApiService
+    
+    if entity == "list":
+        # Mostrar lista de tareas pendientes con paginación
+        page = int(params[0]) if params else 0
+        await _show_pending_tasks_list(query, context, page)
+    
+    elif entity == "select":
+        # Usuario seleccionó una tarea para finalizar
+        if not params:
+            await query.answer("❌ Error: tarea no especificada", show_alert=True)
+            return
+        
+        task_code = params[0]
+        
+        # Obtener detalles de la tarea desde API
+        api_service = ApiService(settings.API_V1_STR)
+        user_id = query.from_user.id if query.from_user else 0
+        
+        # Obtener todas las tareas del usuario
+        tareas = api_service.get_user_pending_tasks(user_id)
+        
+        # Buscar la tarea seleccionada
+        tarea_seleccionada = next((t for t in tareas if t.codigo == task_code), None)
+        
+        if not tarea_seleccionada:
+            await query.answer("❌ Tarea no encontrada", show_alert=True)
+            return
+        
+        # Guardar en contexto para confirmación
+        context.user_data['finalizar_task'] = {
+            'codigo': task_code,
+            'titulo': tarea_seleccionada.titulo,
+            'tipo': tarea_seleccionada.tipo
+        }
+        
+        # Mostrar confirmación
+        await _show_finalize_confirmation(query, context)
+    
+    elif entity == "confirm":
+        # Usuario confirmó finalización
+        await _finalize_task(query, context)
+    
+    elif entity == "cancel":
+        # Usuario canceló finalización
+        if 'finalizar_task' in context.user_data:
+            del context.user_data['finalizar_task']
+        
+        # Volver a la lista
+        await _show_pending_tasks_list(query, context, page=0)
 
 
 async def handle_pagination_action(
@@ -407,11 +440,206 @@ async def handle_pagination_action(
     Args:
         query: CallbackQuery de Telegram
         context: Contexto de la conversación
-        entity: Número de página
-        params: Parámetros adicionales
+        entity: Acción de paginación (next, prev, o número de página)
+        params: Parámetros adicionales (lista a paginar)
     """
-    # MVP: Mensaje temporal
-    await query.answer("🚧 Paginación se implementará en Fase 3", show_alert=False)
+    # El entity contiene la página de destino
+    try:
+        page = int(entity)
+    except ValueError:
+        await query.answer("❌ Página inválida", show_alert=True)
+        return
+    
+    # Determinar qué lista mostrar basado en el contexto
+    # Por ahora solo soportamos finalizar
+    if 'finalizar_context' in context.user_data:
+        await _show_pending_tasks_list(query, context, page)
+    else:
+        await query.answer("❌ Contexto de paginación perdido", show_alert=True)
+
+
+async def _show_pending_tasks_list(
+    query, 
+    context: CallbackContext[Bot, Update, Chat, User], 
+    page: int = 0
+) -> None:
+    """
+    Muestra lista paginada de tareas pendientes del usuario.
+    
+    Args:
+        query: CallbackQuery de Telegram
+        context: Contexto de la conversación
+        page: Número de página (0-indexed)
+    """
+    from src.bot.services.api_service import ApiService
+    
+    # Obtener user_id
+    user_id = query.from_user.id if query.from_user else 0
+    
+    # Obtener tareas desde API
+    api_service = ApiService(settings.API_V1_STR)
+    tareas = api_service.get_user_pending_tasks(user_id)
+    
+    # Guardar contexto de finalización para paginación
+    context.user_data['finalizar_context'] = True
+    
+    logger.bind(finalizar=True).info(
+        f"Mostrando lista de tareas pendientes, página {page}",
+        user_id=user_id,
+        total_tareas=len(tareas)
+    )
+    
+    # Si no hay tareas
+    if not tareas:
+        keyboard = KeyboardFactory.main_menu()
+        await query.edit_message_text(
+            "📭 *No tienes tareas pendientes*\n\n"
+            "¡Buen trabajo! No hay tareas asignadas a ti en este momento.",
+            reply_markup=keyboard,
+            parse_mode="Markdown"
+        )
+        return
+    
+    # Preparar items para el teclado paginado
+    items = [
+        (f"📋 {t.codigo} - {t.titulo[:30]}{'...' if len(t.titulo) > 30 else ''}", t.codigo)
+        for t in tareas
+    ]
+    
+    # Generar teclado paginado
+    keyboard = KeyboardFactory.paginated_list(
+        items=items,
+        page=page,
+        page_size=5,
+        action_prefix="finalizar:select"
+    )
+    
+    # Calcular estadísticas de página
+    total_tareas = len(tareas)
+    start_idx = page * 5
+    end_idx = min(start_idx + 5, total_tareas)
+    
+    text = (
+        f"✅ *Finalizar Tarea*\n\n"
+        f"📊 Tienes *{total_tareas}* tarea{'s' if total_tareas > 1 else ''} pendiente{'s' if total_tareas > 1 else ''}.\n"
+        f"Mostrando {start_idx + 1}-{end_idx} de {total_tareas}.\n\n"
+        f"Selecciona la tarea que deseas finalizar:"
+    )
+    
+    await query.edit_message_text(
+        text,
+        reply_markup=keyboard,
+        parse_mode="Markdown"
+    )
+
+
+async def _show_finalize_confirmation(
+    query, 
+    context: CallbackContext[Bot, Update, Chat, User]
+) -> None:
+    """
+    Muestra pantalla de confirmación antes de finalizar tarea.
+    
+    Args:
+        query: CallbackQuery de Telegram
+        context: Contexto con datos de la tarea a finalizar
+    """
+    task_data = context.user_data.get('finalizar_task', {})
+    
+    if not task_data:
+        await query.answer("❌ Error: datos de tarea no encontrados", show_alert=True)
+        return
+    
+    codigo = task_data.get('codigo', 'N/A')
+    titulo = task_data.get('titulo', 'N/A')
+    tipo = task_data.get('tipo', 'N/A')
+    
+    confirmation_text = (
+        f"⚠️ *Confirmar Finalización*\n\n"
+        f"*Código:* `{codigo}`\n"
+        f"*Título:* {titulo}\n"
+        f"*Tipo:* {tipo}\n\n"
+        f"¿Deseas marcar esta tarea como finalizada?"
+    )
+    
+    keyboard = KeyboardFactory.confirmation("finalizar:confirm", "finalizar:cancel")
+    
+    await query.edit_message_text(
+        confirmation_text,
+        reply_markup=keyboard,
+        parse_mode="Markdown"
+    )
+
+
+async def _finalize_task(
+    query, 
+    context: CallbackContext[Bot, Update, Chat, User]
+) -> None:
+    """
+    Finaliza la tarea llamando a la API.
+    
+    Args:
+        query: CallbackQuery de Telegram
+        context: Contexto con datos de la tarea
+    """
+    from src.bot.services.api_service import ApiService
+    
+    task_data = context.user_data.get('finalizar_task', {})
+    
+    if not task_data:
+        await query.answer("❌ Error: datos de tarea no encontrados", show_alert=True)
+        return
+    
+    codigo = task_data.get('codigo')
+    user_id = query.from_user.id if query.from_user else 0
+    
+    # Llamar a API
+    api_service = ApiService(settings.API_V1_STR)
+    
+    try:
+        tarea_finalizada = api_service.finalize_task(codigo, user_id)
+        
+        logger.bind(finalizar=True).info(
+            f"Tarea finalizada exitosamente: {codigo}",
+            user_id=user_id
+        )
+        
+        # Limpiar contexto
+        if 'finalizar_task' in context.user_data:
+            del context.user_data['finalizar_task']
+        if 'finalizar_context' in context.user_data:
+            del context.user_data['finalizar_context']
+        
+        # Mostrar éxito
+        keyboard = KeyboardFactory.main_menu()
+        await query.edit_message_text(
+            f"✅ *¡Tarea Finalizada!*\n\n"
+            f"*Código:* `{tarea_finalizada.codigo}`\n"
+            f"*Título:* {tarea_finalizada.titulo}\n\n"
+            f"La tarea ha sido marcada como completada exitosamente.",
+            reply_markup=keyboard,
+            parse_mode="Markdown"
+        )
+        
+    except Exception as e:
+        logger.exception(f"Error finalizando tarea {codigo}: {e}")
+        
+        # Determinar mensaje de error
+        error_msg = "❌ *Error al Finalizar*\n\n"
+        
+        if "404" in str(e) or "not found" in str(e).lower():
+            error_msg += "La tarea no fue encontrada o ya fue finalizada."
+        elif "403" in str(e) or "forbidden" in str(e).lower():
+            error_msg += "No tienes permisos para finalizar esta tarea."
+        else:
+            error_msg += "Ocurrió un error al procesar la solicitud.\nIntenta nuevamente más tarde."
+        
+        keyboard = KeyboardFactory.main_menu()
+        await query.edit_message_text(
+            error_msg,
+            reply_markup=keyboard,
+            parse_mode="Markdown"
+        )
 
 
 # Exportar handler configurado
