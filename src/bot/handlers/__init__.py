@@ -12,6 +12,7 @@ from .commands import (  # type: ignore # Added type: ignore
 )
 from .messages import message_handler
 from . import callback_handler
+from . import wizard_text_handler
 
 
 def register_handlers(app: Application) -> None:
@@ -28,6 +29,10 @@ def register_handlers(app: Application) -> None:
     
     # Callback query handler (botones interactivos)
     app.add_handler(callback_handler.callback_handler)
+    
+    # Wizard text handler (inputs de texto durante wizard)
+    # IMPORTANTE: Debe ir DESPUÉS de callback_handler pero ANTES de message_handler
+    app.add_handler(wizard_text_handler.wizard_text_handler)
     
     # Message handler (debe ir al final para no interceptar comandos)
     app.add_handler(message_handler.handler)

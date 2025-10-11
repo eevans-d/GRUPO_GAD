@@ -90,3 +90,81 @@ class KeyboardFactory:
         keyboard.append([InlineKeyboardButton("🔙 Volver", callback_data="menu:main")])
         
         return InlineKeyboardMarkup(keyboard)
+    
+    @staticmethod
+    def user_selector(
+        users: List[dict],
+        action_prefix: str = "select:user"
+    ) -> InlineKeyboardMarkup:
+        """
+        Selector de usuario (delegado o similar).
+        
+        Args:
+            users: Lista de usuarios con 'id' y 'nombre'
+            action_prefix: Prefijo para callbacks (ej: 'crear:delegado')
+        
+        Returns:
+            InlineKeyboardMarkup con lista de usuarios
+        """
+        keyboard = []
+        
+        for user in users:
+            user_id = user.get('id', 0)
+            nombre = user.get('nombre', 'Usuario')
+            
+            keyboard.append([
+                InlineKeyboardButton(
+                    f"👤 {nombre}",
+                    callback_data=f"{action_prefix}:{user_id}"
+                )
+            ])
+        
+        keyboard.append([InlineKeyboardButton("❌ Cancelar", callback_data="crear:cancel")])
+        
+        return InlineKeyboardMarkup(keyboard)
+    
+    @staticmethod
+    def multi_select_users(
+        users: List[dict],
+        selected_ids: List[int],
+        action_prefix: str = "crear:asignado"
+    ) -> InlineKeyboardMarkup:
+        """
+        Selector multi-select de usuarios con checkboxes.
+        
+        Args:
+            users: Lista de usuarios con 'id' y 'nombre'
+            selected_ids: Lista de IDs ya seleccionados
+            action_prefix: Prefijo para callbacks
+        
+        Returns:
+            InlineKeyboardMarkup con checkboxes
+        """
+        keyboard = []
+        
+        for user in users:
+            user_id = user.get('id', 0)
+            nombre = user.get('nombre', 'Usuario')
+            
+            # Checkbox visual
+            checkbox = "✅" if user_id in selected_ids else "⬜"
+            
+            keyboard.append([
+                InlineKeyboardButton(
+                    f"{checkbox} {nombre}",
+                    callback_data=f"{action_prefix}:toggle:{user_id}"
+                )
+            ])
+        
+        # Botón "Continuar" solo si hay al menos 1 seleccionado
+        if selected_ids:
+            keyboard.append([
+                InlineKeyboardButton(
+                    "➡️ Continuar",
+                    callback_data=f"{action_prefix}:done"
+                )
+            ])
+        
+        keyboard.append([InlineKeyboardButton("❌ Cancelar", callback_data="crear:cancel")])
+        
+        return InlineKeyboardMarkup(keyboard)
