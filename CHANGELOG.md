@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-10-11
+
+### Added
+- **Bot Feature: `/historial`** - Comando para consultar historial de tareas con paginación y filtros (todas/activas/finalizadas)
+- **Bot Feature: `/estadisticas`** - Dashboard personal de productividad con métricas visuales y barras de progreso ASCII
+- Tests completos para nuevos comandos del bot (`test_historial.py`, `test_estadisticas.py`)
+- Documentación comprehensiva en `docs/bot/FEATURES_BONUS.md` con guías de implementación y uso
+- Sección de Bot de Telegram en README principal con listado de comandos
+
+### Changed
+- `src/bot/handlers/__init__.py` actualizado con registro de nuevos comandos
+- `src/bot/commands/__init__.py` creado para exportación centralizada de comandos
+- README.md expandido con sección completa del bot y sus capacidades
+
+### Documentation
+- Plan de 7 opciones post-desarrollo completado al 100%
+- Documentación optimizada y consolidada para mantenimiento
+- Resumen ejecutivo de jornada con estado del proyecto
+
 ## [1.2.0] - 2025-10-06
 
 ### Added

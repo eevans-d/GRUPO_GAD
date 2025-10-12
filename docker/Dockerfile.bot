@@ -1,29 +1,67 @@
-FROM python:3.11-slim
+# ============================================
+# Multi-stage build para Bot de Telegram
+# Optimizado para producción
+# ============================================
+
+# Stage 1: Builder - Instalar dependencias
+FROM python:3.11-slim AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
-WORKDIR /app
+WORKDIR /build
 
-# Install system dependencies
+# Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Copy and install Python dependencies
+# Copy and install Python dependencies in a virtual environment
 COPY docker/requirements.bot.txt .
-RUN pip install -r requirements.bot.txt
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install -r requirements.bot.txt
 
-# Copy the rest of the application code
+# Stage 2: Runtime - Imagen final mínima
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/opt/venv/bin:$PATH"
+
+WORKDIR /app
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Copy application code
 COPY src/bot /app/src/bot
-COPY src/shared /app/src/shared
+COPY src/schemas /app/src/schemas
 COPY config /app/config
 
+# Create logs directory
+RUN mkdir -p /app/logs
+
 # Create non-root user for security
-RUN groupadd --system app && adduser --system --group app
-RUN chown -R app:app /app
+RUN groupadd --system --gid 1000 app && \
+    useradd --system --uid 1000 --gid app --create-home app && \
+    chown -R app:app /app
+
+# Switch to non-root user
 USER app
 
+# Health check (verifica que el proceso está corriendo)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD pgrep -f "python.*main.py" || exit 1
+
+# Labels para metadata
+LABEL maintainer="Equipo GRUPO_GAD <dev@grupogad.gob.ec>" \
+      version="1.0.0" \
+      description="Bot de Telegram para sistema GRUPO_GAD" \
+      org.opencontainers.image.source="https://github.com/eevans-d/GRUPO_GAD"
+
 # Start command
-CMD ["python", "src/bot/main.py"]
+CMD ["python", "-u", "src/bot/main.py"]

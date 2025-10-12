@@ -129,6 +129,49 @@ resp = requests.post("http://localhost:8000/tasks/", headers=headers, json=data)
 print(resp.json())
 ```
 
+## 5. Bot de Telegram
+
+El sistema incluye un bot de Telegram integrado para gestión de tareas. El bot permite crear, finalizar y consultar tareas directamente desde Telegram.
+
+### Comandos Disponibles
+
+**Comandos básicos:**
+- `/start` - Menú principal e información del bot
+- `/crear_tarea` - Wizard para crear nueva tarea
+- `/finalizar_tarea` - Finalizar tareas pendientes
+
+**Comandos de consulta:**
+- `/historial [filtro]` - Ver historial de tareas con paginación
+  - `/historial` - Todas las tareas (por defecto)
+  - `/historial activas` - Solo tareas activas
+  - `/historial finalizadas` - Solo tareas completadas
+- `/estadisticas` - Estadísticas personales de productividad
+
+### Características del Bot
+
+**Navegación Intuitiva:**
+- Teclados inline para navegación fácil
+- Paginación automática (10 elementos por página)
+- Filtros de búsqueda integrados
+
+**Estadísticas Visuales:**
+- Barras de progreso ASCII: `▰▰▰▰▰▰▰░░░ 70%`
+- Emojis descriptivos: ✅ ⚡ 🔍 📊
+- Métricas de productividad personal
+
+**Integración Completa:**
+- Sincronización en tiempo real con la API
+- Manejo de errores robusto
+- Soporte para múltiples usuarios
+
+### Configuración del Bot
+
+Para habilitar el bot, configura estas variables en tu `.env`:
+```bash
+BOT_TOKEN=tu_token_de_telegram
+API_BASE_URL=http://localhost:8000
+```
+
 ## 4.1. Preguntas Frecuentes (FAQ)
 
 **¿Por qué no puedo conectarme a la base de datos?**

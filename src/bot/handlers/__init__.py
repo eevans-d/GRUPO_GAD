@@ -5,10 +5,12 @@ Registra todos los manejadores de comandos y mensajes para el bot.
 
 from telegram.ext import Application
 
-from .commands import (  # type: ignore # Added type: ignore
+from ..commands import (  # Import commands from parent bot module
     crear_tarea,
     finalizar_tarea,
     start,
+    historial,
+    estadisticas,
 )
 from .messages import message_handler
 from . import callback_handler
@@ -26,6 +28,10 @@ def register_handlers(app: Application) -> None:
     app.add_handler(start.start_handler)
     app.add_handler(crear_tarea.crear_tarea_handler)
     app.add_handler(finalizar_tarea.finalizar_tarea_handler)
+    
+    # Comandos bonus
+    app.add_handler(historial.historial_handler)
+    app.add_handler(estadisticas.estadisticas_handler)
     
     # Callback query handler (botones interactivos)
     app.add_handler(callback_handler.callback_handler)

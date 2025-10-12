@@ -30,6 +30,7 @@ from src.core.websocket_integration import (
 )
 from src.core.websockets import websocket_manager
 from src.core.ws_pubsub import RedisWebSocketPubSub  # opcional si hay Redis
+from src.core.cache import init_cache_service, shutdown_cache_service
 
 # Importar métricas Prometheus si están disponibles
 try:
@@ -102,8 +103,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             await pubsub.start(websocket_manager)
             app.state.ws_pubsub = pubsub
             api_logger.info("Pub/Sub Redis para WebSockets habilitado", redis=redis_url)
+            
+            # Inicializar CacheService con la misma URL de Redis
+            api_logger.info("Inicializando CacheService...")
+            cache_service = init_cache_service(redis_url=redis_url, prefix="gad:")
+            await cache_service.connect()
+            app.state.cache_service = cache_service
+            api_logger.info("CacheService iniciado correctamente")
+        else:
+            api_logger.warning("Redis no configurado - CacheService no disponible")
     except Exception as e:
-        api_logger.error(f"No se pudo iniciar pub/sub Redis: {e}")
+        api_logger.error(f"No se pudo iniciar pub/sub Redis o CacheService: {e}")
     
     yield
     
@@ -114,6 +124,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     api_logger.info("Deteniendo sistema de WebSockets...")
     await websocket_event_emitter.stop()
     api_logger.info("Sistema de WebSockets detenido.")
+
+    # Detener CacheService si está habilitado
+    try:
+        cache_service = getattr(app.state, 'cache_service', None)
+        if cache_service is not None:
+            await shutdown_cache_service()
+            api_logger.info("CacheService detenido")
+    except Exception as e:
+        api_logger.error(f"Error deteniendo CacheService: {e}")
 
     # Detener pub/sub si estaba habilitado
     try:
