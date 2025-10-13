@@ -3,7 +3,7 @@
 Endpoints para gestionar tareas.
 """
 
-from typing import Any, List
+from typing import Any, List, Optional
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -17,8 +17,41 @@ from src.core.database import get_db_session
 from src.core.geo.postgis_service import find_nearest_efectivo
 from src.api.utils.logging import log_business_event
 from src.schemas.tarea import Tarea, TareaCreate, TareaUpdate
+from src.core.cache import CacheService, get_cache_service
+from src.core.logging import get_logger
 
 router = APIRouter()
+logger = get_logger(__name__)
+
+
+async def invalidate_task_related_cache(cache: Optional[CacheService], task_id: Optional[int] = None) -> None:
+    """
+    Invalida cache relacionado con tareas.
+    
+    Args:
+        cache: Instancia del CacheService (puede ser None si no está habilitado)
+        task_id: ID de la tarea (opcional, si no se provee invalida todo)
+    """
+    if cache is None:
+        return
+    
+    try:
+        # Invalidar estadísticas de usuario (que incluyen conteos de tareas)
+        deleted = await cache.delete_pattern("stats:user:*")
+        logger.info(f"Cache invalidado: {deleted} keys de stats:user:*")
+        
+        # Invalidar listas de tareas si existe un patrón
+        deleted = await cache.delete_pattern("tasks:list:*")
+        logger.info(f"Cache invalidado: {deleted} keys de tasks:list:*")
+        
+        # Si hay un task_id específico, invalidar cache de esa tarea
+        if task_id:
+            deleted_task = await cache.delete(f"task:{task_id}")
+            if deleted_task:
+                logger.info(f"Cache invalidado: task:{task_id}")
+    except Exception as e:
+        # No fallar el request si falla la invalidación
+        logger.error(f"Error invalidando cache: {e}", exc_info=True)
 
 
 class EmergencyRequest(BaseModel):
@@ -56,11 +89,18 @@ async def create_task(
     db: AsyncSession = Depends(get_db_session),
     task_in: TareaCreate,
     current_user: Usuario = Depends(get_current_active_user),
+    cache: Optional[CacheService] = Depends(get_cache_service),
 ) -> Any:
     """
     Crea una nueva tarea.
+    
+    Invalida automáticamente el cache relacionado con tareas y estadísticas.
     """
     task = await crud_tarea.create(db, obj_in=task_in)
+    
+    # Invalidar cache relacionado
+    await invalidate_task_related_cache(cache, task_id=task.id)
+    
     return task
 
 
@@ -70,12 +110,15 @@ async def create_emergency(
     db: AsyncSession = Depends(get_db_session),
     emergency_in: EmergencyRequest,
     current_user: Usuario = Depends(get_current_active_user),
+    cache: Optional[CacheService] = Depends(get_cache_service),
 ) -> Any:
     """
     Creates an emergency task and assigns the nearest available efectivo.
     
     Validates the request, finds the nearest efectivo using PostGIS proximity search,
     and logs the operation for audit purposes.
+    
+    Invalida automáticamente el cache relacionado con emergencias y tareas.
     """
     received_at = datetime.now()
     
@@ -124,6 +167,9 @@ async def create_emergency(
                 "received_at": received_at.isoformat()
             }
         )
+        
+        # Invalidar cache relacionado (emergencias crean tareas)
+        await invalidate_task_related_cache(cache)
         
         return EmergencyResponse(
             assigned_efectivo_id=nearest["efectivo_id"],
@@ -180,9 +226,12 @@ async def update_task(
     task_id: int,
     task_in: TareaUpdate,
     current_user: Usuario = Depends(get_current_active_user),
+    cache: Optional[CacheService] = Depends(get_cache_service),
 ) -> Any:
     """
     Actualiza una tarea.
+    
+    Invalida automáticamente el cache relacionado con esta tarea y estadísticas.
     """
     task = await crud_tarea.get(db, id=task_id)
     if not task:
@@ -191,6 +240,10 @@ async def update_task(
             detail="The task with this id does not exist in the system",
         )
     task = await crud_tarea.update(db, db_obj=task, obj_in=task_in)
+    
+    # Invalidar cache relacionado
+    await invalidate_task_related_cache(cache, task_id=task_id)
+    
     return task
 
 
@@ -200,9 +253,12 @@ async def delete_task(
     db: AsyncSession = Depends(get_db_session),
     task_id: int,
     current_user: Usuario = Depends(get_current_active_user),
+    cache: Optional[CacheService] = Depends(get_cache_service),
 ) -> Any:
     """
     Elimina una tarea.
+    
+    Invalida automáticamente el cache relacionado con esta tarea y estadísticas.
     """
     task = await crud_tarea.get(db, id=task_id)
     if not task:
@@ -211,4 +267,8 @@ async def delete_task(
             detail="The task with this id does not exist in the system",
         )
     task = await crud_tarea.remove(db, id=task_id)
+    
+    # Invalidar cache relacionado
+    await invalidate_task_related_cache(cache, task_id=task_id)
+    
     return task

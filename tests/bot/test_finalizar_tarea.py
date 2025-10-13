@@ -21,8 +21,8 @@ from src.shared.constants import TaskStatus, TaskType, TaskPriority
 def create_mock_tarea(
     codigo: str = "TSK001",
     titulo: str = "Tarea de prueba",
-    tipo: str = "OPERATIVO",
-    estado: str = "pending"
+    tipo: str = "patrullaje",
+    estado: str = "programada"
 ) -> Tarea:
     """Helper para crear tareas mock con todos los campos obligatorios."""
     return Tarea(
@@ -50,7 +50,7 @@ async def test_show_pending_tasks_empty_list():
     context.user_data = {}
     
     # Mock ApiService para retornar lista vacía
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = []
         
@@ -75,13 +75,13 @@ async def test_show_pending_tasks_with_items():
     
     # Crear tareas de ejemplo
     tareas = [
-        create_mock_tarea(codigo="TSK001", titulo="Tarea 1", tipo="OPERATIVO"),
-        create_mock_tarea(codigo="TSK002", titulo="Tarea 2", tipo="ESTRATEGICO"),
-        create_mock_tarea(codigo="TSK003", titulo="Tarea 3", tipo="SEGUIMIENTO"),
+        create_mock_tarea(codigo="TSK001", titulo="Tarea 1", tipo="patrullaje"),
+        create_mock_tarea(codigo="TSK002", titulo="Tarea 2", tipo="investigacion"),
+        create_mock_tarea(codigo="TSK003", titulo="Tarea 3", tipo="vigilancia"),
     ]
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = tareas
         
@@ -93,7 +93,7 @@ async def test_show_pending_tasks_with_items():
     # Verificar que se mostró la lista
     query.edit_message_text.assert_called_once()
     call_args = query.edit_message_text.call_args
-    assert "3 tareas pendientes" in call_args[0][0]
+    assert "Tienes *3* tareas pendientes" in call_args[0][0]
     assert "Finalizar Tarea" in call_args[0][0]
 
 
@@ -114,7 +114,7 @@ async def test_show_pending_tasks_pagination():
     ]
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = tareas
         
@@ -123,7 +123,7 @@ async def test_show_pending_tasks_pagination():
     # Verificar que muestra página 1 de 2
     query.edit_message_text.assert_called_once()
     call_args = query.edit_message_text.call_args
-    assert "8 tareas pendientes" in call_args[0][0]
+    assert "Tienes *8* tareas pendientes" in call_args[0][0]
     assert "1-5 de 8" in call_args[0][0]
     
     # Verificar que el keyboard tiene paginación
@@ -146,7 +146,7 @@ async def test_handle_finalizar_select():
     tarea = create_mock_tarea(codigo="TSK001", titulo="Tarea de prueba")
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = [tarea]
         
@@ -175,7 +175,7 @@ async def test_handle_finalizar_select_not_found():
     context.user_data = {}
     
     # Mock ApiService con lista vacía
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = []
         
@@ -199,7 +199,7 @@ async def test_show_finalize_confirmation():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         }
     }
     
@@ -211,7 +211,7 @@ async def test_show_finalize_confirmation():
     assert "Confirmar Finalización" in call_args[0][0]
     assert "TSK001" in call_args[0][0]
     assert "Tarea de prueba" in call_args[0][0]
-    assert "OPERATIVO" in call_args[0][0]
+    assert "patrullaje" in call_args[0][0]
     
     # Verificar que tiene botones de confirmación
     keyboard_arg = call_args[1]['reply_markup']
@@ -230,7 +230,7 @@ async def test_finalize_task_success():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         },
         'finalizar_context': True
     }
@@ -239,11 +239,11 @@ async def test_finalize_task_success():
     tarea_finalizada = create_mock_tarea(
         codigo="TSK001",
         titulo="Tarea de prueba",
-        estado="completed"
+        estado="finalizada"
     )
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.finalize_task.return_value = tarea_finalizada
         
@@ -275,12 +275,12 @@ async def test_finalize_task_not_found():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         }
     }
     
     # Mock ApiService para simular error 404
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.finalize_task.side_effect = Exception("404 not found")
         
@@ -305,12 +305,12 @@ async def test_finalize_task_forbidden():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         }
     }
     
     # Mock ApiService para simular error 403
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.finalize_task.side_effect = Exception("403 forbidden")
         
@@ -335,12 +335,12 @@ async def test_finalize_task_generic_error():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         }
     }
     
     # Mock ApiService para simular error genérico
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.finalize_task.side_effect = Exception("Connection timeout")
         
@@ -365,13 +365,13 @@ async def test_handle_finalizar_cancel():
         'finalizar_task': {
             'codigo': 'TSK001',
             'titulo': 'Tarea de prueba',
-            'tipo': 'OPERATIVO'
+            'tipo': 'patrullaje'
         },
         'finalizar_context': True
     }
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         mock_api.get_user_pending_tasks.return_value = []
         
@@ -397,10 +397,10 @@ async def test_complete_finalize_flow():
     
     # Crear tarea de ejemplo
     tarea = create_mock_tarea(codigo="TSK001", titulo="Tarea completa")
-    tarea_finalizada = create_mock_tarea(codigo="TSK001", titulo="Tarea completa", estado="completed")
+    tarea_finalizada = create_mock_tarea(codigo="TSK001", titulo="Tarea completa", estado="finalizada")
     
     # Mock ApiService
-    with patch('src.bot.handlers.callback_handler.ApiService') as MockApiService:
+    with patch('src.bot.services.api_service.ApiService') as MockApiService:
         mock_api = MockApiService.return_value
         
         # Step 1: Mostrar lista

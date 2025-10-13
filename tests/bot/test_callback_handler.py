@@ -38,7 +38,7 @@ async def test_menu_ayuda_callback():
 async def test_crear_tipo_callback():
     """Test de selección de tipo de tarea."""
     update = MagicMock()
-    update.callback_query.data = "crear:tipo:OPERATIVO"
+    update.callback_query.data = "crear:tipo:patrullaje"
     update.callback_query.answer = AsyncMock()
     update.callback_query.edit_message_text = AsyncMock()
     update.effective_user.id = 123456
@@ -48,9 +48,10 @@ async def test_crear_tipo_callback():
     
     await handle_callback_query(update, context)
     
-    # Verificar que se guardó en contexto
+    # Verificar que se guardó en contexto (estructura correcta: wizard['data']['tipo'])
     assert 'wizard' in context.user_data
-    assert context.user_data['wizard']['tipo'] == 'OPERATIVO'
+    assert 'data' in context.user_data['wizard']
+    assert context.user_data['wizard']['data']['tipo'] == 'patrullaje'
     
     update.callback_query.answer.assert_called_once()
     update.callback_query.edit_message_text.assert_called_once()
