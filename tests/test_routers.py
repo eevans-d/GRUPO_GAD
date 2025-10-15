@@ -186,7 +186,7 @@ async def test_tasks_get_not_found(client, monkeypatch, db_session):
     assert response.status_code == 404
 
 @pytest.mark.asyncio
-async def test_tasks_put_not_found(client, monkeypatch, db_session):
+async def test_tasks_put_not_found(client, monkeypatch, db_session, override_cache_service):
     app.dependency_overrides[get_current_active_user] = lambda: mock_normal_user
     from src.api.crud.crud_tarea import tarea
     async def mock_get_task_none(db, id):
@@ -198,7 +198,7 @@ async def test_tasks_put_not_found(client, monkeypatch, db_session):
     assert response.status_code == 404
 
 @pytest.mark.asyncio
-async def test_tasks_delete_not_found(client, monkeypatch, db_session):
+async def test_tasks_delete_not_found(client, monkeypatch, db_session, override_cache_service):
     app.dependency_overrides[get_current_active_user] = lambda: mock_normal_user
     from src.api.crud.crud_tarea import tarea
     async def mock_get_task_none(db, id):

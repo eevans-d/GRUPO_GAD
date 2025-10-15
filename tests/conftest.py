@@ -24,8 +24,10 @@ import uvicorn
 from typing import Iterator
 from src.api.models.base import Base
 from src.core.database import get_db_session
+from src.core.cache import get_cache_service
 from jose import jwt
 import os
+from unittest.mock import AsyncMock, MagicMock
 
 ALGORITHM = "HS256"
 
@@ -92,6 +94,41 @@ def token_factory():
         return jwt.encode(payload, secret, algorithm=ALGORITHM)
 
     return _make
+
+
+# --- Fixture para Mock de CacheService ---
+@pytest.fixture
+def mock_cache_service():
+    """
+    Mock de CacheService para tests que requieren cache pero no necesitan Redis real.
+    
+    Provee un AsyncMock con métodos get, set, delete, delete_pattern configurados
+    con valores de retorno por defecto que simulan comportamiento exitoso.
+    """
+    cache = AsyncMock()
+    cache.get = AsyncMock(return_value=None)
+    cache.set = AsyncMock(return_value=True)
+    cache.delete = AsyncMock(return_value=True)
+    cache.delete_pattern = AsyncMock(return_value=5)
+    return cache
+
+
+@pytest.fixture
+def override_cache_service(mock_cache_service):
+    """
+    Override automático de get_cache_service dependency en FastAPI app.
+    
+    Uso en tests:
+        def test_algo(client, override_cache_service):
+            # test code here - CacheService automáticamente mockeado
+    
+    La limpieza de overrides se hace automáticamente al final del test.
+    """
+    app.dependency_overrides[get_cache_service] = lambda: mock_cache_service
+    yield mock_cache_service
+    # Cleanup
+    if get_cache_service in app.dependency_overrides:
+        del app.dependency_overrides[get_cache_service]
 
 
 # --- Fixtures de Pytest ---

@@ -47,7 +47,7 @@ def test_emergency_endpoint_requires_authentication(client):
     assert response.status_code == 401
 
 
-def test_emergency_endpoint_validation_error_invalid_lat(client, token_factory, mock_user):
+def test_emergency_endpoint_validation_error_invalid_lat(client, token_factory, mock_user, override_cache_service):
     """Test validation error for invalid latitude."""
     token = token_factory(mock_user.id)
     
@@ -74,7 +74,7 @@ def test_emergency_endpoint_validation_error_invalid_lat(client, token_factory, 
     assert any(err.get("loc", [None, None, ""])[-1] == "lat" for err in errors)
 
 
-def test_emergency_endpoint_validation_error_invalid_lng(client, token_factory, mock_user):
+def test_emergency_endpoint_validation_error_invalid_lng(client, token_factory, mock_user, override_cache_service):
     """Test validation error for invalid longitude."""
     token = token_factory(mock_user.id)
     
@@ -101,7 +101,7 @@ def test_emergency_endpoint_validation_error_invalid_lng(client, token_factory, 
     assert any(err.get("loc", [None, None, ""])[-1] == "lng" for err in errors)
 
 
-def test_emergency_endpoint_validation_error_missing_fields(client, token_factory, mock_user):
+def test_emergency_endpoint_validation_error_missing_fields(client, token_factory, mock_user, override_cache_service):
     """Test validation error for missing required fields."""
     token = token_factory(mock_user.id)
     
@@ -125,7 +125,7 @@ def test_emergency_endpoint_validation_error_missing_fields(client, token_factor
     assert response.status_code == 422
 
 
-def test_emergency_endpoint_no_efectivos_available(client, token_factory, mock_user):
+def test_emergency_endpoint_no_efectivos_available(client, token_factory, mock_user, override_cache_service):
     """Test emergency endpoint when no efectivos with geom are available."""
     token = token_factory(mock_user.id)
     

@@ -149,9 +149,9 @@ async def test_read_task_by_id_not_found(client: AsyncClient, auth_headers):
 # =======================
 
 @pytest.mark.asyncio
-async def test_create_task_success(client: AsyncClient, mock_user, auth_headers):
+async def test_create_task_success(client: AsyncClient, mock_user, auth_headers, override_cache_service):
     """
-    Test POST /tasks/ debe crear nueva tarea con datos válidos.
+    Test POST /tasks/ debe crear tarea exitosamente.
     """
     task_data = {
         "codigo": "TASK002",
@@ -178,7 +178,7 @@ async def test_create_task_success(client: AsyncClient, mock_user, auth_headers)
 
 
 @pytest.mark.asyncio
-async def test_create_task_invalid_data_fails(client: AsyncClient, auth_headers):
+async def test_create_task_invalid_data_fails(client: AsyncClient, auth_headers, override_cache_service):
     """
     Test POST /tasks/ con datos inválidos debe retornar 422.
     """
@@ -220,7 +220,7 @@ async def test_create_task_without_auth_fails(client: AsyncClient):
 # =======================
 
 @pytest.mark.asyncio
-async def test_update_task_success(client: AsyncClient, mock_task, auth_headers):
+async def test_update_task_success(client: AsyncClient, mock_task, auth_headers, override_cache_service):
     """
     Test PUT /tasks/{id} debe actualizar tarea existente.
     """
@@ -244,7 +244,7 @@ async def test_update_task_success(client: AsyncClient, mock_task, auth_headers)
 
 
 @pytest.mark.asyncio
-async def test_update_task_not_found(client: AsyncClient, auth_headers):
+async def test_update_task_not_found(client: AsyncClient, auth_headers, override_cache_service):
     """
     Test PUT /tasks/{id} con ID inexistente debe retornar 404.
     """
@@ -262,7 +262,7 @@ async def test_update_task_not_found(client: AsyncClient, auth_headers):
 
 
 @pytest.mark.asyncio
-async def test_update_task_partial_update(client: AsyncClient, mock_task, auth_headers):
+async def test_update_task_partial_update(client: AsyncClient, mock_task, auth_headers, override_cache_service):
     """
     Test PUT /tasks/{id} debe permitir actualización parcial.
     """
@@ -289,7 +289,7 @@ async def test_update_task_partial_update(client: AsyncClient, mock_task, auth_h
 # =======================
 
 @pytest.mark.asyncio
-async def test_delete_task_success(client: AsyncClient, mock_task, auth_headers):
+async def test_delete_task_success(client: AsyncClient, mock_task, auth_headers, override_cache_service):
     """
     Test DELETE /tasks/{id} debe eliminar tarea existente.
     """
@@ -313,7 +313,7 @@ async def test_delete_task_success(client: AsyncClient, mock_task, auth_headers)
 
 
 @pytest.mark.asyncio
-async def test_delete_task_not_found(client: AsyncClient, auth_headers):
+async def test_delete_task_not_found(client: AsyncClient, auth_headers, override_cache_service):
     """
     Test DELETE /tasks/{id} con ID inexistente debe retornar 404.
     """
@@ -330,7 +330,7 @@ async def test_delete_task_not_found(client: AsyncClient, auth_headers):
 # =======================
 
 @pytest.mark.asyncio
-async def test_create_emergency_with_mock(client: AsyncClient, auth_headers, monkeypatch):
+async def test_create_emergency_with_mock(client: AsyncClient, auth_headers, monkeypatch, override_cache_service):
     """
     Test POST /tasks/emergency debe crear emergencia y asignar efectivo.
     """
@@ -364,7 +364,7 @@ async def test_create_emergency_with_mock(client: AsyncClient, auth_headers, mon
 
 
 @pytest.mark.asyncio
-async def test_create_emergency_no_efectivos_available(client: AsyncClient, auth_headers, monkeypatch):
+async def test_create_emergency_no_efectivos_available(client: AsyncClient, auth_headers, monkeypatch, override_cache_service):
     """
     Test POST /tasks/emergency sin efectivos disponibles debe retornar 404.
     """
@@ -395,7 +395,7 @@ async def test_create_emergency_no_efectivos_available(client: AsyncClient, auth
 
 
 @pytest.mark.asyncio
-async def test_create_emergency_invalid_coordinates(client: AsyncClient, auth_headers):
+async def test_create_emergency_invalid_coordinates(client: AsyncClient, auth_headers, override_cache_service):
     """
     Test POST /tasks/emergency con coordenadas inválidas debe retornar 422.
     """
@@ -416,7 +416,7 @@ async def test_create_emergency_invalid_coordinates(client: AsyncClient, auth_he
 
 
 @pytest.mark.asyncio
-async def test_create_emergency_service_error(client: AsyncClient, auth_headers, monkeypatch):
+async def test_create_emergency_service_error(client: AsyncClient, auth_headers, monkeypatch, override_cache_service):
     """
     Test POST /tasks/emergency con error del servicio debe retornar 500.
     """
@@ -451,7 +451,7 @@ async def test_create_emergency_service_error(client: AsyncClient, auth_headers,
 # =======================
 
 @pytest.mark.asyncio
-async def test_create_task_with_invalid_type(client: AsyncClient, auth_headers):
+async def test_create_task_with_invalid_type(client: AsyncClient, auth_headers, override_cache_service):
     """
     Test POST /tasks/ con tipo inválido debe retornar 422.
     """
@@ -474,7 +474,7 @@ async def test_create_task_with_invalid_type(client: AsyncClient, auth_headers):
 
 
 @pytest.mark.asyncio
-async def test_update_task_with_invalid_status(client: AsyncClient, mock_task, auth_headers):
+async def test_update_task_with_invalid_status(client: AsyncClient, mock_task, auth_headers, override_cache_service):
     """
     Test PUT /tasks/{id} con estado inválido debe retornar 422.
     """
