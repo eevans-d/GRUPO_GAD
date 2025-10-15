@@ -92,7 +92,7 @@ function randomTaskTitle() {
 
 export function setup() {
   // Verificar que API esté disponible
-  const healthRes = http.get(`${BASE_URL}/health`);
+  const healthRes = http.get(`${BASE_URL}/api/v1/health`);
   
   if (healthRes.status !== 200) {
     throw new Error(`API not available: ${healthRes.status}`);
@@ -122,7 +122,7 @@ export default function(data) {
 
   // Escenario 1: Health Check (10% de requests)
   if (Math.random() < 0.1) {
-    const res = http.get(`${BASE_URL}/health`, { headers });
+    const res = http.get(`${BASE_URL}/api/v1/health`, { headers });
     
     check(res, {
       'health: status 200': (r) => r.status === 200,

@@ -57,7 +57,7 @@ check_requirements() {
     log_success "k6 encontrado: $(k6 version | head -1)"
     
     # Verificar API
-    if ! curl -sf "${API_URL}/health" > /dev/null 2>&1; then
+    if ! curl -sf "${API_URL}/api/v1/health" > /dev/null 2>&1; then
         log_error "API no disponible en ${API_URL}"
         log_warning "Ejecutar: make up"
         exit 1
