@@ -1,0 +1,213 @@
+# ============================================================================
+# GRUPO_GAD - Staging Environment
+# ============================================================================
+# Descripción: Entorno staging para validación pre-producción
+# Puertos: API 8001, PostgreSQL 5435, Redis 6382, Caddy 8443
+# Uso: docker compose -f docker-compose.staging.yml --env-file .env.staging up -d
+# ============================================================================
+
+version: '3.9'
+
+services:
+  # ────────────────────────────────────────────────────────────────────────
+  # PostgreSQL 15 + PostGIS (Staging)
+  # ────────────────────────────────────────────────────────────────────────
+  db-staging:
+    image: postgis/postgis:15-3.4
+    container_name: gad_db_staging
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-grupogad_staging}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_staging_secure}
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=es_ES.UTF-8"
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_staging_data:/var/lib/postgresql/data
+      - ./docker/init_postgis.sql:/docker-entrypoint-initdb.d/10_init_postgis.sql:ro
+    networks:
+      - gad_staging_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-grupogad_staging}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ────────────────────────────────────────────────────────────────────────
+  # Redis 7.2 (Staging - con contraseña)
+  # ────────────────────────────────────────────────────────────────────────
+  redis-staging:
+    image: redis:7.2-alpine
+    container_name: gad_redis_staging
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:-redis_staging_secure}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+      --loglevel warning
+    ports:
+      - "6382:6379"
+    volumes:
+      - redis_staging_data:/data
+    networks:
+      - gad_staging_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  # ────────────────────────────────────────────────────────────────────────
+  # FastAPI (Staging)
+  # ────────────────────────────────────────────────────────────────────────
+  api-staging:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        ENVIRONMENT: staging
+    container_name: gad_api_staging
+    environment:
+      # Core
+      ENVIRONMENT: staging
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      
+      # Database
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_staging_secure}@db-staging:5432/${POSTGRES_DB:-grupogad_staging}
+      
+      # Redis
+      REDIS_URL: redis://default:${REDIS_PASSWORD:-redis_staging_secure}@redis-staging:6379/0
+      
+      # Security (REQUERIDO - generar con openssl rand -hex 32)
+      SECRET_KEY: ${SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      
+      # Telegram Bot (opcional en staging)
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      
+      # CORS
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8001,https://localhost:8443}
+      
+      # API Config
+      API_V1_PREFIX: /api/v1
+      PROJECT_NAME: "GRUPO_GAD API - Staging"
+      VERSION: "1.0.0-staging"
+      
+      # WebSocket
+      WS_HEARTBEAT_INTERVAL: ${WS_HEARTBEAT_INTERVAL:-30}
+      WS_CONNECTION_TIMEOUT: ${WS_CONNECTION_TIMEOUT:-300}
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./src:/app/src:ro
+      - ./alembic:/app/alembic:ro
+      - ./logs:/app/logs
+    networks:
+      - gad_staging_network
+    depends_on:
+      db-staging:
+        condition: service_healthy
+      redis-staging:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  # ────────────────────────────────────────────────────────────────────────
+  # Caddy Reverse Proxy (Staging - SSL self-signed)
+  # ────────────────────────────────────────────────────────────────────────
+  caddy-staging:
+    image: caddy:2.7-alpine
+    container_name: gad_caddy_staging
+    ports:
+      - "8443:443"  # HTTPS
+      - "8080:80"   # HTTP (redirect to HTTPS)
+    volumes:
+      - ./Caddyfile.staging:/etc/caddy/Caddyfile:ro
+      - caddy_staging_data:/data
+      - caddy_staging_config:/config
+      - ./logs/caddy:/var/log/caddy
+    networks:
+      - gad_staging_network
+    depends_on:
+      api-staging:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  gad_staging_network:
+    name: gad_staging_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ============================================================================
+# Volumes (Persistentes)
+# ============================================================================
+volumes:
+  postgres_staging_data:
+    name: gad_postgres_staging_data
+    driver: local
+  redis_staging_data:
+    name: gad_redis_staging_data
+    driver: local
+  caddy_staging_data:
+    name: gad_caddy_staging_data
+    driver: local
+  caddy_staging_config:
+    name: gad_caddy_staging_config
+    driver: local
+
+# ============================================================================
+# NOTAS DE USO
+# ============================================================================
+# 1. Crear .env.staging con SECRET_KEY y JWT_SECRET_KEY únicos (>32 chars)
+# 2. Levantar: docker compose -f docker-compose.staging.yml --env-file .env.staging up -d
+# 3. Migraciones: docker exec gad_api_staging alembic upgrade head
+# 4. Logs: docker compose -f docker-compose.staging.yml logs -f api-staging
+# 5. Health: curl -k https://localhost:8443/api/v1/health
+# 6. Bajar: docker compose -f docker-compose.staging.yml down
+# 7. Limpiar: docker compose -f docker-compose.staging.yml down -v
+# ============================================================================

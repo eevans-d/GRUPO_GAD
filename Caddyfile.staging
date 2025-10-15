@@ -1,0 +1,174 @@
+# ============================================================================
+# Caddyfile - Staging Environment
+# ============================================================================
+# Descripción: Reverse proxy para API staging con SSL self-signed
+# Puertos: 443 (HTTPS), 80 (HTTP redirect)
+# TLS: Self-signed automático de Caddy
+# ============================================================================
+
+{
+    # Global options
+    admin off
+    log {
+        output file /var/log/caddy/access.log
+        format json
+        level INFO
+    }
+    
+    # Staging usa certificados self-signed automáticos
+    # No intenta obtener certificados de Let's Encrypt
+    auto_https disable_redirects
+}
+
+# ────────────────────────────────────────────────────────────────────────
+# HTTP (puerto 80) - Redirect a HTTPS
+# ────────────────────────────────────────────────────────────────────────
+:80 {
+    # Redirect todo a HTTPS
+    redir https://{host}:8443{uri} permanent
+}
+
+# ────────────────────────────────────────────────────────────────────────
+# HTTPS (puerto 443) - Proxy a API staging
+# ────────────────────────────────────────────────────────────────────────
+:443 {
+    # TLS self-signed automático
+    tls internal
+    
+    # Security headers
+    header {
+        # HSTS - Strict Transport Security
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        
+        # Content Security Policy
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' ws: wss:;"
+        
+        # XSS Protection
+        X-XSS-Protection "1; mode=block"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        
+        # Permissions Policy
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        
+        # Remove server headers
+        -Server
+        -X-Powered-By
+        
+        # Custom headers
+        X-Environment "staging"
+        X-Proxy "Caddy/2.7"
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/staging.log {
+            roll_size 10mb
+            roll_keep 5
+            roll_keep_for 168h
+        }
+        format json
+    }
+    
+    # Error handling
+    handle_errors {
+        respond "{err.status_code} {err.status_text}"
+    }
+    
+    # Health check endpoint (direct, no proxy)
+    handle /health {
+        respond "OK - Caddy Staging" 200
+    }
+    
+    # WebSocket endpoint - API
+    handle /ws/* {
+        reverse_proxy api-staging:8000 {
+            # WebSocket config
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Host {host}
+            
+            # Timeouts para WebSocket (más largos)
+            transport http {
+                read_timeout 10m
+                write_timeout 10m
+                dial_timeout 30s
+            }
+        }
+    }
+    
+    # API endpoints - reverse proxy a FastAPI
+    handle /api/* {
+        reverse_proxy api-staging:8000 {
+            # Headers
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+            header_up X-Forwarded-For {remote}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Host {host}
+            
+            # Health check
+            health_uri /api/v1/health
+            health_interval 30s
+            health_timeout 10s
+            
+            # Timeouts
+            transport http {
+                read_timeout 30s
+                write_timeout 30s
+                dial_timeout 10s
+            }
+        }
+    }
+    
+    # Metrics endpoint (opcional, proteger en producción)
+    handle /metrics {
+        reverse_proxy api-staging:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote}
+        }
+    }
+    
+    # Docs endpoints
+    handle /docs {
+        reverse_proxy api-staging:8000
+    }
+    
+    handle /redoc {
+        reverse_proxy api-staging:8000
+    }
+    
+    handle /openapi.json {
+        reverse_proxy api-staging:8000
+    }
+    
+    # Rate limiting (opcional)
+    # rate_limit {
+    #     zone staging {
+    #         key {remote}
+    #         events 100
+    #         window 1m
+    #     }
+    # }
+    
+    # Default handler - 404
+    handle {
+        respond "Not Found - Staging" 404
+    }
+}
+
+# ============================================================================
+# NOTAS
+# ============================================================================
+# 1. Certificado SSL self-signed generado automáticamente por Caddy
+# 2. Navegadores mostrarán warning de certificado no confiable (esperado)
+# 3. Para tests con curl: curl -k https://localhost:8443/api/v1/health
+# 4. Para tests con k6: k6 run --insecure-skip-tls-verify script.js
+# 5. Logs en: docker compose -f docker-compose.staging.yml logs -f caddy-staging
+# 6. Validar config: docker exec gad_caddy_staging caddy validate --config /etc/caddy/Caddyfile
+# ============================================================================
