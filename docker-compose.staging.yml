@@ -19,7 +19,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-grupogad_staging}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_staging_secure}
-      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=es_ES.UTF-8"
+      POSTGRES_INITDB_ARGS: "-E UTF8"
     ports:
       - "5435:5432"
     volumes:
@@ -148,7 +148,7 @@ services:
     container_name: gad_caddy_staging
     ports:
       - "8443:443"  # HTTPS
-      - "8080:80"   # HTTP (redirect to HTTPS)
+      - "8081:80"   # HTTP (redirect to HTTPS)
     volumes:
       - ./Caddyfile.staging:/etc/caddy/Caddyfile:ro
       - caddy_staging_data:/data
@@ -181,7 +181,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.25.0.0/16
 
 # ============================================================================
 # Volumes (Persistentes)

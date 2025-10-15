@@ -14,10 +14,6 @@
         format json
         level INFO
     }
-    
-    # Staging usa certificados self-signed automáticos
-    # No intenta obtener certificados de Let's Encrypt
-    auto_https disable_redirects
 }
 
 # ────────────────────────────────────────────────────────────────────────
