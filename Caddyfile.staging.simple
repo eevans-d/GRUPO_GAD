@@ -1,0 +1,14 @@
+{
+    admin off
+    auto_https off
+}
+
+:443 {
+    tls internal
+    
+    reverse_proxy api-staging:8000
+}
+
+:80 {
+    redir https://{host}:8443{uri}
+}
