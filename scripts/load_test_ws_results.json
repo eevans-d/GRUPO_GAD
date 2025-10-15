@@ -1,0 +1,233 @@
+{
+  "options": {
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": "",
+    "noColor": false
+  },
+  "state": {
+    "isStdOutTTY": false,
+    "isStdErrTTY": false,
+    "testRunDurationMs": 289841.966242
+  },
+  "metrics": {
+    "iterations": {
+      "contains": "default",
+      "values": {
+        "count": 77,
+        "rate": 0.2656620122971074
+      },
+      "type": "counter"
+    },
+    "ws_sessions": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 95,
+        "rate": 0.32776482036656107
+      }
+    },
+    "vus_max": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "value": 30,
+        "min": 30,
+        "max": 30
+      }
+    },
+    "ws_connection_duration": {
+      "type": "trend",
+      "contains": "default",
+      "values": {
+        "med": 5,
+        "max": 13,
+        "p(90)": 6,
+        "p(95)": 8,
+        "avg": 4.842105263157895,
+        "min": 3
+      },
+      "thresholds": {
+        "p(95)<3000": {
+          "ok": true
+        }
+      }
+    },
+    "ws_msgs_received": {
+      "contains": "default",
+      "values": {
+        "count": 183,
+        "rate": 0.6313785487061124
+      },
+      "type": "counter"
+    },
+    "ws_messages_received": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 183,
+        "rate": 0.6313785487061124
+      }
+    },
+    "ws_msgs_sent": {
+      "contains": "default",
+      "values": {
+        "count": 79,
+        "rate": 0.27256232430482447
+      },
+      "type": "counter"
+    },
+    "ws_errors": {
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 0
+      },
+      "thresholds": {
+        "rate<0.10": {
+          "ok": true
+        }
+      },
+      "type": "rate"
+    },
+    "ws_connecting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "max": 11.697628,
+        "p(90)": 5.512322600000001,
+        "p(95)": 6.9787197999999995,
+        "avg": 4.611722684210526,
+        "min": 3.123538,
+        "med": 4.388387
+      }
+    },
+    "checks": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0.8505747126436781,
+        "passes": 444,
+        "fails": 78
+      }
+    },
+    "data_received": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 70179,
+        "rate": 242.12849819478834
+      }
+    },
+    "ws_session_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 51675.2702355,
+        "max": 86632.807627,
+        "p(90)": 79311.6978458,
+        "p(95)": 83763.4715188,
+        "avg": 55115.229341487175,
+        "min": 31031.185184
+      }
+    },
+    "iteration_duration": {
+      "values": {
+        "med": 52897.522728,
+        "max": 87634.451276,
+        "p(90)": 80546.56055360002,
+        "p(95)": 84795.76991880001,
+        "avg": 56246.9360742987,
+        "min": 32032.631965
+      },
+      "type": "trend",
+      "contains": "time"
+    },
+    "ws_connections_success": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 95,
+        "rate": 0.32776482036656107
+      }
+    },
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "min": 1,
+        "max": 30,
+        "value": 4
+      }
+    },
+    "ws_message_latency": {
+      "contains": "default",
+      "values": {
+        "max": 8,
+        "p(90)": 4,
+        "p(95)": 4,
+        "avg": 2.366120218579235,
+        "min": 1,
+        "med": 2
+      },
+      "thresholds": {
+        "p(95)<500": {
+          "ok": true
+        }
+      },
+      "type": "trend"
+    },
+    "data_sent": {
+      "contains": "data",
+      "values": {
+        "count": 30171,
+        "rate": 104.09465679241595
+      },
+      "type": "counter"
+    }
+  },
+  "setup_data": {},
+  "root_group": {
+      "checks": [
+        {
+          "name": "ws: message has event_type",
+          "path": "::ws: message has event_type",
+          "id": "2f83907f8b040a9c5d3389143bbe6c08",
+          "passes": 183,
+          "fails": 0
+        },
+        {
+          "name": "ws: message has timestamp",
+          "path": "::ws: message has timestamp",
+          "id": "798da0192558f4a54fc8b6cf380edb31",
+          "passes": 183,
+          "fails": 0
+        },
+        {
+          "name": "ws: connection established",
+          "path": "::ws: connection established",
+          "id": "3db4f4fe880cfcec14ab7edb3d0af972",
+          "passes": 78,
+          "fails": 0
+        },
+        {
+          "fails": 78,
+          "name": "ws: CONNECTION_ACK received",
+          "path": "::ws: CONNECTION_ACK received",
+          "id": "d9a392c2a5e904fb75658ff4355577ed",
+          "passes": 0
+        }
+      ],
+      "name": "",
+      "path": "",
+      "id": "d41d8cd98f00b204e9800998ecf8427e",
+      "groups": []
+    }
+}
