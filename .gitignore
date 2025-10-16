@@ -209,3 +209,5 @@ audit-*.csv
 audit-*.md
 *.code-workspace
 .env.staging
+# Load test results (files too large for git)
+scripts/load_test_results/*.json
