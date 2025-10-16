@@ -1,0 +1,305 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2025-10-16T03:35:02.53046848Z",
+  "ArtifactName": "grupo_gad-api:latest",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "OS": {
+      "Family": "debian",
+      "Name": "13.1"
+    },
+    "ImageID": "sha256:7653ebe75fe2c3f28db6fc25379a431e46021f9ab202de7f4a14f2193d87a7d6",
+    "DiffIDs": [
+      "sha256:1d46119d249f7719e1820e24a311aa7c453f166f714969cffe89504678eaa447",
+      "sha256:fcbc289cf1e0b89ec16ce54125d53ce57cf6583189212d4597a8455790775138",
+      "sha256:327be8708bd4c592170249cacaebcbd29e70e15f11986e931b3d414266f664d2",
+      "sha256:2f0a7b62007b61fb1f51c0722b517bd4a6cae0c070138cd09eccf15973026775",
+      "sha256:db8213cd933574c54b14901495d7b16071aa92c7198ad9639e7502329579ed58",
+      "sha256:5344cf356b7f679b72bac0dd3acb08cc5657f287fc09321b1e2528bcb8640075",
+      "sha256:ada4de2eddcc0c404dfb703bc4a3043c993c75d6c391d00384f458cbf705426a",
+      "sha256:7b1bf938f6fd5b5dc4a81d87ea01942075a7c23d0d1210740c53c320d0b4beee",
+      "sha256:7d5bc45d25da8a5445fe301b0028d5d5280431058d274e35ffae84c8f92cdcd0",
+      "sha256:cee8d812da92fbbd3ec1f99db7e617179ae548ddfbcfdea6c90bad68e33101dc",
+      "sha256:edd20651162a657c6195618c262882843add150a42982b3e6c06c75a056b9a1f",
+      "sha256:c0ef79dabdac50326c519568d11060df352056c226337c9bee0bf1bca636122b",
+      "sha256:8a52d3a25ea4dbd1192b5a2b16daded7ca0d6fea52446844226002ffb5e83a5e",
+      "sha256:7358d11c0e28b3730d25e9991492707f93887c4bb9e3cd041bffbc53b3858eff"
+    ],
+    "RepoTags": [
+      "grupo_gad-api:latest"
+    ],
+    "RepoDigests": [
+      "grupo_gad-api@sha256:7653ebe75fe2c3f28db6fc25379a431e46021f9ab202de7f4a14f2193d87a7d6"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2025-10-12T04:54:00.082326723Z",
+      "history": [
+        {
+          "created": "2025-09-29T00:00:00Z",
+          "created_by": "# debian.sh --arch 'amd64' out/ 'trixie' '@1759104000'",
+          "comment": "debuerreotype 0.16"
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "ENV LANG=C.UTF-8",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "RUN /bin/sh -c set -eux; \tapt-get update; \tapt-get install -y --no-install-recommends \t\tca-certificates \t\tnetbase \t\ttzdata \t; \tapt-get dist-clean # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "ENV GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "ENV PYTHON_VERSION=3.12.12",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "ENV PYTHON_SHA256=fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "RUN /bin/sh -c set -eux; \t\tsavedAptMark=\"$(apt-mark showmanual)\"; \tapt-get update; \tapt-get install -y --no-install-recommends \t\tdpkg-dev \t\tgcc \t\tgnupg \t\tlibbluetooth-dev \t\tlibbz2-dev \t\tlibc6-dev \t\tlibdb-dev \t\tlibffi-dev \t\tlibgdbm-dev \t\tliblzma-dev \t\tlibncursesw5-dev \t\tlibreadline-dev \t\tlibsqlite3-dev \t\tlibssl-dev \t\tmake \t\ttk-dev \t\tuuid-dev \t\twget \t\txz-utils \t\tzlib1g-dev \t; \t\twget -O python.tar.xz \"https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz\"; \techo \"$PYTHON_SHA256 *python.tar.xz\" | sha256sum -c -; \twget -O python.tar.xz.asc \"https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc\"; \tGNUPGHOME=\"$(mktemp -d)\"; export GNUPGHOME; \tgpg --batch --keyserver hkps://keys.openpgp.org --recv-keys \"$GPG_KEY\"; \tgpg --batch --verify python.tar.xz.asc python.tar.xz; \tgpgconf --kill all; \trm -rf \"$GNUPGHOME\" python.tar.xz.asc; \tmkdir -p /usr/src/python; \ttar --extract --directory /usr/src/python --strip-components=1 --file python.tar.xz; \trm python.tar.xz; \t\tcd /usr/src/python; \tgnuArch=\"$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)\"; \t./configure \t\t--build=\"$gnuArch\" \t\t--enable-loadable-sqlite-extensions \t\t--enable-optimizations \t\t--enable-option-checking=fatal \t\t--enable-shared \t\t$(test \"${gnuArch%%-*}\" != 'riscv64' \u0026\u0026 echo '--with-lto') \t\t--with-ensurepip \t; \tnproc=\"$(nproc)\"; \tEXTRA_CFLAGS=\"$(dpkg-buildflags --get CFLAGS)\"; \tLDFLAGS=\"$(dpkg-buildflags --get LDFLAGS)\"; \tLDFLAGS=\"${LDFLAGS:--Wl},--strip-all\"; \t\tarch=\"$(dpkg --print-architecture)\"; arch=\"${arch##*-}\"; \t\tcase \"$arch\" in \t\t\tamd64|arm64) \t\t\t\tEXTRA_CFLAGS=\"${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer\"; \t\t\t\t;; \t\t\ti386) \t\t\t\t;; \t\t\t*) \t\t\t\tEXTRA_CFLAGS=\"${EXTRA_CFLAGS:-} -fno-omit-frame-pointer\"; \t\t\t\t;; \t\tesac; \tmake -j \"$nproc\" \t\t\"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}\" \t\t\"LDFLAGS=${LDFLAGS:-}\" \t; \trm python; \tmake -j \"$nproc\" \t\t\"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}\" \t\t\"LDFLAGS=${LDFLAGS:--Wl},-rpath='\\$\\$ORIGIN/../lib'\" \t\tpython \t; \tmake install; \t\tcd /; \trm -rf /usr/src/python; \t\tfind /usr/local -depth \t\t\\( \t\t\t\\( -type d -a \\( -name test -o -name tests -o -name idle_test \\) \\) \t\t\t-o \\( -type f -a \\( -name '*.pyc' -o -name '*.pyo' -o -name 'libpython*.a' \\) \\) \t\t\\) -exec rm -rf '{}' + \t; \t\tldconfig; \t\tapt-mark auto '.*' \u003e /dev/null; \tapt-mark manual $savedAptMark; \tfind /usr/local -type f -executable -not \\( -name '*tkinter*' \\) -exec ldd '{}' ';' \t\t| awk '/=\u003e/ { so = $(NF-1); if (index(so, \"/usr/local/\") == 1) { next }; gsub(\"^/(usr/)?\", \"\", so); printf \"*%s\\n\", so }' \t\t| sort -u \t\t| xargs -rt dpkg-query --search \t\t| awk 'sub(\":$\", \"\", $1) { print $1 }' \t\t| sort -u \t\t| xargs -r apt-mark manual \t; \tapt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \tapt-get dist-clean; \t\texport PYTHONDONTWRITEBYTECODE=1; \tpython3 --version; \tpip3 --version # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "RUN /bin/sh -c set -eux; \tfor src in idle3 pip3 pydoc3 python3 python3-config; do \t\tdst=\"$(echo \"$src\" | tr -d 3)\"; \t\t[ -s \"/usr/local/bin/$src\" ]; \t\t[ ! -e \"/usr/local/bin/$dst\" ]; \t\tln -svT \"$src\" \"/usr/local/bin/$dst\"; \tdone # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-09T15:49:21Z",
+          "created_by": "CMD [\"python3\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-11T06:45:51Z",
+          "created_by": "ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-11T06:45:51Z",
+          "created_by": "WORKDIR /app",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T03:58:16Z",
+          "created_by": "RUN /bin/sh -c apt-get update \u0026\u0026 apt-get install -y --no-install-recommends     curl     \u0026\u0026 rm -rf /var/lib/apt/lists/* \u0026\u0026 apt-get clean # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:03:57Z",
+          "created_by": "COPY /install /usr/local # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:03:57Z",
+          "created_by": "COPY alembic.ini /app/alembic.ini # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:53:56Z",
+          "created_by": "COPY alembic /app/alembic # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:53:56Z",
+          "created_by": "COPY config /app/config # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:53:57Z",
+          "created_by": "COPY src /app/src # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:53:57Z",
+          "created_by": "COPY dashboard /app/dashboard # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:53:57Z",
+          "created_by": "COPY scripts/start.sh /app/start.sh # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:54:00Z",
+          "created_by": "RUN /bin/sh -c groupadd -r app \u0026\u0026 useradd -r -g app app     \u0026\u0026 chown -R app:app /app # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-10-12T04:54:00Z",
+          "created_by": "USER app",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-12T04:54:00Z",
+          "created_by": "EXPOSE [8000/tcp]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-12T04:54:00Z",
+          "created_by": "CMD [\"/app/start.sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-10-12T04:54:00Z",
+          "created_by": "HEALTHCHECK \u0026{[\"CMD-SHELL\" \"curl -f http://localhost:8000/api/v1/health || exit 1\"] \"30s\" \"5s\" \"0s\" \"0s\" '\\x03'}",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:1d46119d249f7719e1820e24a311aa7c453f166f714969cffe89504678eaa447",
+          "sha256:fcbc289cf1e0b89ec16ce54125d53ce57cf6583189212d4597a8455790775138",
+          "sha256:327be8708bd4c592170249cacaebcbd29e70e15f11986e931b3d414266f664d2",
+          "sha256:2f0a7b62007b61fb1f51c0722b517bd4a6cae0c070138cd09eccf15973026775",
+          "sha256:db8213cd933574c54b14901495d7b16071aa92c7198ad9639e7502329579ed58",
+          "sha256:5344cf356b7f679b72bac0dd3acb08cc5657f287fc09321b1e2528bcb8640075",
+          "sha256:ada4de2eddcc0c404dfb703bc4a3043c993c75d6c391d00384f458cbf705426a",
+          "sha256:7b1bf938f6fd5b5dc4a81d87ea01942075a7c23d0d1210740c53c320d0b4beee",
+          "sha256:7d5bc45d25da8a5445fe301b0028d5d5280431058d274e35ffae84c8f92cdcd0",
+          "sha256:cee8d812da92fbbd3ec1f99db7e617179ae548ddfbcfdea6c90bad68e33101dc",
+          "sha256:edd20651162a657c6195618c262882843add150a42982b3e6c06c75a056b9a1f",
+          "sha256:c0ef79dabdac50326c519568d11060df352056c226337c9bee0bf1bca636122b",
+          "sha256:8a52d3a25ea4dbd1192b5a2b16daded7ca0d6fea52446844226002ffb5e83a5e",
+          "sha256:7358d11c0e28b3730d25e9991492707f93887c4bb9e3cd041bffbc53b3858eff"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "/app/start.sh"
+        ],
+        "Healthcheck": {
+          "Test": [
+            "CMD-SHELL",
+            "curl -f http://localhost:8000/api/v1/health || exit 1"
+          ],
+          "Interval": 30000000000,
+          "Timeout": 5000000000,
+          "Retries": 3
+        },
+        "Env": [
+          "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "LANG=C.UTF-8",
+          "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+          "PYTHON_VERSION=3.12.12",
+          "PYTHON_SHA256=fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4",
+          "PYTHONDONTWRITEBYTECODE=1",
+          "PYTHONUNBUFFERED=1"
+        ],
+        "Labels": {
+          "com.docker.compose.project": "grupo_gad",
+          "com.docker.compose.service": "api",
+          "com.docker.compose.version": "2.40.0"
+        },
+        "User": "app",
+        "WorkingDir": "/app",
+        "ArgsEscaped": true
+      }
+    }
+  },
+  "Results": [
+    {
+      "Target": "grupo_gad-api:latest (debian 13.1)",
+      "Class": "os-pkgs",
+      "Type": "debian"
+    },
+    {
+      "Target": "Python",
+      "Class": "lang-pkgs",
+      "Type": "python-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-23342",
+          "PkgName": "ecdsa",
+          "PkgPath": "usr/local/lib/python3.12/site-packages/ecdsa-0.19.1.dist-info/METADATA",
+          "PkgIdentifier": {
+            "PURL": "pkg:pypi/ecdsa@0.19.1",
+            "UID": "fb647db4a8b34a63"
+          },
+          "InstalledVersion": "0.19.1",
+          "Status": "affected",
+          "Layer": {
+            "Digest": "sha256:62531ee8a1ab9c19bc57368e37a95fdf3dfd2d946b92e742b5fb7d1ef9104033",
+            "DiffID": "sha256:ada4de2eddcc0c404dfb703bc4a3043c993c75d6c391d00384f458cbf705426a"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-23342",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory pip",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip"
+          },
+          "Title": "python-ecdsa: vulnerable to the Minerva attack",
+          "Description": "The `ecdsa` PyPI package is a pure Python implementation of ECC (Elliptic Curve Cryptography) with support for ECDSA (Elliptic Curve Digital Signature Algorithm), EdDSA (Edwards-curve Digital Signature Algorithm) and ECDH (Elliptic Curve Diffie-Hellman). Versions 0.18.0 and prior are vulnerable to the Minerva attack. As of time of publication, no known patched version exists.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-203",
+            "CWE-208",
+            "CWE-385"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "nvd": 3,
+            "redhat": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+              "V3Score": 7.4
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+              "V3Score": 7.4
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+              "V3Score": 7.4
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-23342",
+            "https://github.com/tlsfuzzer/python-ecdsa",
+            "https://github.com/tlsfuzzer/python-ecdsa/blob/master/SECURITY.md",
+            "https://github.com/tlsfuzzer/python-ecdsa/security/advisories/GHSA-wj6h-64fc-37mp",
+            "https://minerva.crocs.fi.muni.cz",
+            "https://minerva.crocs.fi.muni.cz/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-23342",
+            "https://securitypitfalls.wordpress.com/2018/08/03/constant-time-compare-in-python",
+            "https://securitypitfalls.wordpress.com/2018/08/03/constant-time-compare-in-python/",
+            "https://www.cve.org/CVERecord?id=CVE-2024-23342"
+          ],
+          "PublishedDate": "2024-01-23T00:15:26.397Z",
+          "LastModifiedDate": "2025-08-26T21:33:47.87Z"
+        }
+      ]
+    }
+  ]
+}
