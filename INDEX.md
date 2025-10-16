@@ -100,9 +100,76 @@
 
 ---
 
-## 🔧 DOCUMENTOS DE DESARROLLO
+## � DOCUMENTOS: CONFIGURACIÓN DE SECRETS (GitHub)
 
-### 8. **CHANGELOG.md** - Historial de Cambios 📝
+### 8. **GITHUB_SECRETS_SETUP_GUIDE.md** - Guía Completa 📖
+> Guía DETALLADA (400+ líneas) para configurar los 15 secrets en GitHub
+
+**Cuándo leer**: Necesitas explicación paso a paso  
+**Contenido**:
+- Acceso a GitHub Settings → Secrets
+- Tabla con todos los 15 secrets
+- CÓMO OBTENER cada secret (detallado)
+- Procedimiento para crear cada uno
+- 5 errores comunes y soluciones
+- Tips de seguridad y validación
+
+**Tiempo**: ~20 minutos (leyendo + configurando)  
+**Audiencia**: Nuevos usuarios, necesitan detalle
+
+---
+
+### 9. **GITHUB_SECRETS_QUICK_START.md** - Guía Rápida ⚡
+> Guía ULTRA-RÁPIDA (10 minutos) para expertos
+
+**Cuándo leer**: Quieres hacerlo rápido  
+**Contenido**:
+- Resumen ejecutivo (2 min de lectura)
+- Tabla rápida de 15 secrets
+- Comandos copiar-pegar para generar valores
+- Checklist por tiers (4 niveles)
+- Errores comunes (tabla referencia)
+
+**Tiempo**: ~10 minutos (solo configurar)  
+**Audiencia**: Expertos, velocidad máxima
+
+---
+
+### 10. **GITHUB_SECRETS_VISUAL_GUIDE.md** - Guía Visual 🎬
+> Guía con SCREENSHOTS EN ASCII art
+
+**Cuándo leer**: Aprendizaje visual, paso a paso  
+**Contenido**:
+- ASCII art de cada pantalla GitHub
+- Ubicación de botones/menús
+- Flujo completo visualizado (5 pasos)
+- Workflow en acción (logs)
+- Checklist visual por tiers
+- Errores comunes (visual)
+
+**Tiempo**: ~15 minutos (visual + configurar)  
+**Audiencia**: Aprendizaje visual
+
+---
+
+## �🔧 DOCUMENTOS DE DESARROLLO
+
+### 11. **verify_secrets.py** - Script de Verificación 🔍
+> Script Python para verificar y validar secrets
+
+**Cuándo usar**: Referencia programática, automatización  
+**Contenido**:
+- Definición de 15 secrets en código
+- Función de validación
+- Tabla de referencia (ejecutable)
+- Template para GitHub Actions
+- Ejecutable: `python3 verify_secrets.py`
+
+**Audiencia**: Desarrolladores, automatización
+
+---
+
+### 12. **CHANGELOG.md** - Historial de Cambios 📝
 > Log de todos los cambios del proyecto (versionado semántico).
 
 **Cuándo leer**: Para ver qué cambió entre versiones  
