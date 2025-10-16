@@ -1,0 +1,214 @@
+# ========================================================================
+# 📊 GRUPO_GAD - Monitoring Stack (Prometheus + Grafana)
+# ========================================================================
+# Descripción: Monitoreo completo para producción
+# Componentes: Prometheus, Grafana, AlertManager
+# ========================================================================
+
+services:
+  # ======================================================================
+  # Prometheus: Metrics collection & storage
+  # ======================================================================
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: grupo_gad_prometheus
+    restart: always
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    
+    ports:
+      - "127.0.0.1:9090:9090"  # Solo localhost
+    
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus-data:/prometheus
+    
+    networks:
+      - monitoring
+      - gad-network  # Acceso a API
+    
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  # ======================================================================
+  # Grafana: Visualization & dashboards
+  # ======================================================================
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: grupo_gad_grafana
+    restart: always
+    
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme}
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_USERS_ALLOW_SIGN_UP=false
+    
+    ports:
+      - "127.0.0.1:3000:3000"  # Solo localhost o usar Caddy
+    
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    
+    depends_on:
+      - prometheus
+    
+    networks:
+      - monitoring
+    
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  # ======================================================================
+  # AlertManager: Alert routing & notifications
+  # ======================================================================
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: grupo_gad_alertmanager
+    restart: always
+    
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    
+    ports:
+      - "127.0.0.1:9093:9093"
+    
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/alertmanager
+    
+    networks:
+      - monitoring
+    
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+  # ======================================================================
+  # Node Exporter: Host metrics (CPU, memory, disk)
+  # ======================================================================
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: grupo_gad_node_exporter
+    restart: always
+    
+    command:
+      - '--path.rootfs=/host'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    
+    volumes:
+      - /:/host:ro,rslave
+    
+    ports:
+      - "127.0.0.1:9100:9100"
+    
+    networks:
+      - monitoring
+    
+    pid: host
+  
+  # ======================================================================
+  # Postgres Exporter: Database metrics
+  # ======================================================================
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: grupo_gad_postgres_exporter
+    restart: always
+    
+    environment:
+      DATA_SOURCE_NAME: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable"
+    
+    ports:
+      - "127.0.0.1:9187:9187"
+    
+    depends_on:
+      - db
+    
+    networks:
+      - monitoring
+      - gad-network
+  
+  # ======================================================================
+  # Redis Exporter: Cache metrics
+  # ======================================================================
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.55.0
+    container_name: grupo_gad_redis_exporter
+    restart: always
+    
+    environment:
+      REDIS_ADDR: "redis:6379"
+      # REDIS_PASSWORD: "${REDIS_PASSWORD}"  # Si está configurado
+    
+    ports:
+      - "127.0.0.1:9121:9121"
+    
+    depends_on:
+      - redis
+    
+    networks:
+      - monitoring
+      - gad-network
+
+  # ======================================================================
+  # Caddy Exporter: Web server metrics (opcional)
+  # ======================================================================
+  # caddy-exporter:
+  #   image: hairyhenderson/caddy-exporter:v0.5.1
+  #   container_name: grupo_gad_caddy_exporter
+  #   restart: always
+  #   
+  #   command:
+  #     - '--caddy.addr=http://caddy:2019'
+  #   
+  #   ports:
+  #     - "127.0.0.1:9180:9180"
+  #   
+  #   networks:
+  #     - monitoring
+  #     - gad-network
+
+# ========================================================================
+# Networks
+# ========================================================================
+networks:
+  monitoring:
+    driver: bridge
+  
+  gad-network:
+    external: true  # Conectar a red principal
+
+# ========================================================================
+# Volumes
+# ========================================================================
+volumes:
+  prometheus-data:
+    driver: local
+  
+  grafana-data:
+    driver: local
+  
+  alertmanager-data:
+    driver: local

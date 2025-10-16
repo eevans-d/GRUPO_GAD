@@ -1,0 +1,250 @@
+# ========================================================================
+# 🚨 Prometheus Alert Rules - GRUPO_GAD
+# ========================================================================
+
+groups:
+  # ======================================================================
+  # API Health & Availability
+  # ======================================================================
+  - name: api_health
+    interval: 30s
+    rules:
+      # API Down
+      - alert: APIDown
+        expr: up{job="api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "API está DOWN"
+          description: "La API GRUPO_GAD no responde en {{ $labels.instance }} por más de 1 minuto."
+      
+      # Alta tasa de errores 5xx
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m])) 
+          / 
+          sum(rate(http_requests_total[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "Alta tasa de errores 5xx en API"
+          description: "La tasa de errores 5xx es {{ $value | humanize }}% en los últimos 5 minutos."
+      
+      # Latencia alta P95
+      - alert: HighLatencyP95
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "Latencia P95 alta en API"
+          description: "P95 latency es {{ $value | humanize }}s (umbral: 500ms)."
+      
+      # Latencia crítica P99
+      - alert: CriticalLatencyP99
+        expr: |
+          histogram_quantile(0.99, 
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le)
+          ) > 2
+        for: 2m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "Latencia P99 crítica en API"
+          description: "P99 latency es {{ $value | humanize }}s (umbral: 2s)."
+  
+  # ======================================================================
+  # Database Health
+  # ======================================================================
+  - name: database_health
+    interval: 30s
+    rules:
+      # Database Down
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "PostgreSQL está DOWN"
+          description: "PostgreSQL no responde por más de 1 minuto."
+      
+      # Demasiadas conexiones activas
+      - alert: TooManyConnections
+        expr: pg_stat_activity_count > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Demasiadas conexiones activas en PostgreSQL"
+          description: "PostgreSQL tiene {{ $value }} conexiones activas (límite típico: 100)."
+      
+      # Queries lentas
+      - alert: SlowQueries
+        expr: pg_stat_activity_max_tx_duration > 60
+        for: 2m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Queries lentas detectadas"
+          description: "Query más lenta tarda {{ $value | humanize }}s."
+      
+      # Disk usage alto
+      - alert: HighDatabaseDiskUsage
+        expr: |
+          (pg_database_size_bytes / 
+          node_filesystem_size_bytes{mountpoint="/var/lib/postgresql/data"}) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "Uso de disco alto en PostgreSQL"
+          description: "Database usa {{ $value | humanize }}% del disco."
+  
+  # ======================================================================
+  # Redis Health
+  # ======================================================================
+  - name: redis_health
+    interval: 30s
+    rules:
+      # Redis Down
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          component: cache
+        annotations:
+          summary: "Redis está DOWN"
+          description: "Redis no responde por más de 1 minuto."
+      
+      # Memoria alta
+      - alert: RedisMemoryHigh
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Uso de memoria alto en Redis"
+          description: "Redis usa {{ $value | humanize }}% de su memoria máxima."
+      
+      # Muchas keys evictadas
+      - alert: RedisHighEvictionRate
+        expr: rate(redis_evicted_keys_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Alta tasa de eviction en Redis"
+          description: "Redis está evictando {{ $value | humanize }} keys/s."
+  
+  # ======================================================================
+  # Infrastructure (Host)
+  # ======================================================================
+  - name: infrastructure
+    interval: 30s
+    rules:
+      # CPU alto
+      - alert: HighCPUUsage
+        expr: |
+          100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Uso de CPU alto en {{ $labels.instance }}"
+          description: "CPU usage es {{ $value | humanize }}% (umbral: 80%)."
+      
+      # Memoria alta
+      - alert: HighMemoryUsage
+        expr: |
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Uso de memoria alto en {{ $labels.instance }}"
+          description: "Memory usage es {{ $value | humanize }}% (umbral: 85%)."
+      
+      # Memoria crítica
+      - alert: CriticalMemoryUsage
+        expr: |
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 95
+        for: 2m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "Uso de memoria CRÍTICO en {{ $labels.instance }}"
+          description: "Memory usage es {{ $value | humanize }}% (umbral: 95%)."
+      
+      # Disco lleno
+      - alert: DiskSpaceLow
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/"} / 
+          node_filesystem_size_bytes{mountpoint="/"}) * 100 < 15
+        for: 5m
+        labels:
+          severity: warning
+          component: infrastructure
+        annotations:
+          summary: "Espacio en disco bajo en {{ $labels.instance }}"
+          description: "Solo queda {{ $value | humanize }}% de espacio disponible."
+      
+      # Disco crítico
+      - alert: DiskSpaceCritical
+        expr: |
+          (node_filesystem_avail_bytes{mountpoint="/"} / 
+          node_filesystem_size_bytes{mountpoint="/"}) * 100 < 5
+        for: 2m
+        labels:
+          severity: critical
+          component: infrastructure
+        annotations:
+          summary: "Espacio en disco CRÍTICO en {{ $labels.instance }}"
+          description: "Solo queda {{ $value | humanize }}% de espacio disponible."
+  
+  # ======================================================================
+  # WebSocket Health
+  # ======================================================================
+  - name: websocket_health
+    interval: 30s
+    rules:
+      # Muchas conexiones WebSocket
+      - alert: HighWebSocketConnections
+        expr: websocket_connections_active > 1000
+        for: 5m
+        labels:
+          severity: warning
+          component: websocket
+        annotations:
+          summary: "Alto número de conexiones WebSocket activas"
+          description: "Hay {{ $value }} conexiones WebSocket activas (umbral: 1000)."
+      
+      # Alta tasa de errores en broadcast
+      - alert: HighWebSocketBroadcastErrors
+        expr: rate(websocket_broadcast_errors_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          component: websocket
+        annotations:
+          summary: "Alta tasa de errores en broadcasts WebSocket"
+          description: "Tasa de errores: {{ $value | humanize }} errores/s."

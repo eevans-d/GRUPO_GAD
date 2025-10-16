@@ -1,0 +1,114 @@
+# ========================================================================
+# 📊 Prometheus Configuration - GRUPO_GAD
+# ========================================================================
+
+global:
+  scrape_interval: 15s  # Scrape targets cada 15 segundos
+  evaluation_interval: 15s  # Evaluar reglas cada 15 segundos
+  
+  external_labels:
+    cluster: 'grupo_gad_production'
+    environment: 'production'
+
+# Configuración de AlertManager
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Cargar reglas de alertas
+rule_files:
+  - 'alerts.yml'
+
+# ========================================================================
+# Scrape Configurations
+# ========================================================================
+scrape_configs:
+  # ======================================================================
+  # Job 1: Prometheus self-monitoring
+  # ======================================================================
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+  
+  # ======================================================================
+  # Job 2: FastAPI Application
+  # ======================================================================
+  - job_name: 'api'
+    scrape_interval: 10s  # Más frecuente para API
+    static_configs:
+      - targets: ['api:8000']  # Nombre del servicio Docker
+        labels:
+          service: 'fastapi'
+          component: 'api'
+    
+    # Path donde FastAPI expone /metrics
+    metrics_path: '/metrics'
+    
+    # Relabel para añadir información
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'grupo_gad_api'
+  
+  # ======================================================================
+  # Job 3: PostgreSQL Database
+  # ======================================================================
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+        labels:
+          service: 'postgresql'
+          component: 'database'
+  
+  # ======================================================================
+  # Job 4: Redis Cache
+  # ======================================================================
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          service: 'redis'
+          component: 'cache'
+  
+  # ======================================================================
+  # Job 5: Node Exporter (Host metrics)
+  # ======================================================================
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node-exporter'
+          component: 'infrastructure'
+  
+  # ======================================================================
+  # Job 6: Caddy Metrics (opcional)
+  # ======================================================================
+  # - job_name: 'caddy'
+  #   static_configs:
+  #     - targets: ['caddy-exporter:9180']
+  #       labels:
+  #         service: 'caddy'
+  #         component: 'reverse-proxy'
+  
+  # ======================================================================
+  # Job 7: AlertManager
+  # ======================================================================
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']
+        labels:
+          service: 'alertmanager'
+          component: 'alerting'
+
+# ========================================================================
+# Remote Write (opcional para almacenamiento long-term)
+# ========================================================================
+# remote_write:
+#   - url: 'https://prometheus-us-central1.grafana.net/api/prom/push'
+#     basic_auth:
+#       username: '<YOUR_GRAFANA_CLOUD_USER>'
+#       password: '<YOUR_GRAFANA_CLOUD_API_KEY>'
