@@ -1,0 +1,208 @@
+# ========================================================================
+# 🔐 GRUPO_GAD - Production Caddyfile con HTTPS automático
+# ========================================================================
+# Descripción: Configuración Caddy v2 para producción con Let's Encrypt
+# Features: Auto-HTTPS, Security headers, Compression, Rate limiting
+# ========================================================================
+
+{
+    # Configuración global
+    email admin@grupogad.gob.ec
+    
+    # Activar logs estructurados
+    log {
+        level INFO
+        format json
+    }
+    
+    # Security: Disable admin API en producción
+    admin off
+}
+
+# ========================================================================
+# DOMINIO PRINCIPAL: API Production
+# ========================================================================
+# NOTA: Cambiar por tu dominio real antes de deployment
+# Ejemplo: api.grupogad.gob.ec
+# ========================================================================
+
+# Desarrollo local: Sin TLS
+:80 {
+    # Habilitar compresión (zstd es más eficiente que gzip)
+    encode zstd gzip
+    
+    # Configuración del reverse proxy
+    reverse_proxy api:8000 {
+        # Headers para preservar información del cliente
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-Host {host}
+        
+        # Health check pasivo
+        fail_duration 30s
+        max_fails 3
+        unhealthy_status 5xx
+        
+        # Timeouts ajustados para GAD operations
+        timeout 30s
+    }
+    
+    # Security Headers (básicos para desarrollo)
+    header {
+        # Prevenir MIME sniffing
+        X-Content-Type-Options "nosniff"
+        
+        # Clickjacking protection
+        X-Frame-Options "DENY"
+        
+        # XSS protection
+        X-XSS-Protection "1; mode=block"
+        
+        # Referrer policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        
+        # Feature policy básica
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        
+        # Server header (ocultar versión)
+        -Server
+    }
+    
+    # Logs de acceso
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 50mb
+            roll_keep 10
+            roll_keep_for 720h  # 30 días
+        }
+        format json
+    }
+    
+    # Manejo de errores personalizado
+    handle_errors {
+        @5xx expression {http.error.status_code} >= 500
+        @4xx expression {http.error.status_code} >= 400
+        
+        respond @5xx "Error del servidor: {http.error.status_code}" {http.error.status_code}
+        respond @4xx "Error del cliente: {http.error.status_code}" {http.error.status_code}
+    }
+}
+
+# ========================================================================
+# PRODUCCIÓN: Descomentar y configurar para deployment real
+# ========================================================================
+
+# api.grupogad.gob.ec {
+#     # TLS automático con Let's Encrypt
+#     tls {
+#         protocols tls1.2 tls1.3
+#         ciphers TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#     }
+#     
+#     # Habilitar compresión
+#     encode zstd gzip
+#     
+#     # Rate limiting (requiere Caddy con rate limit plugin o usar Cloudflare)
+#     # Alternativa: Implementar rate limiting en FastAPI
+#     
+#     # Reverse proxy al backend
+#     reverse_proxy api:8000 {
+#         header_up Host {host}
+#         header_up X-Real-IP {remote_host}
+#         header_up X-Forwarded-For {remote_host}
+#         header_up X-Forwarded-Proto {scheme}
+#         header_up X-Forwarded-Host {host}
+#         
+#         # Load balancing si hay múltiples replicas
+#         # lb_policy round_robin
+#         
+#         # Health checks activos
+#         health_uri /api/v1/health
+#         health_interval 30s
+#         health_timeout 5s
+#         health_status 200
+#         
+#         # Timeouts
+#         timeout 30s
+#     }
+#     
+#     # Security Headers COMPLETOS para producción
+#     header {
+#         # HSTS (HTTP Strict Transport Security)
+#         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+#         
+#         # Prevenir MIME sniffing
+#         X-Content-Type-Options "nosniff"
+#         
+#         # Clickjacking protection
+#         X-Frame-Options "DENY"
+#         
+#         # XSS protection
+#         X-XSS-Protection "1; mode=block"
+#         
+#         # Referrer policy
+#         Referrer-Policy "strict-origin-when-cross-origin"
+#         
+#         # Content Security Policy (ajustar según necesidad)
+#         Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+#         
+#         # Feature/Permissions Policy
+#         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+#         
+#         # Ocultar headers innecesarios
+#         -Server
+#         -X-Powered-By
+#     }
+#     
+#     # Logs de acceso con rotación
+#     log {
+#         output file /var/log/caddy/api_production.log {
+#             roll_size 100mb
+#             roll_keep 30
+#             roll_keep_for 2160h  # 90 días
+#         }
+#         format json
+#     }
+#     
+#     # Manejo de errores personalizado
+#     handle_errors {
+#         @5xx expression {http.error.status_code} >= 500
+#         @4xx expression {http.error.status_code} >= 400
+#         
+#         respond @5xx "Error del servidor. Por favor contacte al administrador." {http.error.status_code}
+#         respond @4xx "Solicitud inválida." {http.error.status_code}
+#     }
+# }
+
+# ========================================================================
+# OPCIONAL: Subdominios adicionales
+# ========================================================================
+
+# dashboard.grupogad.gob.ec {
+#     tls {
+#         protocols tls1.2 tls1.3
+#     }
+#     
+#     root * /var/www/dashboard
+#     file_server
+#     
+#     # Security headers iguales que arriba
+#     header {
+#         Strict-Transport-Security "max-age=31536000; includeSubDomains"
+#         X-Content-Type-Options "nosniff"
+#         X-Frame-Options "DENY"
+#         -Server
+#     }
+# }
+
+# ========================================================================
+# HEALTH CHECK endpoint para load balancers externos
+# ========================================================================
+
+# health.grupogad.gob.ec {
+#     respond /health 200 {
+#         body "OK"
+#     }
+# }

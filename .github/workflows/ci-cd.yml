@@ -1,0 +1,384 @@
+# ========================================================================
+# 🚀 GRUPO_GAD - CI/CD Pipeline (GitHub Actions)
+# ========================================================================
+# Descripción: Pipeline automatizado para testing, security y deployment
+# Triggers: Push a master, Pull Requests
+# ========================================================================
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:  # Manual trigger
+
+env:
+  PYTHON_VERSION: '3.11'
+  DOCKER_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/api
+
+jobs:
+  # ======================================================================
+  # JOB 1: Code Quality & Testing
+  # ======================================================================
+  test:
+    name: 🧪 Tests & Code Quality
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+      
+      - name: 🔍 Lint with ruff
+        run: |
+          pip install ruff
+          ruff check src/ tests/ || true  # No bloqueante por ahora
+      
+      - name: 🧪 Run tests with coverage
+        env:
+          DATABASE_URL: postgresql+asyncpg://test_user:test_pass@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379/0
+          ENVIRONMENT: test
+          SECRET_KEY: test-secret-key-for-ci-only-not-production-use
+        run: |
+          pytest tests/ \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-fail-under=70 \
+            -v
+      
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+  
+  # ======================================================================
+  # JOB 2: Security Scanning
+  # ======================================================================
+  security:
+    name: 🔐 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: 🛡️ Safety Check (Dependencies)
+        run: |
+          pip install safety
+          safety check --file requirements.txt --output json || true
+      
+      - name: 🔍 Bandit Check (SAST)
+        run: |
+          pip install bandit
+          bandit -r src/ -f json -o bandit-report.json || true
+      
+      - name: 🔐 Gitleaks (Secret Detection)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}  # Solo si es Pro
+        continue-on-error: true  # No bloqueante
+      
+      - name: 📋 Upload security reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+  
+  # ======================================================================
+  # JOB 3: Build Docker Image
+  # ======================================================================
+  build:
+    name: 🐳 Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: 🔑 Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 📝 Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: 🏗️ Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile.api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: 🔍 Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+        continue-on-error: true
+      
+      - name: 📤 Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+  
+  # ======================================================================
+  # JOB 4: Deploy to Staging (Auto)
+  # ======================================================================
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.grupogad.gob.ec
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔑 Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+      
+      - name: 🚀 Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
+            cd /opt/grupogad
+            git pull origin develop
+            docker compose -f docker-compose.staging.yml pull
+            docker compose -f docker-compose.staging.yml up -d --remove-orphans
+            docker compose -f docker-compose.staging.yml exec -T api alembic upgrade head
+          EOF
+      
+      - name: 🧪 Smoke test staging
+        run: |
+          sleep 10
+          curl -f https://staging.grupogad.gob.ec/api/v1/health || exit 1
+      
+      - name: 📢 Notify deployment
+        if: always()
+        run: |
+          echo "Staging deployment completed: ${{ job.status }}"
+          # TODO: Integrar con Slack/Teams/Email
+  
+  # ======================================================================
+  # JOB 5: Deploy to Production (Manual Approval)
+  # ======================================================================
+  deploy-production:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    environment:
+      name: production
+      url: https://api.grupogad.gob.ec
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔑 Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+      
+      - name: 💾 Pre-deployment backup
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/grupogad
+            ./scripts/backup_production.sh || echo "Warning: Backup script not found"
+          EOF
+      
+      - name: 🚀 Deploy to production
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/grupogad
+            git pull origin master
+            ./scripts/deploy_production.sh --force
+          EOF
+      
+      - name: 🧪 Production smoke tests
+        run: |
+          sleep 15
+          
+          # Health check
+          curl -f https://api.grupogad.gob.ec/api/v1/health || exit 1
+          
+          # Metrics check
+          curl -f https://api.grupogad.gob.ec/metrics || exit 1
+          
+          echo "✅ Production deployment verified"
+      
+      - name: 🔄 Rollback on failure
+        if: failure()
+        run: |
+          echo "⚠️ Deployment failed, executing rollback..."
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PRODUCTION_USER }}@${{ secrets.PRODUCTION_HOST }} << 'EOF'
+            cd /opt/grupogad
+            ./scripts/rollback_production.sh --backup-file $(cat backups/latest_backup.txt) || echo "Rollback failed"
+          EOF
+      
+      - name: 📢 Notify production deployment
+        if: always()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          payload: |
+            {
+              "text": "Production Deployment: ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "🚀 *Production Deployment ${{ job.status }}*\n*Commit:* `${{ github.sha }}`\n*Actor:* ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true
+
+  # ======================================================================
+  # JOB 6: Performance Testing (Post-Deploy)
+  # ======================================================================
+  performance-test:
+    name: ⚡ Performance Test
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: 📦 Install Locust
+        run: |
+          pip install locust
+      
+      - name: ⚡ Run load test
+        run: |
+          # Smoke load test (light)
+          locust \
+            -f tests/load/locustfile.py \
+            --host https://api.grupogad.gob.ec \
+            --users 10 \
+            --spawn-rate 2 \
+            --run-time 2m \
+            --headless \
+            --html reports/load-test-report.html \
+            || echo "Load test completed with warnings"
+      
+      - name: 📤 Upload performance report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-report
+          path: reports/load-test-report.html
+
+# ========================================================================
+# Configuración de Secrets necesarios (GitHub Repo Settings > Secrets):
+# ========================================================================
+# STAGING_SSH_KEY: Private SSH key para staging server
+# STAGING_USER: Username para staging (ej: ubuntu)
+# STAGING_HOST: IP o hostname de staging
+# PRODUCTION_SSH_KEY: Private SSH key para production server
+# PRODUCTION_USER: Username para production (ej: ubuntu)
+# PRODUCTION_HOST: IP o hostname de production
+# SLACK_WEBHOOK_URL: (Opcional) Webhook para notificaciones Slack
+# GITLEAKS_LICENSE: (Opcional) License key de Gitleaks Pro
+# ========================================================================
