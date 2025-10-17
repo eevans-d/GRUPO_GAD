@@ -71,18 +71,27 @@ class Settings(BaseSettings):
         return None
 
     def assemble_db_url(self) -> Optional[str]:
-        """Return a usable DB URL, checking DATABASE_URL, DB_URL and POSTGRES_* components.
+        """Return a usable DB URL compatible with asyncpg (Railway-compatible).
 
         This helper is explicit and safe to call at runtime without relying on
         a global settings instantiation at import time.
+        
+        Transforms postgresql:// to postgresql+asyncpg:// for Railway compatibility.
         """
         # Prefer explicit DATABASE_URL set during initialization
         if self.DATABASE_URL:
-            return self.DATABASE_URL
+            url = self.DATABASE_URL
+            # Railway inyecta postgresql://, transformar para asyncpg
+            if url.startswith("postgresql://") and "+asyncpg" not in url:
+                url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return url
 
         # Fallback to legacy env var
         legacy_db_url = os.getenv("DB_URL")
         if legacy_db_url:
+            # Aplicar misma transformación
+            if legacy_db_url.startswith("postgresql://") and "+asyncpg" not in legacy_db_url:
+                legacy_db_url = legacy_db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
             return legacy_db_url
 
         # Use components if available (be tolerant if attributes are missing when constructed without validation)
