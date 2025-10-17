@@ -10,15 +10,17 @@ Conoce lo mínimo imprescindible para ser productivo y seguro en este repo.
 - Router WS: `src/api/routers/websockets.py` expone `/ws/connect`, `/ws/stats` y (solo dev/test) `POST /ws/_test/broadcast`.
 
 ## Flujos de desarrollo
-- Ejecutar local: `uvicorn src.api.main:app --reload` (o `docker compose up -d --build`).
-- Migraciones: `alembic upgrade head` (requiere `DATABASE_URL`).
-- Tests: `pytest -q` o con cobertura `--cov=src --cov-report=term-missing`. En tests se usa SQLite en memoria (configurado en `pytest.ini`).
+- Ejecutar local: `make up` (o `docker compose up -d --build`; uvicorn solo para dev rápido sin DB).
+- Migraciones: `alembic upgrade head` (requiere `DATABASE_URL`). Production: `make prod-migrate`.
+- Tests: `make test` (o `pytest -q`) • Cobertura: `make test-cov` • Smoke tests: `make smoke` (HTTP), `make ws-smoke` (WebSockets).
+- Deploy a Railway: Lee `RAILWAY_DEPLOYMENT_GUIDE.md` (6 pasos, 15 min). DB/Redis provisionados automáticamente.
 
 ## Convenciones clave (haz esto así aquí)
 - Dependencias/Settings: accede vía helpers perezosos. Evita side effects en import.
 - Validación: handler custom devuelve `{detail: "Validation Error", errors: [...]}` (Pydantic v2). Ajusta tests a esa forma.
 - Logging estructurado: usa `src/core/logging.get_logger()`; decoradores en `src/api/utils/logging.py` preservan firmas (compatibles con FastAPI).
 - Routers: registra en `src/api/routers/__init__.py` con prefijo/tag coherente; no rompas prefijos existentes.
+- Performance: límite productivo ~30 RPS (bottleneck: pool DB). Para mejoras: revisa `PERFORMANCE_OPTIMIZATION_FINAL_REPORT.md` (roadmap 5-7x).
 
 ## WebSockets: patrones prácticos
 - Conexión: en producción `ENVIRONMENT=production` exige JWT. `get_user_from_token()` usa `python-jose` (HS256; claim `sub`, opcionales `role/email`).
@@ -31,6 +33,7 @@ Conoce lo mínimo imprescindible para ser productivo y seguro en este repo.
 ## Testing eficaz (lo que funciona aquí)
 - Para endpoints que tocan DB, usa `app.dependency_overrides[get_db_session]` y yield de una sesión fake (que responda a `execute().scalars().first()`).
 - WebSockets E2E: consume `CONNECTION_ACK` inicial y tolera `PING` intercalado.
+- CI/CD: 9 workflows en `.github/workflows/` (main: `ci-cd.yml`). Configurar 15 secrets en GitHub UI para activar (ver `GITHUB_SECRETS_QUICK_START.md`).
 
 ## Referencias rápidas
 - Entrada app: `src/api/main.py` • WS Manager: `src/core/websockets.py` • Router WS: `src/api/routers/websockets.py`
