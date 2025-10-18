@@ -2,7 +2,8 @@
 
 **Fecha**: 18 Octubre 2025  
 **Usuario**: eevan@eevans  
-**Status**: ✅ 8 de 15 completados | ⚠️ 7 pendientes  
+**Status**: ✅ 9 de 16 completados | ⚠️ 7 pendientes  
+**Actualización**: JWT_SECRET_KEY agregado ✅
 
 ---
 
@@ -10,20 +11,20 @@
 
 | Categoría | Completados | Pendientes | Status |
 |-----------|-------------|------------|--------|
-| **Tier 1: Seguridad** | 2/2 | 0 | ✅ |
+| **Tier 1: Seguridad** | 3/3 | 0 | ✅ |
 | **Tier 2: Base Datos** | 4/4 | 0 | ✅ |
 | **Tier 3: Redis** | 1/1 | 0 | ✅ |
 | **Tier 4: Docker** | 0/2 | 2 | ⚠️ |
 | **Tier 5: Backups** | 0/2 | 2 | ⚠️ |
 | **Tier 6: Servidor** | 0/2 | 2 | ⚠️ |
 | **Tier 7: Opcional** | 0/2 | 2 | 🟡 |
-| **TOTAL** | **8/15** | **7** | **53%** |
+| **TOTAL** | **9/16** | **7** | **56%** |
 
 ---
 
-## ✅ SECRETS COMPLETADOS (8/15)
+## ✅ SECRETS COMPLETADOS (9/16)
 
-### TIER 1: SEGURIDAD ✅ COMPLETO
+### TIER 1: SEGURIDAD ✅ COMPLETO (3/3)
 
 #### 1️⃣ SSH_PRIVATE_KEY ✅
 ```
@@ -63,29 +64,58 @@ chmod 600 ~/.ssh/authorized_keys
 
 **Cómo usar**:
 - GitHub Secrets: Name `SECRET_KEY`, Value arriba
-- Railway: Environment Variable `SECRET_KEY`
+- Fly.io: `flyctl secrets set SECRET_KEY=1534c53529e8723bb1a3118eb90ee7d393701cc2a6605af67189b9b94bb8399d`
 - .env local: `SECRET_KEY=1534c53529e8723bb1a3118eb90ee7d393701cc2a6605af67189b9b94bb8399d`
 
 ---
 
-### TIER 2: BASE DE DATOS ✅ COMPLETO
+#### 3️⃣ JWT_SECRET_KEY ✅ 🆕
+```
+KPatZlVBc9-bHpe_V2spTBzw0l5d8RgJ1DjgJqoR9LU
+```
 
-#### 3️⃣ POSTGRES_USER ✅
+**Descripción**: Clave secreta para firmar y verificar tokens JWT (JSON Web Tokens) de autenticación.
+
+**Cómo usar**:
+- GitHub Secrets: Name `JWT_SECRET_KEY`, Value arriba
+- Fly.io: `flyctl secrets set JWT_SECRET_KEY=KPatZlVBc9-bHpe_V2spTBzw0l5d8RgJ1DjgJqoR9LU`
+- .env local: `JWT_SECRET_KEY=KPatZlVBc9-bHpe_V2spTBzw0l5d8RgJ1DjgJqoR9LU`
+
+**⚠️ IMPORTANTE**: 
+- Esta clave se usa para autenticación de usuarios
+- NO debe compartirse públicamente
+- Si se compromete, todos los tokens JWT actuales serán inválidos
+- Cambiarla forzará re-login de todos los usuarios
+
+**Uso en código**:
+```python
+# src/core/auth.py
+from jose import jwt
+
+def create_access_token(data: dict):
+    return jwt.encode(data, settings.JWT_SECRET_KEY, algorithm="HS256")
+```
+
+---
+
+### TIER 2: BASE DE DATOS ✅ COMPLETO (4/4)
+
+#### 4️⃣ POSTGRES_USER ✅
 ```
 gcp_user
 ```
 
-#### 4️⃣ POSTGRES_PASSWORD ✅
+#### 5️⃣ POSTGRES_PASSWORD ✅
 ```
 E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=
 ```
 
-#### 5️⃣ POSTGRES_DB ✅
+#### 6️⃣ POSTGRES_DB ✅
 ```
 gcp_db
 ```
 
-#### 6️⃣ DATABASE_URL ✅ (⚠️ Requiere actualización para Fly.io)
+#### 7️⃣ DATABASE_URL ✅ (⚠️ Requiere actualización para Fly.io)
 **Actual (desarrollo)**:
 ```
 postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@localhost:5432/gcp_db
@@ -119,11 +149,13 @@ postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@34.123.45.67:
 postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@grupo-gad-db.c6xyz.us-east-1.rds.amazonaws.com:5432/gcp_db
 ```
 
+**Status**: ⏳ SE GENERARÁ EN FLY.IO DEPLOY
+
 ---
 
-### TIER 3: REDIS ✅ COMPLETO
+### TIER 3: REDIS ✅ COMPLETO (1/1)
 
-#### 7️⃣ REDIS_URL ✅ (⚠️ Requiere actualización para Fly.io)
+#### 8️⃣ REDIS_URL ✅ (⚠️ Requiere actualización para Fly.io)
 **Actual (desarrollo)**:
 ```
 redis://localhost:6379
@@ -158,11 +190,11 @@ rediss://default:token@grupo-gad-cache.abc123.use1.cache.amazonaws.com:6379/0
 
 ---
 
-## ⚠️ SECRETS PENDIENTES (7/15)
+## ⚠️ SECRETS PENDIENTES (7/16)
 
 ### TIER 4: DOCKER REGISTRY (2 pendientes)
 
-#### 8️⃣ DOCKER_USERNAME ⚠️
+#### 9️⃣ DOCKER_USERNAME ⚠️
 **Acción requerida**: Proporcionar tu usuario de DockerHub
 
 **Pasos**:
@@ -180,7 +212,7 @@ eevans-d
 
 ---
 
-#### 9️⃣ DOCKER_PASSWORD ⚠️
+#### 🔟 DOCKER_PASSWORD ⚠️
 **Acción requerida**: Generar Access Token de DockerHub
 
 **Pasos**:
@@ -205,7 +237,7 @@ dckr_pat_ABC123XYZ...
 
 ### TIER 5: AWS BACKUPS (2 pendientes)
 
-#### 🔟 BACKUP_ACCESS_KEY ⚠️
+#### 1️⃣1️⃣ BACKUP_ACCESS_KEY ⚠️
 **Acción requerida**: Generar AWS Access Key
 
 **Pasos**:
@@ -246,7 +278,7 @@ AKIA2ABCDEFGHIJKLMNO
 
 ---
 
-#### 1️⃣1️⃣ BACKUP_SECRET_KEY ⚠️
+#### 1️⃣2️⃣ BACKUP_SECRET_KEY ⚠️
 **Acción requerida**: Obtener junto con Access Key
 
 **Pasos**:
@@ -268,7 +300,7 @@ wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 ### TIER 6: SERVIDOR SSH (2 pendientes)
 
-### 🔴 5. SERVER_HOST
+#### 1️⃣3️⃣ SERVER_HOST ⚠️
 
 **Descripción**: IP o dominio del servidor de producción
 
@@ -300,7 +332,7 @@ SERVER_HOST=api.tuempresa.com
 
 ---
 
-#### 1️⃣3️⃣ SERVER_USERNAME ⚠️ (NO REQUERIDO para Fly.io)
+#### 1️⃣4️⃣ SERVER_USERNAME ⚠️ (NO REQUERIDO para Fly.io)
 **Acción requerida**: Usuario SSH del servidor
 
 **⚠️ IMPORTANTE para Fly.io**:
@@ -333,7 +365,7 @@ ssh ubuntu@192.168.1.100 "whoami"
 
 ### TIER 7: OPCIONALES (2 pendientes)
 
-#### 1️⃣4️⃣ CLOUDFLARE_TOKEN 🟡 (Opcional)
+#### 1️⃣5️⃣ CLOUDFLARE_TOKEN 🟡 (Opcional)
 **Acción requerida**: Solo si usas Cloudflare
 
 **Pasos**:
@@ -355,7 +387,7 @@ aBcDeFgHiJkLmNoPqRsTuVwXyZ123456
 
 ---
 
-#### 1️⃣5️⃣ MONITORING_TOKEN 🟡 (Opcional)
+#### 1️⃣6️⃣ MONITORING_TOKEN 🟡 (Opcional)
 **Acción requerida**: Solo si usas servicio de monitoreo
 
 **Servicios soportados**:
@@ -385,7 +417,9 @@ NRAK-XXXXXXXXXXXXXXXXXXXXXXXX
 
 ### Fase 1: Secrets Completados ✅
 - [x] SSH_PRIVATE_KEY generado
+- [x] SSH Private Key generada
 - [x] SECRET_KEY generado
+- [x] JWT_SECRET_KEY generado 🆕
 - [x] POSTGRES_USER definido
 - [x] POSTGRES_PASSWORD generado
 - [x] POSTGRES_DB definido
