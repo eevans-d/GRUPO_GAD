@@ -341,6 +341,86 @@ async def metrics() -> PlainTextResponse:
     return PlainTextResponse(metrics_text)
 
 
+# --- Health Check Endpoints para Railway ---
+
+@app.get("/health", tags=["monitoring"])
+async def health_check():
+    """
+    Health check simple para Railway.
+    Railway llama a este endpoint cada 30 segundos.
+    """
+    return {
+        "status": "ok",
+        "environment": getattr(settings, 'ENVIRONMENT', 'development'),
+        "timestamp": time.time()
+    }
+
+
+@app.get("/health/ready", tags=["monitoring"])
+async def health_ready():
+    """
+    Health check detallado para monitoreo externo.
+    Verifica estado de todas las dependencias críticas.
+    """
+    from sqlalchemy import text
+    from src.core.database import async_engine
+    
+    checks = {}
+    
+    # Check Database
+    try:
+        async with async_engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        checks["database"] = "ok"
+    except Exception as e:
+        checks["database"] = f"error: {str(e)}"
+        api_logger.error("Health check DB failed", error=str(e))
+    
+    # Check Redis (si está habilitado)
+    try:
+        if hasattr(app.state, 'cache_service') and app.state.cache_service:
+            await app.state.cache_service.ping()
+            checks["redis"] = "ok"
+        else:
+            checks["redis"] = "not_configured"
+    except Exception as e:
+        checks["redis"] = f"error: {str(e)}"
+        api_logger.error("Health check Redis failed", error=str(e))
+    
+    # Check WebSocket Manager
+    try:
+        checks["websocket_manager"] = "ok"
+        checks["active_ws_connections"] = len(websocket_manager.active_connections)
+        checks["unique_users"] = len(websocket_manager.user_connections)
+    except Exception as e:
+        checks["websocket_manager"] = f"error: {str(e)}"
+    
+    # Check WebSocket Pub/Sub
+    try:
+        if hasattr(app.state, 'ws_pubsub') and app.state.ws_pubsub:
+            checks["ws_pubsub"] = "ok"
+        else:
+            checks["ws_pubsub"] = "not_configured"
+    except Exception as e:
+        checks["ws_pubsub"] = f"error: {str(e)}"
+    
+    # Determinar estado general
+    all_ok = all(
+        v in ["ok", "not_configured"] or isinstance(v, int) 
+        for v in checks.values()
+    )
+    
+    status_code = 200 if all_ok else 503
+    
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "status": "ready" if all_ok else "degraded",
+            "checks": checks,
+            "timestamp": time.time()
+        }
+    )
+
 
 # Montar archivos estáticos para el dashboard
 app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")
