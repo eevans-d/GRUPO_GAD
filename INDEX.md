@@ -3,7 +3,8 @@
 **Proyecto**: GRUPO_GAD API  
 **Versión**: 1.0  
 **Estado**: Production-Ready (99% completado) ✅  
-**Última actualización**: Octubre 18, 2025 - Documentation Cleanup & Railway Ready ✅  
+**Última actualización**: Octubre 18, 2025 - Fly.io Migration ✅  
+**Plataforma**: Fly.io (Miami region)  
 
 ---
 
@@ -47,21 +48,41 @@
 
 ---
 
-### 4. **RAILWAY_DEPLOYMENT_COMPLETE.md** - 🚂 Deploy a Railway ✅
+### 4. **FLY_DEPLOYMENT_GUIDE.md** - 🚀 Deploy a Fly.io ✅ [RECOMENDADO]
+> Guía completa para deployment en Fly.io (30-40 minutos).
+
+**Cuándo leer**: Para deployar en Fly.io (PLATAFORMA PRINCIPAL)  
+**Contenido**:
+- Setup completo en 30-40 minutos
+- PostgreSQL + Redis (Upstash) automáticos
+- Edge computing (Miami region - 200ms latency LATAM)
+- Free tier: $5/mes crédito
+- Production: $10-15/mes estimado
+- WebSockets nativos
+- Auto-scaling
+- Script automatizado: `scripts/deploy_flyio.sh`
+
+**Viabilidad**: 98% (MUY ALTA)  
+**Audiencia**: DevOps, Deploy Engineers
+
+---
+
+### 5. **RAILWAY_DEPLOYMENT_COMPLETE.md** - 🚂 Deploy a Railway [LEGACY]
 > Guía completa para deployment en Railway.app (42 minutos).
 
-**Cuándo leer**: Para deployar en Railway  
+**Cuándo leer**: Si prefieres Railway sobre Fly.io  
 **Contenido**:
 - Proceso completo 4 fases (5 + 15 + 12 + 10 min)
 - Configuración PostgreSQL + Redis automática
 - Viabilidad: 95% (ALTA)
 - Health checks ya implementados
 
+**Status**: ✅ Compatible pero Fly.io es recomendado  
 **Audiencia**: DevOps, Deploy Engineers
 
 ---
 
-### 5. **GITHUB_SECRETS_GUIDE.md** - � Configurar Secrets ✅
+### 6. **GITHUB_SECRETS_GUIDE.md** - 🔐 Configurar Secrets ✅
 > Guía consolidada para configurar 15 secrets en GitHub Actions.
 
 **Cuándo leer**: Antes de activar CI/CD pipeline  
@@ -91,9 +112,86 @@
 
 ---
 
-## 🔐 DOCUMENTOS: CONFIGURACIÓN DE SECRETS (GitHub)
+## 🔐 DOCUMENTOS: DEPLOYMENT SECRETS
 
-### 8. **GITHUB_SECRETS_SETUP_GUIDE.md** - Guía Completa 📖
+### 7. **DEPLOYMENT_SECRETS_COMPLETE.md** - 📋 Guía Completa de Secrets ✅
+> Documentación exhaustiva de los 15 secrets para deployment.
+
+**Cuándo leer**: Primera vez configurando secrets para producción  
+**Contenido**:
+- 15 secrets organizados en 7 tiers
+- Comandos de generación para cada secret
+- Setup específico por plataforma (Fly.io, Railway, GCP, AWS, VPS)
+- Procedimientos de validación
+- Matriz de troubleshooting
+- Checklist de producción
+
+**Tiempo**: ~30 minutos (lectura + configuración)  
+**Audiencia**: DevOps, Deploy Engineers
+
+---
+
+### 8. **DEPLOYMENT_SECRETS_REFERENCE.md** - ⚡ Referencia Rápida
+> Quick reference de secrets para deployment rápido.
+
+**Cuándo leer**: Ya conoces los conceptos, solo necesitas recordar  
+**Contenido**:
+- Tabla maestra de 15 secrets
+- Proceso en 6 fases (30 min total)
+- Instrucciones de integración por plataforma
+- Script bash de validación
+- Guía de troubleshooting rápida
+- Resumen de 30 segundos
+
+**Tiempo**: ~5 minutos (referencia)  
+**Audiencia**: Usuarios experimentados
+
+---
+
+### 9. **MY_DEPLOYMENT_SECRETS.md** - 📝 Tu Checklist Personal ✅
+> Checklist PERSONALIZADA con tus valores reales de secrets.
+
+**Cuándo leer**: Para ver el progreso de TUS secrets específicos  
+**Contenido**:
+- 8 secrets COMPLETADOS con valores reales:
+  - ✅ SSH_PRIVATE_KEY (ed25519)
+  - ✅ SECRET_KEY (1534c535...)
+  - ✅ POSTGRES_USER (gcp_user)
+  - ✅ POSTGRES_PASSWORD
+  - ✅ POSTGRES_DB (gcp_db)
+  - ✅ DATABASE_URL (requiere update a Fly.io)
+  - ✅ REDIS_URL (requiere update a Fly.io)
+- 7 secrets PENDIENTES con pasos específicos:
+  - ⏳ DOCKER_USERNAME/PASSWORD
+  - ⏳ BACKUP_ACCESS_KEY/SECRET_KEY (AWS)
+  - ⏳ SERVER_HOST (se genera en Fly.io)
+  - ✅ SERVER_USERNAME (NO requerido en Fly.io)
+  - 🟡 CLOUDFLARE_TOKEN (opcional)
+  - 🟡 MONITORING_TOKEN (opcional)
+
+**Progress**: 53% completado (8/15 críticos listos)  
+**Tiempo**: Ver status en 1 minuto  
+**Audiencia**: PERSONAL - Seguimiento de progreso
+
+---
+
+## 🔐 DOCUMENTOS: CONFIGURACIÓN DE SECRETS (GitHub CI/CD)
+
+### 10. **GITHUB_SECRETS_GUIDE.md** - 🔑 Guía Consolidada ✅
+> Guía consolidada para configurar 15 secrets en GitHub Actions.
+
+**Cuándo leer**: Antes de activar CI/CD pipeline  
+**Contenido**:
+- Quick Start (5 minutos)
+- Guía detallada paso a paso
+- Troubleshooting común
+- Comandos para generar secrets
+
+**Audiencia**: DevOps, Release Managers
+
+---
+
+### 11. **GITHUB_SECRETS_SETUP_GUIDE.md** - Guía Completa 📖
 > Guía DETALLADA (400+ líneas) para configurar los 15 secrets en GitHub
 
 **Cuándo leer**: Necesitas explicación paso a paso  

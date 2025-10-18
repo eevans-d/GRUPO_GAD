@@ -85,18 +85,30 @@ E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=
 gcp_db
 ```
 
-#### 6️⃣ DATABASE_URL ✅ (⚠️ Requiere actualización)
+#### 6️⃣ DATABASE_URL ✅ (⚠️ Requiere actualización para Fly.io)
 **Actual (desarrollo)**:
 ```
 postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@localhost:5432/gcp_db
 ```
 
-**Para producción** (debes actualizar):
+**Para Fly.io** (se genera automáticamente):
 ```bash
-# Formato:
-postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@[HOST_PRODUCCION]:[PUERTO]/gcp_db
+# Crear PostgreSQL en Fly.io
+flyctl postgres create --name grupo-gad-db --region mia
+flyctl postgres attach grupo-gad-db --app grupo-gad
 
-# Ejemplos según plataforma:
+# Esto automáticamente crea el secret DATABASE_URL con formato:
+postgresql://postgres:[auto-password]@grupo-gad-db.internal:5432/grupo_gad
+
+# Verificar
+flyctl secrets list | grep DATABASE_URL
+```
+
+**Otras plataformas** (solo si NO usas Fly.io):
+```bash
+# Formato genérico:
+postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@[HOST]:[PORT]/gcp_db
+
 # Railway:
 postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@containers.railway.app:5432/gcp_db
 
@@ -111,18 +123,27 @@ postgresql://gcp_user:E9CbevopiGtsOb23InMrJtzhXBh37MNkCikBrjXa8TI=@grupo-gad-db.
 
 ### TIER 3: REDIS ✅ COMPLETO
 
-#### 7️⃣ REDIS_URL ✅ (⚠️ Requiere actualización)
+#### 7️⃣ REDIS_URL ✅ (⚠️ Requiere actualización para Fly.io)
 **Actual (desarrollo)**:
 ```
 redis://localhost:6379
 ```
 
-**Para producción** (debes actualizar):
+**Para Fly.io** (se genera automáticamente):
 ```bash
-# Formato:
-redis://[HOST_PRODUCCION]:[PUERTO]/0
+# Crear Redis en Fly.io (Upstash - gratis)
+flyctl redis create --name grupo-gad-redis --region global --plan free
+flyctl redis attach grupo-gad-redis --app grupo-gad
 
-# Ejemplos según plataforma:
+# Esto automáticamente crea el secret REDIS_URL con formato:
+redis://[token]@fly.upstash.io:6379
+
+# Verificar
+flyctl secrets list | grep REDIS_URL
+```
+
+**Otras plataformas** (solo si NO usas Fly.io):
+```bash
 # Railway:
 redis://default:xyz123token@containers.railway.app:6379
 
@@ -132,6 +153,8 @@ redis://10.0.0.3:6379
 # AWS ElastiCache:
 rediss://default:token@grupo-gad-cache.abc123.use1.cache.amazonaws.com:6379/0
 ```
+
+**Status**: ⏳ SE GENERARÁ EN FLY.IO DEPLOY
 
 ---
 
@@ -245,56 +268,51 @@ wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
 ### TIER 6: SERVIDOR SSH (2 pendientes)
 
-#### 1️⃣2️⃣ SERVER_HOST ⚠️
-**Acción requerida**: Proporcionar IP o dominio del servidor
+### 🔴 5. SERVER_HOST
 
-**Opciones según plataforma**:
+**Descripción**: IP o dominio del servidor de producción
 
-**Si usas Railway**:
+**Valor Esperado**: `grupo-gad.fly.dev` (Fly.io auto-generado)
+
+**Acción Requerida**:
 ```bash
-# Railway genera automáticamente el dominio:
-grupo-gad-production.up.railway.app
+# Fly.io genera automáticamente el dominio al hacer deploy
+flyctl launch  # Crea app y genera: [app-name].fly.dev
 
-# O dominio personalizado:
-api.grupo-gad.com
+# Ver tu dominio actual
+flyctl info --app grupo-gad | grep Hostname
+
+# Si quieres dominio custom
+flyctl certs create tu-dominio.com --app grupo-gad
+# Luego agregar DNS CNAME: tu-dominio.com → grupo-gad.fly.dev
 ```
 
-**Si usas VPS (DigitalOcean, Linode, AWS EC2)**:
+**Valor para usar**:
 ```bash
-# IP pública del servidor:
-192.168.1.100
+# OPCIÓN 1: Dominio Fly.io (automático)
+SERVER_HOST=grupo-gad.fly.dev
 
-# O dominio apuntando al servidor:
-server.grupo-gad.com
+# OPCIÓN 2: Dominio custom (si configuraste)
+SERVER_HOST=api.tuempresa.com
 ```
 
-**Si usas Google Cloud Run**:
-```bash
-# URL del servicio:
-grupo-gad-xxxxxxx-uc.a.run.app
-```
-
-**Cómo obtener**:
-```bash
-# Railway:
-railway status | grep "Domain"
-
-# AWS EC2:
-aws ec2 describe-instances --query "Reservations[*].Instances[*].[PublicIpAddress,Tags[?Key=='Name'].Value]" --output table
-
-# Google Cloud:
-gcloud compute instances list --format="table(name,networkInterfaces[0].accessConfigs[0].natIP)"
-
-# DigitalOcean:
-doctl compute droplet list --format "Name,Public IPv4"
-```
+**Status**: ⏳ SE GENERARÁ EN DEPLOY
 
 ---
 
-#### 1️⃣3️⃣ SERVER_USERNAME ⚠️
+#### 1️⃣3️⃣ SERVER_USERNAME ⚠️ (NO REQUERIDO para Fly.io)
 **Acción requerida**: Usuario SSH del servidor
 
-**Valores comunes según plataforma**:
+**⚠️ IMPORTANTE para Fly.io**:
+```bash
+# Fly.io NO usa SSH tradicional con usuario/contraseña
+# Acceso a la VM se hace con:
+flyctl ssh console --app grupo-gad
+
+# NO NECESITAS configurar este secret para Fly.io
+```
+
+**Solo si usas VPS/EC2 tradicional** (NO Fly.io):
 - **AWS EC2**: `ec2-user` (Amazon Linux) o `ubuntu` (Ubuntu)
 - **Google Cloud**: `tu-username-google` o `ubuntu`
 - **DigitalOcean**: `root` o `ubuntu`
