@@ -48,7 +48,27 @@
 
 ---
 
-### 4. **FLY_DEPLOYMENT_GUIDE.md** - 🚀 Deploy a Fly.io ✅ [RECOMENDADO]
+### 4. **DEEP_DEPLOYMENT_ANALYSIS.md** - 🔬 Análisis Forense Profundo ✅ [NUEVO]
+> **Ingeniería Inversa Completa del Proceso de Despliegue Fly.io**
+
+**Cuándo leer**: Para ENTENDER en profundidad cada fase del despliegue  
+**Contenido**:
+- 7 fases críticas: Build → Release → Runtime → Networking → Secrets
+- Análisis CLI/Fly.io detallado (comandos exactos)
+- Diagrama de timeline completo (0:00 → 1:40)
+- Matriz de 9 puntos de falla identificados + soluciones
+- Build FIXED: libpq-dev + libpq5 agregados (commit 68dbe26)
+- 15-point pre-deployment checklist
+- 4 escenarios de troubleshooting avanzado
+- Comandos copy-paste ready para cada fase
+
+**Estado Actual**: ✅ Build FIXED y localmente testeado (SUCCESS)  
+**Próximo Paso**: Retry deployment desde Fly.io Dashboard  
+**Audiencia**: DevOps, SRE, Arquitectos, Técnicos Avanzados
+
+---
+
+### 5. **FLY_DEPLOYMENT_GUIDE.md** - 🚀 Deploy a Fly.io ✅ [RECOMENDADO]
 > Guía completa para deployment en Fly.io (30-40 minutos).
 
 **Cuándo leer**: Para deployar en Fly.io (PLATAFORMA PRINCIPAL)  
