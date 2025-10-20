@@ -106,7 +106,7 @@ class Settings(BaseSettings):
         return None
 
     # === REDIS (CACHÉ) ===
-    REDIS_HOST: str = "redis"
+    REDIS_HOST: Optional[str] = None  # None = disabled; set to hostname to enable
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
     REDIS_PASSWORD: Optional[str] = None
