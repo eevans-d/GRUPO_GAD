@@ -28,9 +28,12 @@ else
 	fi
 fi
 
+# Read PORT from environment or default to 8000
+PORT=${PORT:-8000}
+
 exec uvicorn \
 	src.api.main:app \
 	--workers "$WORKERS" \
 	--host 0.0.0.0 \
-	--port 8000 \
+	--port "$PORT" \
 	--log-level info
