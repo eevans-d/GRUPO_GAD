@@ -9,8 +9,31 @@ Sistema de gestión administrativa para entidades gubernamentales con API REST, 
 
 ---
 
-## 📋 Tabla de Contenidos
+## � STATUS (Oct 20, 2025)
 
+**App is LIVE in production!**
+
+| Component | Status | URL |
+|-----------|--------|-----|
+| 🌐 Web App | ✅ LIVE | https://grupo-gad.fly.dev |
+| 🏥 Health | ✅ OK | https://grupo-gad.fly.dev/health |
+| 📚 API Docs | ✅ Available | https://grupo-gad.fly.dev/docs |
+| 🔌 WebSocket | ✅ Ready | https://grupo-gad.fly.dev/ws/stats |
+| 🐘 Database | 🟡 Pending | Setup needed (see below) |
+| 🔐 Secrets | 🟡 Pending | Configuration needed |
+
+**🟡 Next Step**: Setup PostgreSQL database
+- 📖 Read: `STATE_OF_REPO.md` (current state)
+- 🚀 Run: `bash setup-db.sh` (interactive setup)
+- 📋 Docs: `DOCUMENTATION_INDEX.md` (all resources)
+
+**Time to Full Production**: ~20-30 minutes ⏱️
+
+---
+
+## �📋 Tabla de Contenidos
+
+- [STATUS](#-status-oct-20-2025)
 - [Características](#-características)
 - [Arquitectura](#-arquitectura)
 - [Quick Start](#-quick-start)
