@@ -101,7 +101,7 @@ kill_timeout = "30s"
 
 # Deployment settings
 [deploy]
-  release_command = "alembic upgrade head"  # Run migrations before deploy
+  # release_command = "alembic upgrade head"  # Disabled: DATABASE_URL is not valid in Fly.io
   strategy = "rolling"  # Zero-downtime deployments
   
 # Volumes (for persistent storage if needed)
