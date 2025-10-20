@@ -3,7 +3,7 @@
 # https://fly.io/docs/reference/configuration/
 
 app = "grupo-gad"
-primary_region = "mia"  # Miami (closest to Latin America)
+primary_region = "dfw"  # Dallas (closest available to Latin America; mia deprecated)
 
 # Kill signal (graceful shutdown)
 kill_signal = "SIGINT"
