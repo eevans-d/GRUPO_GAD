@@ -1,5 +1,8 @@
 FROM python:3.12-slim AS builder
 
+# Build timestamp for cache invalidation (Oct 20, 2025)
+ARG BUILD_DATE="2025-10-20"
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
