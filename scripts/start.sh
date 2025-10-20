@@ -3,9 +3,13 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-# Run database migrations
-echo "Running database migrations..."
-alembic upgrade head
+# Run database migrations (only if DATABASE_URL is configured)
+if [ -n "$DATABASE_URL" ] && [ "$ALLOW_NO_DB" != "1" ]; then
+    echo "Running database migrations..."
+    alembic upgrade head
+else
+    echo "Skipping database migrations (ALLOW_NO_DB=1 or DATABASE_URL not set)"
+fi
 
 # Start the application
 echo "Starting Uvicorn server..."
