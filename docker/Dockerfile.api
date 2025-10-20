@@ -1,7 +1,8 @@
 FROM python:3.12-slim AS builder
 
-# Build timestamp for cache invalidation (Oct 20, 2025 - 05:35 UTC)
-ARG BUILD_DATE="2025-10-20-0535"
+# Build cache invalidation: 2025-10-20-0545-UTC (Critical fixes)
+# Ensures alembic conditional fix is picked up
+ARG BUILD_TIMESTAMP="2025-10-20-0545"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
