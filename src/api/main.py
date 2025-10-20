@@ -64,9 +64,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         import os
         db_url = os.getenv("DATABASE_URL")
     if not db_url:
-        api_logger.error("DATABASE_URL no configurada y no se pudo ensamblar desde POSTGRES_*.")
-        raise RuntimeError("DATABASE_URL no configurada")
-    init_db(db_url)
+        # En desarrollo/testing, permitir iniciar sin DB si ALLOW_NO_DB=1
+        import os
+        if os.getenv("ALLOW_NO_DB") != "1":
+            api_logger.error("DATABASE_URL no configurada y no se pudo ensamblar desde POSTGRES_*.")
+            raise RuntimeError("DATABASE_URL no configurada")
+        else:
+            api_logger.warning("⚠️  Iniciando SIN base de datos (ALLOW_NO_DB=1). Solo endpoints sin DB funcionarán.")
+            db_url = None
+    if db_url:
+        init_db(db_url)
     app.state.start_time = time.time()
     api_logger.info("Conexión a la base de datos establecida.")
     

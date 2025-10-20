@@ -18,6 +18,9 @@ kill_timeout = "30s"
   ENVIRONMENT = "production"
   LOG_LEVEL = "info"
   
+  # Database (temporary: allow startup without DB)
+  ALLOW_NO_DB = "1"
+  
   # Server configuration
   PORT = "8080"
   HOST = "0.0.0.0"
