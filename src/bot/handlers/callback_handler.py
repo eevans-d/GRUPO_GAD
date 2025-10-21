@@ -10,7 +10,7 @@ from loguru import logger
 
 from config.settings import settings
 from src.bot.utils.keyboards import KeyboardFactory
-from src.bot.handlers.wizard_text_handler import get_step_header
+from src.bot.handlers.wizard_text_handler import get_step_header, format_task_summary
 
 
 async def handle_callback_query(
@@ -266,8 +266,25 @@ async def handle_crear_action(
             await _show_wizard_summary(query, context)
     
     elif entity == "confirm":
-        # Step 6: Confirmar creación
-        await _create_task_from_wizard(query, context)
+        # Step 6: Confirmar creación o editar
+        action_type = params[0] if params else None
+        
+        if action_type == "yes":
+            # Crear tarea
+            await _create_task_from_wizard(query, context)
+        elif action_type == "edit":
+            # Volver al inicio del wizard para editar
+            keyboard = KeyboardFactory.main_menu()
+            await query.edit_message_text(
+                "✏️ *Edición de Tarea*\n\n"
+                "Función de edición en desarrollo.\n"
+                "Por ahora, cancela y vuelve a crear la tarea.",
+                reply_markup=keyboard,
+                parse_mode="Markdown"
+            )
+        else:
+            # Callback antiguo sin tipo específico, asumir confirmación
+            await _create_task_from_wizard(query, context)
     
     elif entity == "cancel":
         # Cancelar wizard
@@ -301,23 +318,16 @@ async def _show_wizard_summary(query, context: CallbackContext[Bot, Update, Chat
     """
     wizard_data = context.user_data.get('wizard', {}).get('data', {})
     
-    tipo = wizard_data.get('tipo', 'N/A')
-    codigo = wizard_data.get('codigo', 'N/A')
-    titulo = wizard_data.get('titulo', 'N/A')
-    delegado_id = wizard_data.get('delegado_id', 'N/A')
-    asignados = wizard_data.get('asignados', [])
+    # Usar función de formato mejorada
+    summary_text = format_task_summary(wizard_data)
     
-    summary_text = (
-        f"📋 *Resumen de la Tarea*\n\n"
-        f"*Código:* `{codigo}`\n"
-        f"*Título:* {titulo}\n"
-        f"*Tipo:* {tipo}\n"
-        f"*Delegado:* ID {delegado_id}\n"
-        f"*Asignados:* {', '.join(map(str, asignados)) if asignados else 'Ninguno'}\n\n"
-        f"¿Confirmar creación?"
+    keyboard = KeyboardFactory.task_confirmation()
+    
+    await query.edit_message_text(
+        summary_text,
+        reply_markup=keyboard,
+        parse_mode="Markdown"
     )
-    
-    keyboard = KeyboardFactory.confirmation("crear:confirm", "crear:cancel")
     await query.edit_message_text(
         summary_text,
         reply_markup=keyboard,

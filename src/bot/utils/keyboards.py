@@ -45,6 +45,18 @@ class KeyboardFactory:
         return InlineKeyboardMarkup(keyboard)
     
     @staticmethod
+    def task_confirmation() -> InlineKeyboardMarkup:
+        """Teclado de confirmación específico para creación de tarea."""
+        keyboard = [
+            [
+                InlineKeyboardButton("✅ Sí, Crear Tarea", callback_data="crear:confirm:yes"),
+                InlineKeyboardButton("✏️ Editar", callback_data="crear:confirm:edit")
+            ],
+            [InlineKeyboardButton("❌ Cancelar Todo", callback_data="crear:cancel")]
+        ]
+        return InlineKeyboardMarkup(keyboard)
+    
+    @staticmethod
     def back_button(callback_data: str = "menu:main") -> InlineKeyboardMarkup:
         """Botón de regreso al menú."""
         keyboard = [[InlineKeyboardButton("🔙 Volver", callback_data=callback_data)]]
