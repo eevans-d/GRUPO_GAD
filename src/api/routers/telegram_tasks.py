@@ -39,7 +39,7 @@ async def create_task_from_telegram(
     """
     try:
         # 1. Verify user exists
-        user_query = select(User).where(User.telegram_id == task_data.telegram_id)
+        user_query = select(Usuario).where(Usuario.telegram_id == task_data.telegram_id)
         user_result = await db.execute(user_query)
         creator = user_result.scalars().first()
         
@@ -50,7 +50,7 @@ async def create_task_from_telegram(
             )
         
         # 2. Check if codigo already exists
-        codigo_query = select(Task).where(Task.codigo == task_data.codigo)
+        codigo_query = select(Tarea).where(Tarea.codigo == task_data.codigo)
         codigo_result = await db.execute(codigo_query)
         existing_task = codigo_result.scalars().first()
         
@@ -60,17 +60,14 @@ async def create_task_from_telegram(
                 detail=f"Ya existe una tarea con el código {task_data.codigo}"
             )
         
-        # 3. Create task
-        new_task = Task(
+        # 3. Create task (delegado = creator from Telegram)
+        new_task = Tarea(
             codigo=task_data.codigo,
             titulo=task_data.titulo,
-            descripcion=task_data.descripcion,
             tipo=task_data.tipo,
-            prioridad=task_data.prioridad,
-            ubicacion=task_data.ubicacion,
-            estado="pendiente",  # New tasks start as pending
-            creada_por_id=creator.id,
-            creada_en=datetime.now()
+            inicio_programado=datetime.now(),
+            estado="programada",  # New tasks start as programmed
+            delegado_usuario_id=creator.id
         )
         
         db.add(new_task)
@@ -100,7 +97,7 @@ async def create_task_from_telegram(
             message=f"Tarea {task_data.codigo} creada exitosamente",
             task_id=new_task.id,
             codigo=new_task.codigo,
-            created_at=new_task.creada_en
+            created_at=new_task.inicio_programado
         )
         
     except HTTPException:
@@ -125,7 +122,7 @@ async def finalize_task_by_code(
     """
     try:
         # 1. Find task by code
-        task_query = select(Task).where(Task.codigo == finalize_request.codigo)
+        task_query = select(Tarea).where(Tarea.codigo == finalize_request.codigo)
         task_result = await db.execute(task_query)
         task = task_result.scalars().first()
         
@@ -136,7 +133,7 @@ async def finalize_task_by_code(
             )
         
         # 2. Verify user exists
-        user_query = select(User).where(User.telegram_id == finalize_request.telegram_id)
+        user_query = select(Usuario).where(Usuario.telegram_id == finalize_request.telegram_id)
         user_result = await db.execute(user_query)
         user = user_result.scalars().first()
         
@@ -146,32 +143,23 @@ async def finalize_task_by_code(
                 detail=f"Usuario con telegram_id {finalize_request.telegram_id} no encontrado"
             )
         
-        # 3. Check permissions (creator or assigned user can finalize)
-        # Note: In current schema, tasks don't have assigned_user field
-        # For now, allow creator or any user (admin logic)
-        # TODO: Add proper assignment validation when schema updated
+        # 3. Check permissions (delegado_usuario_id must be the creator or assignee)
+        # For now, allow any user with matching telegram_id (admin override)
+        # TODO: Add proper permission validation when assignment schema updated
         
         # 4. Check if already completed
-        if task.estado == "completada":
+        if task.estado == "finalizada":
             return TelegramTaskFinalizeResponse(
                 success=False,
-                message=f"La tarea {task.codigo} ya está completada",
+                message=f"La tarea {task.codigo} ya está finalizada",
                 task_id=task.id,
                 codigo=task.codigo,
-                finalized_at=task.completada_en or datetime.now()
+                finalized_at=task.fin_real or datetime.now()
             )
         
-        # 5. Update task to completed
-        task.estado = "completada"
-        task.completada_en = datetime.now()
-        task.completada_por_id = user.id
-        
-        if finalize_request.observaciones:
-            # Append observations to description or create observations field
-            if task.descripcion:
-                task.descripcion += f"\n\n**Observaciones finales:** {finalize_request.observaciones}"
-            else:
-                task.descripcion = f"**Observaciones finales:** {finalize_request.observaciones}"
+        # 5. Update task to finalized
+        task.estado = "finalizada"  # type: ignore
+        task.fin_real = datetime.now()
         
         await db.commit()
         await db.refresh(task)
@@ -196,7 +184,7 @@ async def finalize_task_by_code(
             message=f"Tarea {task.codigo} finalizada exitosamente",
             task_id=task.id,
             codigo=task.codigo,
-            finalized_at=task.completada_en
+            finalized_at=task.fin_real or datetime.now()
         )
         
     except HTTPException:
@@ -221,7 +209,7 @@ async def get_user_tasks_by_telegram(
     """
     try:
         # 1. Find user
-        user_query = select(User).where(User.telegram_id == telegram_id)
+        user_query = select(Usuario).where(Usuario.telegram_id == telegram_id)
         user_result = await db.execute(user_query)
         user = user_result.scalars().first()
         
@@ -231,31 +219,29 @@ async def get_user_tasks_by_telegram(
                 detail=f"Usuario con telegram_id {telegram_id} no encontrado"
             )
         
-        # 2. Get all tasks created by user
-        # TODO: Add tasks assigned to user when schema supports it
-        tasks_query = select(Task).where(Task.creada_por_id == user.id)
+        # 2. Get all tasks created by user (delegado_usuario_id = user.id)
+        tasks_query = select(Tarea).where(Tarea.delegado_usuario_id == user.id)
         tasks_result = await db.execute(tasks_query)
         all_tasks = tasks_result.scalars().all()
         
         # 3. Calculate statistics
         total_tasks = len(all_tasks)
-        active_tasks = sum(1 for t in all_tasks if t.estado == "activa")
-        pending_tasks = sum(1 for t in all_tasks if t.estado == "pendiente")
-        completed_tasks = sum(1 for t in all_tasks if t.estado == "completada")
+        active_tasks = sum(1 for t in all_tasks if t.estado == "en_curso")
+        pending_tasks = sum(1 for t in all_tasks if t.estado == "programada")
+        completed_tasks = sum(1 for t in all_tasks if t.estado == "finalizada")
         
-        # 4. Build task summaries (only non-completed for brevity)
+        # 4. Build task summaries (only non-finalized for brevity)
         task_summaries = [
             {
                 "id": task.id,
                 "codigo": task.codigo,
                 "titulo": task.titulo,
                 "estado": task.estado,
-                "prioridad": task.prioridad,
                 "tipo": task.tipo,
-                "creada_en": task.creada_en.isoformat() if task.creada_en else None
+                "inicio_programado": task.inicio_programado.isoformat() if task.inicio_programado else None
             }
             for task in all_tasks
-            if task.estado in ["activa", "pendiente"]
+            if task.estado in ["programada", "en_curso"]
         ]
         
         return TelegramUserTasksResponse(
@@ -289,7 +275,7 @@ async def get_task_by_code(
     try:
         codigo_upper = codigo.upper()
         
-        query = select(Task).where(Task.codigo == codigo_upper)
+        query = select(Tarea).where(Tarea.codigo == codigo_upper)
         result = await db.execute(query)
         task = result.scalars().first()
         
@@ -303,13 +289,10 @@ async def get_task_by_code(
             "id": task.id,
             "codigo": task.codigo,
             "titulo": task.titulo,
-            "descripcion": task.descripcion,
             "tipo": task.tipo,
-            "prioridad": task.prioridad,
             "estado": task.estado,
-            "ubicacion": task.ubicacion,
-            "creada_en": task.creada_en.isoformat() if task.creada_en else None,
-            "completada_en": task.completada_en.isoformat() if task.completada_en else None
+            "inicio_programado": task.inicio_programado.isoformat() if task.inicio_programado else None,
+            "fin_real": task.fin_real.isoformat() if task.fin_real else None
         }
         
     except HTTPException:
