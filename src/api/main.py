@@ -435,6 +435,12 @@ app.mount("/static", StaticFiles(directory="dashboard/static"), name="static")
 # Incluir routers
 app.include_router(dashboard_router.router)
 app.include_router(websockets_router.router)
+
+# Telegram-specific routers
+from src.api.routers import telegram_auth, telegram_tasks
+app.include_router(telegram_auth.router, prefix=settings.API_V1_STR)
+app.include_router(telegram_tasks.router, prefix=settings.API_V1_STR)
+
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 api_logger.info(
