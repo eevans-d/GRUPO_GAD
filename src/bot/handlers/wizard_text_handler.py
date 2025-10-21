@@ -156,6 +156,74 @@ def get_step_help(step: int) -> str:
     return help_texts.get(step, f"{StatusEmojis.INFO} Ayuda no disponible para este paso.")
 
 
+def validate_codigo(codigo: str) -> tuple[bool, str]:
+    """
+    Valida el código de tarea en tiempo real.
+    
+    Args:
+        codigo: Código ingresado por el usuario
+    
+    Returns:
+        tuple: (es_valido, mensaje_feedback)
+    """
+    from src.bot.utils.emojis import ValidationEmojis
+    
+    # Validación: no vacío
+    if not codigo or codigo.strip() == "":
+        return (False, f"{ValidationEmojis.INVALID} El código no puede estar vacío.")
+    
+    # Validación: longitud
+    if len(codigo) > 20:
+        return (False, f"{ValidationEmojis.INVALID} El código es muy largo ({len(codigo)}/20 caracteres).")
+    
+    if len(codigo) < 3:
+        return (False, f"{ValidationEmojis.INVALID} El código es muy corto (mínimo 3 caracteres).")
+    
+    # Validación: formato sugerido
+    if not any(c in codigo for c in ['-', '_', '.']):
+        return (True, f"{ValidationEmojis.FORMAT_OK} Formato aceptable. Sugerencia: usa guiones (ej: OPE-2025-001)")
+    
+    return (True, f"{ValidationEmojis.VALID} Código válido.")
+
+
+def validate_titulo(titulo: str) -> tuple[bool, str]:
+    """
+    Valida el título de tarea en tiempo real.
+    
+    Args:
+        titulo: Título ingresado por el usuario
+    
+    Returns:
+        tuple: (es_valido, mensaje_feedback)
+    """
+    from src.bot.utils.emojis import ValidationEmojis
+    
+    # Validación: no vacío
+    if not titulo or titulo.strip() == "":
+        return (False, f"{ValidationEmojis.INVALID} El título no puede estar vacío.")
+    
+    # Validación: longitud
+    if len(titulo) > 100:
+        return (False, f"{ValidationEmojis.INVALID} El título es muy largo ({len(titulo)}/100 caracteres).")
+    
+    if len(titulo) < 10:
+        return (False, f"{ValidationEmojis.REQUIRED} El título es muy corto (mínimo 10 caracteres para ser descriptivo).")
+    
+    # Validación: contiene verbo de acción
+    verbos_accion = [
+        'reparar', 'actualizar', 'revisar', 'instalar', 'configurar', 
+        'gestionar', 'coordinar', 'supervisar', 'verificar', 'completar',
+        'realizar', 'ejecutar', 'implementar', 'desarrollar'
+    ]
+    
+    tiene_verbo = any(verbo in titulo.lower() for verbo in verbos_accion)
+    
+    if not tiene_verbo:
+        return (True, f"{ValidationEmojis.FORMAT_OK} Título aceptable. Sugerencia: inicia con un verbo de acción.")
+    
+    return (True, f"{ValidationEmojis.VALID} Título descriptivo y claro.")
+
+
 async def handle_wizard_text_input(
     update: Update,
     context: CallbackContext[Bot, Update, Chat, User]
@@ -208,28 +276,47 @@ async def handle_wizard_text_input(
         )
 
 
-async def _handle_codigo_input(
+async def _handle_step_2_codigo(
     update: Update,
     context: CallbackContext[Bot, Update, Chat, User],
     codigo: str
 ) -> None:
     """
-    Valida y guarda el código de la tarea.
+    Valida y guarda el código de la tarea con validación en tiempo real.
     
     Args:
         update: Update de Telegram
         context: Contexto con wizard state
         codigo: Código ingresado por el usuario
     """
-    # Validación
-    if not codigo:
-        await update.message.reply_text("❌ El código no puede estar vacío. Intenta nuevamente:")
+    # Validación en tiempo real
+    es_valido, mensaje = validate_codigo(codigo)
+    
+    if not es_valido:
+        await update.message.reply_text(
+            f"{mensaje}\n\n"
+            f"Intenta nuevamente con un código válido:"
+        )
         return
     
-    if len(codigo) > 20:
-        await update.message.reply_text(
-            f"❌ El código es demasiado largo ({len(codigo)} caracteres). "
-            f"Máximo 20 caracteres. Intenta nuevamente:"
+    # Guardar en wizard
+    context.user_data['wizard']['data']['codigo'] = codigo  # type: ignore
+    context.user_data['wizard']['current_step'] = 3  # type: ignore
+    
+    logger.bind(wizard=True).info(
+        f"Wizard Step 2 completado: código={codigo}",
+        user_id=update.effective_user.id if update.effective_user else None
+    )
+    
+    # Step 3: Solicitar título
+    keyboard = KeyboardFactory.back_button("crear:cancel")
+    header = get_step_header(3, "Crear Nueva Tarea")
+    await update.message.reply_text(
+        f"{mensaje}\n\n"  # Mostrar feedback positivo
+        f"{header}\n"
+        f"Código: `{codigo}`\n\n"
+        f"✏️ *Ingresa el título de la tarea:*\n\n"
+        f"💡 *Consejos:* Sé específico y claro\n"
         )
         return
     
@@ -262,22 +349,20 @@ async def _handle_titulo_input(
     titulo: str
 ) -> None:
     """
-    Valida y guarda el título de la tarea.
+    Valida y guarda el título de la tarea con validación en tiempo real.
     
     Args:
         update: Update de Telegram
         context: Contexto con wizard state
         titulo: Título ingresado por el usuario
     """
-    # Validación
-    if not titulo:
-        await update.message.reply_text("❌ El título no puede estar vacío. Intenta nuevamente:")
-        return
+    # Validación en tiempo real
+    es_valido, mensaje = validate_titulo(titulo)
     
-    if len(titulo) > 200:
+    if not es_valido:
         await update.message.reply_text(
-            f"❌ El título es demasiado largo ({len(titulo)} caracteres). "
-            f"Máximo 200 caracteres. Intenta nuevamente:"
+            f"{mensaje}\n\n"
+            f"Intenta nuevamente con un título descriptivo:"
         )
         return
     
