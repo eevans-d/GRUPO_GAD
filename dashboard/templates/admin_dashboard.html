@@ -549,11 +549,13 @@ max-width: 300px;
 .notification.warning { background: #ffc107; color: black; }
 .notification.info { background: #17a2b8; color: white; }
 </style>
+<!-- Notification System Styles -->
+<link rel="stylesheet" href="/static/css/notifications.css">
 </head>
 <body>
 <div class="dashboard-container">
   <!-- === HEADER === -->
-  <div class="header">
+  <div class="header dashboard-header">
     <div class="header-info">
       <div>
         <div style="font-size: 18px; font-weight: 600;">🚔 GRUPO_GAD</div>
@@ -573,6 +575,7 @@ max-width: 300px;
       </div>
       <div class="status-badge" id="clock">--:--:--</div>
     </div>
+    <!-- Notification bell will be injected here by notifications.js -->
     <button class="btn btn-danger" onclick="dashboard.logout()">🚪 Cerrar Sesión</button>
   </div>
 
@@ -794,5 +797,7 @@ max-width: 300px;
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="/static/dashboard.js"></script>
+<!-- Notification System -->
+<script src="/static/js/notifications.js"></script>
 </body>
 </html>
