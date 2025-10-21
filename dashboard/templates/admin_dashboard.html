@@ -551,6 +551,8 @@ max-width: 300px;
 </style>
 <!-- Notification System Styles -->
 <link rel="stylesheet" href="/static/css/notifications.css">
+<!-- Users Management Styles -->
+<link rel="stylesheet" href="/static/css/users_management.css">
 </head>
 <body>
 <div class="dashboard-container">
@@ -677,17 +679,70 @@ max-width: 300px;
     </div>
 
     <!-- === TAB: USUARIOS === -->
-    <div class="tab-panel" data-panel="users">
-      <div style="margin-bottom: 10px;">
-        <input id="search-users" class="input" placeholder="Buscar usuario..." oninput="dashboard.filterUsers(this.value)"/>
+    <div class="tab-panel" data-panel="users" id="users-container">
+      <div class="users-header">
+        <h2>Gestión de Usuarios</h2>
+        <input id="users-search" placeholder="Buscar usuario..." type="text"/>
+        <button id="users-create-btn" class="btn btn-success">➕ Nuevo Usuario</button>
       </div>
-      <div style="background: #e3f2fd; padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 11px;">
-        <strong>📊 Resumen:</strong> <span id="users-summary">Cargando...</span>
+      
+      <table id="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nivel</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="users-table-body">
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 20px; color: #999;">Cargando usuarios...</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div id="users-pagination" style="margin-top: 15px;"></div>
+    </div>
+    
+    <!-- Modal para crear/editar usuario -->
+    <div id="users-modal" class="hidden">
+      <div class="users-modal-content">
+        <div class="users-modal-header">
+          <h3 id="users-modal-title">Crear Nuevo Usuario</h3>
+        </div>
+        
+        <form style="display:none">
+          <div class="users-form-group">
+            <label>ID</label>
+            <input id="users-form-id" type="hidden"/>
+          </div>
+        </form>
+        
+        <div class="users-form-group">
+          <label>Telegram ID</label>
+          <input id="users-form-telegram-id" type="number" placeholder="ID de Telegram del usuario" required/>
+        </div>
+        
+        <div class="users-form-group">
+          <label>Nombre</label>
+          <input id="users-form-nombre" type="text" placeholder="Nombre completo" required/>
+        </div>
+        
+        <div class="users-form-group">
+          <label>Nivel de Autenticación</label>
+          <select id="users-form-nivel">
+            <option value="1">Nivel 1 - Usuario Básico</option>
+            <option value="2">Nivel 2 - Usuario Avanzado</option>
+            <option value="3">Nivel 3 - Administrador</option>
+          </select>
+        </div>
+        
+        <div class="users-modal-footer">
+          <button type="button" id="users-modal-save" class="btn btn-primary">Guardar</button>
+          <button type="button" id="users-modal-cancel" class="btn btn-secondary">Cancelar</button>
+        </div>
       </div>
-      <div id="users-list" style="max-height: 400px; overflow-y: auto;">
-        <!-- Se carga dinámicamente -->
-      </div>
-      <button class="btn btn-primary" onclick="dashboard.loadUsers()" style="width: 100%; margin-top: 10px;">🔄 Actualizar Personal</button>
     </div>
 
     <!-- === TAB: NOTAS === -->
@@ -799,5 +854,7 @@ max-width: 300px;
 <script src="/static/dashboard.js"></script>
 <!-- Notification System -->
 <script src="/static/js/notifications.js"></script>
+<!-- Users Management System -->
+<script src="/static/js/users_management.js"></script>
 </body>
 </html>
