@@ -238,19 +238,293 @@ background: #f8f9fa;
 text-decoration: none;
 }
 
-/* === RESPONSIVE === */
+/* === RESPONSIVE DESIGN (Mobile-First) === */
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .header {
+    padding: 8px 12px;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .header-info {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .status-badge {
+    flex: 1;
+    min-width: calc(50% - 4px);
+    justify-content: center;
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  /* Mapa en móvil */
+  .map-section {
+    order: 2;
+    height: 300px !important;
+    min-height: 300px;
+  }
+  
+  #main-map {
+    min-height: 300px;
+  }
+  
+  .map-controls {
+    top: 5px;
+    left: 5px;
+    padding: 6px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .map-controls input {
+    width: calc(100% - 45px);
+    font-size: 11px;
+  }
+  
+  .map-controls .btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  /* Panel lateral en móvil */
+  .side-panel {
+    order: 1;
+  }
+  
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .tab {
+    padding: 10px 8px;
+    font-size: 18px;
+    min-width: 45px;
+    flex-shrink: 0;
+  }
+  
+  .tab-panel {
+    padding: 10px;
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  
+  /* Cards y métricas en móvil */
+  .metric-card {
+    padding: 10px;
+  }
+  
+  .metric-value {
+    font-size: 20px;
+  }
+  
+  .metric-label {
+    font-size: 10px;
+  }
+  
+  /* Botones en móvil */
+  .btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    touch-action: manipulation;
+  }
+  
+  .btn-sm {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  /* Inputs en móvil */
+  .input {
+    font-size: 14px;
+    padding: 10px;
+  }
+  
+  /* Telegram box en móvil */
+  .telegram-box {
+    margin-bottom: 10px;
+  }
+  
+  .telegram-body {
+    padding: 8px;
+  }
+  
+  textarea.input {
+    font-size: 14px;
+  }
+  
+  /* Users list en móvil */
+  #users-list {
+    max-height: 30vh !important;
+  }
+  
+  /* Notas en móvil */
+  #notes-list {
+    max-height: 25vh !important;
+  }
+  
+  /* Botón logout más visible */
+  .header .btn-danger {
+    width: 100%;
+    padding: 10px;
+  }
+  
+  /* Grid de botones responsivo */
+  .card [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+}
+
+/* Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(400px, 50vh) auto;
+    padding: 10px;
+  }
+  
+  .header-info {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .status-badge {
+    font-size: 11px;
+  }
+  
+  .map-section {
+    height: auto;
+  }
+  
+  #main-map {
+    min-height: 400px;
+  }
+  
+  .tabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    padding: 10px 6px;
+    font-size: 13px;
+    min-width: 60px;
+  }
+  
+  .tab-panel {
+    padding: 12px;
+  }
+  
+  /* Grid de métricas en 2 columnas */
+  .tab-panel [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  /* Users list en tablet */
+  #users-list {
+    max-height: 350px !important;
+  }
+}
+
+/* Desktop grande (> 1400px) */
+@media (min-width: 1400px) {
+  .dashboard-container {
+    grid-template-columns: 1fr 500px;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .header {
+    padding: 12px 24px;
+  }
+  
+  .tab-panel {
+    padding: 20px;
+  }
+  
+  .metric-value {
+    font-size: 28px;
+  }
+  
+  .btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Landscape móvil (480px - 767px en horizontal) */
+@media (max-width: 767px) and (orientation: landscape) {
+  .map-section {
+    height: 250px !important;
+    min-height: 250px;
+  }
+  
+  #main-map {
+    min-height: 250px;
+  }
+  
+  .tab-panel {
+    max-height: calc(100vh - 350px);
+  }
+  
+  .dashboard-container {
+    grid-template-rows: auto 250px 1fr;
+  }
+}
+
+/* Mejoras táctiles generales para móvil */
+@media (max-width: 767px) {
+  /* Aumentar área de toque */
+  button, .btn, .tab, .link-oficial {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Eliminar hover effects en táctil */
+  .btn:hover, .tab:hover, .user-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Focus visible para accesibilidad */
+  button:focus, .btn:focus, .tab:focus, .input:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+  }
+  
+  /* Scroll suave en paneles */
+  .tab-panel {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  /* Notificaciones adaptadas */
+  .notification {
+    max-width: calc(100% - 20px);
+    right: 10px;
+    top: 10px;
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+
+/* === FALLBACK PARA RESPONSIVE ANTERIOR === */
 @media (max-width: 1024px) {
-.dashboard-container {
-grid-template-columns: 1fr;
-grid-template-rows: auto 400px auto;
-}
-.tabs {
-font-size: 12px;
-}
-.tab {
-padding: 8px 2px;
-font-size: 12px;
-}
+  /* Mantener compatibilidad con código existente */
 }
 
 /* === ANIMACIONES === */
