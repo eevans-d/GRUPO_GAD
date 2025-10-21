@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Factory para construir teclados inline reutilizables.
+Factory para construir teclados inline reutilizables con emojis semánticos.
 """
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from typing import List, Tuple
+
+from src.bot.utils.emojis import (
+    TaskEmojis, ActionEmojis, NavigationEmojis, StatusEmojis
+)
 
 
 class KeyboardFactory:
@@ -12,34 +16,67 @@ class KeyboardFactory:
     
     @staticmethod
     def main_menu() -> InlineKeyboardMarkup:
-        """Menú principal del bot."""
+        """Menú principal del bot con emojis mejorados."""
         keyboard = [
-            [InlineKeyboardButton("📋 Crear Tarea", callback_data="menu:crear:start")],
-            [InlineKeyboardButton("✅ Finalizar Tarea", callback_data="menu:finalizar:start")],
-            [InlineKeyboardButton("📊 Mis Tareas", callback_data="menu:tareas:list:mis")],
-            [InlineKeyboardButton("🔍 Buscar", callback_data="menu:tareas:search")],
-            [InlineKeyboardButton("ℹ️ Ayuda", callback_data="menu:ayuda:general")]
+            [InlineKeyboardButton(
+                f"{TaskEmojis.CREATE} Crear Nueva Tarea", 
+                callback_data="menu:crear:start"
+            )],
+            [InlineKeyboardButton(
+                f"{TaskEmojis.COMPLETE} Completar Tarea", 
+                callback_data="menu:finalizar:start"
+            )],
+            [InlineKeyboardButton(
+                f"{TaskEmojis.LIST} Ver Mis Tareas", 
+                callback_data="menu:tareas:list:mis"
+            )],
+            [InlineKeyboardButton(
+                f"{TaskEmojis.SEARCH} Buscar Tareas", 
+                callback_data="menu:tareas:search"
+            )],
+            [InlineKeyboardButton(
+                f"{StatusEmojis.INFO} Centro de Ayuda", 
+                callback_data="menu:ayuda:general"
+            )]
         ]
         return InlineKeyboardMarkup(keyboard)
     
     @staticmethod
     def task_types() -> InlineKeyboardMarkup:
-        """Selector de tipos de tarea."""
+        """Selector de tipos de tarea con emojis y descripciones."""
         keyboard = [
-            [InlineKeyboardButton("🔧 OPERATIVO", callback_data="crear:tipo:OPERATIVO")],
-            [InlineKeyboardButton("📄 ADMINISTRATIVO", callback_data="crear:tipo:ADMINISTRATIVO")],
-            [InlineKeyboardButton("🚨 EMERGENCIA", callback_data="crear:tipo:EMERGENCIA")],
-            [InlineKeyboardButton("❌ Cancelar", callback_data="crear:cancel")]
+            [InlineKeyboardButton(
+                f"{TaskEmojis.OPERATIONAL} Operativo - Tareas de campo", 
+                callback_data="crear:tipo:OPERATIVO"
+            )],
+            [InlineKeyboardButton(
+                f"{TaskEmojis.ADMINISTRATIVE} Administrativo - Gestión y oficina", 
+                callback_data="crear:tipo:ADMINISTRATIVO"
+            )],
+            [InlineKeyboardButton(
+                f"{TaskEmojis.EMERGENCY} Emergencia - Prioridad alta", 
+                callback_data="crear:tipo:EMERGENCIA"
+            )],
+            [InlineKeyboardButton(
+                f"{ActionEmojis.CANCEL} Cancelar Operación", 
+                callback_data="crear:cancel"
+            )]
         ]
         return InlineKeyboardMarkup(keyboard)
     
     @staticmethod
     def confirmation(action: str, entity_id: str) -> InlineKeyboardMarkup:
-        """Teclado de confirmación genérico."""
+        """Teclado de confirmación genérico con emojis claros."""
         keyboard = [
             [
-                InlineKeyboardButton("✅ Confirmar", callback_data=f"{action}:confirm:{entity_id}:yes"),
-                InlineKeyboardButton("❌ Cancelar", callback_data=f"{action}:confirm:{entity_id}:no")
+                InlineKeyboardButton(
+                    f"{StatusEmojis.SUCCESS} Sí, Confirmar", 
+                    callback_data=f"{action}:confirm:{entity_id}:yes"
+                ),
+                InlineKeyboardButton(
+                    f"{ActionEmojis.CANCEL} No, Cancelar", 
+                    callback_data=f"{action}:confirm:{entity_id}:no"
+                )
             ]
         ]
         return InlineKeyboardMarkup(keyboard)
@@ -49,17 +86,29 @@ class KeyboardFactory:
         """Teclado de confirmación específico para creación de tarea."""
         keyboard = [
             [
-                InlineKeyboardButton("✅ Sí, Crear Tarea", callback_data="crear:confirm:yes"),
-                InlineKeyboardButton("✏️ Editar", callback_data="crear:confirm:edit")
+                InlineKeyboardButton(
+                    f"{StatusEmojis.SUCCESS} Sí, Crear Tarea", 
+                    callback_data="crear:confirm:yes"
+                ),
+                InlineKeyboardButton(
+                    f"{ActionEmojis.EDIT} Revisar y Editar", 
+                    callback_data="crear:confirm:edit"
+                )
             ],
-            [InlineKeyboardButton("❌ Cancelar Todo", callback_data="crear:cancel")]
+            [InlineKeyboardButton(
+                f"{ActionEmojis.CANCEL} Cancelar Todo", 
+                callback_data="crear:cancel"
+            )]
         ]
         return InlineKeyboardMarkup(keyboard)
     
     @staticmethod
     def back_button(callback_data: str = "menu:main") -> InlineKeyboardMarkup:
-        """Botón de regreso al menú."""
-        keyboard = [[InlineKeyboardButton("🔙 Volver", callback_data=callback_data)]]
+        """Botón de regreso al menú con emoji."""
+        keyboard = [[InlineKeyboardButton(
+            f"{NavigationEmojis.BACK} Volver al Menú", 
+            callback_data=callback_data
+        )]]
         return InlineKeyboardMarkup(keyboard)
     
     @staticmethod
@@ -92,14 +141,23 @@ class KeyboardFactory:
         # Navegación
         nav_buttons = []
         if page > 0:
-            nav_buttons.append(InlineKeyboardButton("⬅️ Anterior", callback_data=f"page:{page-1}"))
+            nav_buttons.append(InlineKeyboardButton(
+                f"{NavigationEmojis.LEFT} Anterior", 
+                callback_data=f"page:{page-1}"
+            ))
         if end < len(items):
-            nav_buttons.append(InlineKeyboardButton("➡️ Siguiente", callback_data=f"page:{page+1}"))
+            nav_buttons.append(InlineKeyboardButton(
+                f"{NavigationEmojis.RIGHT} Siguiente", 
+                callback_data=f"page:{page+1}"
+            ))
         
         if nav_buttons:
             keyboard.append(nav_buttons)
         
-        keyboard.append([InlineKeyboardButton("🔙 Volver", callback_data="menu:main")])
+        keyboard.append([InlineKeyboardButton(
+            f"{NavigationEmojis.BACK} Volver al Menú", 
+            callback_data="menu:main"
+        )])
         
         return InlineKeyboardMarkup(keyboard)
     
@@ -109,7 +167,7 @@ class KeyboardFactory:
         action_prefix: str = "select:user"
     ) -> InlineKeyboardMarkup:
         """
-        Selector de usuario (delegado o similar).
+        Selector de usuario (delegado o similar) con emojis.
         
         Args:
             users: Lista de usuarios con 'id' y 'nombre'
@@ -118,6 +176,8 @@ class KeyboardFactory:
         Returns:
             InlineKeyboardMarkup con lista de usuarios
         """
+        from src.bot.utils.emojis import UserEmojis
+        
         keyboard = []
         
         for user in users:
@@ -126,12 +186,15 @@ class KeyboardFactory:
             
             keyboard.append([
                 InlineKeyboardButton(
-                    f"👤 {nombre}",
+                    f"{UserEmojis.AGENT} {nombre} (ID: {user_id})",
                     callback_data=f"{action_prefix}:{user_id}"
                 )
             ])
         
-        keyboard.append([InlineKeyboardButton("❌ Cancelar", callback_data="crear:cancel")])
+        keyboard.append([InlineKeyboardButton(
+            f"{ActionEmojis.CANCEL} Cancelar Operación", 
+            callback_data="crear:cancel"
+        )])
         
         return InlineKeyboardMarkup(keyboard)
     
@@ -142,7 +205,7 @@ class KeyboardFactory:
         action_prefix: str = "crear:asignado"
     ) -> InlineKeyboardMarkup:
         """
-        Selector multi-select de usuarios con checkboxes.
+        Selector multi-select de usuarios con checkboxes visuales.
         
         Args:
             users: Lista de usuarios con 'id' y 'nombre'
@@ -152,18 +215,20 @@ class KeyboardFactory:
         Returns:
             InlineKeyboardMarkup con checkboxes
         """
+        from src.bot.utils.emojis import ValidationEmojis
+        
         keyboard = []
         
         for user in users:
             user_id = user.get('id', 0)
             nombre = user.get('nombre', 'Usuario')
             
-            # Checkbox visual
-            checkbox = "✅" if user_id in selected_ids else "⬜"
+            # Checkbox visual mejorado
+            checkbox = ValidationEmojis.VALID if user_id in selected_ids else ValidationEmojis.OPTIONAL
             
             keyboard.append([
                 InlineKeyboardButton(
-                    f"{checkbox} {nombre}",
+                    f"{checkbox} {nombre} (ID: {user_id})",
                     callback_data=f"{action_prefix}:toggle:{user_id}"
                 )
             ])
@@ -172,11 +237,14 @@ class KeyboardFactory:
         if selected_ids:
             keyboard.append([
                 InlineKeyboardButton(
-                    "➡️ Continuar",
+                    f"{NavigationEmojis.FORWARD} Continuar al Siguiente Paso",
                     callback_data=f"{action_prefix}:done"
                 )
             ])
         
-        keyboard.append([InlineKeyboardButton("❌ Cancelar", callback_data="crear:cancel")])
+        keyboard.append([InlineKeyboardButton(
+            f"{ActionEmojis.CANCEL} Cancelar Operación", 
+            callback_data="crear:cancel"
+        )])
         
         return InlineKeyboardMarkup(keyboard)
