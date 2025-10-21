@@ -50,6 +50,39 @@ def get_step_header(current_step: int, title: str = "Crear Nueva Tarea") -> str:
     return f"📋 *{title}* [Paso {current_step}/6]\n{progress}\n"
 
 
+def format_task_summary(task_data: dict) -> str:
+    """
+    Genera resumen visual de tarea antes de confirmar.
+    
+    Args:
+        task_data: Diccionario con datos de la tarea
+    
+    Returns:
+        String formateado con resumen
+    """
+    tipo = task_data.get('tipo', 'N/A')
+    codigo = task_data.get('codigo', 'N/A')
+    titulo = task_data.get('titulo', 'N/A')
+    descripcion = task_data.get('descripcion', 'N/A')
+    
+    # Truncar descripción si es muy larga
+    if len(str(descripcion)) > 100:
+        descripcion = str(descripcion)[:100] + "..."
+    
+    return f"""
+✅ *Resumen de Nueva Tarea*
+━━━━━━━━━━━━━━━━━━━━━━
+
+📌 *Tipo:* {tipo}
+🔤 *Código:* `{codigo}`
+✏️ *Título:* {titulo}
+📝 *Descripción:* {descripcion}
+
+━━━━━━━━━━━━━━━━━━━━━━
+¿Todo es correcto?
+"""
+
+
 async def handle_wizard_text_input(
     update: Update,
     context: CallbackContext[Bot, Update, Chat, User]
