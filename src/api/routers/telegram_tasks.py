@@ -21,7 +21,7 @@ from src.api.schemas.telegram import (
     TelegramUserTasksResponse
 )
 from src.api.dependencies import get_db_session
-from src.db.models import User, Task
+from src.api.models import Usuario, Tarea
 from src.core.websockets import websocket_manager, WSMessage, EventType
 
 router = APIRouter(prefix="/telegram/tasks", tags=["Telegram Tasks"])

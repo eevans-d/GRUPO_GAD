@@ -14,7 +14,7 @@ import jwt
 
 from src.api.schemas.telegram import TelegramAuthRequest, TelegramAuthResponse
 from src.api.dependencies import get_db_session
-from src.db.models import User
+from src.api.models import Usuario
 from config.settings import get_settings
 
 router = APIRouter(prefix="/telegram/auth", tags=["Telegram Authentication"])
@@ -22,14 +22,14 @@ router = APIRouter(prefix="/telegram/auth", tags=["Telegram Authentication"])
 settings = get_settings()
 
 
-def create_jwt_token(telegram_id: int, user_id: int, role: str) -> str:
+def create_jwt_token(telegram_id: int, user_id: int, nivel: str) -> str:
     """
     Create JWT token for authenticated Telegram user.
     
     Args:
         telegram_id: Telegram user ID
         user_id: Database user ID
-        role: User role (admin, member, etc.)
+        nivel: User level (uno, dos, tres, etc.)
     
     Returns:
         JWT token string
@@ -37,7 +37,7 @@ def create_jwt_token(telegram_id: int, user_id: int, role: str) -> str:
     payload = {
         "sub": str(telegram_id),
         "user_id": user_id,
-        "role": role,
+        "nivel": nivel,
         "exp": datetime.utcnow() + timedelta(days=7)  # Token válido 7 días
     }
     
@@ -59,7 +59,7 @@ async def authenticate_telegram_user(
     """
     try:
         # Query user by telegram_id
-        query = select(User).where(User.telegram_id == auth_request.telegram_id)
+        query = select(Usuario).where(Usuario.telegram_id == auth_request.telegram_id)
         result = await db.execute(query)
         user = result.scalars().first()
         
@@ -74,14 +74,14 @@ async def authenticate_telegram_user(
         token = create_jwt_token(
             telegram_id=user.telegram_id,
             user_id=user.id,
-            role=user.role or "member"
+            nivel=str(user.nivel)
         )
         
         return TelegramAuthResponse(
             authenticated=True,
             user_id=user.id,
             telegram_id=user.telegram_id,
-            role=user.role or "member",
+            role=str(user.nivel),
             token=token,
             message="Usuario autenticado correctamente"
         )
@@ -119,14 +119,14 @@ async def get_telegram_user_auth(
         token = create_jwt_token(
             telegram_id=user.telegram_id,
             user_id=user.id,
-            role=user.role or "member"
+            nivel=str(user.nivel)
         )
         
         return TelegramAuthResponse(
             authenticated=True,
             user_id=user.id,
             telegram_id=telegram_id,
-            role=user.role or "member",
+            role=str(user.nivel),
             token=token,
             message=f"Usuario {user.nombre} autenticado"
         )
