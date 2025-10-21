@@ -76,12 +76,84 @@ def format_task_summary(task_data: dict) -> str:
         f"🔤 *Código:* `{codigo}`\n"
         f"📝 *Título:* {titulo}\n"
         f"{tipo_emoji} *Tipo:* {tipo}\n"
-        f"� *Delegado:* ID `{delegado_id}`\n"
+        f"👤 *Delegado:* ID `{delegado_id}`\n"
         f"👥 *Asignados:* {', '.join(map(str, asignados)) if asignados else 'Ninguno'}\n\n"
         f"{'─' * 30}\n"
         f"⚠️ *¿Confirmar creación?*\n"
         f"Revisa los datos antes de continuar."
     )
+
+
+def get_step_help(step: int) -> str:
+    """
+    Retorna texto de ayuda contextual para cada paso del wizard.
+    
+    Args:
+        step: Número de paso del wizard (1-6)
+    
+    Returns:
+        String con ayuda específica para el paso
+    """
+    help_texts = {
+        1: (
+            f"{StatusEmojis.INFO} *Ayuda: Tipo de Tarea*\n\n"
+            f"{TaskEmojis.OPERATIONAL} *OPERATIVO:* Tareas técnicas y de campo\n"
+            f"{TaskEmojis.ADMINISTRATIVE} *ADMINISTRATIVO:* Tareas de oficina y gestión\n"
+            f"{TaskEmojis.EMERGENCY} *EMERGENCIA:* Situaciones urgentes que requieren atención inmediata\n\n"
+            f"Selecciona el tipo que mejor describe la tarea."
+        ),
+        2: (
+            f"{StatusEmojis.INFO} *Ayuda: Código de Tarea*\n\n"
+            f"📌 *Formato sugerido:* `TIPO-AÑO-NÚMERO`\n"
+            f"✅ *Ejemplos válidos:*\n"
+            f"  • `OPE-2025-001`\n"
+            f"  • `ADM-2025-042`\n"
+            f"  • `EMG-2025-005`\n\n"
+            f"⚠️ Máximo 20 caracteres\n"
+            f"⚠️ Debe ser único en el sistema"
+        ),
+        3: (
+            f"{StatusEmojis.INFO} *Ayuda: Título de Tarea*\n\n"
+            f"✍️ Escribe un título descriptivo y claro.\n\n"
+            f"✅ *Buenas prácticas:*\n"
+            f"  • Sé específico y conciso\n"
+            f"  • Incluye acción y objetivo\n"
+            f"  • Máximo 100 caracteres\n\n"
+            f"📝 *Ejemplos:*\n"
+            f"  • 'Reparar tubería principal edificio A'\n"
+            f"  • 'Actualizar inventario de equipos'\n"
+            f"  • 'Responder emergencia en sector 3'"
+        ),
+        4: (
+            f"{StatusEmojis.INFO} *Ayuda: Delegado*\n\n"
+            f"👤 Selecciona el usuario que *delegará* esta tarea.\n\n"
+            f"🔑 *Importante:*\n"
+            f"  • El delegado es quien asigna la tarea\n"
+            f"  • Tiene permisos de seguimiento\n"
+            f"  • Puede modificar la tarea después\n\n"
+            f"Selecciona un ID de la lista o escribe el ID del usuario."
+        ),
+        5: (
+            f"{StatusEmojis.INFO} *Ayuda: Asignados*\n\n"
+            f"👥 Selecciona los usuarios que *ejecutarán* esta tarea.\n\n"
+            f"📌 *Puedes:*\n"
+            f"  • Seleccionar múltiples usuarios\n"
+            f"  • Dejar sin asignados (opcional)\n"
+            f"  • Modificar selección después\n\n"
+            f"Envía IDs separados por comas (ej: 101,102,103)"
+        ),
+        6: (
+            f"{StatusEmojis.INFO} *Ayuda: Confirmación*\n\n"
+            f"✅ Revisa cuidadosamente los datos antes de confirmar.\n\n"
+            f"💡 *Opciones disponibles:*\n"
+            f"  • {ActionEmojis.CONFIRM} *Confirmar:* Crear la tarea\n"
+            f"  • {ActionEmojis.EDIT} *Editar:* Modificar datos\n"
+            f"  • {ActionEmojis.CANCEL} *Cancelar:* Descartar todo\n\n"
+            f"Una vez creada, podrás editarla desde el menú principal."
+        ),
+    }
+    
+    return help_texts.get(step, f"{StatusEmojis.INFO} Ayuda no disponible para este paso.")
 
 
 async def handle_wizard_text_input(

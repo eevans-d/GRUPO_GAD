@@ -9,11 +9,13 @@ from . import finalizar_tarea
 from . import start
 from . import historial
 from . import estadisticas
+from . import help as help_cmd
 
 __all__ = [
     "crear_tarea",
     "finalizar_tarea", 
     "start",
     "historial",
-    "estadisticas"
+    "estadisticas",
+    "help_cmd"
 ]
