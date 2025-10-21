@@ -11,6 +11,45 @@ from loguru import logger
 from src.bot.utils.keyboards import KeyboardFactory
 
 
+# ==================== UTILIDADES DE PROGRESS ====================
+
+def get_progress_bar(current_step: int, total_steps: int = 6) -> str:
+    """
+    Genera barra de progreso visual ASCII.
+    
+    Args:
+        current_step: Paso actual (1-6)
+        total_steps: Total de pasos (default 6)
+    
+    Returns:
+        String con barra y porcentaje
+        
+    Ejemplo:
+        >>> get_progress_bar(2, 6)
+        "▰▰░░░░ 33%"
+    """
+    filled = min(current_step, total_steps)
+    empty = max(total_steps - current_step, 0)
+    bar = "▰" * filled + "░" * empty
+    percent = int((current_step / total_steps) * 100) if total_steps > 0 else 0
+    return f"{bar} {percent}%"
+
+
+def get_step_header(current_step: int, title: str = "Crear Nueva Tarea") -> str:
+    """
+    Genera header mejorado con progress y paso actual.
+    
+    Args:
+        current_step: Paso actual (1-6)
+        title: Título del wizard
+    
+    Returns:
+        String formateado con progress
+    """
+    progress = get_progress_bar(current_step)
+    return f"📋 *{title}* [Paso {current_step}/6]\n{progress}\n"
+
+
 async def handle_wizard_text_input(
     update: Update,
     context: CallbackContext[Bot, Update, Chat, User]
@@ -99,11 +138,13 @@ async def _handle_codigo_input(
     
     # Step 3: Solicitar título
     keyboard = KeyboardFactory.back_button("crear:cancel")
+    header = get_step_header(3, "Crear Nueva Tarea")
     await update.message.reply_text(
-        f"📝 *Crear Tarea - Paso 3 de 6*\n\n"
+        f"{header}\n"
         f"Código: `{codigo}`\n\n"
-        f"Por favor, envía el *título* de la tarea\n"
-        f"(máximo 200 caracteres):",
+        f"✏️ *Ingresa el título de la tarea:*\n\n"
+        f"💡 *Consejos:* Sé específico y claro\n"
+        f"📝 *Máximo:* 200 caracteres",
         reply_markup=keyboard,
         parse_mode="Markdown"
     )

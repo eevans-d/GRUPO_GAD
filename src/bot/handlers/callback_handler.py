@@ -10,6 +10,7 @@ from loguru import logger
 
 from config.settings import settings
 from src.bot.utils.keyboards import KeyboardFactory
+from src.bot.handlers.wizard_text_handler import get_step_header
 
 
 async def handle_callback_query(
@@ -188,11 +189,13 @@ async def handle_crear_action(
         
         # Step 2: Solicitar código
         keyboard = KeyboardFactory.back_button("crear:cancel")
+        header = get_step_header(2, "Crear Nueva Tarea")
         await query.edit_message_text(
-            f"📝 *Crear Tarea - Paso 2 de 6*\n\n"
+            f"{header}\n"
             f"Tipo: *{tipo}*\n\n"
-            f"Por favor, envía el *código* de la tarea\n"
-            f"(máximo 20 caracteres):",
+            f"🔤 *Ingresa el código único de la tarea:*\n\n"
+            f"📌 *Formato sugerido:* `TIP-2025-001`\n"
+            f"⚠️ *Importante:* Máximo 20 caracteres",
             reply_markup=keyboard,
             parse_mode="Markdown"
         )
