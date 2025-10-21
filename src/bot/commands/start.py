@@ -22,14 +22,22 @@ async def start(update: Update, context: CallbackContext[Bot, Update, Chat, User
     if update.message is None:  # Added None check
         return
     
+    # Obtener información del usuario
+    user = update.effective_user
+    user_name = user.first_name if user else "Usuario"
+    user_id = user.id if user else "N/A"
+    
     # Obtener teclado del menú principal
     keyboard = KeyboardFactory.main_menu()
     
-    # Mensaje de bienvenida
+    # Mensaje de bienvenida personalizado
     welcome_text = (
-        "🤖 *Bienvenido a GAD Bot*\n\n"
-        "Sistema de Gestión de Agentes y Tareas.\n\n"
-        "Selecciona una opción del menú:"
+        f"👋 *¡Hola, {user_name}!*\n\n"
+        f"Bienvenido al *Sistema GAD*\n"
+        f"Gestión de Agentes y Tareas\n\n"
+        f"🆔 Usuario ID: `{user_id}`\n\n"
+        f"📌 *¿Qué deseas hacer hoy?*\n"
+        f"Selecciona una opción del menú:"
     )
     
     await update.message.reply_text(
