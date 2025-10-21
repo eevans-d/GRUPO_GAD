@@ -17,6 +17,7 @@ from pydantic import BaseModel
 
 from src.api.models import Usuario
 from src.api.dependencies import get_db_session
+from src.core.cache_decorators import cache_result, cache_and_invalidate
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
@@ -46,6 +47,7 @@ class UsuarioUpdate(BaseModel):
 
 
 @router.get("", response_model=List[UsuarioResponse])
+@cache_result(ttl_seconds=300, key_prefix="usuarios")  # Cache for 5 minutes
 async def list_usuarios(
     db: AsyncSession = Depends(get_db_session),
     skip: int = 0,
@@ -69,6 +71,7 @@ async def list_usuarios(
 
 
 @router.get("/{usuario_id}", response_model=UsuarioResponse)
+@cache_result(ttl_seconds=300, key_prefix="usuarios")  # Cache for 5 minutes
 async def get_usuario(
     usuario_id: int,
     db: AsyncSession = Depends(get_db_session)
@@ -98,6 +101,7 @@ async def get_usuario(
 
 
 @router.post("", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)
+@cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def create_usuario(
     usuario_in: UsuarioCreate,
     db: AsyncSession = Depends(get_db_session)
@@ -151,6 +155,7 @@ async def create_usuario(
 
 
 @router.put("/{usuario_id}", response_model=UsuarioResponse)
+@cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def update_usuario(
     usuario_id: int,
     usuario_in: UsuarioUpdate,
@@ -202,6 +207,7 @@ async def update_usuario(
 
 
 @router.delete("/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
+@cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def delete_usuario(
     usuario_id: int,
     db: AsyncSession = Depends(get_db_session)
