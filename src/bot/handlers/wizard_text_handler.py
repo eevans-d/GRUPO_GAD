@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Handler para capturar inputs de texto del wizard de creación.
+Manejador de texto para wizard de creación/finalización de tareas.
 """
 
 from telegram import Update
@@ -9,30 +9,31 @@ from telegram import Bot, Chat, User
 from loguru import logger
 
 from src.bot.utils.keyboards import KeyboardFactory
+from src.bot.utils.emojis import (
+    TaskEmojis, StatusEmojis, ActionEmojis, ProgressEmojis,
+    get_task_emoji, get_status_emoji
+)
 
 
 # ==================== UTILIDADES DE PROGRESS ====================
 
-def get_progress_bar(current_step: int, total_steps: int = 6) -> str:
+def get_progress_bar(step: int, total: int = 6) -> str:
     """
-    Genera barra de progreso visual ASCII.
+    Genera una barra de progreso visual para el wizard.
     
     Args:
-        current_step: Paso actual (1-6)
-        total_steps: Total de pasos (default 6)
+        step: Paso actual (1-based)
+        total: Total de pasos
     
     Returns:
-        String con barra y porcentaje
-        
-    Ejemplo:
-        >>> get_progress_bar(2, 6)
-        "▰▰░░░░ 33%"
+        String con barra de progreso ASCII con emojis
     """
-    filled = min(current_step, total_steps)
-    empty = max(total_steps - current_step, 0)
-    bar = "▰" * filled + "░" * empty
-    percent = int((current_step / total_steps) * 100) if total_steps > 0 else 0
-    return f"{bar} {percent}%"
+    filled = step
+    empty = total - step
+    percentage = int((step / total) * 100)
+    
+    bar = (ProgressEmojis.FILLED * filled) + (ProgressEmojis.EMPTY * empty)
+    return f"{bar} {percentage}%"
 
 
 def get_step_header(current_step: int, title: str = "Crear Nueva Tarea") -> str:
@@ -52,35 +53,35 @@ def get_step_header(current_step: int, title: str = "Crear Nueva Tarea") -> str:
 
 def format_task_summary(task_data: dict) -> str:
     """
-    Genera resumen visual de tarea antes de confirmar.
+    Formatea el resumen de una tarea con diseño visual mejorado.
     
     Args:
-        task_data: Diccionario con datos de la tarea
+        task_data: Diccionario con datos de la tarea (tipo, codigo, titulo, etc.)
     
     Returns:
-        String formateado con resumen
+        String con resumen formateado en Markdown con emojis semánticos
     """
     tipo = task_data.get('tipo', 'N/A')
     codigo = task_data.get('codigo', 'N/A')
     titulo = task_data.get('titulo', 'N/A')
-    descripcion = task_data.get('descripcion', 'N/A')
+    delegado_id = task_data.get('delegado_id', 'N/A')
+    asignados = task_data.get('asignados', [])
     
-    # Truncar descripción si es muy larga
-    if len(str(descripcion)) > 100:
-        descripcion = str(descripcion)[:100] + "..."
+    # Obtener emoji del tipo de tarea
+    tipo_emoji = get_task_emoji(tipo)
     
-    return f"""
-✅ *Resumen de Nueva Tarea*
-━━━━━━━━━━━━━━━━━━━━━━
-
-📌 *Tipo:* {tipo}
-🔤 *Código:* `{codigo}`
-✏️ *Título:* {titulo}
-📝 *Descripción:* {descripcion}
-
-━━━━━━━━━━━━━━━━━━━━━━
-¿Todo es correcto?
-"""
+    return (
+        f"📋 *RESUMEN DE LA TAREA*\n"
+        f"{'─' * 30}\n\n"
+        f"🔤 *Código:* `{codigo}`\n"
+        f"📝 *Título:* {titulo}\n"
+        f"{tipo_emoji} *Tipo:* {tipo}\n"
+        f"� *Delegado:* ID `{delegado_id}`\n"
+        f"👥 *Asignados:* {', '.join(map(str, asignados)) if asignados else 'Ninguno'}\n\n"
+        f"{'─' * 30}\n"
+        f"⚠️ *¿Confirmar creación?*\n"
+        f"Revisa los datos antes de continuar."
+    )
 
 
 async def handle_wizard_text_input(
