@@ -66,17 +66,17 @@ RUN groupadd -r app && \
 # Switch to non-root user
 USER app
 
-# Expose port (Fly.io uses 8080 internally)
-EXPOSE 8080
+# Expose port (Fly.io proxy expects 8000)
+EXPOSE 8000
 
-# Health check
+# Health check (use $PORT env var or default to 8000)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:8080/health || exit 1
+  CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
-# Start command (overridden by fly.toml release_command for migrations)
-CMD ["uvicorn", "src.api.main:app", \
-     "--host", "0.0.0.0", \
-     "--port", "8080", \
-     "--workers", "1", \
-     "--loop", "uvloop", \
-     "--log-level", "info"]
+# Start command using PORT env var (default 8000 for Fly.io compatibility)
+CMD uvicorn src.api.main:app \
+     --host 0.0.0.0 \
+     --port ${PORT:-8000} \
+     --workers 1 \
+     --loop uvloop \
+     --log-level info
