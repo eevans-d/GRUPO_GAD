@@ -1,0 +1,114 @@
+# Fly.io deployment configuration for GRUPO_GAD STAGING
+# Generated: October 24, 2025
+# https://fly.io/docs/reference/configuration/
+
+app = "grupo-gad-staging"
+primary_region = "dfw"  # Dallas (closest available to Latin America; mia deprecated)
+
+# Kill signal (graceful shutdown)
+kill_signal = "SIGINT"
+kill_timeout = "30s"
+
+[build]
+  # Use existing Dockerfile
+  dockerfile = "Dockerfile"
+
+[env]
+  # Application environment
+  ENVIRONMENT = "staging"
+  LOG_LEVEL = "debug"
+  
+  # Allow app to start without a database (temporary)
+  ALLOW_NO_DB = "1"
+  
+  # Server configuration
+  PORT = "8000"
+  HOST = "0.0.0.0"
+  
+  # WebSocket configuration
+  WS_HEARTBEAT_INTERVAL = "30"
+  WS_MAX_CONNECTIONS = "10000"
+  
+  # Performance
+  WORKERS = "1"  # Fly.io handles scaling
+  
+  # Uvicorn
+  UVICORN_LOOP = "uvloop"
+  UVICORN_LOG_LEVEL = "debug"
+
+[experimental]
+  # Enable private networking
+  auto_rollback = true
+
+# Health checks
+[[services]]
+  protocol = "tcp"
+  internal_port = 8000
+  processes = ["app"]
+
+  # HTTP service
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  # Concurrency limits
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 800
+
+  # HTTP health checks
+  [[services.http_checks]]
+    interval = "15s"
+    timeout = "10s"
+    grace_period = "30s"
+    method = "GET"
+    path = "/health"
+    protocol = "http"
+    restart_limit = 3
+    
+    [services.http_checks.headers]
+      User-Agent = "Fly-HealthCheck"
+
+  # TCP checks (redundant with HTTP)
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "30s"
+    restart_limit = 3
+
+# Compute resources
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512  # Start small, scale up if needed
+
+# Autoscaling
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+# Metrics
+[metrics]
+  port = 9091
+  path = "/metrics"
+
+# Deployment settings
+[deploy]
+  # release_command = "alembic upgrade head"  # Disabled: DATABASE_URL is not valid in Fly.io
+  strategy = "rolling"  # Zero-downtime deployments
+  
+# Volumes (for persistent storage if needed)
+# [[mounts]]
+#   source = "grupo_gad_data"
+#   destination = "/data"
+#   initial_size = "1GB"

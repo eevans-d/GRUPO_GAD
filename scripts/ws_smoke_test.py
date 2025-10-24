@@ -1,9 +1,18 @@
 import asyncio
 import httpx
 import websockets
+import os
+import sys
 
-WS_URL = "ws://localhost:8000/ws/connect"
-BROADCAST_URL = "http://localhost:8000/ws/_test/broadcast"
+# Usar URL de env var o defaults a localhost
+BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+WS_BASE_URL = os.getenv("WS_BASE_URL", "ws://localhost:8000")
+
+WS_URL = f"{WS_BASE_URL}/ws/connect"
+BROADCAST_URL = f"{BASE_URL}/ws/_test/broadcast"
+
+print(f"[INFO] WS URL: {WS_URL}")
+print(f"[INFO] Broadcast URL: {BROADCAST_URL}")
 
 async def main():
     async with websockets.connect(WS_URL) as ws:

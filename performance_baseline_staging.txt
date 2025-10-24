@@ -1,0 +1,121 @@
+============================================================
+🚀 GRUPO_GAD v1.3.0 - Performance Testing Suite
+   Started: 2025-10-24T07:41:08.248757
+============================================================
+
+📊 Testing Cache Hit Ratio (100 requests)...
+  ❌ Error on request 1: All connection attempts failed
+  ❌ Error on request 2: All connection attempts failed
+  ❌ Error on request 3: All connection attempts failed
+  ❌ Error on request 4: All connection attempts failed
+  ❌ Error on request 5: All connection attempts failed
+  ❌ Error on request 6: All connection attempts failed
+  ❌ Error on request 7: All connection attempts failed
+  ❌ Error on request 8: All connection attempts failed
+  ❌ Error on request 9: All connection attempts failed
+  ❌ Error on request 10: All connection attempts failed
+  ❌ Error on request 11: All connection attempts failed
+  ❌ Error on request 12: All connection attempts failed
+  ❌ Error on request 13: All connection attempts failed
+  ❌ Error on request 14: All connection attempts failed
+  ❌ Error on request 15: All connection attempts failed
+  ❌ Error on request 16: All connection attempts failed
+  ❌ Error on request 17: All connection attempts failed
+  ❌ Error on request 18: All connection attempts failed
+  ❌ Error on request 19: All connection attempts failed
+  ❌ Error on request 20: All connection attempts failed
+  ❌ Error on request 21: All connection attempts failed
+  ❌ Error on request 22: All connection attempts failed
+  ❌ Error on request 23: All connection attempts failed
+  ❌ Error on request 24: All connection attempts failed
+  ❌ Error on request 25: All connection attempts failed
+  ❌ Error on request 26: All connection attempts failed
+  ❌ Error on request 27: All connection attempts failed
+  ❌ Error on request 28: All connection attempts failed
+  ❌ Error on request 29: All connection attempts failed
+  ❌ Error on request 30: All connection attempts failed
+  ❌ Error on request 31: All connection attempts failed
+  ❌ Error on request 32: All connection attempts failed
+  ❌ Error on request 33: All connection attempts failed
+  ❌ Error on request 34: All connection attempts failed
+  ❌ Error on request 35: All connection attempts failed
+  ❌ Error on request 36: All connection attempts failed
+  ❌ Error on request 37: All connection attempts failed
+  ❌ Error on request 38: All connection attempts failed
+  ❌ Error on request 39: All connection attempts failed
+  ❌ Error on request 40: All connection attempts failed
+  ❌ Error on request 41: All connection attempts failed
+  ❌ Error on request 42: All connection attempts failed
+  ❌ Error on request 43: All connection attempts failed
+  ❌ Error on request 44: All connection attempts failed
+  ❌ Error on request 45: All connection attempts failed
+  ❌ Error on request 46: All connection attempts failed
+  ❌ Error on request 47: All connection attempts failed
+  ❌ Error on request 48: All connection attempts failed
+  ❌ Error on request 49: All connection attempts failed
+  ❌ Error on request 50: All connection attempts failed
+  ❌ Error on request 51: All connection attempts failed
+  ❌ Error on request 52: All connection attempts failed
+  ❌ Error on request 53: All connection attempts failed
+  ❌ Error on request 54: All connection attempts failed
+  ❌ Error on request 55: All connection attempts failed
+  ❌ Error on request 56: All connection attempts failed
+  ❌ Error on request 57: All connection attempts failed
+  ❌ Error on request 58: All connection attempts failed
+  ❌ Error on request 59: All connection attempts failed
+  ❌ Error on request 60: All connection attempts failed
+  ❌ Error on request 61: All connection attempts failed
+  ❌ Error on request 62: All connection attempts failed
+  ❌ Error on request 63: All connection attempts failed
+  ❌ Error on request 64: All connection attempts failed
+  ❌ Error on request 65: All connection attempts failed
+  ❌ Error on request 66: All connection attempts failed
+  ❌ Error on request 67: All connection attempts failed
+  ❌ Error on request 68: All connection attempts failed
+  ❌ Error on request 69: All connection attempts failed
+  ❌ Error on request 70: All connection attempts failed
+  ❌ Error on request 71: All connection attempts failed
+  ❌ Error on request 72: All connection attempts failed
+  ❌ Error on request 73: All connection attempts failed
+  ❌ Error on request 74: All connection attempts failed
+  ❌ Error on request 75: All connection attempts failed
+  ❌ Error on request 76: All connection attempts failed
+  ❌ Error on request 77: All connection attempts failed
+  ❌ Error on request 78: All connection attempts failed
+  ❌ Error on request 79: All connection attempts failed
+  ❌ Error on request 80: All connection attempts failed
+  ❌ Error on request 81: All connection attempts failed
+  ❌ Error on request 82: All connection attempts failed
+  ❌ Error on request 83: All connection attempts failed
+  ❌ Error on request 84: All connection attempts failed
+  ❌ Error on request 85: All connection attempts failed
+  ❌ Error on request 86: All connection attempts failed
+  ❌ Error on request 87: All connection attempts failed
+  ❌ Error on request 88: All connection attempts failed
+  ❌ Error on request 89: All connection attempts failed
+  ❌ Error on request 90: All connection attempts failed
+  ❌ Error on request 91: All connection attempts failed
+  ❌ Error on request 92: All connection attempts failed
+  ❌ Error on request 93: All connection attempts failed
+  ❌ Error on request 94: All connection attempts failed
+  ❌ Error on request 95: All connection attempts failed
+  ❌ Error on request 96: All connection attempts failed
+  ❌ Error on request 97: All connection attempts failed
+  ❌ Error on request 98: All connection attempts failed
+  ❌ Error on request 99: All connection attempts failed
+  ❌ Error on request 100: All connection attempts failed
+
+🔍 Testing Endpoint Latency (3 endpoints)...
+  ❌ /api/v1/usuarios: All connection attempts failed
+  ❌ /metrics: All connection attempts failed
+  ❌ /health: All connection attempts failed
+
+📈 Testing Concurrent Load (50 users, 30s)...
+
+📋 Validation Results:
+
+🎯 Summary: 0 passed, 0 failed
+
+============================================================
+✅ ALL TESTS PASSED - Ready for production
+============================================================

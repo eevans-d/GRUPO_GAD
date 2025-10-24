@@ -8,6 +8,8 @@ import asyncio
 import time
 import httpx
 import statistics
+import os
+import sys
 from typing import List, Dict
 from datetime import datetime
 
@@ -229,7 +231,14 @@ class PerformanceTester:
 
 
 async def main():
-    tester = PerformanceTester(base_url="http://localhost:8000")
+    # Read base URL from env var, sys args, or default
+    if len(sys.argv) > 1:
+        base_url = sys.argv[1]
+    else:
+        base_url = os.getenv("API_BASE_URL", "http://localhost:8000")
+    
+    print(f"[INFO] Using base URL: {base_url}\n")
+    tester = PerformanceTester(base_url=base_url)
     success = await tester.run_all_tests()
     exit(0 if success else 1)
 

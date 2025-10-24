@@ -9,7 +9,8 @@ API_CONTAINER_PROD := gad_api_prod
 .PHONY: help up down ps logs-api migrate smoke ws-smoke test test-cov lint type fmt \
 	backup backup-verify backup-list backup-restore backup-service backup-service-down \
 	ci ci-local build-api release-check release-check-strict \
-	prod-up prod-up-local prod-down prod-down-local prod-ps prod-logs-api prod-migrate prod-smoke prod-ws-smoke prod-smoke-local
+	prod-up prod-up-local prod-down prod-down-local prod-ps prod-logs-api prod-migrate prod-smoke prod-ws-smoke prod-smoke-local \
+	staging-smoke staging-ws-smoke
 
 help:
 	@echo "Targets disponibles"
@@ -190,4 +191,21 @@ release-check-strict:
 	@$(MAKE) type
 	@$(MAKE) test-cov
 	@$(MAKE) build-api
+
+# ===== STAGING EN FLY.IO =====
+
+staging-smoke:
+	@echo "[INFO] Testing staging: grupo-gad-staging.fly.dev"
+	@set -e; \
+	code=$$(curl -s -o /dev/null -w "%{http_code}" https://grupo-gad-staging.fly.dev/metrics); \
+	if [ "$$code" != "200" ]; then echo "[FAIL] /metrics => $$code"; exit 1; fi; \
+	code=$$(curl -s -o /dev/null -w "%{http_code}" https://grupo-gad-staging.fly.dev/health); \
+	if [ "$$code" != "200" ]; then echo "[FAIL] /health => $$code"; exit 1; fi; \
+	code=$$(curl -s -o /dev/null -w "%{http_code}" https://grupo-gad-staging.fly.dev/api/v1/health); \
+	if [ "$$code" != "200" ]; then echo "[FAIL] /api/v1/health => $$code"; exit 1; fi; \
+	echo "[OK] HTTP smoke passed (staging)"
+
+staging-ws-smoke:
+	@echo "[INFO] WebSocket smoke test against staging"
+	API_BASE_URL=https://grupo-gad-staging.fly.dev WS_BASE_URL=wss://grupo-gad-staging.fly.dev python scripts/ws_smoke_test.py
 	@echo "✅ Proyecto listo para release (modo estricto)"
