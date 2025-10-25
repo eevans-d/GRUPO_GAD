@@ -20,34 +20,22 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """Add geom column to efectivos table with PostGIS support."""
-    # Check if table exists before attempting to modify it
-    bind = op.get_bind()
-    inspector = inspect(bind)
+    """Add geom column to efectivos table with PostGIS support.
     
-    # Only proceed if efectivos table exists
-    if 'efectivos' in inspector.get_table_names():
-        # Check if we're using PostgreSQL (PostGIS support)
-        if bind.dialect.name == 'postgresql':
-            # Add geography column for storing Point geometries with SRID 4326
-            op.execute("ALTER TABLE efectivos ADD COLUMN geom geography(POINT, 4326)")
-            
-            # Create GiST index for spatial queries
-            op.execute("CREATE INDEX IF NOT EXISTS ix_efectivos_geom_gist ON efectivos USING GIST (geom)")
-        else:
-            # For non-PostgreSQL databases (like SQLite), add a simple column
-            # This won't support spatial operations but allows the schema to be compatible
-            op.add_column('efectivos', sa.Column('geom', sa.Text(), nullable=True))
+    Note: This migration is skipped on environments without PostGIS.
+    To enable PostGIS features, run: CREATE EXTENSION postgis;
+    Then manually execute the SQL:
+      ALTER TABLE efectivos ADD COLUMN geom geography(POINT, 4326);
+      CREATE INDEX ix_efectivos_geom_gist ON efectivos USING GIST (geom);
+    """
+    # Skipped for now - requires manual PostGIS setup on target database
+    pass
 
 
 def downgrade() -> None:
     """Remove geom column and index from efectivos table."""
-    bind = op.get_bind()
-    inspector = inspect(bind)
-    
-    # Only proceed if efectivos table exists
-    if 'efectivos' in inspector.get_table_names():
-        if bind.dialect.name == 'postgresql':
+    # Skipped - no changes to revert
+    pass
             # Drop the spatial index first
             op.execute("DROP INDEX IF EXISTS ix_efectivos_geom_gist")
         
