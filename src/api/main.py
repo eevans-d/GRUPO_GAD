@@ -190,6 +190,25 @@ async def security_headers_middleware(
     # Content Security Policy for API
     if request.url.path.startswith("/api/"):
         response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
+
+    # Lightweight CORS headers for simple requests (complementa CORSMiddleware)
+    # Nota: CORSMiddleware solo añade cabeceras cuando la petición incluye 'Origin'.
+    # Para facilitar UAT y clientes simples, exponemos 'Access-Control-Allow-Origin'
+    # cuando la configuración permite '*'.
+    try:
+        from config.settings import get_settings as _get_settings  # local import to avoid import-time effects
+        _s = _get_settings()
+        allowed = getattr(_s, 'cors_origins_list', [])
+        if (not allowed) and hasattr(_s, 'ALLOWED_HOSTS'):
+            allowed = getattr(_s, 'ALLOWED_HOSTS') or []
+        # Si '*' está habilitado explícitamente, añade cabecera universal
+        if isinstance(allowed, list) and any(o == "*" for o in allowed):
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            response.headers.setdefault("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+            response.headers.setdefault("Access-Control-Allow-Headers", "*")
+    except Exception:
+        # Mantener silencioso si no hay settings válidos en tiempo de import
+        pass
     
     # Remove server header for security
     if "server" in response.headers:
