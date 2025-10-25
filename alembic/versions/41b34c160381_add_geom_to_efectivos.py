@@ -9,7 +9,6 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy import inspect
 
 
 # revision identifiers, used by Alembic.
@@ -36,8 +35,3 @@ def downgrade() -> None:
     """Remove geom column and index from efectivos table."""
     # Skipped - no changes to revert
     pass
-            # Drop the spatial index first
-            op.execute("DROP INDEX IF EXISTS ix_efectivos_geom_gist")
-        
-        # Drop the geom column
-        op.drop_column('efectivos', 'geom')
