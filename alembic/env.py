@@ -15,7 +15,7 @@ import os
 import sys
 from logging.config import fileConfig
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any, Dict
 
 from sqlalchemy import pool, create_engine, text
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -319,12 +319,26 @@ async def run_migrations_online() -> None:
         migration_logger.info("Creando motor async para migraciones")
     else:
         migration_logger.info("Creando motor async para migraciones")
-    
+
     # Asegurar que la URL sea async
     if not db_url.startswith("postgresql+asyncpg://"):
         db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
-    
-    connectable = create_async_engine(db_url, poolclass=pool.NullPool)
+
+    # Configurar SSL según variables de entorno comunes (Fly.io/asyncpg)
+    # asyncpg no acepta 'sslmode' como kwarg; se debe usar connect_args={"ssl": False}
+    engine_kwargs: Dict[str, Any] = {"poolclass": pool.NullPool}
+    pg_sslmode = os.getenv("PGSSLMODE", "").lower()
+    if pg_sslmode in {"disable", "allow"}:
+        engine_kwargs["connect_args"] = {"ssl": False}
+        if use_structured_logging:
+            migration_logger.info("SSL deshabilitado para conexión asyncpg (PGSSLMODE)")
+    # Alternativamente, permitir bandera explícita
+    if os.getenv("ASYNC_DB_SSL", "").lower() in {"0", "false", "no"}:
+        engine_kwargs["connect_args"] = {"ssl": False}
+        if use_structured_logging:
+            migration_logger.info("SSL deshabilitado por ASYNC_DB_SSL=false")
+
+    connectable = create_async_engine(db_url, **engine_kwargs)
 
     try:
         async with connectable.connect() as connection:
