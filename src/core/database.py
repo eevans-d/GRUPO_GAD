@@ -60,6 +60,13 @@ def init_db(db_url: str) -> None:
                 }
             })
 
+            # Permitir deshabilitar SSL para asyncpg en entornos internos (Flycast)
+            pg_sslmode = os.getenv("PGSSLMODE", "").lower()
+            async_db_ssl = os.getenv("ASYNC_DB_SSL", "").lower()
+            if pg_sslmode in {"disable", "allow"} or async_db_ssl in {"0", "false", "no"}:
+                # asyncpg usa la clave "ssl": False para deshabilitar TLS
+                connect_args["ssl"] = False
+
         async_engine = create_async_engine(
             db_url,
             pool_pre_ping=True,
