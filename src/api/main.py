@@ -100,7 +100,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         # Preferir REDIS_URL completa si está definida (permite rediss:// con TLS)
         import os
         redis_url = os.getenv("REDIS_URL")
-        api_logger.debug(f"DEBUG: REDIS_URL env var = {redis_url if redis_url else 'NOT SET'}")
+        api_logger.info(f"Redis URL from env: {'SET' if redis_url else 'NOT SET'} | Full URL: {redis_url[:50] + '...' if redis_url and len(redis_url) > 50 else redis_url}")
 
         # Backwards-compat: construir desde componentes si no se definió REDIS_URL
         if not redis_url:
