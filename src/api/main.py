@@ -97,14 +97,23 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Iniciar pub/sub Redis para broadcast cross-worker si está configurado
     app.state.ws_pubsub = None
     try:
-        redis_host = getattr(_settings, 'REDIS_HOST', None) or None
-        redis_port = getattr(_settings, 'REDIS_PORT', 6379)
-        redis_db = getattr(_settings, 'REDIS_DB', 0)
-        redis_password = getattr(_settings, 'REDIS_PASSWORD', None)
-        if redis_host:
-            scheme = "redis"
-            auth = f":{redis_password}@" if redis_password else ""
-            redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
+        # Preferir REDIS_URL completa si está definida (permite rediss:// con TLS)
+        import os
+        redis_url = os.getenv("REDIS_URL")
+
+        # Backwards-compat: construir desde componentes si no se definió REDIS_URL
+        if not redis_url:
+            redis_host = getattr(_settings, 'REDIS_HOST', None) or None
+            redis_port = getattr(_settings, 'REDIS_PORT', 6379)
+            redis_db = getattr(_settings, 'REDIS_DB', 0)
+            redis_password = getattr(_settings, 'REDIS_PASSWORD', None)
+            if redis_host:
+                # Permitir forzar TLS con REDIS_SCHEME=rediss si el proveedor lo exige (Upstash)
+                scheme = os.getenv("REDIS_SCHEME", "redis").strip() or "redis"
+                auth = f":{redis_password}@" if redis_password else ""
+                redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
+
+        if redis_url:
             pubsub = RedisWebSocketPubSub(redis_url)
             websocket_manager.set_pubsub(pubsub)
             await pubsub.start(websocket_manager)
@@ -400,18 +409,18 @@ async def health_ready():
         checks["database"] = "ok"
     except Exception as e:
         checks["database"] = f"error: {str(e)}"
-        api_logger.error("Health check DB failed", error=str(e))
+        api_logger.error("Health check DB failed", error=e)
     
     # Check Redis (si está habilitado)
     try:
         if hasattr(app.state, 'cache_service') and app.state.cache_service:
-            await app.state.cache_service.ping()
-            checks["redis"] = "ok"
+            stats = await app.state.cache_service.get_stats()
+            checks["redis"] = "ok" if stats.get("connected") else f"error: {stats.get('error', 'unknown')}"
         else:
             checks["redis"] = "not_configured"
     except Exception as e:
         checks["redis"] = f"error: {str(e)}"
-        api_logger.error("Health check Redis failed", error=str(e))
+        api_logger.error("Health check Redis failed", error=e)
     
     # Check WebSocket Manager
     try:

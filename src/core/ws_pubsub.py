@@ -16,7 +16,7 @@ ws_pubsub_logger = get_logger("websockets.pubsub")
 
 
 class _BroadcastManager(Protocol):
-    async def broadcast_local_dict(self, message_dict: dict[str, Any]) -> None:  # pragma: no cover - protocolo mínimo
+    async def broadcast_local_dict(self, message_dict: dict[str, Any]) -> int:  # pragma: no cover - protocolo mínimo
         ...
 
 
