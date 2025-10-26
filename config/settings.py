@@ -76,22 +76,29 @@ class Settings(BaseSettings):
         This helper is explicit and safe to call at runtime without relying on
         a global settings instantiation at import time.
         
-        Transforms postgresql:// to postgresql+asyncpg:// for Railway compatibility.
+        Transforms postgres:// or postgresql:// to postgresql+asyncpg:// for asyncpg compatibility.
         """
         # Prefer explicit DATABASE_URL set during initialization
         if self.DATABASE_URL:
             url = self.DATABASE_URL
-            # Railway inyecta postgresql://, transformar para asyncpg
-            if url.startswith("postgresql://") and "+asyncpg" not in url:
-                url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            # Proveedores pueden inyectar postgres:// o postgresql://
+            if "+asyncpg" not in url:
+                if url.startswith("postgresql://"):
+                    url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+                elif url.startswith("postgres://"):
+                    # Normalizar alias corto a driver async
+                    url = url.replace("postgres://", "postgresql+asyncpg://", 1)
             return url
 
         # Fallback to legacy env var
         legacy_db_url = os.getenv("DB_URL")
         if legacy_db_url:
             # Aplicar misma transformación
-            if legacy_db_url.startswith("postgresql://") and "+asyncpg" not in legacy_db_url:
-                legacy_db_url = legacy_db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            if "+asyncpg" not in legacy_db_url:
+                if legacy_db_url.startswith("postgresql://"):
+                    legacy_db_url = legacy_db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+                elif legacy_db_url.startswith("postgres://"):
+                    legacy_db_url = legacy_db_url.replace("postgres://", "postgresql+asyncpg://", 1)
             return legacy_db_url
 
         # Use components if available (be tolerant if attributes are missing when constructed without validation)
