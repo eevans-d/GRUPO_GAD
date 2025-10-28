@@ -143,11 +143,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
 
         if redis_url:
-            # Ajuste Upstash TLS: si es rediss://*.upstash.io y no usa 6380, cambiar a 6380
+            # Ajuste Upstash TLS: normalizar Upstash a TLS en 6380 y esquema rediss
             try:
                 parsed0 = urlparse(redis_url.strip())
                 host = (parsed0.hostname or "").lower()
-                if parsed0.scheme == "rediss" and host.endswith(".upstash.io"):
+                if host.endswith(".upstash.io"):
                     tls_port = 6380
                     # Reconstruir URL manteniendo userinfo si existe
                     userinfo = ""
@@ -156,10 +156,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                         p = parsed0.password or ""
                         userinfo = f"{u}:{p}@" if (u or p) else ""
                     path = parsed0.path or "/0"
-                    if parsed0.port != tls_port:
+                    # Forzar esquema y puerto correctos si no coinciden
+                    needs_scheme_fix = parsed0.scheme != "rediss"
+                    needs_port_fix = parsed0.port != tls_port
+                    if needs_scheme_fix or needs_port_fix:
                         redis_url = f"rediss://{userinfo}{host}:{tls_port}{path}"
                         api_logger.info(
-                            "Ajuste Upstash TLS: redirigido a 6380",
+                            "Ajuste Upstash TLS: forzado rediss y puerto 6380",
                             redis_url_sanitized=_sanitize_redis_url(redis_url)
                         )
             except Exception as ex:
