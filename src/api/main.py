@@ -426,7 +426,8 @@ async def metrics() -> PlainTextResponse:
     
     # Añadir métricas básicas de WebSockets
     stats = websocket_manager.get_stats()
-    connections_count = len(stats.get('connections_by_role', {}))
+    # Contar conexiones reales, no roles
+    connections_count = len(websocket_manager.active_connections)
     metrics_text += "\n# HELP ws_connections_active Active WebSocket connections\n"
     metrics_text += f"ws_connections_active {connections_count}\n"
     

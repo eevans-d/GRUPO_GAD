@@ -45,14 +45,28 @@ async def get_user_from_token(token: Optional[str] = None) -> Optional[dict]:
     
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])  # type: ignore[arg-type]
-        sub = payload.get("sub")
-        if not sub:
-            return None
-        # Nota: En una implementación real, recuperaríamos el usuario desde DB
+        
+        # Priorizar user_id claim si existe, sino usar sub
+        user_id = payload.get("user_id")
+        if user_id:
+            # Convertir a int si es dígito
+            user_id = int(user_id) if str(user_id).isdigit() else user_id
+        else:
+            sub = payload.get("sub")
+            if not sub:
+                return None
+            user_id = int(sub) if str(sub).isdigit() else sub
+        
+        # Mapear nivel → role si role no está presente
+        # Telegram auth proporciona "nivel"; aceptar también "role"
+        role = payload.get("role") or payload.get("nivel")
+        if not role:
+            role = "LEVEL_1"  # Default
+        
         return {
-            "user_id": int(sub) if str(sub).isdigit() else sub,
+            "user_id": user_id,
             "email": payload.get("email", ""),
-            "role": payload.get("role", "LEVEL_1"),
+            "role": role,
         }
     except Exception as e:
         ws_router_logger.error(f"Error validando token: {str(e)}")
@@ -185,7 +199,14 @@ async def handle_client_message(connection_id: str, message_data: dict,
             # Respuesta a ping - actualizar last_ping
             connection_info = websocket_manager.active_connections.get(connection_id)
             if connection_info:
-                connection_info.last_ping = data.get("timestamp", connection_info.last_ping)
+                # Si viene timestamp usarlo; si no, usar ahora
+                try:
+                    ts = data.get("timestamp")
+                    connection_info.last_ping = ts or connection_info.last_ping
+                except Exception:
+                    # fallback seguro por si data no es un dict estándar
+                    from datetime import datetime as _dt
+                    connection_info.last_ping = _dt.now()
                 
         elif event_type == EventType.DASHBOARD_UPDATE:
             # Cliente solicita actualización del dashboard

@@ -342,7 +342,13 @@ class WebSocketManager:
         for connection_id in connection_ids:
             if await self.send_to_connection(connection_id, message):
                 sent_count += 1
-        
+        # Actualizar métricas si hubo envíos
+        if sent_count:
+            self.total_broadcasts += 1
+            self.last_broadcast_at = datetime.now()
+            if METRICS_ENABLED:
+                # Consideramos envío por rol como broadcast para métricas
+                message_sent(is_broadcast=True)
         return sent_count
     
     async def broadcast(self, message: WSMessage, 
