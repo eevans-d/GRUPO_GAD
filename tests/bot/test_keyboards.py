@@ -4,6 +4,8 @@ Tests para KeyboardFactory.
 """
 
 import pytest
+# Saltar estos tests si no está instalado python-telegram-bot
+pytest.importorskip("telegram", reason="python-telegram-bot no instalado en este entorno de test")
 from src.bot.utils.keyboards import KeyboardFactory
 
 

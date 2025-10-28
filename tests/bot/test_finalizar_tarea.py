@@ -4,6 +4,8 @@ Tests para la funcionalidad de finalización de tareas.
 """
 
 import pytest
+# Saltar estos tests si no está instalado python-telegram-bot
+pytest.importorskip("telegram", reason="python-telegram-bot no instalado en este entorno de test")
 from datetime import datetime
 from uuid import uuid4
 from unittest.mock import AsyncMock, MagicMock, patch

@@ -48,12 +48,31 @@ class CacheService:
         try:
             from redis import asyncio as aioredis
 
-            self._redis = aioredis.from_url(
-                self.redis_url,
+            from urllib.parse import urlparse
+            import os
+            parsed = urlparse(self.redis_url)
+            insecure_tls = (
+                os.getenv("REDIS_INSECURE_TLS") in ("1", "true", "True")
+                and parsed.hostname and parsed.hostname.endswith(".upstash.io")
+            )
+            extra_kwargs = dict(
                 encoding="utf-8",
                 decode_responses=True,
                 socket_connect_timeout=5,
                 socket_timeout=5,
+                socket_keepalive=True,
+                health_check_interval=30,
+                retry_on_timeout=True,
+            )
+            if insecure_tls and parsed.scheme == "rediss":
+                # Mitigación temporal: desactivar validación de certificado
+                extra_kwargs["ssl_cert_reqs"] = None  # type: ignore[assignment]
+                cache_logger.warning(
+                    "REDIS_INSECURE_TLS=1 activo: deshabilitando verificación de certificado TLS para Redis"
+                )
+            self._redis = aioredis.from_url(
+                self.redis_url,
+                **extra_kwargs,
             )
             
             # Verificar conexión
@@ -69,7 +88,44 @@ class CacheService:
             cache_logger.error("redis[asyncio] no está instalado")
             raise
         except Exception as e:
-            cache_logger.error(f"Error conectando a Redis: {e}")
+            # Fallback para Upstash: si falla TLS, intentar puerto no-TLS 6380
+            try:
+                from urllib.parse import urlparse
+                parsed = urlparse(self.redis_url)
+                if parsed.hostname and parsed.hostname.endswith(".upstash.io"):
+                    userinfo = ""
+                    if parsed.username or parsed.password:
+                        u = parsed.username or ""
+                        p = parsed.password or ""
+                        userinfo = f"{u}:{p}@" if (u or p) else ""
+                    fallback_url = f"redis://{userinfo}{parsed.hostname}:6380{parsed.path or '/0'}"
+                    cache_logger.warning(
+                        "Fallo TLS al conectar a Upstash; intentando fallback no-TLS en 6380",
+                        error=str(e),
+                    )
+                    from redis import asyncio as aioredis2
+                    self._redis = aioredis2.from_url(
+                        fallback_url,
+                        encoding="utf-8",
+                        decode_responses=True,
+                        socket_connect_timeout=5,
+                        socket_timeout=5,
+                        socket_keepalive=True,
+                        health_check_interval=30,
+                        retry_on_timeout=True,
+                    )
+                    await self._redis.ping()  # type: ignore[union-attr]
+                    self.redis_url = fallback_url
+                    self._connected = True
+                    cache_logger.info("CacheService conectado (fallback no-TLS)")
+                    return
+            except Exception as e2:
+                cache_logger.error(
+                    "Error conectando a Redis (TLS y fallback)",
+                    error_primary=str(e),
+                    error_fallback=str(e2),
+                )
+            # Si no hubo fallback o también falló, mantener estado desconectado y relanzar
             self._connected = False
             raise
 

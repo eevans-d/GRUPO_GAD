@@ -4,6 +4,7 @@ Tests para el comando start con botones.
 """
 
 import pytest
+pytest.importorskip("telegram", reason="python-telegram-bot no instalado en este entorno de test")
 from unittest.mock import AsyncMock, MagicMock
 from src.bot.commands.start import start
 

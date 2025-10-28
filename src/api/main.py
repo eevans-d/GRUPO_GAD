@@ -21,7 +21,7 @@ from src.api.routers import dashboard as dashboard_router
 from src.api.routers import websockets as websockets_router
 from src.api.middleware.websockets import websocket_event_emitter
 from src.api.middleware.government_rate_limiting import setup_government_rate_limiting
-from src.core.database import async_engine, init_db
+from src.core import database as db
 from src.core.logging import setup_logging
 from src.core.websocket_integration import (
     initialize_websocket_integrator,
@@ -79,7 +79,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             api_logger.warning("⚠️  Iniciando SIN base de datos (ALLOW_NO_DB=1). Solo endpoints sin DB funcionarán.")
             db_url = None
     if db_url:
-        init_db(db_url)
+        db.init_db(db_url)
     app.state.start_time = time.time()
     api_logger.info("Conexión a la base de datos establecida.")
     
@@ -105,7 +105,30 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     try:
         # Preferir REDIS_URL completa si está definida (permite rediss:// con TLS)
         import os
-        redis_url = os.getenv("REDIS_URL")
+        from urllib.parse import urlparse
+
+        def _sanitize_redis_url(url: str) -> str:
+            try:
+                parsed = urlparse(url)
+                # Construir forma segura sin credenciales
+                netloc = parsed.hostname or "localhost"
+                if parsed.port:
+                    netloc = f"{netloc}:{parsed.port}"
+                path = parsed.path or "/0"
+                return f"{parsed.scheme}://{netloc}{path}"
+            except Exception:
+                return "<invalid>"
+
+        # Priorizar URL TLS de Upstash si existe
+        raw_upstash_tls = os.getenv("UPSTASH_REDIS_TLS_URL")
+        raw_redis_url = os.getenv("REDIS_URL")
+        raw_upstash_url = os.getenv("UPSTASH_REDIS_URL")
+        redis_url = raw_upstash_tls.strip() if isinstance(raw_upstash_tls, str) else None
+        if not redis_url:
+            redis_url = raw_redis_url.strip() if isinstance(raw_redis_url, str) else None
+        if not redis_url:
+            # Compatibilidad con proveedores que exponen UPSTASH_REDIS_URL
+            redis_url = raw_upstash_url.strip() if isinstance(raw_upstash_url, str) else None
 
         # Backwards-compat: construir desde componentes si no se definió REDIS_URL
         if not redis_url:
@@ -120,6 +143,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
 
         if redis_url:
+            # No forzar cambios de puerto: respetar el que viene de la URL del proveedor (Upstash suele usar 6379 para TLS)
+            try:
+                parsed0 = urlparse(redis_url)
+                if parsed0.scheme == "rediss" and parsed0.hostname and parsed0.hostname.endswith(".upstash.io"):
+                    api_logger.info(
+                        "Usando Redis TLS de Upstash",
+                        redis_url_sanitized=_sanitize_redis_url(redis_url),
+                        port=parsed0.port or 6379,
+                    )
+            except Exception:
+                pass
+            api_logger.info(
+                "Detectada configuración Redis",
+                redis_url_sanitized=_sanitize_redis_url(redis_url),
+                source=(
+                    "UPSTASH_REDIS_TLS_URL" if raw_upstash_tls else
+                    ("REDIS_URL/UPSTASH_REDIS_URL" if (raw_redis_url or raw_upstash_url) else "settings+REDIS_*")
+                ),
+            )
             pubsub = RedisWebSocketPubSub(redis_url)
             websocket_manager.set_pubsub(pubsub)
             await pubsub.start(websocket_manager)
@@ -133,9 +175,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             app.state.cache_service = cache_service
             api_logger.info("CacheService iniciado correctamente")
         else:
-            api_logger.warning("Redis no configurado - CacheService no disponible")
+            # Log extendido para ayudar a diagnosticar casos donde la variable existe pero está vacía o con espacios
+            env_present = "REDIS_URL" in os.environ or "UPSTASH_REDIS_URL" in os.environ
+            api_logger.warning(
+                "Redis no configurado - CacheService no disponible",
+                env_present=env_present,
+                REDIS_URL_len=len(os.environ.get("REDIS_URL", "")),
+                UPSTASH_REDIS_URL_len=len(os.environ.get("UPSTASH_REDIS_URL", "")),
+            )
     except Exception as e:
-        api_logger.error(f"No se pudo iniciar pub/sub Redis o CacheService: {e}")
+        api_logger.error(f"No se pudo iniciar pub/sub Redis o CacheService: {e}", exc_info=True)
     
     yield
     
@@ -165,8 +214,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         pass
     
     api_logger.info("Cerrando conexión a la base de datos...")
-    if async_engine:
-        await async_engine.dispose()
+    if db.async_engine:
+        await db.async_engine.dispose()
     api_logger.info("Conexión a la base de datos cerrada.")
 
 
@@ -404,13 +453,31 @@ async def health_ready():
     Verifica estado de todas las dependencias críticas.
     """
     from sqlalchemy import text
-    from src.core.database import async_engine
     
     checks = {}
     
     # Check Database
     try:
-        async with async_engine.connect() as conn:
+        # Intento de auto-reparación si el motor no fue inicializado por alguna razón
+        if db.async_engine is None:
+            try:
+                _s = get_settings()
+                _db_url = _s.assemble_db_url() if hasattr(_s, "assemble_db_url") else None
+                if not _db_url:
+                    import os as _os
+                    _db_url = _os.getenv("DATABASE_URL")
+                    if _db_url and "+asyncpg" not in _db_url:
+                        if _db_url.startswith("postgresql://"):
+                            _db_url = _db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+                        elif _db_url.startswith("postgres://"):
+                            _db_url = _db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+                if _db_url:
+                    db.init_db(_db_url)
+                    api_logger.warning("DB engine no estaba inicializado; inicializado durante health_ready")
+            except Exception as _e:
+                api_logger.error("Auto-inicialización de DB en health_ready falló", error=_e, exc_info=True)
+
+        async with db.async_engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
         checks["database"] = "ok"
     except Exception as e:

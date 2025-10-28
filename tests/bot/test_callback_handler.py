@@ -4,6 +4,8 @@ Tests para callback_handler.
 """
 
 import pytest
+# Saltar estos tests si no está instalado python-telegram-bot
+pytest.importorskip("telegram", reason="python-telegram-bot no instalado en este entorno de test")
 from unittest.mock import AsyncMock, MagicMock
 from src.bot.handlers.callback_handler import (
     handle_callback_query,

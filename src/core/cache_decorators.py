@@ -20,6 +20,26 @@ cache_logger = get_logger(__name__)
 # Type variables
 F = TypeVar("F", bound=Callable[..., Awaitable[Any]])
 
+# Permite a los tests inyectar un CacheService falso parcheando este módulo.
+# En producción, si este override es None, usaremos src.core.cache._cache_service.
+_cache_service: Optional[Any] = None
+
+
+def _get_effective_cache_service() -> Optional[Any]:
+    """Devuelve el CacheService efectivo.
+
+    Prioridad:
+    1) Variable local parcheable en tests: src.core.cache_decorators._cache_service
+    2) Instancia global real: src.core.cache._cache_service
+    """
+    if _cache_service is not None:
+        return _cache_service
+    try:
+        from src.core.cache import _cache_service as _global_cache_service  # type: ignore
+        return _global_cache_service
+    except Exception:
+        return None
+
 
 def _generate_cache_key(func_name: str, args: tuple, kwargs: dict) -> str:
     """
@@ -85,11 +105,9 @@ def cache_result(
     def decorator(func: F) -> F:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs) -> Any:
-            # Import here to avoid circular imports
-            from src.core.cache import _cache_service
-            
             # Skip if cache not initialized
-            if _cache_service is None:
+            _svc = _get_effective_cache_service()
+            if _svc is None:
                 cache_logger.debug(f"Cache not initialized, calling {func.__name__} directly")
                 return await func(*args, **kwargs)
             
@@ -98,7 +116,7 @@ def cache_result(
             
             try:
                 # Try to get from cache
-                cached_result = await _cache_service.get(cache_key)
+                cached_result = await _svc.get(cache_key)
                 if cached_result is not None:
                     cache_logger.debug(f"Cache HIT: {cache_key}")
                     return cached_result
@@ -112,7 +130,7 @@ def cache_result(
             
             # Store in cache
             try:
-                await _cache_service.set(
+                await _svc.set(
                     key=cache_key,
                     value=result,
                     ttl=ttl_seconds  # TTL in seconds
@@ -146,16 +164,14 @@ def invalidate_cache(pattern: str) -> Callable[[F], F]:
     def decorator(func: F) -> F:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs) -> Any:
-            # Import here to avoid circular imports
-            from src.core.cache import _cache_service
-            
+            _svc = _get_effective_cache_service()
             # Call the actual function first
             result = await func(*args, **kwargs)
             
             # Invalidate cache after successful execution
-            if _cache_service is not None:
+            if _svc is not None:
                 try:
-                    deleted_count = await _cache_service.delete_pattern(pattern)
+                    deleted_count = await _svc.delete_pattern(pattern)
                     if deleted_count > 0:
                         cache_logger.debug(f"Invalidated {deleted_count} cache entries matching pattern: {pattern}")
                 except Exception as e:
@@ -202,12 +218,11 @@ def cache_and_invalidate(
             
             # Invalidate related cache patterns
             if invalidate_patterns:
-                from src.core.cache import _cache_service
-                
-                if _cache_service is not None:
+                _svc = _get_effective_cache_service()
+                if _svc is not None:
                     for pattern in invalidate_patterns:
                         try:
-                            deleted_count = await _cache_service.delete_pattern(pattern)
+                            deleted_count = await _svc.delete_pattern(pattern)
                             if deleted_count > 0:
                                 cache_logger.debug(f"Invalidated {deleted_count} entries: {pattern}")
                         except Exception as e:

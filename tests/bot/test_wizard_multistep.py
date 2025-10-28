@@ -2,6 +2,9 @@
 """
 Tests para el wizard multi-step de creación de tareas.
 """
+import pytest
+# Saltar estos tests si no está instalado python-telegram-bot
+pytest.importorskip("telegram", reason="python-telegram-bot no instalado en este entorno de test")
 
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
