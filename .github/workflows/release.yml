@@ -188,7 +188,8 @@ jobs:
             ### ✅ Verification
             After deployment, verify the release:
             ```bash
-            curl -f https://your-domain.com/api/v1/health
+            curl -f https://your-domain.com/health
+            curl -f https://your-domain.com/health/ready
             curl -f https://your-domain.com/metrics
             ```
           draft: false

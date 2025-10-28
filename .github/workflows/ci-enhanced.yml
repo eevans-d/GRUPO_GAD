@@ -212,7 +212,8 @@ jobs:
       - name: Run E2E tests
         run: |
           # Health check
-          curl -f http://localhost:8000/api/v1/health
+          curl -f http://localhost:8000/health
+          curl -f http://localhost:8000/health/ready
           
           # Metrics check
           curl -f http://localhost:8000/metrics

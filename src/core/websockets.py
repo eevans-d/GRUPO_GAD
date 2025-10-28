@@ -79,6 +79,8 @@ class WSMessage(BaseModel):
     message_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     target_user_id: Optional[int] = None
     target_role: Optional[str] = None
+    # Canal/tema opcional para routing por suscripción
+    topic: Optional[str] = None
 
 
 class ConnectionInfo(BaseModel):
@@ -89,6 +91,8 @@ class ConnectionInfo(BaseModel):
     connection_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     connected_at: datetime = Field(default_factory=datetime.now)
     last_ping: datetime = Field(default_factory=datetime.now)
+    # Suscripciones a topics (MVP)
+    subscriptions: Set[str] = Field(default_factory=set)
     
     model_config = {
         "arbitrary_types_allowed": True
@@ -126,6 +130,33 @@ class WebSocketManager:
         self._pubsub = None
         
         ws_logger.info("WebSocketManager inicializado")
+
+    # --- Gestión de Suscripciones (MVP) ---
+    def subscribe(self, connection_id: str, topics: Set[str]) -> None:
+        if not topics:
+            return
+        ci = self.active_connections.get(connection_id)
+        if not ci:
+            return
+        ci.subscriptions.update(t.strip() for t in topics if isinstance(t, str) and t.strip())
+
+    def unsubscribe(self, connection_id: str, topics: Set[str]) -> None:
+        if not topics:
+            return
+        ci = self.active_connections.get(connection_id)
+        if not ci:
+            return
+        for t in list(topics):
+            if isinstance(t, str):
+                ci.subscriptions.discard(t.strip())
+
+    @staticmethod
+    def _should_receive(ci: "ConnectionInfo", topic: Optional[str]) -> bool:
+        # Si no hay topic en el mensaje: todos reciben
+        if not topic:
+            return True
+        # Si hay topic, solo conexiones suscritas lo reciben
+        return topic in ci.subscriptions
     
     async def connect(self, websocket: WebSocket, user_id: Optional[int] = None, 
                      user_role: Optional[str] = None) -> str:
@@ -315,7 +346,10 @@ class WebSocketManager:
         sent_count = 0
         
         for connection_id in connection_ids:
-            if await self.send_to_connection(connection_id, message):
+            ci = self.active_connections.get(connection_id)
+            if not ci:
+                continue
+            if self._should_receive(ci, message.topic) and await self.send_to_connection(connection_id, message):
                 sent_count += 1
         if sent_count:
             self.total_broadcasts += 1
@@ -340,7 +374,10 @@ class WebSocketManager:
         sent_count = 0
         
         for connection_id in connection_ids:
-            if await self.send_to_connection(connection_id, message):
+            ci = self.active_connections.get(connection_id)
+            if not ci:
+                continue
+            if self._should_receive(ci, message.topic) and await self.send_to_connection(connection_id, message):
                 sent_count += 1
         # Actualizar métricas si hubo envíos
         if sent_count:
@@ -371,7 +408,10 @@ class WebSocketManager:
         
         sent_count = 0
         for connection_id in connection_ids:
-            if await self.send_to_connection(connection_id, message):
+            ci = self.active_connections.get(connection_id)
+            if not ci:
+                continue
+            if self._should_receive(ci, message.topic) and await self.send_to_connection(connection_id, message):
                 sent_count += 1
         # Actualizar métricas si hubo envíos
         if sent_count:
@@ -407,15 +447,17 @@ class WebSocketManager:
             message_dict["timestamp"] = datetime.now().isoformat()
 
         exclude_connections: Set[str] = set()
+        topic = message_dict.get("topic")
         sent_count = 0
         for cid, info in list(self.active_connections.items()):
             if cid in exclude_connections:
                 continue
             try:
-                await info.websocket.send_text(json.dumps(message_dict))
-                if evt not in (EventType.CONNECTION_ACK, EventType.PING):
-                    self.total_messages_sent += 1
-                sent_count += 1
+                if self._should_receive(info, topic):
+                    await info.websocket.send_text(json.dumps(message_dict))
+                    if evt not in (EventType.CONNECTION_ACK, EventType.PING):
+                        self.total_messages_sent += 1
+                    sent_count += 1
             except Exception:
                 await self.disconnect(cid)
                 self.total_send_errors += 1

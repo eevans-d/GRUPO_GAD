@@ -154,6 +154,7 @@
         </div>
 
         <div class="controls">
+            <input id="tokenInput" type="text" placeholder="JWT (opcional)" style="flex:1; min-width:280px; padding:8px;" />
             <button id="connectBtn" onclick="connect()">🔌 Conectar</button>
             <button id="disconnectBtn" onclick="disconnect()" disabled>🔌 Desconectar</button>
             <button id="dashboardBtn" onclick="requestDashboard()" disabled>📊 Dashboard</button>
@@ -196,6 +197,8 @@
             errorCount: 0
         };
         let uptimeInterval = null;
+        let reconnectAttempts = 0;
+        let lastSubscribedEvents = ['task_created', 'task_updated', 'dashboard_update', 'notification'];
 
         function connect() {
             if (websocket && websocket.readyState === WebSocket.OPEN) {
@@ -203,7 +206,10 @@
                 return;
             }
 
-            const wsUrl = `ws://${window.location.host}/ws/connect`;
+            const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+            const token = (document.getElementById('tokenInput').value || '').trim();
+            const query = token ? `?token=${encodeURIComponent(token)}` : '';
+            const wsUrl = `${protocol}://${window.location.host}/ws/connect${query}`;
             addMessage(`🔌 Conectando a ${wsUrl}...`, 'info');
 
             websocket = new WebSocket(wsUrl);
@@ -213,9 +219,15 @@
                 updateStatus('connected', 'Conectado');
                 updateButtons(true);
                 addMessage('✅ Conexión WebSocket establecida', 'success');
+                reconnectAttempts = 0; // reset backoff al conectar
 
                 // Iniciar contador de uptime
                 uptimeInterval = setInterval(updateUptime, 1000);
+
+                // Re-suscribirse automáticamente si procede
+                if (lastSubscribedEvents && lastSubscribedEvents.length > 0) {
+                    subscribe(lastSubscribedEvents);
+                }
             };
 
             websocket.onmessage = function (event) {
@@ -243,6 +255,11 @@
                     addMessage(`❌ Conexión cerrada inesperadamente (código: ${event.code})`, 'error');
                     stats.errorCount++;
                     updateStats();
+                    // Intentar reconectar con backoff exponencial simple (máx 30s)
+                    const delay = Math.min(30000, 1000 * Math.pow(2, reconnectAttempts));
+                    reconnectAttempts++;
+                    addMessage(`⏳ Reintentando conexión en ${Math.round(delay/1000)}s...`, 'info');
+                    setTimeout(connect, delay);
                 }
             };
 
@@ -355,10 +372,10 @@
             sendMessage('metrics_update');
         }
 
-        function subscribe() {
-            sendMessage('subscribe', {
-                events: ['task_created', 'task_updated', 'dashboard_update', 'notification']
-            });
+        function subscribe(events) {
+            const evts = events || ['task_created', 'task_updated', 'dashboard_update', 'notification'];
+            lastSubscribedEvents = evts.slice();
+            sendMessage('subscribe', { events: evts });
         }
 
         function addMessage(text, type = 'info') {

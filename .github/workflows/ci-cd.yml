@@ -241,7 +241,8 @@ jobs:
       - name: 🧪 Smoke test staging
         run: |
           sleep 10
-          curl -f https://staging.grupogad.gob.ec/api/v1/health || exit 1
+          curl -f https://staging.grupogad.gob.ec/health || exit 1
+          curl -f https://staging.grupogad.gob.ec/health/ready || exit 1
       
       - name: 📢 Notify deployment
         if: always()
@@ -290,7 +291,8 @@ jobs:
           sleep 15
           
           # Health check
-          curl -f https://api.grupogad.gob.ec/api/v1/health || exit 1
+          curl -f https://api.grupogad.gob.ec/health || exit 1
+          curl -f https://api.grupogad.gob.ec/health/ready || exit 1
           
           # Metrics check
           curl -f https://api.grupogad.gob.ec/metrics || exit 1

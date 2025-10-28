@@ -117,7 +117,8 @@ jobs:
           sleep 30  # Esperar a que el servicio esté listo
           
           # Smoke tests básicos
-          curl -f https://staging.grupogad.com/api/v1/health || exit 1
+          curl -f https://staging.grupogad.com/health || exit 1
+          curl -f https://staging.grupogad.com/health/ready || exit 1
           curl -f https://staging.grupogad.com/metrics || exit 1
           
           echo "✅ Staging smoke tests passed"
@@ -152,7 +153,8 @@ jobs:
           sleep 30  # Esperar a que el servicio esté listo
           
           # Smoke tests básicos
-          curl -f https://grupogad.com/api/v1/health || exit 1
+          curl -f https://grupogad.com/health || exit 1
+          curl -f https://grupogad.com/health/ready || exit 1
           curl -f https://grupogad.com/metrics || exit 1
           
           echo "✅ Production smoke tests passed"

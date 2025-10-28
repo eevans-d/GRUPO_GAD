@@ -319,13 +319,28 @@ async def handle_subscription(connection_id: str, data: dict, user_info: Optiona
     """
     events = data.get("events", [])
     
-    ws_router_logger.info(
-        f"Cliente {connection_id} suscrito a eventos",
-        events=events,
-        user_id=user_info.get("user_id") if user_info else None
-    )
-    
-    # TODO: Implementar lógica de suscripciones específicas
+    # Registrar suscripciones en el manager
+    try:
+        from typing import Set as _Set
+        topics: _Set[str] = set()
+        for e in events:
+            if isinstance(e, str) and e.strip():
+                topics.add(e.strip())
+        if topics:
+            websocket_manager.subscribe(connection_id, topics)
+            ws_router_logger.info(
+                f"Cliente {connection_id} suscrito a eventos",
+                events=list(topics),
+                user_id=user_info.get("user_id") if user_info else None
+            )
+        else:
+            ws_router_logger.info(
+                f"Cliente {connection_id} solicitó suscripción vacía",
+                user_id=user_info.get("user_id") if user_info else None
+            )
+    except Exception as _e:
+        ws_router_logger.error("Error registrando suscripción", error=_e)
+
     response = WSMessage(
         event_type=EventType.NOTIFICATION,
         data={
@@ -348,13 +363,21 @@ async def handle_unsubscription(connection_id: str, data: dict, user_info: Optio
     """
     events = data.get("events", [])
     
-    ws_router_logger.info(
-        f"Cliente {connection_id} desuscrito de eventos",
-        events=events,
-        user_id=user_info.get("user_id") if user_info else None
-    )
-    
-    # TODO: Implementar lógica de desuscripciones
+    try:
+        from typing import Set as _Set
+        topics: _Set[str] = set()
+        for e in events:
+            if isinstance(e, str) and e.strip():
+                topics.add(e.strip())
+        if topics:
+            websocket_manager.unsubscribe(connection_id, topics)
+            ws_router_logger.info(
+                f"Cliente {connection_id} desuscrito de eventos",
+                events=list(topics),
+                user_id=user_info.get("user_id") if user_info else None
+            )
+    except Exception as _e:
+        ws_router_logger.error("Error registrando desuscripción", error=_e)
 
 
 @router.get("/stats")

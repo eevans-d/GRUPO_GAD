@@ -316,7 +316,12 @@ async def max_body_size_middleware(
     return response
 
 # --- Middleware CORS ---
-cors_origins = getattr(settings, 'cors_origins_list', []) or getattr(settings, 'ALLOWED_HOSTS', [])
+# Endurecer en producción: solo CORS_ALLOWED_ORIGINS; en dev permitir fallback a ALLOWED_HOSTS
+_env = getattr(settings, 'ENVIRONMENT', 'development')
+if _env == 'production':
+    cors_origins = getattr(settings, 'cors_origins_list', [])
+else:
+    cors_origins = getattr(settings, 'cors_origins_list', []) or getattr(settings, 'ALLOWED_HOSTS', [])
 cors_credentials = bool(getattr(settings, 'CORS_ALLOW_CREDENTIALS', False))
 app.add_middleware(
     CORSMiddleware,
