@@ -143,17 +143,27 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
 
         if redis_url:
-            # No forzar cambios de puerto: respetar el que viene de la URL del proveedor (Upstash suele usar 6379 para TLS)
+            # Ajuste Upstash TLS: si es rediss://*.upstash.io y no usa 6380, cambiar a 6380
             try:
-                parsed0 = urlparse(redis_url)
-                if parsed0.scheme == "rediss" and parsed0.hostname and parsed0.hostname.endswith(".upstash.io"):
-                    api_logger.info(
-                        "Usando Redis TLS de Upstash",
-                        redis_url_sanitized=_sanitize_redis_url(redis_url),
-                        port=parsed0.port or 6379,
-                    )
-            except Exception:
-                pass
+                parsed0 = urlparse(redis_url.strip())
+                host = (parsed0.hostname or "").lower()
+                if parsed0.scheme == "rediss" and host.endswith(".upstash.io"):
+                    tls_port = 6380
+                    # Reconstruir URL manteniendo userinfo si existe
+                    userinfo = ""
+                    if parsed0.username or parsed0.password:
+                        u = parsed0.username or ""
+                        p = parsed0.password or ""
+                        userinfo = f"{u}:{p}@" if (u or p) else ""
+                    path = parsed0.path or "/0"
+                    if parsed0.port != tls_port:
+                        redis_url = f"rediss://{userinfo}{host}:{tls_port}{path}"
+                        api_logger.info(
+                            "Ajuste Upstash TLS: redirigido a 6380",
+                            redis_url_sanitized=_sanitize_redis_url(redis_url)
+                        )
+            except Exception as ex:
+                api_logger.warning("No se pudo aplicar ajuste Upstash TLS", error=str(ex))
             api_logger.info(
                 "Detectada configuración Redis",
                 redis_url_sanitized=_sanitize_redis_url(redis_url),
@@ -458,7 +468,7 @@ async def health_ready():
     
     # Check Database
     try:
-        # Intento de auto-reparación si el motor no fue inicializado por alguna razón
+        # Auto-reparación si el motor no fue inicializado por alguna razón
         if db.async_engine is None:
             try:
                 _s = get_settings()
@@ -483,7 +493,7 @@ async def health_ready():
     except Exception as e:
         checks["database"] = f"error: {str(e)}"
         api_logger.error("Health check DB failed", error=e)
-    
+
     # Check Redis (si está habilitado)
     try:
         if hasattr(app.state, 'cache_service') and app.state.cache_service:
