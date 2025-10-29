@@ -1,0 +1,5 @@
+src/bot/handlers/wizard_text_handler.py:321:9: error: Unexpected indent 
+[syntax]
+            return
+            ^
+Found 1 error in 1 file (errors prevented further checking)

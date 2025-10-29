@@ -1,0 +1,1432 @@
+************* Module src.bot.handlers.wizard_text_handler
+src/bot/handlers/wizard_text_handler.py:321:8: E0001: Parsing failed: 'unexpected indent (src.bot.handlers.wizard_text_handler, line 321)' (syntax-error)
+************* Module src.api.dependencies
+src/api/dependencies.py:7:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/dependencies.py:8:0: E0401: Unable to import 'fastapi.security' (import-error)
+src/api/dependencies.py:9:0: E0401: Unable to import 'jose' (import-error)
+src/api/dependencies.py:10:0: E0401: Unable to import 'jose.exceptions' (import-error)
+src/api/dependencies.py:12:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/dependencies.py:16:0: E0611: No name 'usuario' in module 'src.api.models' (no-name-in-module)
+src/api/dependencies.py:38:8: W0707: Consider explicitly re-raising using 'except (JWTError, ValidationError) as exc' and 'raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Could not validate credentials') from exc' (raise-missing-from)
+************* Module src.api.main
+src/api/main.py:79:0: C0301: Line too long (117/100) (line-too-long)
+src/api/main.py:85:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:89:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:100:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:175:0: C0301: Line too long (113/100) (line-too-long)
+src/api/main.py:183:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:191:0: C0301: Line too long (116/100) (line-too-long)
+src/api/main.py:201:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:203:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:207:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:228:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:245:0: C0301: Line too long (105/100) (line-too-long)
+src/api/main.py:259:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:266:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:276:0: C0301: Line too long (110/100) (line-too-long)
+src/api/main.py:284:0: C0301: Line too long (113/100) (line-too-long)
+src/api/main.py:289:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:293:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:299:21: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:327:0: C0301: Line too long (103/100) (line-too-long)
+src/api/main.py:350:0: C0301: Line too long (102/100) (line-too-long)
+src/api/main.py:371:21: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:375:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:387:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:400:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:402:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:411:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:430:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:434:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:441:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:445:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:449:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:475:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:477:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:495:0: C0301: Line too long (109/100) (line-too-long)
+src/api/main.py:497:0: C0301: Line too long (108/100) (line-too-long)
+src/api/main.py:510:0: C0301: Line too long (107/100) (line-too-long)
+src/api/main.py:516:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:524:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:533:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:536:59: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:539:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:541:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/main.py:572:0: C0304: Final newline missing (missing-final-newline)
+src/api/main.py:9:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/main.py:10:0: E0401: Unable to import 'fastapi.exceptions' (import-error)
+src/api/main.py:11:0: E0401: Unable to import 'fastapi.responses' (import-error)
+src/api/main.py:12:0: E0401: Unable to import 'fastapi.staticfiles' (import-error)
+src/api/main.py:13:0: E0401: Unable to import 'starlette' (import-error)
+src/api/main.py:14:0: E0401: Unable to import 'starlette.middleware.cors' (import-error)
+src/api/main.py:15:0: E0401: Unable to import 'uvicorn.middleware.proxy_headers' (import-error)
+src/api/main.py:16:0: E0401: Unable to import 'starlette.responses' (import-error)
+src/api/main.py:53:0: R0914: Too many local variables (31/15) (too-many-locals)
+src/api/main.py:53:19: W0621: Redefining name 'app' from outer scope (line 235) (redefined-outer-name)
+src/api/main.py:64:8: C0415: Import outside toplevel (os) (import-outside-toplevel)
+src/api/main.py:74:8: C0415: Import outside toplevel (os) (import-outside-toplevel)
+src/api/main.py:75:8: R1720: Unnecessary "else" after "raise", remove the "else" and de-indent the code inside it (no-else-raise)
+src/api/main.py:199:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:107:8: C0415: Import outside toplevel (os) (import-outside-toplevel)
+src/api/main.py:108:8: C0415: Import outside toplevel (urllib.parse.urlparse) (import-outside-toplevel)
+src/api/main.py:119:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:168:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:218:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:226:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:53:0: R0912: Too many branches (25/12) (too-many-branches)
+src/api/main.py:53:0: R0915: Too many statements (120/50) (too-many-statements)
+src/api/main.py:286:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:276:8: W0404: Reimport 'get_settings' (imported line 18) (reimported)
+src/api/main.py:276:8: C0415: Import outside toplevel (config.settings.get_settings) (import-outside-toplevel)
+src/api/main.py:298:0: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/main.py:350:0: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/main.py:370:0: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/main.py:404:4: C0415: Import outside toplevel (src.core.performance.performance_middleware) (import-outside-toplevel)
+src/api/main.py:425:0: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/main.py:474:4: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/main.py:474:4: C0415: Import outside toplevel (sqlalchemy.text) (import-outside-toplevel)
+src/api/main.py:502:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:496:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:486:20: C0415: Import outside toplevel (os) (import-outside-toplevel)
+src/api/main.py:479:4: R1702: Too many nested blocks (6/5) (too-many-nested-blocks)
+src/api/main.py:513:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:522:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:531:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/main.py:469:0: R0912: Too many branches (15/12) (too-many-branches)
+src/api/main.py:469:0: R0915: Too many statements (51/50) (too-many-statements)
+src/api/main.py:560:0: C0413: Import "from src.api.routers import telegram_auth, telegram_tasks, usuarios" should be placed at the top of the module (wrong-import-position)
+src/api/main.py:16:0: C0412: Imports from package starlette are not grouped (ungrouped-imports)
+************* Module src.api.models
+src/api/models.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+src/api/models.py:3:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models.py:13:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+src/api/models.py:14:0: E0401: Unable to import 'sqlalchemy.sql' (import-error)
+src/api/models.py:16:0: E0401: Unable to import 'src.api.database' (import-error)
+src/api/models.py:20:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:21:4: C0103: Class constant name "uno" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:22:4: C0103: Class constant name "dos" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:23:4: C0103: Class constant name "tres" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:26:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:27:4: C0103: Class constant name "activo" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:28:4: C0103: Class constant name "en_tarea" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:29:4: C0103: Class constant name "en_licencia" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:32:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:33:4: C0103: Class constant name "programada" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:34:4: C0103: Class constant name "en_curso" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:35:4: C0103: Class constant name "finalizada" doesn't conform to UPPER_CASE naming style (invalid-name)
+src/api/models.py:58:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:58:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/api/models.py:73:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:73:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/api/models.py:93:0: C0115: Missing class docstring (missing-class-docstring)
+src/api/models.py:93:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+************* Module src.api.middleware.__init__
+src/api/middleware/__init__.py:4:0: C0304: Final newline missing (missing-final-newline)
+src/api/middleware/__init__.py:4:0: C0304: Final newline missing (missing-final-newline)
+************* Module src.api.middleware.government_rate_limiting
+src/api/middleware/government_rate_limiting.py:31:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:35:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:40:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:47:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:50:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:53:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:57:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:62:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:66:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:85:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:90:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:99:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:103:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:117:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:122:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:125:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:128:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:132:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:137:0: C0301: Line too long (102/100) (line-too-long)
+src/api/middleware/government_rate_limiting.py:138:0: C0301: Line too long (115/100) (line-too-long)
+src/api/middleware/government_rate_limiting.py:154:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:157:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:162:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/government_rate_limiting.py:12:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/middleware/government_rate_limiting.py:13:0: E0401: Unable to import 'fastapi.responses' (import-error)
+src/api/middleware/government_rate_limiting.py:14:0: E0401: Unable to import 'starlette.middleware.base' (import-error)
+src/api/middleware/government_rate_limiting.py:118:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/middleware/government_rate_limiting.py:112:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module src.api.middleware.logging
+src/api/middleware/logging.py:44:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:49:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:52:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:65:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:71:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:81:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:92:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:97:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:109:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:130:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:134:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:145:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:151:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:160:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:162:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:165:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:173:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:191:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:194:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:206:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:208:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/logging.py:216:0: C0304: Final newline missing (missing-final-newline)
+src/api/middleware/logging.py:12:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/middleware/logging.py:13:0: E0401: Unable to import 'starlette.middleware.base' (import-error)
+src/api/middleware/logging.py:41:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/middleware/logging.py:21:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+src/api/middleware/logging.py:128:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/middleware/logging.py:113:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+src/api/middleware/logging.py:187:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/middleware/logging.py:177:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module src.api.middleware.websockets
+src/api/middleware/websockets.py:36:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:41:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:49:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:51:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:55:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:72:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:74:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:75:66: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:96:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:114:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:116:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:117:66: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:136:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:138:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:151:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:153:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:160:44: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:163:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:165:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:174:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:184:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:195:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:198:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:205:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:213:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:223:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:228:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:235:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:241:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:246:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:255:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:257:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:264:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:270:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:272:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:278:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:282:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:284:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:303:82: C0303: Trailing whitespace (trailing-whitespace)
+src/api/middleware/websockets.py:332:0: C0304: Final newline missing (missing-final-newline)
+src/api/middleware/websockets.py:171:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/middleware/websockets.py:196:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module src.api.models.__init__
+src/api/models/__init__.py:24:0: C0304: Final newline missing (missing-final-newline)
+************* Module src.api.models.associations
+src/api/models/associations.py:20:0: C0305: Trailing newlines (trailing-newlines)
+src/api/models/associations.py:6:0: E0401: Unable to import 'sqlalchemy' (import-error)
+************* Module src.api.models.base
+src/api/models/base.py:10:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/base.py:11:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/base.py:12:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/models/base.py:13:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+src/api/models/base.py:14:0: E0401: Unable to import 'sqlalchemy.types' (import-error)
+src/api/models/base.py:26:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/models/base.py:27:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/api/models/base.py:17:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+src/api/models/base.py:42:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/models/base.py:43:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/api/models/base.py:48:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/api/models/base.py:53:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module src.api.models.efectivo
+src/api/models/efectivo.py:10:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/efectivo.py:11:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/efectivo.py:12:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/efectivo.py:13:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+src/api/models/efectivo.py:14:0: E0401: Unable to import 'sqlalchemy.types' (import-error)
+src/api/models/efectivo.py:32:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+************* Module src.api.models.historial_estado
+src/api/models/historial_estado.py:10:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/historial_estado.py:11:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/historial_estado.py:12:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+************* Module src.api.models.metrica_tarea
+src/api/models/metrica_tarea.py:9:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/metrica_tarea.py:10:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/metrica_tarea.py:11:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+************* Module src.api.models.tarea
+src/api/models/tarea.py:12:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/tarea.py:21:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/tarea.py:22:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/tarea.py:23:0: E0401: Unable to import 'sqlalchemy.ext.hybrid' (import-error)
+src/api/models/tarea.py:24:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+************* Module src.api.models.usuario
+src/api/models/usuario.py:12:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/models/usuario.py:13:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/usuario.py:14:0: E0401: Unable to import 'sqlalchemy.dialects.postgresql' (import-error)
+src/api/models/usuario.py:15:0: E0401: Unable to import 'sqlalchemy.orm' (import-error)
+************* Module src.api.routers.__init__
+src/api/routers/__init__.py:16:0: C0301: Line too long (104/100) (line-too-long)
+************* Module src.api.routers
+src/api/routers/__init__.py:6:0: E0401: Unable to import 'fastapi' (import-error)
+************* Module src.api.routers.admin
+src/api/routers/admin.py:58:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/admin.py:63:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/admin.py:78:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/admin.py:82:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/admin.py:87:0: C0304: Final newline missing (missing-final-newline)
+src/api/routers/admin.py:12:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/admin.py:14:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/admin.py:17:0: E0611: No name 'usuario' in module 'src.api.models' (no-name-in-module)
+src/api/routers/admin.py:40:4: W0613: Unused argument 'db' (unused-argument)
+************* Module src.api.routers.auth
+src/api/routers/auth.py:35:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:44:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:47:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:71:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:75:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:87:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:96:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:102:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:105:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/auth.py:8:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/auth.py:9:0: E0401: Unable to import 'fastapi.security' (import-error)
+src/api/routers/auth.py:10:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+************* Module src.api.routers.cache
+src/api/routers/cache.py:10:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/cache.py:11:0: E0401: Unable to import 'fastapi.responses' (import-error)
+src/api/routers/cache.py:41:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error obteniendo estadísticas: {str(e)}') from e' (raise-missing-from)
+src/api/routers/cache.py:63:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/api/routers/cache.py:76:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error invalidando key: {str(e)}') from e' (raise-missing-from)
+src/api/routers/cache.py:112:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error invalidando patrón: {str(e)}') from e' (raise-missing-from)
+src/api/routers/cache.py:139:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error limpiando caché: {str(e)}') from e' (raise-missing-from)
+************* Module src.api.routers.dashboard
+src/api/routers/dashboard.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+src/api/routers/dashboard.py:4:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/dashboard.py:5:0: E0401: Unable to import 'fastapi.responses' (import-error)
+src/api/routers/dashboard.py:13:26: W0613: Unused argument 'current_admin' (unused-argument)
+************* Module src.api.routers.efectivos_mock
+src/api/routers/efectivos_mock.py:23:55: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:45:70: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:62:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:83:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:95:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:101:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:104:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:116:0: C0301: Line too long (101/100) (line-too-long)
+src/api/routers/efectivos_mock.py:122:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/efectivos_mock.py:132:0: C0304: Final newline missing (missing-final-newline)
+src/api/routers/efectivos_mock.py:13:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/efectivos_mock.py:42:0: R0914: Too many local variables (20/15) (too-many-locals)
+src/api/routers/efectivos_mock.py:48:4: W0613: Unused argument 'current_user' (unused-argument)
+************* Module src.api.routers.geo
+src/api/routers/geo.py:62:0: C0301: Line too long (110/100) (line-too-long)
+src/api/routers/geo.py:20:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/geo.py:21:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/geo.py:22:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/geo.py:25:0: E0611: No name 'tarea' in module 'src.api.models' (no-name-in-module)
+src/api/routers/geo.py:46:0: R0914: Too many local variables (17/15) (too-many-locals)
+src/api/routers/geo.py:80:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/geo.py:105:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/geo.py:52:4: W0613: Unused argument 'current_user' (unused-argument)
+************* Module src.api.routers.health
+src/api/routers/health.py:18:0: C0301: Line too long (118/100) (line-too-long)
+src/api/routers/health.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:166:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:174:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:183:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:200:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:202:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:206:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:210:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:214:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:217:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:220:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:225:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:231:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:238:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:244:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:250:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:252:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:260:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:281:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:291:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:295:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:299:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:300:0: C0301: Line too long (156/100) (line-too-long)
+src/api/routers/health.py:301:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:305:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:308:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:310:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:332:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:339:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:343:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:346:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:351:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:375:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:379:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:382:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:387:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:392:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:397:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:403:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:445:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:450:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:456:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:461:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:471:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:476:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:486:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:504:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:508:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:511:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:520:54: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/health.py:9:0: E0401: Unable to import 'psutil' (import-error)
+src/api/routers/health.py:14:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/health.py:15:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/health.py:60:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:113:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail={'status': 'not_ready', 'error': str(e), 'timestamp': datetime.utcnow().isoformat()}) from e' (raise-missing-from)
+src/api/routers/health.py:152:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:194:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:268:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:318:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:294:8: E0401: Unable to import 'redis' (import-error)
+src/api/routers/health.py:294:8: C0415: Import outside toplevel (redis.asyncio) (import-outside-toplevel)
+src/api/routers/health.py:344:8: W0621: Redefining name 'status' from outer scope (line 14) (redefined-outer-name)
+src/api/routers/health.py:361:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:331:8: C0415: Import outside toplevel (src.core.websockets.websocket_manager) (import-outside-toplevel)
+src/api/routers/health.py:384:8: W0621: Redefining name 'status' from outer scope (line 14) (redefined-outer-name)
+src/api/routers/health.py:413:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:432:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/health.py:457:4: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/api/routers/health.py:495:30: W0613: Unused argument 'uptime_seconds' (unused-argument)
+src/api/routers/health.py:527:0: W0212: Access to a protected member _start_time of a client class (protected-access)
+src/api/routers/health.py:10:0: C0411: standard import "shutil" should be placed before third party import "psutil" (wrong-import-order)
+src/api/routers/health.py:11:0: C0411: standard import "datetime.datetime" should be placed before third party import "psutil" (wrong-import-order)
+src/api/routers/health.py:12:0: C0411: standard import "typing.Any" should be placed before third party import "psutil" (wrong-import-order)
+************* Module src.api.routers.metrics
+src/api/routers/metrics.py:36:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/metrics.py:39:0: C0304: Final newline missing (missing-final-newline)
+src/api/routers/metrics.py:8:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/metrics.py:9:0: E0401: Unable to import 'prometheus_client' (import-error)
+src/api/routers/metrics.py:34:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module src.api.routers.statistics
+src/api/routers/statistics.py:66:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:68:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:86:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:108:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:116:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:127:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:131:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:134:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:159:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:169:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:171:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:208:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:213:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:220:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:226:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/statistics.py:11:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/statistics.py:12:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/statistics.py:13:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/statistics.py:16:0: E0611: No name 'tarea' in module 'src.api.models' (no-name-in-module)
+src/api/routers/statistics.py:17:0: E0611: No name 'usuario' in module 'src.api.models' (no-name-in-module)
+src/api/routers/statistics.py:28:0: R0913: Too many arguments (6/5) (too-many-arguments)
+src/api/routers/statistics.py:28:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/api/routers/statistics.py:28:0: R0914: Too many local variables (25/15) (too-many-locals)
+src/api/routers/statistics.py:176:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error calculando estadísticas: {str(e)}') from e' (raise-missing-from)
+src/api/routers/statistics.py:229:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error invalidando estadísticas: {str(e)}') from e' (raise-missing-from)
+src/api/routers/statistics.py:12:0: W0611: Unused func imported from sqlalchemy (unused-import)
+************* Module src.api.routers.tasks
+src/api/routers/tasks.py:27:0: C0301: Line too long (110/100) (line-too-long)
+src/api/routers/tasks.py:37:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:100:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:103:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:124:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:133:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:151:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:154:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:170:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:173:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:180:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:243:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:246:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:270:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:273:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/tasks.py:9:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/tasks.py:11:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/tasks.py:15:0: E0611: No name 'usuario' in module 'src.api.models' (no-name-in-module)
+src/api/routers/tasks.py:52:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/tasks.py:77:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/tasks.py:91:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/tasks.py:198:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=500, detail='Internal error processing emergency request') from e' (raise-missing-from)
+src/api/routers/tasks.py:207:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/tasks.py:228:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/tasks.py:255:4: W0613: Unused argument 'current_user' (unused-argument)
+************* Module src.api.routers.telegram_auth
+src/api/routers/telegram_auth.py:43:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:65:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:71:0: C0301: Line too long (105/100) (line-too-long)
+src/api/routers/telegram_auth.py:73:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:89:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:111:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:119:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:126:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:135:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:153:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:161:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_auth.py:8:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/telegram_auth.py:9:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/telegram_auth.py:10:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/telegram_auth.py:13:0: E0401: Unable to import 'jwt' (import-error)
+src/api/routers/telegram_auth.py:91:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error autenticando usuario: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_auth.py:137:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error verificando usuario: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_auth.py:163:8: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token expirado') from exc' (raise-missing-from)
+src/api/routers/telegram_auth.py:168:8: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token inválido') from exc' (raise-missing-from)
+src/api/routers/telegram_auth.py:11:0: C0411: standard import "datetime.datetime" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" (wrong-import-order)
+src/api/routers/telegram_auth.py:12:0: C0411: standard import "typing.Optional" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" (wrong-import-order)
+src/api/routers/telegram_auth.py:12:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.api.routers.telegram_tasks
+src/api/routers/telegram_tasks.py:45:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:51:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:56:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:62:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:72:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:76:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:102:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:128:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:134:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:139:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:145:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:149:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:159:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:163:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:166:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:181:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:189:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:215:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:221:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:226:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:232:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:241:0: C0301: Line too long (107/100) (line-too-long)
+src/api/routers/telegram_tasks.py:246:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:255:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:277:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:281:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:287:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:294:0: C0301: Line too long (104/100) (line-too-long)
+src/api/routers/telegram_tasks.py:297:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/telegram_tasks.py:148:9: W0511: TODO: Add proper permission validation when assignment schema updated (fixme)
+src/api/routers/telegram_tasks.py:10:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/telegram_tasks.py:11:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/telegram_tasks.py:12:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/telegram_tasks.py:91:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/telegram_tasks.py:107:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error creando tarea: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_tasks.py:179:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/telegram_tasks.py:194:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error finalizando tarea: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_tasks.py:259:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error obteniendo tareas del usuario: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_tasks.py:301:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error obteniendo tarea: {str(e)}') from e' (raise-missing-from)
+src/api/routers/telegram_tasks.py:13:0: C0411: standard import "datetime.datetime" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" (wrong-import-order)
+src/api/routers/telegram_tasks.py:14:0: C0411: standard import "typing.List" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" (wrong-import-order)
+src/api/routers/telegram_tasks.py:12:0: W0611: Unused and_ imported from sqlalchemy (unused-import)
+src/api/routers/telegram_tasks.py:12:0: W0611: Unused or_ imported from sqlalchemy (unused-import)
+src/api/routers/telegram_tasks.py:14:0: W0611: Unused List imported from typing (unused-import)
+************* Module src.api.routers.users
+src/api/routers/users.py:8:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/users.py:9:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/users.py:13:0: E0611: No name 'usuario' in module 'src.api.models' (no-name-in-module)
+src/api/routers/users.py:31:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/users.py:45:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/users.py:73:4: W0613: Unused argument 'current_user' (unused-argument)
+src/api/routers/users.py:94:4: W0613: Unused argument 'current_user' (unused-argument)
+************* Module src.api.routers.usuarios
+src/api/routers/usuarios.py:31:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:50:0: C0301: Line too long (105/100) (line-too-long)
+src/api/routers/usuarios.py:75:0: C0301: Line too long (108/100) (line-too-long)
+src/api/routers/usuarios.py:87:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:93:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:120:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:126:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:134:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:141:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:145:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:147:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:174:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:180:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:184:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:194:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:197:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:199:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:225:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:231:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:234:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/usuarios.py:12:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/usuarios.py:13:0: E0401: Unable to import 'sqlalchemy.ext.asyncio' (import-error)
+src/api/routers/usuarios.py:14:0: E0401: Unable to import 'sqlalchemy' (import-error)
+src/api/routers/usuarios.py:32:4: C0115: Missing class docstring (missing-class-docstring)
+src/api/routers/usuarios.py:32:4: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/api/routers/usuarios.py:68:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error retrieving users: {str(e)}') from e' (raise-missing-from)
+src/api/routers/usuarios.py:98:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error retrieving user: {str(e)}') from e' (raise-missing-from)
+src/api/routers/usuarios.py:152:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error creating user: {str(e)}') from e' (raise-missing-from)
+src/api/routers/usuarios.py:204:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error updating user: {str(e)}') from e' (raise-missing-from)
+src/api/routers/usuarios.py:239:8: W0707: Consider explicitly re-raising using 'raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f'Error deleting user: {str(e)}') from e' (raise-missing-from)
+src/api/routers/usuarios.py:15:0: C0411: standard import "typing.List" should be placed before third party imports "fastapi.APIRouter", "sqlalchemy.ext.asyncio.AsyncSession", "sqlalchemy.select" (wrong-import-order)
+src/api/routers/usuarios.py:20:0: W0611: Unused cache_result imported from src.core.cache_decorators (unused-import)
+src/api/routers/usuarios.py:20:0: W0611: Unused cache_and_invalidate imported from src.core.cache_decorators (unused-import)
+************* Module src.api.routers.websockets
+src/api/routers/websockets.py:16:22: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:17:14: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:43:17: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:45:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:47:0: C0301: Line too long (104/100) (line-too-long)
+src/api/routers/websockets.py:48:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:65:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:79:0: C0301: Line too long (106/100) (line-too-long)
+src/api/routers/websockets.py:95:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:98:0: C0301: Line too long (102/100) (line-too-long)
+src/api/routers/websockets.py:106:0: C0325: Unnecessary parens after '=' keyword (superfluous-parens)
+src/api/routers/websockets.py:117:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:124:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:131:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:138:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:144:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:147:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:157:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:161:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:164:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:169:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:176:71: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:189:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:196:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:210:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:220:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:230:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:234:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:238:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:244:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:249:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:321:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:365:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:392:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:394:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/routers/websockets.py:424:0: C0304: Final newline missing (missing-final-newline)
+src/api/routers/websockets.py:424:0: C0301: Line too long (102/100) (line-too-long)
+src/api/routers/websockets.py:267:5: W0511: TODO: Implementar lógica real de dashboard (fixme)
+src/api/routers/websockets.py:291:5: W0511: TODO: Implementar lógica real de métricas (fixme)
+src/api/routers/websockets.py:10:0: E0401: Unable to import 'fastapi' (import-error)
+src/api/routers/websockets.py:11:0: E0401: Unable to import 'fastapi.security' (import-error)
+src/api/routers/websockets.py:12:0: E0401: Unable to import 'jose' (import-error)
+src/api/routers/websockets.py:13:0: E0401: Unable to import 'starlette.status' (import-error)
+src/api/routers/websockets.py:71:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:165:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:245:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:206:23: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:208:20: C0415: Import outside toplevel (datetime.datetime) (import-outside-toplevel)
+src/api/routers/websockets.py:257:29: W0613: Unused argument 'user_info' (unused-argument)
+src/api/routers/websockets.py:281:27: W0613: Unused argument 'user_info' (unused-argument)
+src/api/routers/websockets.py:341:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:324:8: C0415: Import outside toplevel (typing.Set) (import-outside-toplevel)
+src/api/routers/websockets.py:379:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/api/routers/websockets.py:367:8: C0415: Import outside toplevel (typing.Set) (import-outside-toplevel)
+src/api/routers/websockets.py:410:4: W0404: Reimport 'settings' (imported line 21) (reimported)
+src/api/routers/websockets.py:410:4: C0415: Import outside toplevel (config.settings.settings) (import-outside-toplevel)
+************* Module src.api.utils.__init__
+src/api/utils/__init__.py:4:0: C0304: Final newline missing (missing-final-newline)
+src/api/utils/__init__.py:4:0: C0304: Final newline missing (missing-final-newline)
+************* Module src.api.utils.logging
+src/api/utils/logging.py:32:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:48:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:52:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:62:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:65:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:74:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:76:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:95:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:97:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:104:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:108:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:116:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:118:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:121:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:130:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:132:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:139:0: C0301: Line too long (113/100) (line-too-long)
+src/api/utils/logging.py:149:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:158:0: C0301: Line too long (103/100) (line-too-long)
+src/api/utils/logging.py:168:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:176:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:186:20: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:187:26: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:188:24: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:201:0: C0303: Trailing whitespace (trailing-whitespace)
+src/api/utils/logging.py:208:0: C0304: Final newline missing (missing-final-newline)
+src/api/utils/logging.py:14:0: E0401: Unable to import 'fastapi' (import-error)
+************* Module src.app.main
+src/app/main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+src/app/main.py:1:0: E0401: Unable to import 'fastapi' (import-error)
+src/app/main.py:8:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module src.bot.main
+src/bot/main.py:9:0: E0401: Unable to import 'loguru' (import-error)
+src/bot/main.py:10:0: E0401: Unable to import 'telegram.ext' (import-error)
+************* Module src.bot.commands.__init__
+src/bot/commands/__init__.py:8:29: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/__init__.py:21:0: C0304: Final newline missing (missing-final-newline)
+************* Module src.bot.commands.crear_tarea
+src/bot/commands/crear_tarea.py:76:0: C0301: Line too long (108/100) (line-too-long)
+src/bot/commands/crear_tarea.py:82:0: C0304: Final newline missing (missing-final-newline)
+src/bot/commands/crear_tarea.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/crear_tarea.py:9:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/crear_tarea.py:17:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/crear_tarea.py:17:0: W0404: Reimport 'CallbackContext' (imported line 9) (reimported)
+src/bot/commands/crear_tarea.py:18:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/crear_tarea.py:19:0: R0914: Too many local variables (18/15) (too-many-locals)
+src/bot/commands/crear_tarea.py:78:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/bot/commands/crear_tarea.py:67:8: C0415: Import outside toplevel (config.settings.settings) (import-outside-toplevel)
+src/bot/commands/crear_tarea.py:10:0: C0411: standard import "typing.Any" should be placed before third party imports "telegram.Update", "telegram.ext.CallbackContext" (wrong-import-order)
+src/bot/commands/crear_tarea.py:17:0: C0411: third party import "telegram.ext.CallbackContext" should be placed before first party imports "src.bot.services.api_service.ApiService", "src.schemas.tarea.TareaCreate", "src.shared.constants.TaskType"  (wrong-import-order)
+src/bot/commands/crear_tarea.py:18:0: C0411: third party import "telegram.Bot" should be placed before first party imports "src.bot.services.api_service.ApiService", "src.schemas.tarea.TareaCreate", "src.shared.constants.TaskType"  (wrong-import-order)
+src/bot/commands/crear_tarea.py:17:0: C0412: Imports from package telegram are not grouped (ungrouped-imports)
+src/bot/commands/crear_tarea.py:10:0: W0611: Unused Any imported from typing (unused-import)
+************* Module src.bot.commands.estadisticas
+src/bot/commands/estadisticas.py:36:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:45:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:52:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:57:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:63:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:66:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:71:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:77:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:102:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:106:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:112:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:116:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:121:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:124:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:127:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:131:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:161:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:170:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:176:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:182:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:193:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:203:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:210:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:220:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:231:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/estadisticas.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/estadisticas.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/estadisticas.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/estadisticas.py:9:0: E0401: Unable to import 'loguru' (import-error)
+src/bot/commands/estadisticas.py:78:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/bot/commands/estadisticas.py:48:22: E1123: Unexpected keyword argument 'base_url' in constructor call (unexpected-keyword-arg)
+src/bot/commands/estadisticas.py:48:22: E1123: Unexpected keyword argument 'timeout' in constructor call (unexpected-keyword-arg)
+src/bot/commands/estadisticas.py:48:22: E1120: No value for argument 'api_url' in constructor call (no-value-for-parameter)
+src/bot/commands/estadisticas.py:18:4: W0613: Unused argument 'context' (unused-argument)
+src/bot/commands/estadisticas.py:90:40: W0613: Unused argument 'user_id' (unused-argument)
+src/bot/commands/estadisticas.py:179:8: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+src/bot/commands/estadisticas.py:10:0: C0411: standard import "datetime.datetime" should be placed before third party imports "telegram.Update", "telegram.ext.CallbackContext", "telegram.Bot", "loguru.logger" (wrong-import-order)
+src/bot/commands/estadisticas.py:10:0: W0611: Unused timedelta imported from datetime (unused-import)
+************* Module src.bot.commands.finalizar_tarea
+src/bot/commands/finalizar_tarea.py:15:0: C0301: Line too long (101/100) (line-too-long)
+src/bot/commands/finalizar_tarea.py:46:0: C0304: Final newline missing (missing-final-newline)
+src/bot/commands/finalizar_tarea.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/finalizar_tarea.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/finalizar_tarea.py:13:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/finalizar_tarea.py:13:0: W0404: Reimport 'CallbackContext' (imported line 7) (reimported)
+src/bot/commands/finalizar_tarea.py:14:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/finalizar_tarea.py:42:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/bot/commands/finalizar_tarea.py:31:8: C0415: Import outside toplevel (config.settings.settings) (import-outside-toplevel)
+src/bot/commands/finalizar_tarea.py:8:0: C0411: standard import "typing.Any" should be placed before third party imports "telegram.Update", "telegram.ext.CallbackContext" (wrong-import-order)
+src/bot/commands/finalizar_tarea.py:13:0: C0411: third party import "telegram.ext.CallbackContext" should be placed before first party import "src.bot.services.api_service.ApiService"  (wrong-import-order)
+src/bot/commands/finalizar_tarea.py:14:0: C0411: third party import "telegram.Bot" should be placed before first party import "src.bot.services.api_service.ApiService"  (wrong-import-order)
+src/bot/commands/finalizar_tarea.py:13:0: C0412: Imports from package telegram are not grouped (ungrouped-imports)
+src/bot/commands/finalizar_tarea.py:8:0: W0611: Unused Any imported from typing (unused-import)
+************* Module src.bot.commands.help
+src/bot/commands/help.py:25:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/help.py:29:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/help.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/help.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/help.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/help.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/help.py:12:0: E0001: Cannot import 'src.bot.handlers.wizard_text_handler' due to 'unexpected indent (src.bot.handlers.wizard_text_handler, line 321)' (syntax-error)
+************* Module src.bot.commands.historial
+src/bot/commands/historial.py:33:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:35:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:51:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:69:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:72:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:86:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:89:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:100:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:137:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:140:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:147:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:153:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:159:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:172:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:177:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:181:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:187:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:190:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:193:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:202:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:218:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:224:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:229:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:235:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:240:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/historial.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/historial.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/historial.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/historial.py:9:0: E0401: Unable to import 'loguru' (import-error)
+src/bot/commands/historial.py:108:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/bot/commands/historial.py:55:22: E1123: Unexpected keyword argument 'base_url' in constructor call (unexpected-keyword-arg)
+src/bot/commands/historial.py:55:22: E1123: Unexpected keyword argument 'timeout' in constructor call (unexpected-keyword-arg)
+src/bot/commands/historial.py:55:22: E1120: No value for argument 'api_url' in constructor call (no-value-for-parameter)
+src/bot/commands/historial.py:120:0: R0914: Too many local variables (22/15) (too-many-locals)
+src/bot/commands/historial.py:168:12: W0702: No exception type(s) specified (bare-except)
+src/bot/commands/historial.py:165:16: C0415: Import outside toplevel (datetime.datetime) (import-outside-toplevel)
+************* Module src.bot.commands.start
+src/bot/commands/start.py:24:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/start.py:29:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/start.py:32:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/start.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/commands/start.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/start.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/commands/start.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/commands/start.py:14:32: W0613: Unused argument 'context' (unused-argument)
+src/bot/commands/start.py:9:0: C0411: standard import "typing.Any" should be placed before third party imports "telegram.Update", "telegram.ext.CallbackContext", "telegram.Bot" (wrong-import-order)
+src/bot/commands/start.py:9:0: W0611: Unused Any imported from typing (unused-import)
+************* Module src.bot.handlers.__init__
+src/bot/handlers/__init__.py:31:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/__init__.py:35:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/__init__.py:38:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/__init__.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+************* Module src.bot.handlers
+src/bot/handlers/__init__.py:6:0: E0401: Unable to import 'telegram.ext' (import-error)
+************* Module src.bot.handlers.callback_handler
+src/bot/handlers/callback_handler.py:17:19: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:28:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:31:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:34:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:36:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:40:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:49:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:57:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:76:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:77:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:78:16: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:108:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:113:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:124:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:148:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:154:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:155:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:156:16: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:173:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:175:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:184:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:189:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:202:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:208:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:210:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:215:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:218:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:223:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:236:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:242:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:244:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:247:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:251:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:254:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:260:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:263:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:267:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:271:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:288:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:293:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:298:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:306:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:320:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:323:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:325:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:338:0: C0301: Line too long (101/100) (line-too-long)
+src/bot/handlers/callback_handler.py:347:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:354:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:360:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:364:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:378:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:379:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:380:16: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:393:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:398:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:404:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:406:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:410:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:413:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:416:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:420:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:427:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:430:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:434:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:439:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:445:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:446:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:447:16: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:465:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:475:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:476:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:488:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:491:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:495:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:498:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:504:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:515:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:521:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:529:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:534:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:537:0: C0301: Line too long (121/100) (line-too-long)
+src/bot/handlers/callback_handler.py:541:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:550:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:561:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:565:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:569:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:577:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:579:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:588:10: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:599:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:601:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:605:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:608:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:611:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:614:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:619:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:625:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:636:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:639:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:642:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:649:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/handlers/callback_handler.py:225:9: W0511: TODO: Llamar a API para obtener lista de agentes (fixme)
+src/bot/handlers/callback_handler.py:261:13: W0511: TODO: Regenerar keyboard con checkboxes actualizados (fixme)
+src/bot/handlers/callback_handler.py:348:5: W0511: TODO: Llamar a API para crear tarea (fixme)
+src/bot/handlers/callback_handler.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/handlers/callback_handler.py:7:0: E0401: Unable to import 'telegram.ext' (import-error)
+src/bot/handlers/callback_handler.py:8:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/handlers/callback_handler.py:9:0: E0401: Unable to import 'loguru' (import-error)
+src/bot/handlers/callback_handler.py:13:0: E0001: Cannot import 'src.bot.handlers.wizard_text_handler' due to 'unexpected indent (src.bot.handlers.wizard_text_handler, line 321)' (syntax-error)
+src/bot/handlers/callback_handler.py:70:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/bot/handlers/callback_handler.py:79:4: W0613: Unused argument 'params' (unused-argument)
+src/bot/handlers/callback_handler.py:153:0: R0912: Too many branches (19/12) (too-many-branches)
+src/bot/handlers/callback_handler.py:153:0: R0915: Too many statements (55/50) (too-many-statements)
+src/bot/handlers/callback_handler.py:392:4: C0415: Import outside toplevel (src.bot.services.api_service.ApiService) (import-outside-toplevel)
+src/bot/handlers/callback_handler.py:448:4: W0613: Unused argument 'params' (unused-argument)
+src/bot/handlers/callback_handler.py:487:4: C0415: Import outside toplevel (src.bot.services.api_service.ApiService) (import-outside-toplevel)
+src/bot/handlers/callback_handler.py:598:4: C0415: Import outside toplevel (src.bot.services.api_service.ApiService) (import-outside-toplevel)
+src/bot/handlers/callback_handler.py:637:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module src.bot.utils.emojis
+src/bot/utils/emojis.py:194:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/emojis.py:198:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/emojis.py:17:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:32:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:43:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:59:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:71:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:85:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:104:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+src/bot/utils/emojis.py:115:0: R0903: Too few public methods (0/2) (too-few-public-methods)
+************* Module src.bot.utils.keyboards
+src/bot/utils/keyboards.py:16:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:22:57: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:26:57: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:30:52: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:34:53: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:38:55: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:43:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:49:72: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:53:82: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:57:70: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:61:60: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:66:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:73:60: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:77:58: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:83:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:90:62: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:94:60: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:99:55: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:104:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:109:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:113:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:116:37: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:117:22: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:136:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:139:0: C0301: Line too long (109/100) (line-too-long)
+src/bot/utils/keyboards.py:140:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:145:52: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:150:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:153:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:156:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:158:54: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:161:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:163:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:180:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:182:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:186:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:193:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:195:56: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:198:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:200:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:219:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:221:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:225:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:227:0: C0301: Line too long (103/100) (line-too-long)
+src/bot/utils/keyboards.py:228:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:235:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:244:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:246:56: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:249:0: C0303: Trailing whitespace (trailing-whitespace)
+src/bot/utils/keyboards.py:6:0: E0401: Unable to import 'telegram' (import-error)
+src/bot/utils/keyboards.py:179:8: C0415: Import outside toplevel (src.bot.utils.emojis.UserEmojis) (import-outside-toplevel)
+src/bot/utils/keyboards.py:218:8: C0415: Import outside toplevel (src.bot.utils.emojis.ValidationEmojis) (import-outside-toplevel)
+src/bot/utils/keyboards.py:7:0: C0411: standard import "typing.List" should be placed before third party import "telegram.InlineKeyboardButton" (wrong-import-order)
+************* Module src.grupo_gad
+src/grupo_gad/__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module src.observability.__init__
+src/observability/__init__.py:6:0: C0304: Final newline missing (missing-final-newline)
+src/observability/__init__.py:6:0: C0304: Final newline missing (missing-final-newline)
+************* Module src.observability.metrics
+src/observability/metrics.py:113:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:127:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:142:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:156:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:204:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:209:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:214:0: C0303: Trailing whitespace (trailing-whitespace)
+src/observability/metrics.py:218:0: C0304: Final newline missing (missing-final-newline)
+src/observability/metrics.py:13:0: E0401: Unable to import 'prometheus_client' (import-error)
+src/observability/metrics.py:117:27: W0613: Unused argument 'user_id' (unused-argument)
+src/observability/metrics.py:133:22: W0613: Unused argument 'user_id' (unused-argument)
+************* Module src.schemas
+src/schemas/__init__.py:15:4: E0603: Undefined variable name 'Tarea' in __all__ (undefined-all-variable)
+src/schemas/__init__.py:16:4: E0603: Undefined variable name 'TareaCreate' in __all__ (undefined-all-variable)
+src/schemas/__init__.py:17:4: E0603: Undefined variable name 'TareaUpdate' in __all__ (undefined-all-variable)
+************* Module src.schemas.tarea
+src/schemas/tarea.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+src/schemas/tarea.py:74:0: C0303: Trailing whitespace (trailing-whitespace)
+src/schemas/tarea.py:16:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/tarea.py:31:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/tarea.py:48:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/tarea.py:62:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/tarea.py:80:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/schemas/tarea.py:87:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/tarea.py:92:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module src.schemas.token
+src/schemas/token.py:11:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/token.py:16:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module src.schemas.usuario
+src/schemas/usuario.py:15:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:27:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:36:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:49:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:54:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/schemas/usuario.py:61:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:66:0: C0115: Missing class docstring (missing-class-docstring)
+src/schemas/usuario.py:1:0: R0801: Similar lines in 2 files
+==src.api.routers.telegram_tasks:[102:108]
+==src.api.routers.usuarios:[147:153]
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, (duplicate-code)
+src/schemas/usuario.py:1:0: R0801: Similar lines in 2 files
+==src.api.routers.telegram_tasks:[189:195]
+==src.api.routers.usuarios:[199:205]
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, (duplicate-code)
+src/schemas/usuario.py:1:0: R0801: Similar lines in 2 files
+==src.api.routers.telegram_tasks:[255:260]
+==src.api.routers.usuarios:[94:99]
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, (duplicate-code)
+
+
+Report
+======
+2742 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |61     |61         |=          |93.44       |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |52     |52         |=          |59.62       |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|method   |52     |52         |=          |80.77       |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|function |130    |130        |=          |96.15       |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    config 
+      \-settings (src.api.dependencies,src.api.main,src.api.routers.auth,src.api.routers.health,src.api.routers.telegram_auth,src.api.routers.websockets,src.bot.commands.crear_tarea,src.bot.commands.estadisticas,src.bot.commands.finalizar_tarea,src.bot.commands.historial,src.bot.handlers.callback_handler,src.bot.main,src.observability.metrics)
+    pydantic (src.api.dependencies,src.api.routers.admin,src.api.routers.tasks,src.api.routers.usuarios,src.schemas.tarea,src.schemas.token,src.schemas.usuario)
+    src 
+      \-api 
+      | \-crud 
+      | | \-crud_tarea (src.api.routers.tasks)
+      | | \-crud_usuario (src.api.routers.users)
+      | \-dependencies (src.api.routers.admin,src.api.routers.efectivos_mock,src.api.routers.geo,src.api.routers.statistics,src.api.routers.tasks,src.api.routers.telegram_auth,src.api.routers.telegram_tasks,src.api.routers.users,src.api.routers.usuarios)
+      | \-models (src.api.routers.telegram_auth,src.api.routers.telegram_tasks,src.api.routers.usuarios)
+      | | \-tarea (src.api.routers.geo,src.api.routers.statistics)
+      | | \-usuario (src.api.routers.admin,src.api.routers.statistics,src.api.routers.tasks,src.api.routers.users)
+      | \-schemas 
+      | | \-telegram (src.api.routers.telegram_auth,src.api.routers.telegram_tasks)
+      | \-services 
+      | | \-auth (src.api.routers.auth)
+      | \-utils 
+      |   \-logging (src.api.routers.admin,src.api.routers.auth,src.api.routers.tasks)
+      \-bot 
+      | \-commands 
+      | | \-crear_tarea (src.bot.handlers)
+      | | \-estadisticas (src.bot.handlers)
+      | | \-finalizar_tarea (src.bot.handlers)
+      | | \-historial (src.bot.handlers)
+      | | \-start (src.bot.handlers)
+      | \-services 
+      | | \-api_service (src.bot.commands.crear_tarea,src.bot.commands.estadisticas,src.bot.commands.finalizar_tarea,src.bot.commands.historial,src.bot.handlers.callback_handler)
+      | \-utils 
+      |   \-emojis (src.bot.commands.help)
+      |   \-keyboards (src.bot.commands.help,src.bot.commands.start,src.bot.handlers.callback_handler)
+      \-core 
+      | \-auth (src.api.routers.dashboard)
+      | \-cache (src.api.main,src.api.routers.cache,src.api.routers.statistics,src.api.routers.tasks)
+      | \-cache_decorators (src.api.routers.usuarios)
+      | \-database (src.api.dependencies,src.api.main,src.api.routers.admin,src.api.routers.auth,src.api.routers.geo,src.api.routers.health,src.api.routers.statistics,src.api.routers.tasks,src.api.routers.users)
+      | \-geo 
+      | | \-postgis_service (src.api.routers.tasks)
+      | \-logging (src.api.main,src.api.middleware.logging,src.api.middleware.websockets,src.api.routers.auth,src.api.routers.cache,src.api.routers.metrics,src.api.routers.statistics,src.api.routers.tasks,src.api.routers.websockets,src.api.utils.logging,src.observability.metrics)
+      | \-performance (src.api.main,src.api.routers.health)
+      | \-security (src.api.dependencies,src.api.routers.auth)
+      | \-websocket_integration (src.api.main)
+      | \-websockets (src.api.main,src.api.middleware.websockets,src.api.routers.health,src.api.routers.metrics,src.api.routers.telegram_tasks,src.api.routers.websockets)
+      | \-ws_pubsub (src.api.main)
+      \-observability 
+      | \-metrics (src.api.main,src.api.routers.metrics)
+      \-schemas 
+      | \-tarea (src.api.routers.tasks,src.bot.commands.crear_tarea)
+      | \-token (src.api.dependencies,src.api.routers.auth)
+      | \-usuario (src.api.routers.users)
+      \-shared 
+        \-constants (src.api.models.historial_estado,src.api.models.metrica_tarea,src.api.models.tarea,src.api.models.usuario,src.api.routers.geo,src.api.routers.statistics,src.bot.commands.crear_tarea,src.schemas.tarea,src.schemas.usuario)
+
+
+
+7831 lines have been analyzed
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |4461   |56.97 |4461     |=          |
++----------+-------+------+---------+-----------+
+|docstring |1595   |20.37 |1595     |=          |
++----------+-------+------+---------+-----------+
+|comment   |524    |6.69  |524      |=          |
++----------+-------+------+---------+-----------+
+|empty     |1251   |15.97 |1251     |=          |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |0          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |721    |721      |721        |
++-----------+-------+---------+-----------+
+|refactor   |41     |41       |41         |
++-----------+-------+---------+-----------+
+|warning    |111    |111      |111        |
++-----------+-------+---------+-----------+
+|error      |142    |142      |142        |
++-----------+-------+---------+-----------+
+
+
+
+% errors / warnings by module
+-----------------------------
+
++--------------------------------------------+------+--------+---------+-----------+
+|module                                      |error |warning |refactor |convention |
++============================================+======+========+=========+===========+
+|src.api.main                                |6.34  |11.71   |17.07    |8.18       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.estadisticas               |4.93  |4.50    |0.00     |3.88       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.historial                  |4.93  |1.80    |2.44     |4.30       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.dependencies                        |4.23  |0.90    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.handlers.callback_handler           |3.52  |6.31    |4.88     |14.84      |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.statistics                  |3.52  |2.70    |7.32     |2.36       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.base                         |3.52  |0.00    |7.32     |0.55       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.efectivo                     |3.52  |0.00    |2.44     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.tarea                        |3.52  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.health                      |2.82  |11.71   |2.44     |7.77       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.websockets                  |2.82  |9.91    |0.00     |5.83       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.telegram_auth               |2.82  |4.50    |0.00     |1.94       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.crear_tarea                |2.82  |2.70    |2.44     |0.97       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.geo                         |2.82  |2.70    |2.44     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.finalizar_tarea            |2.82  |2.70    |0.00     |0.97       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models                              |2.82  |0.00    |7.32     |2.22       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.help                       |2.82  |0.00    |0.00     |0.42       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.usuario                      |2.82  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.telegram_tasks              |2.11  |9.01    |0.00     |4.44       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.usuarios                    |2.11  |6.31    |2.44     |3.05       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.tasks                       |2.11  |6.31    |0.00     |2.36       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.users                       |2.11  |3.60    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.start                      |2.11  |1.80    |0.00     |0.69       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.admin                       |2.11  |0.90    |0.00     |0.69       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.middleware.government_rate_limiting |2.11  |0.00    |2.44     |3.47       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.auth                        |2.11  |0.00    |0.00     |1.39       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.schemas.__init__                        |2.11  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.metrica_tarea                |2.11  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.historial_estado             |2.11  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.cache                       |1.41  |3.60    |2.44     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.metrics                     |1.41  |0.90    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.dashboard                   |1.41  |0.90    |0.00     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.middleware.logging                  |1.41  |0.00    |7.32     |3.74       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.main                                |1.41  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.observability.metrics                   |0.70  |1.80    |0.00     |1.11       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.efectivos_mock              |0.70  |0.90    |2.44     |2.08       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.utils.keyboards                     |0.70  |0.00    |0.00     |7.21       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.utils.logging                       |0.70  |0.00    |0.00     |3.88       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.handlers.__init__                   |0.70  |0.00    |0.00     |0.55       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.app.main                                |0.70  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.routers.__init__                    |0.70  |0.00    |0.00     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.associations                 |0.70  |0.00    |0.00     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.handlers.wizard_text_handler        |0.70  |0.00    |0.00     |0.00       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.middleware.websockets               |0.00  |1.80    |0.00     |5.83       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.utils.emojis                        |0.00  |0.00    |19.51    |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.schemas.usuario                         |0.00  |0.00    |7.32     |0.97       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.schemas.tarea                           |0.00  |0.00    |0.00     |1.25       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.schemas.token                           |0.00  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.observability.__init__                  |0.00  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.bot.commands.__init__                   |0.00  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.utils.__init__                      |0.00  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.middleware.__init__                 |0.00  |0.00    |0.00     |0.28       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.grupo_gad.__init__                      |0.00  |0.00    |0.00     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+|src.api.models.__init__                     |0.00  |0.00    |0.00     |0.14       |
++--------------------------------------------+------+--------+---------+-----------+
+
+
+
+Messages
+--------
+
++-------------------------------+------------+
+|message id                     |occurrences |
++===============================+============+
+|trailing-whitespace            |572         |
++-------------------------------+------------+
+|import-error                   |123         |
++-------------------------------+------------+
+|broad-exception-caught         |39          |
++-------------------------------+------------+
+|line-too-long                  |36          |
++-------------------------------+------------+
+|unused-argument                |23          |
++-------------------------------+------------+
+|raise-missing-from             |22          |
++-------------------------------+------------+
+|import-outside-toplevel        |22          |
++-------------------------------+------------+
+|missing-class-docstring        |21          |
++-------------------------------+------------+
+|missing-final-newline          |19          |
++-------------------------------+------------+
+|too-few-public-methods         |18          |
++-------------------------------+------------+
+|wrong-import-order             |17          |
++-------------------------------+------------+
+|missing-function-docstring     |15          |
++-------------------------------+------------+
+|unused-import                  |11          |
++-------------------------------+------------+
+|invalid-name                   |9           |
++-------------------------------+------------+
+|no-name-in-module              |7           |
++-------------------------------+------------+
+|too-many-locals                |6           |
++-------------------------------+------------+
+|fixme                          |6           |
++-------------------------------+------------+
+|unexpected-keyword-arg         |4           |
++-------------------------------+------------+
+|reimported                     |4           |
++-------------------------------+------------+
+|no-else-return                 |4           |
++-------------------------------+------------+
+|missing-module-docstring       |4           |
++-------------------------------+------------+
+|ungrouped-imports              |3           |
++-------------------------------+------------+
+|undefined-all-variable         |3           |
++-------------------------------+------------+
+|too-many-statements            |3           |
++-------------------------------+------------+
+|too-many-branches              |3           |
++-------------------------------+------------+
+|syntax-error                   |3           |
++-------------------------------+------------+
+|redefined-outer-name           |3           |
++-------------------------------+------------+
+|duplicate-code                 |3           |
++-------------------------------+------------+
+|no-value-for-parameter         |2           |
++-------------------------------+------------+
+|wrong-import-position          |1           |
++-------------------------------+------------+
+|trailing-newlines              |1           |
++-------------------------------+------------+
+|too-many-positional-arguments  |1           |
++-------------------------------+------------+
+|too-many-nested-blocks         |1           |
++-------------------------------+------------+
+|too-many-arguments             |1           |
++-------------------------------+------------+
+|superfluous-parens             |1           |
++-------------------------------+------------+
+|protected-access               |1           |
++-------------------------------+------------+
+|no-else-raise                  |1           |
++-------------------------------+------------+
+|f-string-without-interpolation |1           |
++-------------------------------+------------+
+|bare-except                    |1           |
++-------------------------------+------------+
+
+
+
+
+------------------------------------------------------------------
+Your code has been rated at 4.23/10 (previous run: 4.23/10, +0.00)
+

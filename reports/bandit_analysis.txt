@@ -1,0 +1,265 @@
+Run started:2025-10-29 07:04:39.438646
+
+Test results:
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/api/main.py:226:4
+225	            await _pubsub.stop()
+226	    except Exception:
+227	        pass
+228	    
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/api/main.py:286:4
+285	            response.headers.setdefault("Access-Control-Allow-Headers", "*")
+286	    except Exception:
+287	        # Mantener silencioso si no hay settings válidos en tiempo de import
+288	        pass
+289	    
+
+--------------------------------------------------
+>> Issue: [B106:hardcoded_password_funcarg] Possible hardcoded password: 'bearer'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b106_hardcoded_password_funcarg.html
+   Location: src/api/routers/auth.py:124:11
+123	    )
+124	    return Token(access_token=access_token, token_type="bearer")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:73:25
+72	            # Offset aleatorio en grados (aprox 0.02 grados = ~2km)
+73	            lat_offset = uniform(-0.02, 0.02)
+74	            lng_offset = uniform(-0.02, 0.02)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:74:25
+73	            lat_offset = uniform(-0.02, 0.02)
+74	            lng_offset = uniform(-0.02, 0.02)
+75	            locations_in_range.append((
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:88:29
+87	            # Pequeña variación de posición (patrullando cerca de la base)
+88	            lat = base_lat + uniform(-0.005, 0.005)  # ~500m variación
+89	            lng = base_lng + uniform(-0.005, 0.005)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:89:29
+88	            lat = base_lat + uniform(-0.005, 0.005)  # ~500m variación
+89	            lng = base_lng + uniform(-0.005, 0.005)
+90	        else:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:92:31
+91	            # Efectivos adicionales en posiciones aleatorias
+92	            lat = center_lat + uniform(-0.015, 0.015)
+93	            lng = center_lng + uniform(-0.015, 0.015)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:93:31
+92	            lat = center_lat + uniform(-0.015, 0.015)
+93	            lng = center_lng + uniform(-0.015, 0.015)
+94	            location_name = f"Zona Patrullaje {i-len(locations_in_range)+1}"
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:100:17
+99	        # Estado simulado
+100	        estado = choice(estados_disponibles)
+101	        
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:116:72
+115	            "ubicacion": location_name,
+116	            "ultima_actualizacion": (datetime.now() - timedelta(minutes=uniform(1, 15))).isoformat(),
+117	            # Campos adicionales para el popup del mapa
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:118:21
+117	            # Campos adicionales para el popup del mapa
+118	            "rango": choice(["Cabo", "Sargento", "Oficial"]),
+119	            "unidad": choice(["Móvil 101", "Móvil 205", "Móvil 318", "Pie"]),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:119:22
+118	            "rango": choice(["Cabo", "Sargento", "Oficial"]),
+119	            "unidad": choice(["Móvil 101", "Móvil 205", "Móvil 318", "Pie"]),
+120	            "radio_activo": choice([True, False, True, True])  # 75% con radio activo
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: src/api/routers/efectivos_mock.py:120:28
+119	            "unidad": choice(["Móvil 101", "Móvil 205", "Móvil 318", "Pie"]),
+120	            "radio_activo": choice([True, False, True, True])  # 75% con radio activo
+121	        })
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b101_assert_used.html
+   Location: src/api/routers/health.py:243:12
+242	            result = await session.execute(text("SELECT 1 as health_check"))
+243	            assert result.scalar() == 1
+244	            
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b324_hashlib.html
+   Location: src/core/cache_decorators.py:81:15
+80	    key_str = json.dumps(key_data, sort_keys=True, default=str)
+81	    key_hash = hashlib.md5(key_str.encode()).hexdigest()
+82	    
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/core/logging.py:165:8
+164	                )
+165	        except Exception:
+166	            pass
+167	    
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/core/logging.py:182:8
+181	            )
+182	        except Exception:
+183	            pass
+184	    
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: src/core/migrations.py:10:0
+9	import asyncio
+10	import subprocess
+11	from pathlib import Path
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: src/core/migrations.py:53:21
+52	        try:
+53	            result = subprocess.run(
+54	                full_command,
+55	                cwd=self.project_root,
+56	                capture_output=True,
+57	                text=True,
+58	                timeout=300  # 5 minutos timeout
+59	            )
+60	            
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/core/websockets.py:427:8
+426	                await self._pubsub.publish(message.model_dump(mode='json'))
+427	        except Exception:
+428	            # No afectar envío local por errores de pub/sub
+429	            pass
+430	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b110_try_except_pass.html
+   Location: src/core/ws_pubsub.py:117:12
+116	                await self._redis.aclose()
+117	            except Exception:
+118	                pass
+119	            self._redis = None
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b101_assert_used.html
+   Location: src/core/ws_pubsub.py:135:8
+134	        """Consume mensajes del canal y los reenvía a conexiones locales."""
+135	        assert self._redis is not None
+136	        try:
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 9195
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 22
+		Medium: 0
+		High: 1
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 22
+Files skipped (1):
+	src/bot/handlers/wizard_text_handler.py (syntax error while parsing AST from file)

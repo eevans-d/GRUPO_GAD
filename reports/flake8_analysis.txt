@@ -1,0 +1,2029 @@
+src/__init__.py:1:1: D104 Missing docstring in public package
+src/__init__.py:1:80: E501 line too long (86 > 79 characters)
+src/api/__init__.py:1:1: D104 Missing docstring in public package
+src/api/crud/base.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/base.py:18:1: I201 Missing newline between import groups. 'from pydantic import BaseModel' is identified as Third Party and 'from fastapi.encoders import jsonable_encoder' is identified as Third Party.
+src/api/crud/base.py:19:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from pydantic import BaseModel' is identified as Third Party.
+src/api/crud/base.py:29:1: D101 Missing docstring in public class
+src/api/crud/base.py:39:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/base.py:49:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/base.py:55:80: E501 line too long (87 > 79 characters)
+src/api/crud/base.py:56:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/base.py:73:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/base.py:85:80: E501 line too long (83 > 79 characters)
+src/api/crud/base.py:100:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_tarea.py:16:1: D101 Missing docstring in public class
+src/api/crud/crud_tarea.py:24:26: E261 at least two spaces before inline comment
+src/api/crud/crud_tarea.py:25:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_usuario.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_usuario.py:17:1: D101 Missing docstring in public class
+src/api/crud/crud_usuario.py:18:80: E501 line too long (87 > 79 characters)
+src/api/crud/crud_usuario.py:19:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_usuario.py:22:80: E501 line too long (87 > 79 characters)
+src/api/crud/crud_usuario.py:25:80: E501 line too long (82 > 79 characters)
+src/api/crud/crud_usuario.py:26:1: D200 One-line docstring should fit on one line with quotes
+src/api/crud/crud_usuario.py:52:1: D200 One-line docstring should fit on one line with quotes
+src/api/dependencies.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/dependencies.py:9:1: I201 Missing newline between import groups. 'from jose import jwt' is identified as Third Party and 'from fastapi.security import OAuth2PasswordBearer' is identified as Third Party.
+src/api/dependencies.py:11:1: I201 Missing newline between import groups. 'from pydantic import ValidationError' is identified as Third Party and 'from jose.exceptions import JWTError' is identified as Third Party.
+src/api/dependencies.py:12:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from pydantic import ValidationError' is identified as Third Party.
+src/api/dependencies.py:14:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from sqlalchemy.ext.asyncio import AsyncSession' and in a different group.
+src/api/dependencies.py:15:1: I201 Missing newline between import groups. 'from src.api.crud.crud_usuario import usuario' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/api/dependencies.py:27:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/dependencies.py:27:62: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/dependencies.py:27:80: E501 line too long (85 > 79 characters)
+src/api/dependencies.py:29:1: D200 One-line docstring should fit on one line with quotes
+src/api/dependencies.py:49:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/dependencies.py:51:1: D200 One-line docstring should fit on one line with quotes
+src/api/dependencies.py:60:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/dependencies.py:62:1: D200 One-line docstring should fit on one line with quotes
+src/api/main.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/main.py:13:1: I201 Missing newline between import groups. 'from starlette import status' is identified as Third Party and 'from fastapi.staticfiles import StaticFiles' is identified as Third Party.
+src/api/main.py:15:1: I201 Missing newline between import groups. 'from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware' is identified as Third Party and 'from starlette.middleware.cors import CORSMiddleware' is identified as Third Party.
+src/api/main.py:16:1: I100 Import statements are in the wrong order. 'from starlette.responses import Response' should be before 'from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware' and in a different group.
+src/api/main.py:16:1: I201 Missing newline between import groups. 'from starlette.responses import Response' is identified as Third Party and 'from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware' is identified as Third Party.
+src/api/main.py:18:1: I100 Import statements are in the wrong order. 'from config.settings import get_settings, settings' should be before 'from starlette.responses import Response' and in a different group.
+src/api/main.py:19:1: I201 Missing newline between import groups. 'from src.api.routers import api_router' is identified as Third Party and 'from config.settings import get_settings, settings' is identified as Third Party.
+src/api/main.py:22:1: I100 Import statements are in the wrong order. 'from src.api.middleware.websockets import websocket_event_emitter' should be before 'from src.api.routers import websockets'
+src/api/main.py:23:1: I100 Import statements are in the wrong order. 'from src.api.middleware.government_rate_limiting import setup_government_rate_limiting' should be before 'from src.api.middleware.websockets import websocket_event_emitter'
+src/api/main.py:23:80: E501 line too long (86 > 79 characters)
+src/api/main.py:33:1: I100 Import statements are in the wrong order. 'from src.core.cache import init_cache_service, shutdown_cache_service' should be before 'from src.core.ws_pubsub import RedisWebSocketPubSub'
+src/api/main.py:45:80: E501 line too long (87 > 79 characters)
+src/api/main.py:54:1: D200 One-line docstring should fit on one line with quotes
+src/api/main.py:59:80: E501 line too long (90 > 79 characters)
+src/api/main.py:61:80: E501 line too long (91 > 79 characters)
+src/api/main.py:66:80: E501 line too long (83 > 79 characters)
+src/api/main.py:69:80: E501 line too long (84 > 79 characters)
+src/api/main.py:71:80: E501 line too long (82 > 79 characters)
+src/api/main.py:76:80: E501 line too long (100 > 79 characters)
+src/api/main.py:79:80: E501 line too long (117 > 79 characters)
+src/api/main.py:85:1: W293 blank line contains whitespace
+src/api/main.py:89:1: W293 blank line contains whitespace
+src/api/main.py:94:1: W293 blank line contains whitespace
+src/api/main.py:100:1: W293 blank line contains whitespace
+src/api/main.py:106:80: E501 line too long (82 > 79 characters)
+src/api/main.py:126:80: E501 line too long (89 > 79 characters)
+src/api/main.py:128:80: E501 line too long (89 > 79 characters)
+src/api/main.py:131:80: E501 line too long (93 > 79 characters)
+src/api/main.py:133:80: E501 line too long (82 > 79 characters)
+src/api/main.py:140:80: E501 line too long (96 > 79 characters)
+src/api/main.py:143:80: E501 line too long (84 > 79 characters)
+src/api/main.py:146:80: E501 line too long (83 > 79 characters)
+src/api/main.py:163:80: E501 line too long (81 > 79 characters)
+src/api/main.py:169:80: E501 line too long (90 > 79 characters)
+src/api/main.py:175:80: E501 line too long (113 > 79 characters)
+src/api/main.py:182:80: E501 line too long (88 > 79 characters)
+src/api/main.py:183:1: W293 blank line contains whitespace
+src/api/main.py:186:80: E501 line too long (82 > 79 characters)
+src/api/main.py:191:80: E501 line too long (116 > 79 characters)
+src/api/main.py:192:80: E501 line too long (88 > 79 characters)
+src/api/main.py:197:80: E501 line too long (83 > 79 characters)
+src/api/main.py:200:80: E501 line too long (96 > 79 characters)
+src/api/main.py:201:1: W293 blank line contains whitespace
+src/api/main.py:203:1: W293 blank line contains whitespace
+src/api/main.py:207:1: W293 blank line contains whitespace
+src/api/main.py:228:1: W293 blank line contains whitespace
+src/api/main.py:245:80: E501 line too long (105 > 79 characters)
+src/api/main.py:246:80: E501 line too long (87 > 79 characters)
+src/api/main.py:248:80: E501 line too long (83 > 79 characters)
+src/api/main.py:259:1: W293 blank line contains whitespace
+src/api/main.py:265:80: E501 line too long (87 > 79 characters)
+src/api/main.py:266:1: W293 blank line contains whitespace
+src/api/main.py:269:80: E501 line too long (99 > 79 characters)
+src/api/main.py:272:80: E501 line too long (84 > 79 characters)
+src/api/main.py:273:80: E501 line too long (84 > 79 characters)
+src/api/main.py:276:80: E501 line too long (110 > 79 characters)
+src/api/main.py:280:23: B009 Do not call getattr with a constant attribute value, it is not any safer than normal property access.
+src/api/main.py:284:80: E501 line too long (113 > 79 characters)
+src/api/main.py:289:1: W293 blank line contains whitespace
+src/api/main.py:293:1: W293 blank line contains whitespace
+src/api/main.py:298:1: D103 Missing docstring in public function
+src/api/main.py:299:22: W291 trailing whitespace
+src/api/main.py:312:80: E501 line too long (80 > 79 characters)
+src/api/main.py:322:80: E501 line too long (94 > 79 characters)
+src/api/main.py:327:80: E501 line too long (103 > 79 characters)
+src/api/main.py:340:80: E501 line too long (86 > 79 characters)
+src/api/main.py:344:80: E501 line too long (85 > 79 characters)
+src/api/main.py:349:1: E302 expected 2 blank lines, found 1
+src/api/main.py:350:1: D103 Missing docstring in public function
+src/api/main.py:350:80: E501 line too long (102 > 79 characters)
+src/api/main.py:370:1: D103 Missing docstring in public function
+src/api/main.py:371:22: W291 trailing whitespace
+src/api/main.py:375:1: W293 blank line contains whitespace
+src/api/main.py:387:1: W293 blank line contains whitespace
+src/api/main.py:400:1: W293 blank line contains whitespace
+src/api/main.py:402:1: W293 blank line contains whitespace
+src/api/main.py:411:1: W293 blank line contains whitespace
+src/api/main.py:425:1: D103 Missing docstring in public function
+src/api/main.py:426:80: E501 line too long (87 > 79 characters)
+src/api/main.py:430:1: W293 blank line contains whitespace
+src/api/main.py:433:80: E501 line too long (96 > 79 characters)
+src/api/main.py:434:1: W293 blank line contains whitespace
+src/api/main.py:439:80: E501 line too long (83 > 79 characters)
+src/api/main.py:441:1: W293 blank line contains whitespace
+src/api/main.py:445:1: W293 blank line contains whitespace
+src/api/main.py:449:1: W293 blank line contains whitespace
+src/api/main.py:457:1: D205 1 blank line required between summary line and description
+src/api/main.py:470:1: D205 1 blank line required between summary line and description
+src/api/main.py:475:1: W293 blank line contains whitespace
+src/api/main.py:477:1: W293 blank line contains whitespace
+src/api/main.py:484:80: E501 line too long (90 > 79 characters)
+src/api/main.py:490:80: E501 line too long (98 > 79 characters)
+src/api/main.py:492:80: E501 line too long (96 > 79 characters)
+src/api/main.py:495:80: E501 line too long (109 > 79 characters)
+src/api/main.py:497:80: E501 line too long (108 > 79 characters)
+src/api/main.py:510:80: E501 line too long (107 > 79 characters)
+src/api/main.py:516:1: W293 blank line contains whitespace
+src/api/main.py:520:80: E501 line too long (83 > 79 characters)
+src/api/main.py:524:1: W293 blank line contains whitespace
+src/api/main.py:533:1: W293 blank line contains whitespace
+src/api/main.py:536:60: W291 trailing whitespace
+src/api/main.py:539:1: W293 blank line contains whitespace
+src/api/main.py:541:1: W293 blank line contains whitespace
+src/api/main.py:560:1: I100 Import statements are in the wrong order. 'from src.api.routers import telegram_auth, telegram_tasks, usuarios' should be before 'from src.core.cache import init_cache_service, shutdown_cache_service'
+src/api/main.py:560:1: I202 Additional newline in a group of imports. 'from src.api.routers import telegram_auth, telegram_tasks, usuarios' is identified as Third Party and 'from src.core.cache import init_cache_service, shutdown_cache_service' is identified as Third Party.
+src/api/main.py:560:1: E402 module level import not at top of file
+src/api/main.py:572:2: W292 no newline at end of file
+src/api/middleware/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/middleware/__init__.py:4:4: W292 no newline at end of file
+src/api/middleware/government_rate_limiting.py:2:1: D205 1 blank line required between summary line and description
+src/api/middleware/government_rate_limiting.py:8:1: I101 Imported names are in the wrong order. Should be Callable, Dict
+src/api/middleware/government_rate_limiting.py:9:1: I100 Import statements are in the wrong order. 'from collections import defaultdict' should be before 'from typing import Dict, Callable'
+src/api/middleware/government_rate_limiting.py:14:1: I201 Missing newline between import groups. 'from starlette.middleware.base import BaseHTTPMiddleware' is identified as Third Party and 'from fastapi.responses import JSONResponse' is identified as Third Party.
+src/api/middleware/government_rate_limiting.py:27:1: D205 1 blank line required between summary line and description
+src/api/middleware/government_rate_limiting.py:31:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:32:1: D107 Missing docstring in __init__
+src/api/middleware/government_rate_limiting.py:35:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:40:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:47:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:50:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:53:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:57:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:62:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:66:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:75:1: D205 1 blank line required between summary line and description
+src/api/middleware/government_rate_limiting.py:85:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:90:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:97:80: E501 line too long (85 > 79 characters)
+src/api/middleware/government_rate_limiting.py:99:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:103:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:107:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:113:1: D205 1 blank line required between summary line and description
+src/api/middleware/government_rate_limiting.py:117:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:118:1: D102 Missing docstring in public method
+src/api/middleware/government_rate_limiting.py:120:80: E501 line too long (88 > 79 characters)
+src/api/middleware/government_rate_limiting.py:122:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:125:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:128:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:132:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:137:80: E501 line too long (102 > 79 characters)
+src/api/middleware/government_rate_limiting.py:138:80: E501 line too long (115 > 79 characters)
+src/api/middleware/government_rate_limiting.py:143:80: E501 line too long (86 > 79 characters)
+src/api/middleware/government_rate_limiting.py:154:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:157:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:162:1: W293 blank line contains whitespace
+src/api/middleware/government_rate_limiting.py:167:1: D205 1 blank line required between summary line and description
+src/api/middleware/logging.py:12:1: I201 Missing newline between import groups. 'from fastapi import Request, Response' is identified as Third Party and 'from typing import Callable' is identified as Stdlib.
+src/api/middleware/logging.py:13:1: I201 Missing newline between import groups. 'from starlette.middleware.base import BaseHTTPMiddleware' is identified as Third Party and 'from fastapi import Request, Response' is identified as Third Party.
+src/api/middleware/logging.py:15:1: I100 Import statements are in the wrong order. 'from src.core.logging import get_logger' should be before 'from starlette.middleware.base import BaseHTTPMiddleware' and in a different group.
+src/api/middleware/logging.py:24:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:32:1: D107 Missing docstring in __init__
+src/api/middleware/logging.py:41:1: D102 Missing docstring in public method
+src/api/middleware/logging.py:41:80: E501 line too long (80 > 79 characters)
+src/api/middleware/logging.py:44:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:49:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:51:80: E501 line too long (90 > 79 characters)
+src/api/middleware/logging.py:52:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:65:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:67:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:71:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:81:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:92:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:94:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:97:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:109:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:116:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:124:1: D107 Missing docstring in __init__
+src/api/middleware/logging.py:128:1: D102 Missing docstring in public method
+src/api/middleware/logging.py:128:80: E501 line too long (80 > 79 characters)
+src/api/middleware/logging.py:130:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:134:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:138:80: E501 line too long (82 > 79 characters)
+src/api/middleware/logging.py:143:80: E501 line too long (82 > 79 characters)
+src/api/middleware/logging.py:145:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:151:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:155:80: E501 line too long (98 > 79 characters)
+src/api/middleware/logging.py:160:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:162:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:165:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:173:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:180:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:187:1: D102 Missing docstring in public method
+src/api/middleware/logging.py:187:80: E501 line too long (80 > 79 characters)
+src/api/middleware/logging.py:191:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:194:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:204:80: E501 line too long (83 > 79 characters)
+src/api/middleware/logging.py:206:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:208:1: W293 blank line contains whitespace
+src/api/middleware/logging.py:216:18: W292 no newline at end of file
+src/api/middleware/websockets.py:13:1: I101 Imported names are in the wrong order. Should be Any, Dict, Optional
+src/api/middleware/websockets.py:14:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from typing import Optional, Dict, Any'
+src/api/middleware/websockets.py:16:1: I101 Imported names are in the wrong order. Should be EventType, WSMessage, notify_dashboard_update, send_system_alert, websocket_manager
+src/api/middleware/websockets.py:23:1: I100 Import statements are in the wrong order. 'from src.core.logging import get_logger' should be before 'from src.core.websockets import websocket_manager, WSMessage, EventType, notify_dashboard_update, send_system_alert'
+src/api/middleware/websockets.py:32:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:36:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:37:1: D107 Missing docstring in __init__
+src/api/middleware/websockets.py:41:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:46:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:49:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:51:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:55:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:62:80: E501 line too long (99 > 79 characters)
+src/api/middleware/websockets.py:63:80: E501 line too long (90 > 79 characters)
+src/api/middleware/websockets.py:66:80: E501 line too long (80 > 79 characters)
+src/api/middleware/websockets.py:72:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:74:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:75:67: W291 trailing whitespace
+src/api/middleware/websockets.py:76:30: E128 continuation line under-indented for visual indent
+src/api/middleware/websockets.py:76:80: E501 line too long (87 > 79 characters)
+src/api/middleware/websockets.py:77:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:79:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:94:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:96:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:98:34: E128 continuation line under-indented for visual indent
+src/api/middleware/websockets.py:99:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:101:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:114:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:116:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:117:67: W291 trailing whitespace
+src/api/middleware/websockets.py:118:32: E128 continuation line under-indented for visual indent
+src/api/middleware/websockets.py:119:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:121:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:136:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:138:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:140:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:142:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:151:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:153:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:160:45: W291 trailing whitespace
+src/api/middleware/websockets.py:163:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:165:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:172:80: E501 line too long (90 > 79 characters)
+src/api/middleware/websockets.py:174:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:178:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:184:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:194:80: E501 line too long (89 > 79 characters)
+src/api/middleware/websockets.py:195:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:197:80: E501 line too long (95 > 79 characters)
+src/api/middleware/websockets.py:198:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:205:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:213:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:223:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:228:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:235:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:241:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:246:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:255:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:257:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:264:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:270:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:272:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:278:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:282:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:284:1: W293 blank line contains whitespace
+src/api/middleware/websockets.py:294:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:295:80: E501 line too long (80 > 79 characters)
+src/api/middleware/websockets.py:298:80: E501 line too long (100 > 79 characters)
+src/api/middleware/websockets.py:299:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:300:80: E501 line too long (89 > 79 characters)
+src/api/middleware/websockets.py:303:80: E501 line too long (82 > 79 characters)
+src/api/middleware/websockets.py:303:83: W291 trailing whitespace
+src/api/middleware/websockets.py:304:35: E128 continuation line under-indented for visual indent
+src/api/middleware/websockets.py:305:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:311:80: E501 line too long (82 > 79 characters)
+src/api/middleware/websockets.py:314:80: E501 line too long (90 > 79 characters)
+src/api/middleware/websockets.py:315:39: E128 continuation line under-indented for visual indent
+src/api/middleware/websockets.py:316:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:322:80: E501 line too long (90 > 79 characters)
+src/api/middleware/websockets.py:326:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:327:80: E501 line too long (91 > 79 characters)
+src/api/middleware/websockets.py:331:1: D401 First line should be in imperative mood
+src/api/middleware/websockets.py:332:72: W292 no newline at end of file
+src/api/models.py:1:1: D100 Missing docstring in public module
+src/api/models.py:20:1: D101 Missing docstring in public class
+src/api/models.py:26:1: D101 Missing docstring in public class
+src/api/models.py:32:1: D101 Missing docstring in public class
+src/api/models.py:58:1: D101 Missing docstring in public class
+src/api/models.py:66:80: E501 line too long (80 > 79 characters)
+src/api/models.py:69:80: E501 line too long (80 > 79 characters)
+src/api/models.py:73:1: D101 Missing docstring in public class
+src/api/models.py:82:80: E501 line too long (87 > 79 characters)
+src/api/models.py:93:1: D101 Missing docstring in public class
+src/api/models.py:106:80: E501 line too long (86 > 79 characters)
+src/api/models.py:108:80: E501 line too long (88 > 79 characters)
+src/api/models.py:116:80: E501 line too long (82 > 79 characters)
+src/api/models/__init__.py:3:1: D205 1 blank line required between summary line and description
+src/api/models/__init__.py:24:2: W292 no newline at end of file
+src/api/models/associations.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/associations.py:15:1: W191 indentation contains tabs
+src/api/models/associations.py:16:1: W191 indentation contains tabs
+src/api/models/associations.py:17:1: W191 indentation contains tabs
+src/api/models/associations.py:18:1: W191 indentation contains tabs
+src/api/models/associations.py:20:1: W391 blank line at end of file
+src/api/models/base.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/base.py:26:1: D102 Missing docstring in public method
+src/api/models/base.py:42:1: D102 Missing docstring in public method
+src/api/models/base.py:48:1: D102 Missing docstring in public method
+src/api/models/base.py:53:1: D102 Missing docstring in public method
+src/api/models/efectivo.py:6:1: I101 Imported names are in the wrong order. Should be List, Optional, TYPE_CHECKING
+src/api/models/efectivo.py:7:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from typing import TYPE_CHECKING, List, Optional'
+src/api/models/efectivo.py:72:80: E501 line too long (86 > 79 characters)
+src/api/models/efectivo.py:79:80: E501 line too long (82 > 79 characters)
+src/api/models/historial_estado.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/historial_estado.py:7:1: I101 Imported names are in the wrong order. Should be Optional, TYPE_CHECKING
+src/api/models/historial_estado.py:8:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from typing import TYPE_CHECKING, Optional'
+src/api/models/historial_estado.py:31:5: E122 continuation line missing indentation or outdented
+src/api/models/historial_estado.py:35:5: E122 continuation line missing indentation or outdented
+src/api/models/historial_estado.py:38:5: E122 continuation line missing indentation or outdented
+src/api/models/historial_estado.py:42:5: E122 continuation line missing indentation or outdented
+src/api/models/historial_estado.py:50:80: E501 line too long (86 > 79 characters)
+src/api/models/historial_estado.py:56:1: D105 Missing docstring in magic method
+src/api/models/metrica_tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/metrica_tarea.py:9:1: I101 Imported names are in the wrong order. Should be DECIMAL, Integer, REAL
+src/api/models/metrica_tarea.py:26:5: E122 continuation line missing indentation or outdented
+src/api/models/metrica_tarea.py:29:5: E122 continuation line missing indentation or outdented
+src/api/models/metrica_tarea.py:33:80: E501 line too long (81 > 79 characters)
+src/api/models/metrica_tarea.py:34:80: E501 line too long (81 > 79 characters)
+src/api/models/metrica_tarea.py:50:1: D105 Missing docstring in magic method
+src/api/models/metrica_tarea.py:51:80: E501 line too long (86 > 79 characters)
+src/api/models/tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/tarea.py:9:1: I101 Imported names are in the wrong order. Should be List, Optional, TYPE_CHECKING
+src/api/models/tarea.py:10:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from typing import TYPE_CHECKING, List, Optional'
+src/api/models/tarea.py:62:80: E501 line too long (80 > 79 characters)
+src/api/models/tarea.py:68:5: E122 continuation line missing indentation or outdented
+src/api/models/tarea.py:71:5: E122 continuation line missing indentation or outdented
+src/api/models/tarea.py:80:80: E501 line too long (87 > 79 characters)
+src/api/models/tarea.py:81:80: E501 line too long (84 > 79 characters)
+src/api/models/tarea.py:82:80: E501 line too long (81 > 79 characters)
+src/api/models/tarea.py:84:80: E501 line too long (83 > 79 characters)
+src/api/models/tarea.py:88:5: E122 continuation line missing indentation or outdented
+src/api/models/tarea.py:95:5: E122 continuation line missing indentation or outdented
+src/api/models/tarea.py:98:5: E122 continuation line missing indentation or outdented
+src/api/models/tarea.py:107:80: E501 line too long (83 > 79 characters)
+src/api/models/tarea.py:110:80: E501 line too long (88 > 79 characters)
+src/api/models/tarea.py:118:80: E501 line too long (88 > 79 characters)
+src/api/models/tarea.py:122:80: E501 line too long (88 > 79 characters)
+src/api/models/tarea.py:126:80: E501 line too long (80 > 79 characters)
+src/api/models/usuario.py:1:1: D200 One-line docstring should fit on one line with quotes
+src/api/models/usuario.py:9:1: I101 Imported names are in the wrong order. Should be List, Optional, TYPE_CHECKING
+src/api/models/usuario.py:10:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from typing import TYPE_CHECKING, List, Optional'
+src/api/models/usuario.py:47:5: E122 continuation line missing indentation or outdented
+src/api/models/usuario.py:54:80: E501 line too long (84 > 79 characters)
+src/api/models/usuario.py:55:80: E501 line too long (86 > 79 characters)
+src/api/models/usuario.py:57:80: E501 line too long (88 > 79 characters)
+src/api/models/usuario.py:119:1: D105 Missing docstring in magic method
+src/api/routers/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/__init__.py:8:1: I101 Imported names are in the wrong order. Should be admin, auth, cache, efectivos_mock, geo, health, metrics, statistics, tasks, users
+src/api/routers/__init__.py:8:80: E501 line too long (96 > 79 characters)
+src/api/routers/__init__.py:16:80: E501 line too long (104 > 79 characters)
+src/api/routers/admin.py:10:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from typing import Any, Dict'
+src/api/routers/admin.py:13:1: I201 Missing newline between import groups. 'from pydantic import BaseModel' is identified as Third Party and 'from fastapi import APIRouter, Depends' is identified as Third Party.
+src/api/routers/admin.py:14:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from pydantic import BaseModel' is identified as Third Party.
+src/api/routers/admin.py:19:1: I100 Import statements are in the wrong order. 'from src.api.utils.logging import log_security_event' should be before 'from src.core.database import get_db_session'
+src/api/routers/admin.py:25:1: D204 1 blank line required after class docstring
+src/api/routers/admin.py:31:1: D204 1 blank line required after class docstring
+src/api/routers/admin.py:40:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/admin.py:42:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/admin.py:46:1: W293 blank line contains whitespace
+src/api/routers/admin.py:47:80: E501 line too long (81 > 79 characters)
+src/api/routers/admin.py:50:1: W293 blank line contains whitespace
+src/api/routers/admin.py:58:1: W293 blank line contains whitespace
+src/api/routers/admin.py:63:1: W293 blank line contains whitespace
+src/api/routers/admin.py:75:80: E501 line too long (82 > 79 characters)
+src/api/routers/admin.py:78:1: W293 blank line contains whitespace
+src/api/routers/admin.py:79:80: E501 line too long (80 > 79 characters)
+src/api/routers/admin.py:82:1: W293 blank line contains whitespace
+src/api/routers/admin.py:85:80: E501 line too long (90 > 79 characters)
+src/api/routers/admin.py:87:6: W292 no newline at end of file
+src/api/routers/auth.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/auth.py:8:80: E501 line too long (80 > 79 characters)
+src/api/routers/auth.py:10:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from fastapi.security import OAuth2PasswordRequestForm' is identified as Third Party.
+src/api/routers/auth.py:12:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from sqlalchemy.ext.asyncio import AsyncSession' and in a different group.
+src/api/routers/auth.py:13:1: I201 Missing newline between import groups. 'from src.api.services.auth import auth_service' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/api/routers/auth.py:35:1: W293 blank line contains whitespace
+src/api/routers/auth.py:44:1: W293 blank line contains whitespace
+src/api/routers/auth.py:47:1: W293 blank line contains whitespace
+src/api/routers/auth.py:59:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/auth.py:64:1: W293 blank line contains whitespace
+src/api/routers/auth.py:71:1: W293 blank line contains whitespace
+src/api/routers/auth.py:75:1: W293 blank line contains whitespace
+src/api/routers/auth.py:87:1: W293 blank line contains whitespace
+src/api/routers/auth.py:96:1: W293 blank line contains whitespace
+src/api/routers/auth.py:102:1: W293 blank line contains whitespace
+src/api/routers/auth.py:105:1: W293 blank line contains whitespace
+src/api/routers/cache.py:22:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/cache.py:26:1: W293 blank line contains whitespace
+src/api/routers/cache.py:50:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/cache.py:54:1: W293 blank line contains whitespace
+src/api/routers/cache.py:57:1: W293 blank line contains whitespace
+src/api/routers/cache.py:85:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/cache.py:89:1: W293 blank line contains whitespace
+src/api/routers/cache.py:92:1: W293 blank line contains whitespace
+src/api/routers/cache.py:95:1: W293 blank line contains whitespace
+src/api/routers/cache.py:102:80: E501 line too long (95 > 79 characters)
+src/api/routers/cache.py:120:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/cache.py:124:1: W293 blank line contains whitespace
+src/api/routers/cache.py:126:1: W293 blank line contains whitespace
+src/api/routers/dashboard.py:1:1: D100 Missing docstring in public module
+src/api/routers/dashboard.py:11:1: E302 expected 2 blank lines, found 1
+src/api/routers/dashboard.py:13:1: E304 blank lines found after function decorator
+src/api/routers/dashboard.py:13:48: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/dashboard.py:13:80: E501 line too long (96 > 79 characters)
+src/api/routers/dashboard.py:14:1: D400 First line should end with a period
+src/api/routers/efectivos_mock.py:5:56: W291 trailing whitespace
+src/api/routers/efectivos_mock.py:10:1: I100 Import statements are in the wrong order. 'from datetime import datetime, timedelta' should be before 'from typing import Any, Dict, List'
+src/api/routers/efectivos_mock.py:11:1: I101 Imported names are in the wrong order. Should be choice, uniform
+src/api/routers/efectivos_mock.py:14:1: I201 Missing newline between import groups. 'from src.api.dependencies import get_current_active_user' is identified as Third Party and 'from fastapi import APIRouter, Depends, Query' is identified as Third Party.
+src/api/routers/efectivos_mock.py:23:56: W291 trailing whitespace
+src/api/routers/efectivos_mock.py:35:67: W291 trailing whitespace
+src/api/routers/efectivos_mock.py:41:1: E302 expected 2 blank lines, found 1
+src/api/routers/efectivos_mock.py:41:80: E501 line too long (81 > 79 characters)
+src/api/routers/efectivos_mock.py:44:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/efectivos_mock.py:45:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/efectivos_mock.py:45:71: W291 trailing whitespace
+src/api/routers/efectivos_mock.py:46:21: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/efectivos_mock.py:46:80: E501 line too long (82 > 79 characters)
+src/api/routers/efectivos_mock.py:47:18: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/efectivos_mock.py:47:80: E501 line too long (84 > 79 characters)
+src/api/routers/efectivos_mock.py:48:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/efectivos_mock.py:52:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:55:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:60:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:62:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:65:80: E501 line too long (85 > 79 characters)
+src/api/routers/efectivos_mock.py:67:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:68:80: E501 line too long (84 > 79 characters)
+src/api/routers/efectivos_mock.py:80:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:82:80: E501 line too long (97 > 79 characters)
+src/api/routers/efectivos_mock.py:83:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:95:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:97:80: E501 line too long (88 > 79 characters)
+src/api/routers/efectivos_mock.py:98:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:101:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:104:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:107:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:116:80: E501 line too long (101 > 79 characters)
+src/api/routers/efectivos_mock.py:120:80: E501 line too long (85 > 79 characters)
+src/api/routers/efectivos_mock.py:122:1: W293 blank line contains whitespace
+src/api/routers/efectivos_mock.py:132:6: W292 no newline at end of file
+src/api/routers/geo.py:17:1: I101 Imported names are in the wrong order. Should be cos, hypot, radians
+src/api/routers/geo.py:21:1: I201 Missing newline between import groups. 'from sqlalchemy import and_, select' is identified as Third Party and 'from fastapi import APIRouter, Depends, Query' is identified as Third Party.
+src/api/routers/geo.py:32:80: E501 line too long (94 > 79 characters)
+src/api/routers/geo.py:35:80: E501 line too long (80 > 79 characters)
+src/api/routers/geo.py:48:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/geo.py:49:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/geo.py:50:21: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/geo.py:50:80: E501 line too long (83 > 79 characters)
+src/api/routers/geo.py:51:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/geo.py:52:25: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/geo.py:54:1: D205 1 blank line required between summary line and description
+src/api/routers/geo.py:54:1: D400 First line should end with a period
+src/api/routers/geo.py:61:80: E501 line too long (86 > 79 characters)
+src/api/routers/geo.py:62:80: E501 line too long (110 > 79 characters)
+src/api/routers/geo.py:70:80: E501 line too long (80 > 79 characters)
+src/api/routers/geo.py:78:80: E501 line too long (81 > 79 characters)
+src/api/routers/geo.py:79:80: E501 line too long (81 > 79 characters)
+src/api/routers/geo.py:89:80: E501 line too long (86 > 79 characters)
+src/api/routers/geo.py:96:80: E501 line too long (85 > 79 characters)
+src/api/routers/health.py:2:1: D205 1 blank line required between summary line and description
+src/api/routers/health.py:9:1: I201 Missing newline between import groups. 'import psutil' is identified as Third Party and 'import time' is identified as Stdlib.
+src/api/routers/health.py:10:1: I100 Import statements are in the wrong order. 'import shutil' should be before 'import psutil' and in a different group.
+src/api/routers/health.py:10:1: I201 Missing newline between import groups. 'import shutil' is identified as Stdlib and 'import psutil' is identified as Third Party.
+src/api/routers/health.py:15:1: I201 Missing newline between import groups. 'from sqlalchemy import text' is identified as Third Party and 'from fastapi import APIRouter, HTTPException, status' is identified as Third Party.
+src/api/routers/health.py:17:1: I101 Imported names are in the wrong order. Should be db_circuit_breaker, get_db_session
+src/api/routers/health.py:18:1: I101 Imported names are in the wrong order. Should be analyze_slow_queries, performance_middleware, query_tracker, suggest_database_indexes
+src/api/routers/health.py:18:80: E501 line too long (118 > 79 characters)
+src/api/routers/health.py:19:1: I100 Import statements are in the wrong order. 'from config.settings import get_settings' should be before 'from src.core.performance import query_tracker, performance_middleware, analyze_slow_queries, suggest_database_indexes' and in a different group.
+src/api/routers/health.py:19:1: I201 Missing newline between import groups. 'from config.settings import get_settings' is identified as Third Party and 'from src.core.performance import query_tracker, performance_middleware, analyze_slow_queries, suggest_database_indexes' is identified as Third Party.
+src/api/routers/health.py:29:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/health.py:29:1: D401 First line should be in imperative mood; try rephrasing
+src/api/routers/health.py:38:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/health.py:85:80: E501 line too long (83 > 79 characters)
+src/api/routers/health.py:99:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/health.py:107:1: W293 blank line contains whitespace
+src/api/routers/health.py:125:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/health.py:136:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/health.py:136:1: D401 First line should be in imperative mood
+src/api/routers/health.py:149:80: E501 line too long (82 > 79 characters)
+src/api/routers/health.py:150:80: E501 line too long (82 > 79 characters)
+src/api/routers/health.py:160:1: D205 1 blank line required between summary line and description
+src/api/routers/health.py:166:1: W293 blank line contains whitespace
+src/api/routers/health.py:174:1: W293 blank line contains whitespace
+src/api/routers/health.py:183:1: W293 blank line contains whitespace
+src/api/routers/health.py:200:1: W293 blank line contains whitespace
+src/api/routers/health.py:202:1: W293 blank line contains whitespace
+src/api/routers/health.py:206:1: W293 blank line contains whitespace
+src/api/routers/health.py:210:1: W293 blank line contains whitespace
+src/api/routers/health.py:214:1: W293 blank line contains whitespace
+src/api/routers/health.py:216:80: E501 line too long (95 > 79 characters)
+src/api/routers/health.py:217:1: W293 blank line contains whitespace
+src/api/routers/health.py:219:80: E501 line too long (86 > 79 characters)
+src/api/routers/health.py:220:1: W293 blank line contains whitespace
+src/api/routers/health.py:225:1: W293 blank line contains whitespace
+src/api/routers/health.py:231:1: W293 blank line contains whitespace
+src/api/routers/health.py:238:1: W293 blank line contains whitespace
+src/api/routers/health.py:244:1: W293 blank line contains whitespace
+src/api/routers/health.py:247:63: W291 trailing whitespace
+src/api/routers/health.py:250:1: W293 blank line contains whitespace
+src/api/routers/health.py:252:1: W293 blank line contains whitespace
+src/api/routers/health.py:260:1: W293 blank line contains whitespace
+src/api/routers/health.py:281:1: W293 blank line contains whitespace
+src/api/routers/health.py:287:80: E501 line too long (83 > 79 characters)
+src/api/routers/health.py:291:1: W293 blank line contains whitespace
+src/api/routers/health.py:295:1: W293 blank line contains whitespace
+src/api/routers/health.py:299:1: W293 blank line contains whitespace
+src/api/routers/health.py:300:80: E501 line too long (156 > 79 characters)
+src/api/routers/health.py:301:1: W293 blank line contains whitespace
+src/api/routers/health.py:305:1: W293 blank line contains whitespace
+src/api/routers/health.py:308:1: W293 blank line contains whitespace
+src/api/routers/health.py:310:1: W293 blank line contains whitespace
+src/api/routers/health.py:332:1: W293 blank line contains whitespace
+src/api/routers/health.py:339:1: W293 blank line contains whitespace
+src/api/routers/health.py:343:1: W293 blank line contains whitespace
+src/api/routers/health.py:346:1: W293 blank line contains whitespace
+src/api/routers/health.py:351:1: W293 blank line contains whitespace
+src/api/routers/health.py:375:1: W293 blank line contains whitespace
+src/api/routers/health.py:379:1: W293 blank line contains whitespace
+src/api/routers/health.py:382:1: W293 blank line contains whitespace
+src/api/routers/health.py:387:1: W293 blank line contains whitespace
+src/api/routers/health.py:392:1: W293 blank line contains whitespace
+src/api/routers/health.py:397:1: W293 blank line contains whitespace
+src/api/routers/health.py:403:1: W293 blank line contains whitespace
+src/api/routers/health.py:430:80: E501 line too long (81 > 79 characters)
+src/api/routers/health.py:445:1: W293 blank line contains whitespace
+src/api/routers/health.py:450:1: W293 blank line contains whitespace
+src/api/routers/health.py:456:1: W293 blank line contains whitespace
+src/api/routers/health.py:461:1: W293 blank line contains whitespace
+src/api/routers/health.py:465:80: E501 line too long (83 > 79 characters)
+src/api/routers/health.py:471:1: W293 blank line contains whitespace
+src/api/routers/health.py:476:1: W293 blank line contains whitespace
+src/api/routers/health.py:486:1: W293 blank line contains whitespace
+src/api/routers/health.py:495:80: E501 line too long (95 > 79 characters)
+src/api/routers/health.py:503:80: E501 line too long (90 > 79 characters)
+src/api/routers/health.py:504:1: W293 blank line contains whitespace
+src/api/routers/health.py:508:1: W293 blank line contains whitespace
+src/api/routers/health.py:509:80: E501 line too long (85 > 79 characters)
+src/api/routers/health.py:511:1: W293 blank line contains whitespace
+src/api/routers/health.py:520:55: W291 trailing whitespace
+src/api/routers/metrics.py:9:1: I101 Imported names are in the wrong order. Should be CONTENT_TYPE_LATEST, generate_latest
+src/api/routers/metrics.py:9:1: I201 Missing newline between import groups. 'from prometheus_client import generate_latest, CONTENT_TYPE_LATEST' is identified as Third Party and 'from fastapi import APIRouter, Response' is identified as Third Party.
+src/api/routers/metrics.py:24:1: D205 1 blank line required between summary line and description
+src/api/routers/metrics.py:36:1: W293 blank line contains whitespace
+src/api/routers/metrics.py:39:69: W292 no newline at end of file
+src/api/routers/statistics.py:12:1: I201 Missing newline between import groups. 'from sqlalchemy import func, select' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException, Query, status' is identified as Third Party.
+src/api/routers/statistics.py:12:1: F401 'sqlalchemy.func' imported but unused
+src/api/routers/statistics.py:30:17: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:30:80: E501 line too long (80 > 79 characters)
+src/api/routers/statistics.py:31:23: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:32:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:33:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:34:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:38:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:46:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:51:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:56:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:66:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:68:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:86:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:94:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:98:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:108:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:111:80: E501 line too long (80 > 79 characters)
+src/api/routers/statistics.py:112:80: E501 line too long (82 > 79 characters)
+src/api/routers/statistics.py:113:80: E501 line too long (81 > 79 characters)
+src/api/routers/statistics.py:116:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:125:80: E501 line too long (92 > 79 characters)
+src/api/routers/statistics.py:127:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:131:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:134:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:159:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:169:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:171:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:185:27: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:186:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/statistics.py:190:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:195:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:198:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:206:80: E501 line too long (83 > 79 characters)
+src/api/routers/statistics.py:208:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:213:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:220:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:226:1: W293 blank line contains whitespace
+src/api/routers/statistics.py:228:80: E501 line too long (84 > 79 characters)
+src/api/routers/tasks.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/tasks.py:7:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from typing import Any, List, Optional'
+src/api/routers/tasks.py:10:1: I201 Missing newline between import groups. 'from pydantic import BaseModel, Field' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException' is identified as Third Party.
+src/api/routers/tasks.py:11:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from pydantic import BaseModel, Field' is identified as Third Party.
+src/api/routers/tasks.py:18:1: I100 Import statements are in the wrong order. 'from src.api.utils.logging import log_business_event' should be before 'from src.core.geo.postgis_service import find_nearest_efectivo'
+src/api/routers/tasks.py:20:1: I100 Import statements are in the wrong order. 'from src.core.cache import CacheService, get_cache_service' should be before 'from src.schemas.tarea import Tarea, TareaCreate, TareaUpdate'
+src/api/routers/tasks.py:27:80: E501 line too long (110 > 79 characters)
+src/api/routers/tasks.py:30:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:32:80: E501 line too long (80 > 79 characters)
+src/api/routers/tasks.py:37:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:42:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:46:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:58:1: D204 1 blank line required after class docstring
+src/api/routers/tasks.py:60:80: E501 line too long (85 > 79 characters)
+src/api/routers/tasks.py:61:80: E501 line too long (90 > 79 characters)
+src/api/routers/tasks.py:65:1: D204 1 blank line required after class docstring
+src/api/routers/tasks.py:74:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:77:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:79:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/tasks.py:89:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:91:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:92:37: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:96:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:100:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:103:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:110:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:112:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:113:37: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:115:1: D401 First line should be in imperative mood
+src/api/routers/tasks.py:117:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:118:80: E501 line too long (85 > 79 characters)
+src/api/routers/tasks.py:120:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:124:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:133:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:151:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:154:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:170:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:173:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:180:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:207:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:208:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:210:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/tasks.py:225:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:228:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:229:37: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:233:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:234:80: E501 line too long (80 > 79 characters)
+src/api/routers/tasks.py:243:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:246:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:253:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:255:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:256:37: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/tasks.py:260:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:261:80: E501 line too long (80 > 79 characters)
+src/api/routers/tasks.py:270:1: W293 blank line contains whitespace
+src/api/routers/tasks.py:273:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:9:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException, status' is identified as Third Party.
+src/api/routers/telegram_auth.py:10:1: I100 Import statements are in the wrong order. 'from sqlalchemy import select' should be before 'from sqlalchemy.ext.asyncio import AsyncSession'
+src/api/routers/telegram_auth.py:11:1: I100 Import statements are in the wrong order. 'from datetime import datetime, timedelta' should be before 'from sqlalchemy import select' and in a different group.
+src/api/routers/telegram_auth.py:11:1: I201 Missing newline between import groups. 'from datetime import datetime, timedelta' is identified as Stdlib and 'from sqlalchemy import select' is identified as Third Party.
+src/api/routers/telegram_auth.py:12:1: F401 'typing.Optional' imported but unused
+src/api/routers/telegram_auth.py:13:1: I201 Missing newline between import groups. 'import jwt' is identified as Third Party and 'from typing import Optional' is identified as Stdlib.
+src/api/routers/telegram_auth.py:16:1: I100 Import statements are in the wrong order. 'from src.api.dependencies import get_db_session' should be before 'from src.api.schemas.telegram import TelegramAuthRequest, TelegramAuthResponse'
+src/api/routers/telegram_auth.py:18:1: I100 Import statements are in the wrong order. 'from config.settings import get_settings' should be before 'from src.api.models import Usuario' and in a different group.
+src/api/routers/telegram_auth.py:18:1: I201 Missing newline between import groups. 'from config.settings import get_settings' is identified as Third Party and 'from src.api.models import Usuario' is identified as Third Party.
+src/api/routers/telegram_auth.py:28:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:33:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:43:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:53:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_auth.py:57:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:62:80: E501 line too long (86 > 79 characters)
+src/api/routers/telegram_auth.py:65:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:71:80: E501 line too long (105 > 79 characters)
+src/api/routers/telegram_auth.py:73:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:80:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:89:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:100:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_auth.py:104:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:111:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:119:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:126:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:135:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:147:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:153:1: W293 blank line contains whitespace
+src/api/routers/telegram_auth.py:161:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:11:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException, status' is identified as Third Party.
+src/api/routers/telegram_tasks.py:12:1: I101 Imported names are in the wrong order. Should be and_, or_, select
+src/api/routers/telegram_tasks.py:12:1: I100 Import statements are in the wrong order. 'from sqlalchemy import select, and_, or_' should be before 'from sqlalchemy.ext.asyncio import AsyncSession'
+src/api/routers/telegram_tasks.py:12:1: F401 'sqlalchemy.and_' imported but unused
+src/api/routers/telegram_tasks.py:12:1: F401 'sqlalchemy.or_' imported but unused
+src/api/routers/telegram_tasks.py:13:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from sqlalchemy import select, and_, or_' and in a different group.
+src/api/routers/telegram_tasks.py:13:1: I201 Missing newline between import groups. 'from datetime import datetime' is identified as Stdlib and 'from sqlalchemy import select, and_, or_' is identified as Third Party.
+src/api/routers/telegram_tasks.py:14:1: F401 'typing.List' imported but unused
+src/api/routers/telegram_tasks.py:23:1: I100 Import statements are in the wrong order. 'from src.api.dependencies import get_db_session' should be before 'from src.api.schemas.telegram import TelegramTaskCreate, TelegramTaskCreateResponse, TelegramTaskFinalizeRequest, TelegramTaskFinalizeResponse, TelegramUserTasksResponse'
+src/api/routers/telegram_tasks.py:24:1: I101 Imported names are in the wrong order. Should be Tarea, Usuario
+src/api/routers/telegram_tasks.py:25:1: I101 Imported names are in the wrong order. Should be EventType, WSMessage, websocket_manager
+src/api/routers/telegram_tasks.py:33:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_tasks.py:37:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:42:80: E501 line too long (88 > 79 characters)
+src/api/routers/telegram_tasks.py:45:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:49:80: E501 line too long (87 > 79 characters)
+src/api/routers/telegram_tasks.py:51:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:56:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:62:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:72:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:76:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:88:80: E501 line too long (98 > 79 characters)
+src/api/routers/telegram_tasks.py:94:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:102:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:116:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_tasks.py:120:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:125:80: E501 line too long (81 > 79 characters)
+src/api/routers/telegram_tasks.py:128:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:132:80: E501 line too long (82 > 79 characters)
+src/api/routers/telegram_tasks.py:134:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:136:80: E501 line too long (95 > 79 characters)
+src/api/routers/telegram_tasks.py:139:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:143:80: E501 line too long (94 > 79 characters)
+src/api/routers/telegram_tasks.py:145:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:146:80: E501 line too long (84 > 79 characters)
+src/api/routers/telegram_tasks.py:149:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:159:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:163:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:166:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:176:80: E501 line too long (84 > 79 characters)
+src/api/routers/telegram_tasks.py:181:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:189:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:203:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_tasks.py:207:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:215:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:221:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:226:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:232:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:241:80: E501 line too long (107 > 79 characters)
+src/api/routers/telegram_tasks.py:246:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:255:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:268:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/telegram_tasks.py:272:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:277:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:281:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:287:1: W293 blank line contains whitespace
+src/api/routers/telegram_tasks.py:294:80: E501 line too long (104 > 79 characters)
+src/api/routers/telegram_tasks.py:297:1: W293 blank line contains whitespace
+src/api/routers/users.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/users.py:9:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException' is identified as Third Party.
+src/api/routers/users.py:13:80: E501 line too long (87 > 79 characters)
+src/api/routers/users.py:26:53: E261 at least two spaces before inline comment
+src/api/routers/users.py:28:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:31:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:33:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/users.py:40:48: E261 at least two spaces before inline comment
+src/api/routers/users.py:43:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:45:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:47:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/users.py:60:49: E261 at least two spaces before inline comment
+src/api/routers/users.py:62:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:64:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/users.py:70:56: E261 at least two spaces before inline comment
+src/api/routers/users.py:70:80: E501 line too long (80 > 79 characters)
+src/api/routers/users.py:73:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:74:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:76:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/users.py:88:56: E261 at least two spaces before inline comment
+src/api/routers/users.py:88:80: E501 line too long (80 > 79 characters)
+src/api/routers/users.py:91:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:94:29: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/users.py:96:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/usuarios.py:13:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from fastapi import APIRouter, Depends, HTTPException, status' is identified as Third Party.
+src/api/routers/usuarios.py:14:1: I100 Import statements are in the wrong order. 'from sqlalchemy import select' should be before 'from sqlalchemy.ext.asyncio import AsyncSession'
+src/api/routers/usuarios.py:15:1: I100 Import statements are in the wrong order. 'from typing import List, Optional' should be before 'from sqlalchemy import select' and in a different group.
+src/api/routers/usuarios.py:15:1: I201 Missing newline between import groups. 'from typing import List, Optional' is identified as Stdlib and 'from sqlalchemy import select' is identified as Third Party.
+src/api/routers/usuarios.py:16:1: I201 Missing newline between import groups. 'from pydantic import BaseModel' is identified as Third Party and 'from typing import List, Optional' is identified as Stdlib.
+src/api/routers/usuarios.py:19:1: I100 Import statements are in the wrong order. 'from src.api.dependencies import get_db_session' should be before 'from src.api.models import Usuario'
+src/api/routers/usuarios.py:20:1: I101 Imported names are in the wrong order. Should be cache_and_invalidate, cache_result
+src/api/routers/usuarios.py:20:1: F401 'src.core.cache_decorators.cache_result' imported but unused
+src/api/routers/usuarios.py:20:1: F401 'src.core.cache_decorators.cache_and_invalidate' imported but unused
+src/api/routers/usuarios.py:26:1: D204 1 blank line required after class docstring
+src/api/routers/usuarios.py:31:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:32:1: D106 Missing docstring in public nested class
+src/api/routers/usuarios.py:37:1: D204 1 blank line required after class docstring
+src/api/routers/usuarios.py:44:1: D204 1 blank line required after class docstring
+src/api/routers/usuarios.py:50:80: E501 line too long (105 > 79 characters)
+src/api/routers/usuarios.py:53:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/usuarios.py:59:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:75:80: E501 line too long (108 > 79 characters)
+src/api/routers/usuarios.py:78:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/usuarios.py:80:1: D200 One-line docstring should fit on one line with quotes
+src/api/routers/usuarios.py:87:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:93:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:104:80: E501 line too long (85 > 79 characters)
+src/api/routers/usuarios.py:105:80: E501 line too long (99 > 79 characters)
+src/api/routers/usuarios.py:108:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/usuarios.py:112:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:117:80: E501 line too long (84 > 79 characters)
+src/api/routers/usuarios.py:120:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:124:80: E501 line too long (84 > 79 characters)
+src/api/routers/usuarios.py:126:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:134:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:141:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:145:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:147:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:159:80: E501 line too long (99 > 79 characters)
+src/api/routers/usuarios.py:163:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/usuarios.py:167:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:174:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:180:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:184:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:194:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:197:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:199:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:211:80: E501 line too long (99 > 79 characters)
+src/api/routers/usuarios.py:214:24: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/usuarios.py:218:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:225:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:231:1: W293 blank line contains whitespace
+src/api/routers/usuarios.py:234:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:10:1: I101 Imported names are in the wrong order. Should be APIRouter, Query, WebSocket, WebSocketDisconnect
+src/api/routers/websockets.py:10:1: I201 Missing newline between import groups. 'from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query' is identified as Third Party and 'from typing import Optional' is identified as Stdlib.
+src/api/routers/websockets.py:12:1: I201 Missing newline between import groups. 'from jose import jwt' is identified as Third Party and 'from fastapi.security import HTTPBearer' is identified as Third Party.
+src/api/routers/websockets.py:13:1: I201 Missing newline between import groups. 'from starlette.status import WS_1008_POLICY_VIOLATION' is identified as Third Party and 'from jose import jwt' is identified as Third Party.
+src/api/routers/websockets.py:15:1: I101 Imported names are in the wrong order. Should be EventType, WSMessage, websocket_manager
+src/api/routers/websockets.py:15:1: I100 Import statements are in the wrong order. 'from src.core.websockets import websocket_manager, WSMessage, EventType' should be before 'from starlette.status import WS_1008_POLICY_VIOLATION' and in a different group.
+src/api/routers/websockets.py:16:23: W291 trailing whitespace
+src/api/routers/websockets.py:17:15: W291 trailing whitespace
+src/api/routers/websockets.py:20:1: I100 Import statements are in the wrong order. 'from src.core.logging import get_logger' should be before 'from src.core.websockets import websocket_manager, WSMessage, EventType'
+src/api/routers/websockets.py:21:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from src.core.logging import get_logger' and in a different group.
+src/api/routers/websockets.py:21:1: I201 Missing newline between import groups. 'from config.settings import settings' is identified as Third Party and 'from src.core.logging import get_logger' is identified as Third Party.
+src/api/routers/websockets.py:36:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:39:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:43:18: W291 trailing whitespace
+src/api/routers/websockets.py:45:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:47:80: E501 line too long (104 > 79 characters)
+src/api/routers/websockets.py:48:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:59:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:65:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:79:28: B008 Do not perform function calls in argument defaults.  The call is performed only once at function definition time. All calls to your function will reuse the result of that definition-time function call.  If this is intended, assign the function call to a module-level variable and use that variable as a default value.
+src/api/routers/websockets.py:79:80: E501 line too long (106 > 79 characters)
+src/api/routers/websockets.py:83:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:86:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:95:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:98:80: E501 line too long (102 > 79 characters)
+src/api/routers/websockets.py:106:80: E501 line too long (89 > 79 characters)
+src/api/routers/websockets.py:108:80: E501 line too long (98 > 79 characters)
+src/api/routers/websockets.py:114:80: E501 line too long (80 > 79 characters)
+src/api/routers/websockets.py:115:80: E501 line too long (92 > 79 characters)
+src/api/routers/websockets.py:117:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:124:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:131:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:138:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:144:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:146:80: E501 line too long (83 > 79 characters)
+src/api/routers/websockets.py:147:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:156:80: E501 line too long (88 > 79 characters)
+src/api/routers/websockets.py:157:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:159:80: E501 line too long (90 > 79 characters)
+src/api/routers/websockets.py:161:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:164:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:169:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:176:72: W291 trailing whitespace
+src/api/routers/websockets.py:177:32: E128 continuation line under-indented for visual indent
+src/api/routers/websockets.py:180:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:189:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:196:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:200:80: E501 line too long (85 > 79 characters)
+src/api/routers/websockets.py:210:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:219:80: E501 line too long (83 > 79 characters)
+src/api/routers/websockets.py:220:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:229:80: E501 line too long (83 > 79 characters)
+src/api/routers/websockets.py:230:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:234:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:238:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:244:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:249:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:254:80: E501 line too long (80 > 79 characters)
+src/api/routers/websockets.py:260:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:263:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:284:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:287:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:311:80: E501 line too long (89 > 79 characters)
+src/api/routers/websockets.py:314:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:321:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:355:80: E501 line too long (91 > 79 characters)
+src/api/routers/websockets.py:358:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:365:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:387:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:392:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:394:1: W293 blank line contains whitespace
+src/api/routers/websockets.py:403:80: E501 line too long (100 > 79 characters)
+src/api/routers/websockets.py:421:80: E501 line too long (85 > 79 characters)
+src/api/routers/websockets.py:424:80: E501 line too long (102 > 79 characters)
+src/api/routers/websockets.py:424:103: W292 no newline at end of file
+src/api/schemas/telegram.py:11:1: I101 Imported names are in the wrong order. Should be List, Optional
+src/api/schemas/telegram.py:12:1: I201 Missing newline between import groups. 'from pydantic import BaseModel, Field, validator' is identified as Third Party and 'from typing import Optional, List' is identified as Stdlib.
+src/api/schemas/telegram.py:16:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:18:1: W293 blank line contains whitespace
+src/api/schemas/telegram.py:27:80: E501 line too long (83 > 79 characters)
+src/api/schemas/telegram.py:28:80: E501 line too long (88 > 79 characters)
+src/api/schemas/telegram.py:29:80: E501 line too long (89 > 79 characters)
+src/api/schemas/telegram.py:30:80: E501 line too long (84 > 79 characters)
+src/api/schemas/telegram.py:31:80: E501 line too long (93 > 79 characters)
+src/api/schemas/telegram.py:32:80: E501 line too long (103 > 79 characters)
+src/api/schemas/telegram.py:33:80: E501 line too long (87 > 79 characters)
+src/api/schemas/telegram.py:34:80: E501 line too long (103 > 79 characters)
+src/api/schemas/telegram.py:37:1: D102 Missing docstring in public method
+src/api/schemas/telegram.py:38:80: E501 line too long (95 > 79 characters)
+src/api/schemas/telegram.py:44:1: D102 Missing docstring in public method
+src/api/schemas/telegram.py:47:80: E501 line too long (88 > 79 characters)
+src/api/schemas/telegram.py:54:80: E501 line too long (84 > 79 characters)
+src/api/schemas/telegram.py:57:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:64:80: E501 line too long (87 > 79 characters)
+src/api/schemas/telegram.py:73:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:75:1: W293 blank line contains whitespace
+src/api/schemas/telegram.py:78:80: E501 line too long (94 > 79 characters)
+src/api/schemas/telegram.py:80:80: E501 line too long (96 > 79 characters)
+src/api/schemas/telegram.py:83:1: D102 Missing docstring in public method
+src/api/schemas/telegram.py:86:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:97:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:104:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:117:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:123:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:135:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:140:80: E501 line too long (80 > 79 characters)
+src/api/schemas/telegram.py:143:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:157:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:163:80: E501 line too long (89 > 79 characters)
+src/api/schemas/telegram.py:165:1: D106 Missing docstring in public nested class
+src/api/schemas/telegram.py:187:1: D204 1 blank line required after class docstring
+src/api/schemas/telegram.py:194:1: D106 Missing docstring in public nested class
+src/api/services/auth.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/services/auth.py:15:1: D101 Missing docstring in public class
+src/api/services/auth.py:19:1: D200 One-line docstring should fit on one line with quotes
+src/api/test_api.py:1:1: D100 Missing docstring in public module
+src/api/tests/__init__.py:1:1: D104 Missing docstring in public package
+src/api/utils/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/api/utils/__init__.py:4:4: W292 no newline at end of file
+src/api/utils/logging.py:15:1: I201 Missing newline between import groups. 'from src.core.logging import get_logger' is identified as Third Party and 'from fastapi import Request' is identified as Third Party.
+src/api/utils/logging.py:24:1: W293 blank line contains whitespace
+src/api/utils/logging.py:32:1: W293 blank line contains whitespace
+src/api/utils/logging.py:39:1: W293 blank line contains whitespace
+src/api/utils/logging.py:46:80: E501 line too long (90 > 79 characters)
+src/api/utils/logging.py:48:1: W293 blank line contains whitespace
+src/api/utils/logging.py:52:1: W293 blank line contains whitespace
+src/api/utils/logging.py:60:1: W293 blank line contains whitespace
+src/api/utils/logging.py:62:1: W293 blank line contains whitespace
+src/api/utils/logging.py:65:1: W293 blank line contains whitespace
+src/api/utils/logging.py:74:1: W293 blank line contains whitespace
+src/api/utils/logging.py:76:1: W293 blank line contains whitespace
+src/api/utils/logging.py:77:80: E501 line too long (81 > 79 characters)
+src/api/utils/logging.py:78:80: E501 line too long (85 > 79 characters)
+src/api/utils/logging.py:86:1: W293 blank line contains whitespace
+src/api/utils/logging.py:95:1: W293 blank line contains whitespace
+src/api/utils/logging.py:97:1: W293 blank line contains whitespace
+src/api/utils/logging.py:104:1: W293 blank line contains whitespace
+src/api/utils/logging.py:108:1: W293 blank line contains whitespace
+src/api/utils/logging.py:116:1: W293 blank line contains whitespace
+src/api/utils/logging.py:118:1: W293 blank line contains whitespace
+src/api/utils/logging.py:121:1: W293 blank line contains whitespace
+src/api/utils/logging.py:130:1: W293 blank line contains whitespace
+src/api/utils/logging.py:132:1: W293 blank line contains whitespace
+src/api/utils/logging.py:134:80: E501 line too long (85 > 79 characters)
+src/api/utils/logging.py:139:80: E501 line too long (113 > 79 characters)
+src/api/utils/logging.py:142:1: W293 blank line contains whitespace
+src/api/utils/logging.py:149:1: W293 blank line contains whitespace
+src/api/utils/logging.py:158:80: E501 line too long (103 > 79 characters)
+src/api/utils/logging.py:161:1: W293 blank line contains whitespace
+src/api/utils/logging.py:163:80: E501 line too long (83 > 79 characters)
+src/api/utils/logging.py:168:1: W293 blank line contains whitespace
+src/api/utils/logging.py:176:1: W293 blank line contains whitespace
+src/api/utils/logging.py:186:21: W291 trailing whitespace
+src/api/utils/logging.py:187:27: W291 trailing whitespace
+src/api/utils/logging.py:188:25: W291 trailing whitespace
+src/api/utils/logging.py:193:1: W293 blank line contains whitespace
+src/api/utils/logging.py:201:1: W293 blank line contains whitespace
+src/api/utils/logging.py:208:6: W292 no newline at end of file
+src/api/web_router.py:1:1: D100 Missing docstring in public module
+src/app/__init__.py:1:1: D104 Missing docstring in public package
+src/app/core/config.py:1:1: D100 Missing docstring in public module
+src/app/core/config.py:2:1: I100 Import statements are in the wrong order. 'from typing import List' should be before 'from pydantic_settings import BaseSettings, SettingsConfigDict' and in a different group.
+src/app/core/config.py:2:1: I201 Missing newline between import groups. 'from typing import List' is identified as Stdlib and 'from pydantic_settings import BaseSettings, SettingsConfigDict' is identified as Third Party.
+src/app/core/config.py:3:1: I100 Import statements are in the wrong order. 'from functools import lru_cache' should be before 'from typing import List'
+src/app/core/config.py:5:1: D101 Missing docstring in public class
+src/app/core/config.py:5:1: E302 expected 2 blank lines, found 1
+src/app/core/config.py:8:80: E501 line too long (83 > 79 characters)
+src/app/core/config.py:21:1: D102 Missing docstring in public method
+src/app/core/config.py:26:1: E302 expected 2 blank lines, found 1
+src/app/core/config.py:27:1: D103 Missing docstring in public function
+src/app/core/config.py:30:1: E305 expected 2 blank lines after class or function definition, found 1
+src/app/core/database.py:1:1: D100 Missing docstring in public module
+src/app/core/database.py:1:1: I101 Imported names are in the wrong order. Should be AsyncSession, async_sessionmaker, create_async_engine
+src/app/core/database.py:1:80: E501 line too long (88 > 79 characters)
+src/app/core/database.py:3:1: I100 Import statements are in the wrong order. 'from typing import AsyncGenerator' should be before 'from sqlalchemy.orm import declarative_base' and in a different group.
+src/app/core/database.py:3:1: I201 Missing newline between import groups. 'from typing import AsyncGenerator' is identified as Stdlib and 'from sqlalchemy.orm import declarative_base' is identified as Third Party.
+src/app/core/database.py:4:1: I201 Missing newline between import groups. 'from .config import settings' is identified as Application Relative and 'from typing import AsyncGenerator' is identified as Stdlib.
+src/app/core/database.py:20:1: D103 Missing docstring in public function
+src/app/core/database.py:20:1: E302 expected 2 blank lines, found 1
+src/app/core/startup.py:1:1: D100 Missing docstring in public module
+src/app/core/startup.py:3:1: D103 Missing docstring in public function
+src/app/core/startup.py:3:1: E302 expected 2 blank lines, found 1
+src/app/core/startup.py:20:80: E501 line too long (94 > 79 characters)
+src/app/core/startup.py:21:80: E501 line too long (84 > 79 characters)
+src/app/main.py:1:1: D100 Missing docstring in public module
+src/app/main.py:2:1: I201 Missing newline between import groups. 'from src.app.core.config import settings' is identified as Third Party and 'from fastapi import FastAPI' is identified as Third Party.
+src/app/main.py:7:1: E302 expected 2 blank lines, found 1
+src/app/main.py:8:1: D103 Missing docstring in public function
+src/bot/__init__.py:1:1: D104 Missing docstring in public package
+src/bot/commands/__init__.py:2:1: D205 1 blank line required between summary line and description
+src/bot/commands/__init__.py:8:30: W291 trailing whitespace
+src/bot/commands/__init__.py:10:1: I100 Import statements are in the wrong order. 'from . import historial' should be before 'from . import start'
+src/bot/commands/__init__.py:11:1: I100 Import statements are in the wrong order. 'from . import estadisticas' should be before 'from . import historial'
+src/bot/commands/__init__.py:16:23: W291 trailing whitespace
+src/bot/commands/__init__.py:21:2: W292 no newline at end of file
+src/bot/commands/crear_tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/crear_tarea.py:10:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from telegram.ext import CallbackContext, CommandHandler' and in a different group.
+src/bot/commands/crear_tarea.py:10:1: I201 Missing newline between import groups. 'from typing import Any' is identified as Stdlib and 'from telegram.ext import CallbackContext, CommandHandler' is identified as Third Party.
+src/bot/commands/crear_tarea.py:10:1: F401 'typing.Any' imported but unused
+src/bot/commands/crear_tarea.py:17:1: F811 redefinition of unused 'CallbackContext' from line 9
+src/bot/commands/crear_tarea.py:18:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext'
+src/bot/commands/crear_tarea.py:19:1: E302 expected 2 blank lines, found 0
+src/bot/commands/crear_tarea.py:19:80: E501 line too long (97 > 79 characters)
+src/bot/commands/crear_tarea.py:20:1: D205 1 blank line required between summary line and description
+src/bot/commands/crear_tarea.py:72:80: E501 line too long (81 > 79 characters)
+src/bot/commands/crear_tarea.py:76:80: E501 line too long (108 > 79 characters)
+src/bot/commands/crear_tarea.py:82:59: W292 no newline at end of file
+src/bot/commands/estadisticas.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/estadisticas.py:8:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext, CommandHandler'
+src/bot/commands/estadisticas.py:9:1: I100 Import statements are in the wrong order. 'from loguru import logger' should be before 'from telegram import Bot, Chat, User' and in a different group.
+src/bot/commands/estadisticas.py:9:1: I201 Missing newline between import groups. 'from loguru import logger' is identified as Third Party and 'from telegram import Bot, Chat, User' is identified as Third Party.
+src/bot/commands/estadisticas.py:10:1: I100 Import statements are in the wrong order. 'from datetime import datetime, timedelta' should be before 'from loguru import logger' and in a different group.
+src/bot/commands/estadisticas.py:10:1: I201 Missing newline between import groups. 'from datetime import datetime, timedelta' is identified as Stdlib and 'from loguru import logger' is identified as Third Party.
+src/bot/commands/estadisticas.py:10:1: F401 'datetime.timedelta' imported but unused
+src/bot/commands/estadisticas.py:13:1: I100 Import statements are in the wrong order. 'from config.settings import get_settings' should be before 'from src.bot.services.api_service import ApiService' and in a different group.
+src/bot/commands/estadisticas.py:13:1: I201 Missing newline between import groups. 'from config.settings import get_settings' is identified as Third Party and 'from src.bot.services.api_service import ApiService' is identified as Third Party.
+src/bot/commands/estadisticas.py:22:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:29:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:36:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:39:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:45:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:52:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:57:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:60:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:63:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:66:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:71:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:77:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:79:80: E501 line too long (81 > 79 characters)
+src/bot/commands/estadisticas.py:93:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:97:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:102:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:106:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:112:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:116:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:120:80: E501 line too long (84 > 79 characters)
+src/bot/commands/estadisticas.py:121:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:124:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:126:80: E501 line too long (82 > 79 characters)
+src/bot/commands/estadisticas.py:127:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:131:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:148:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:152:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:161:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:170:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:176:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:179:9: F541 f-string is missing placeholders
+src/bot/commands/estadisticas.py:182:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:185:80: E501 line too long (87 > 79 characters)
+src/bot/commands/estadisticas.py:193:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:203:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:210:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:220:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:231:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:238:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:242:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:254:1: W293 blank line contains whitespace
+src/bot/commands/estadisticas.py:257:1: W293 blank line contains whitespace
+src/bot/commands/finalizar_tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/finalizar_tarea.py:8:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from telegram.ext import CallbackContext, CommandHandler' and in a different group.
+src/bot/commands/finalizar_tarea.py:8:1: I201 Missing newline between import groups. 'from typing import Any' is identified as Stdlib and 'from telegram.ext import CallbackContext, CommandHandler' is identified as Third Party.
+src/bot/commands/finalizar_tarea.py:8:1: F401 'typing.Any' imported but unused
+src/bot/commands/finalizar_tarea.py:13:1: F811 redefinition of unused 'CallbackContext' from line 7
+src/bot/commands/finalizar_tarea.py:14:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext'
+src/bot/commands/finalizar_tarea.py:15:1: E302 expected 2 blank lines, found 0
+src/bot/commands/finalizar_tarea.py:15:80: E501 line too long (101 > 79 characters)
+src/bot/commands/finalizar_tarea.py:16:1: D205 1 blank line required between summary line and description
+src/bot/commands/finalizar_tarea.py:46:71: W292 no newline at end of file
+src/bot/commands/help.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/help.py:8:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext, CommandHandler'
+src/bot/commands/help.py:10:1: I100 Import statements are in the wrong order. 'from src.bot.utils.keyboards import KeyboardFactory' should be before 'from telegram import Bot, Chat, User' and in a different group.
+src/bot/commands/help.py:11:1: I101 Imported names are in the wrong order. Should be ActionEmojis, StatusEmojis, TaskEmojis
+src/bot/commands/help.py:11:1: I100 Import statements are in the wrong order. 'from src.bot.utils.emojis import StatusEmojis, ActionEmojis, TaskEmojis' should be before 'from src.bot.utils.keyboards import KeyboardFactory'
+src/bot/commands/help.py:12:1: I100 Import statements are in the wrong order. 'from src.bot.handlers.wizard_text_handler import get_step_help' should be before 'from src.bot.utils.emojis import StatusEmojis, ActionEmojis, TaskEmojis'
+src/bot/commands/help.py:15:80: E501 line too long (98 > 79 characters)
+src/bot/commands/help.py:18:1: W293 blank line contains whitespace
+src/bot/commands/help.py:25:1: W293 blank line contains whitespace
+src/bot/commands/help.py:27:80: E501 line too long (82 > 79 characters)
+src/bot/commands/help.py:29:1: W293 blank line contains whitespace
+src/bot/commands/help.py:54:80: E501 line too long (83 > 79 characters)
+src/bot/commands/help.py:59:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/historial.py:6:1: I101 Imported names are in the wrong order. Should be InlineKeyboardButton, InlineKeyboardMarkup, Update
+src/bot/commands/historial.py:8:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext, CommandHandler'
+src/bot/commands/historial.py:9:1: I100 Import statements are in the wrong order. 'from loguru import logger' should be before 'from telegram import Bot, Chat, User' and in a different group.
+src/bot/commands/historial.py:9:1: I201 Missing newline between import groups. 'from loguru import logger' is identified as Third Party and 'from telegram import Bot, Chat, User' is identified as Third Party.
+src/bot/commands/historial.py:12:1: I100 Import statements are in the wrong order. 'from config.settings import get_settings' should be before 'from src.bot.services.api_service import ApiService' and in a different group.
+src/bot/commands/historial.py:12:1: I201 Missing newline between import groups. 'from config.settings import get_settings' is identified as Third Party and 'from src.bot.services.api_service import ApiService' is identified as Third Party.
+src/bot/commands/historial.py:21:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:25:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:33:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:35:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:39:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:51:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:59:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:64:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:66:80: E501 line too long (85 > 79 characters)
+src/bot/commands/historial.py:69:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:72:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:80:80: E501 line too long (88 > 79 characters)
+src/bot/commands/historial.py:86:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:89:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:93:80: E501 line too long (95 > 79 characters)
+src/bot/commands/historial.py:94:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:100:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:107:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:123:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:128:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:137:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:139:80: E501 line too long (96 > 79 characters)
+src/bot/commands/historial.py:140:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:147:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:153:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:159:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:166:80: E501 line too long (82 > 79 characters)
+src/bot/commands/historial.py:168:13: B001 Do not use bare `except:`, it also catches unexpected events like memory errors, interrupts, system exit, and so on.  Prefer excepting specific exceptions  If you're sure what you're doing, be explicit and write `except BaseException:`.
+src/bot/commands/historial.py:168:13: E722 do not use bare 'except'
+src/bot/commands/historial.py:172:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:177:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:181:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:187:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:190:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:192:80: E501 line too long (97 > 79 characters)
+src/bot/commands/historial.py:193:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:202:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:206:80: E501 line too long (85 > 79 characters)
+src/bot/commands/historial.py:209:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:213:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:218:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:222:80: E501 line too long (84 > 79 characters)
+src/bot/commands/historial.py:224:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:227:80: E501 line too long (82 > 79 characters)
+src/bot/commands/historial.py:229:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:233:80: E501 line too long (85 > 79 characters)
+src/bot/commands/historial.py:235:1: W293 blank line contains whitespace
+src/bot/commands/historial.py:240:1: W293 blank line contains whitespace
+src/bot/commands/start.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/commands/start.py:8:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext, CommandHandler'
+src/bot/commands/start.py:9:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from telegram import Bot, Chat, User' and in a different group.
+src/bot/commands/start.py:9:1: I201 Missing newline between import groups. 'from typing import Any' is identified as Stdlib and 'from telegram import Bot, Chat, User' is identified as Third Party.
+src/bot/commands/start.py:9:1: F401 'typing.Any' imported but unused
+src/bot/commands/start.py:14:80: E501 line too long (91 > 79 characters)
+src/bot/commands/start.py:17:1: W293 blank line contains whitespace
+src/bot/commands/start.py:24:1: W293 blank line contains whitespace
+src/bot/commands/start.py:29:1: W293 blank line contains whitespace
+src/bot/commands/start.py:32:1: W293 blank line contains whitespace
+src/bot/commands/start.py:42:1: W293 blank line contains whitespace
+src/bot/handlers/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/handlers/__init__.py:8:1: I101 Imported names are in the wrong order. Should be crear_tarea, estadisticas, finalizar_tarea, historial, start
+src/bot/handlers/__init__.py:15:1: I100 Import statements are in the wrong order. 'from .messages import message_handler' should be before 'from ..commands import crear_tarea, finalizar_tarea, start, historial, estadisticas'
+src/bot/handlers/__init__.py:16:1: I100 Import statements are in the wrong order. 'from . import callback_handler' should be before 'from .messages import message_handler'
+src/bot/handlers/__init__.py:23:1: W293 blank line contains whitespace
+src/bot/handlers/__init__.py:31:1: W293 blank line contains whitespace
+src/bot/handlers/__init__.py:35:1: W293 blank line contains whitespace
+src/bot/handlers/__init__.py:38:1: W293 blank line contains whitespace
+src/bot/handlers/__init__.py:40:80: E501 line too long (83 > 79 characters)
+src/bot/handlers/__init__.py:42:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/handlers/callback_handler.py:8:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext, CallbackQueryHandler'
+src/bot/handlers/callback_handler.py:9:1: I100 Import statements are in the wrong order. 'from loguru import logger' should be before 'from telegram import Bot, Chat, User' and in a different group.
+src/bot/handlers/callback_handler.py:9:1: I201 Missing newline between import groups. 'from loguru import logger' is identified as Third Party and 'from telegram import Bot, Chat, User' is identified as Third Party.
+src/bot/handlers/callback_handler.py:11:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from loguru import logger' and in a different group.
+src/bot/handlers/callback_handler.py:12:1: I201 Missing newline between import groups. 'from src.bot.utils.keyboards import KeyboardFactory' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/bot/handlers/callback_handler.py:13:1: I101 Imported names are in the wrong order. Should be format_task_summary, get_step_header
+src/bot/handlers/callback_handler.py:13:1: I100 Import statements are in the wrong order. 'from src.bot.handlers.wizard_text_handler import get_step_header, format_task_summary' should be before 'from src.bot.utils.keyboards import KeyboardFactory'
+src/bot/handlers/callback_handler.py:13:80: E501 line too long (85 > 79 characters)
+src/bot/handlers/callback_handler.py:17:20: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:22:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:28:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:31:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:34:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:36:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:40:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:42:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:46:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:49:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:57:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:72:80: E501 line too long (93 > 79 characters)
+src/bot/handlers/callback_handler.py:76:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:77:55: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:78:17: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:83:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:98:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:108:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:113:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:124:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:148:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:150:80: E501 line too long (80 > 79 characters)
+src/bot/handlers/callback_handler.py:154:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:155:55: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:156:17: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:161:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:171:80: E501 line too long (83 > 79 characters)
+src/bot/handlers/callback_handler.py:173:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:175:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:184:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:189:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:202:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:208:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:210:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:215:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:218:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:223:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:236:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:242:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:244:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:247:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:251:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:254:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:260:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:262:80: E501 line too long (89 > 79 characters)
+src/bot/handlers/callback_handler.py:263:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:267:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:271:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:288:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:293:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:298:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:306:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:308:80: E501 line too long (84 > 79 characters)
+src/bot/handlers/callback_handler.py:311:80: E501 line too long (97 > 79 characters)
+src/bot/handlers/callback_handler.py:314:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:320:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:323:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:325:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:338:80: E501 line too long (101 > 79 characters)
+src/bot/handlers/callback_handler.py:341:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:347:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:354:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:360:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:364:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:378:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:379:55: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:380:17: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:385:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:393:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:398:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:402:80: E501 line too long (81 > 79 characters)
+src/bot/handlers/callback_handler.py:404:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:406:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:410:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:413:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:415:80: E501 line too long (85 > 79 characters)
+src/bot/handlers/callback_handler.py:416:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:420:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:427:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:430:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:434:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:439:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:445:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:446:55: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:447:17: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:452:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:465:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:475:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:476:55: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:481:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:488:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:491:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:495:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:498:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:504:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:515:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:518:80: E501 line too long (90 > 79 characters)
+src/bot/handlers/callback_handler.py:521:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:529:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:534:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:537:80: E501 line too long (121 > 79 characters)
+src/bot/handlers/callback_handler.py:541:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:550:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:555:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:561:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:563:80: E501 line too long (85 > 79 characters)
+src/bot/handlers/callback_handler.py:565:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:569:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:577:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:578:80: E501 line too long (84 > 79 characters)
+src/bot/handlers/callback_handler.py:579:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:588:11: W291 trailing whitespace
+src/bot/handlers/callback_handler.py:593:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:599:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:601:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:603:80: E501 line too long (85 > 79 characters)
+src/bot/handlers/callback_handler.py:605:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:608:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:611:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:614:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:619:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:625:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:636:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:639:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:642:1: W293 blank line contains whitespace
+src/bot/handlers/callback_handler.py:648:80: E501 line too long (100 > 79 characters)
+src/bot/handlers/callback_handler.py:649:1: W293 blank line contains whitespace
+src/bot/handlers/messages/message_handler.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/handlers/messages/message_handler.py:10:1: I100 Import statements are in the wrong order. 'from typing import Any' should be before 'from telegram.ext import CallbackContext, MessageHandler, filters' and in a different group.
+src/bot/handlers/messages/message_handler.py:10:1: I201 Missing newline between import groups. 'from typing import Any' is identified as Stdlib and 'from telegram.ext import CallbackContext, MessageHandler, filters' is identified as Third Party.
+src/bot/handlers/messages/message_handler.py:10:1: F401 'typing.Any' imported but unused
+src/bot/handlers/messages/message_handler.py:15:1: F811 redefinition of unused 'CallbackContext' from line 9
+src/bot/handlers/messages/message_handler.py:16:1: I100 Import statements are in the wrong order. 'from telegram import Bot, Chat, User' should be before 'from telegram.ext import CallbackContext'
+src/bot/handlers/messages/message_handler.py:17:1: E302 expected 2 blank lines, found 0
+src/bot/handlers/messages/message_handler.py:17:80: E501 line too long (106 > 79 characters)
+src/bot/handlers/messages/message_handler.py:18:1: D200 One-line docstring should fit on one line with quotes
+src/bot/handlers/messages/message_handler.py:21:80: E501 line too long (85 > 79 characters)
+src/bot/handlers/messages/message_handler.py:43:80: E501 line too long (80 > 79 characters)
+src/bot/handlers/messages/message_handler.py:48:2: W292 no newline at end of file
+src/bot/handlers/wizard_text_handler.py:321:9: E999 IndentationError: unexpected indent
+src/bot/main.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/main.py:10:1: I201 Missing newline between import groups. 'from telegram.ext import ApplicationBuilder' is identified as Third Party and 'from loguru import logger' is identified as Third Party.
+src/bot/main.py:12:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from telegram.ext import ApplicationBuilder' and in a different group.
+src/bot/main.py:13:1: I201 Missing newline between import groups. 'from src.bot.handlers import register_handlers' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/bot/services/api_legacy.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/services/api_legacy.py:6:1: F401 'typing.Dict' imported but unused
+src/bot/services/api_legacy.py:6:1: F401 'typing.List' imported but unused
+src/bot/services/api_legacy.py:10:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'import requests' and in a different group.
+src/bot/services/api_legacy.py:11:1: I201 Missing newline between import groups. 'from src.schemas.tarea import Tarea, TareaCreate' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/bot/services/api_legacy.py:14:1: D101 Missing docstring in public class
+src/bot/services/api_legacy.py:15:1: D107 Missing docstring in __init__
+src/bot/services/api_legacy.py:20:80: E501 line too long (94 > 79 characters)
+src/bot/services/api_legacy.py:26:80: E501 line too long (84 > 79 characters)
+src/bot/services/api_service.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/services/api_service.py:10:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'import requests' and in a different group.
+src/bot/services/api_service.py:10:1: F401 'config.settings.settings' imported but unused
+src/bot/services/api_service.py:11:1: I201 Missing newline between import groups. 'from src.schemas.tarea import Tarea, TareaCreate' is identified as Third Party and 'from config.settings import settings' is identified as Third Party.
+src/bot/services/api_service.py:14:1: D101 Missing docstring in public class
+src/bot/services/api_service.py:15:1: D107 Missing docstring in __init__
+src/bot/services/api_service.py:20:80: E501 line too long (94 > 79 characters)
+src/bot/services/api_service.py:26:80: E501 line too long (84 > 79 characters)
+src/bot/services/api_service.py:56:80: E501 line too long (86 > 79 characters)
+src/bot/services/api_service.py:61:1: W293 blank line contains whitespace
+src/bot/services/api_service.py:65:1: W293 blank line contains whitespace
+src/bot/services/api_service.py:68:1: W293 blank line contains whitespace
+src/bot/services/api_service.py:70:80: E501 line too long (84 > 79 characters)
+src/bot/utils/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/utils/emojis.py:11:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:18:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:33:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:44:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:60:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:72:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:86:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:105:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:116:1: D204 1 blank line required after class docstring
+src/bot/utils/emojis.py:144:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:147:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:157:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:160:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:170:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:173:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:183:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:188:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:194:1: W293 blank line contains whitespace
+src/bot/utils/emojis.py:198:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/bot/utils/keyboards.py:7:1: I100 Import statements are in the wrong order. 'from typing import List, Tuple' should be before 'from telegram import InlineKeyboardButton, InlineKeyboardMarkup' and in a different group.
+src/bot/utils/keyboards.py:7:1: I201 Missing newline between import groups. 'from typing import List, Tuple' is identified as Stdlib and 'from telegram import InlineKeyboardButton, InlineKeyboardMarkup' is identified as Third Party.
+src/bot/utils/keyboards.py:9:1: I101 Imported names are in the wrong order. Should be ActionEmojis, NavigationEmojis, StatusEmojis, TaskEmojis
+src/bot/utils/keyboards.py:16:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:22:58: W291 trailing whitespace
+src/bot/utils/keyboards.py:26:58: W291 trailing whitespace
+src/bot/utils/keyboards.py:30:53: W291 trailing whitespace
+src/bot/utils/keyboards.py:34:54: W291 trailing whitespace
+src/bot/utils/keyboards.py:38:56: W291 trailing whitespace
+src/bot/utils/keyboards.py:43:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:49:73: W291 trailing whitespace
+src/bot/utils/keyboards.py:53:80: E501 line too long (82 > 79 characters)
+src/bot/utils/keyboards.py:53:83: W291 trailing whitespace
+src/bot/utils/keyboards.py:57:71: W291 trailing whitespace
+src/bot/utils/keyboards.py:61:61: W291 trailing whitespace
+src/bot/utils/keyboards.py:66:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:73:61: W291 trailing whitespace
+src/bot/utils/keyboards.py:77:59: W291 trailing whitespace
+src/bot/utils/keyboards.py:83:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:90:63: W291 trailing whitespace
+src/bot/utils/keyboards.py:94:61: W291 trailing whitespace
+src/bot/utils/keyboards.py:99:56: W291 trailing whitespace
+src/bot/utils/keyboards.py:104:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:109:55: W291 trailing whitespace
+src/bot/utils/keyboards.py:113:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:116:38: W291 trailing whitespace
+src/bot/utils/keyboards.py:117:23: W291 trailing whitespace
+src/bot/utils/keyboards.py:123:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:129:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:136:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:139:80: E501 line too long (109 > 79 characters)
+src/bot/utils/keyboards.py:140:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:145:53: W291 trailing whitespace
+src/bot/utils/keyboards.py:150:55: W291 trailing whitespace
+src/bot/utils/keyboards.py:153:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:156:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:158:55: W291 trailing whitespace
+src/bot/utils/keyboards.py:161:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:163:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:171:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:175:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:180:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:182:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:186:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:193:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:195:57: W291 trailing whitespace
+src/bot/utils/keyboards.py:198:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:200:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:209:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:214:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:219:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:221:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:225:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:227:80: E501 line too long (103 > 79 characters)
+src/bot/utils/keyboards.py:228:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:235:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:244:1: W293 blank line contains whitespace
+src/bot/utils/keyboards.py:246:57: W291 trailing whitespace
+src/bot/utils/keyboards.py:249:1: W293 blank line contains whitespace
+src/core/auth.py:1:1: D100 Missing docstring in public module
+src/core/auth.py:4:80: E501 line too long (87 > 79 characters)
+src/core/cache.py:9:1: F401 'datetime.timedelta' imported but unused
+src/core/cache.py:21:1: W293 blank line contains whitespace
+src/core/cache.py:32:1: W293 blank line contains whitespace
+src/core/cache.py:58:28: C408 Unnecessary dict call - rewrite as a literal.
+src/core/cache.py:69:80: E501 line too long (80 > 79 characters)
+src/core/cache.py:71:80: E501 line too long (108 > 79 characters)
+src/core/cache.py:77:1: W293 blank line contains whitespace
+src/core/cache.py:101:80: E501 line too long (99 > 79 characters)
+src/core/cache.py:103:80: E501 line too long (94 > 79 characters)
+src/core/cache.py:120:80: E501 line too long (81 > 79 characters)
+src/core/cache.py:128:80: E501 line too long (90 > 79 characters)
+src/core/cache.py:151:1: W293 blank line contains whitespace
+src/core/cache.py:154:1: W293 blank line contains whitespace
+src/core/cache.py:176:80: E501 line too long (81 > 79 characters)
+src/core/cache.py:192:1: W293 blank line contains whitespace
+src/core/cache.py:197:1: W293 blank line contains whitespace
+src/core/cache.py:209:80: E501 line too long (84 > 79 characters)
+src/core/cache.py:210:1: W293 blank line contains whitespace
+src/core/cache.py:221:80: E501 line too long (84 > 79 characters)
+src/core/cache.py:230:1: W293 blank line contains whitespace
+src/core/cache.py:233:1: W293 blank line contains whitespace
+src/core/cache.py:256:1: W293 blank line contains whitespace
+src/core/cache.py:259:1: W293 blank line contains whitespace
+src/core/cache.py:294:1: W293 blank line contains whitespace
+src/core/cache.py:296:1: W293 blank line contains whitespace
+src/core/cache.py:319:1: W293 blank line contains whitespace
+src/core/cache.py:332:1: W293 blank line contains whitespace
+src/core/cache.py:374:1: W293 blank line contains whitespace
+src/core/cache.py:388:1: W293 blank line contains whitespace
+src/core/cache.py:390:1: W293 blank line contains whitespace
+src/core/cache.py:394:1: W293 blank line contains whitespace
+src/core/cache.py:405:1: D200 One-line docstring should fit on one line with quotes
+src/core/cache_decorators.py:1:1: D400 First line should end with a period
+src/core/cache_decorators.py:24:80: E501 line too long (82 > 79 characters)
+src/core/cache_decorators.py:32:80: E501 line too long (83 > 79 characters)
+src/core/cache_decorators.py:38:80: E501 line too long (90 > 79 characters)
+src/core/cache_decorators.py:47:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:52:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:56:80: E501 line too long (81 > 79 characters)
+src/core/cache_decorators.py:58:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:64:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:68:69: W291 trailing whitespace
+src/core/cache_decorators.py:71:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:78:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:82:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:90:1: D401 First line should be in imperative mood
+src/core/cache_decorators.py:92:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:97:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:101:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:111:80: E501 line too long (94 > 79 characters)
+src/core/cache_decorators.py:113:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:115:80: E501 line too long (90 > 79 characters)
+src/core/cache_decorators.py:116:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:123:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:127:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:130:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:138:80: E501 line too long (90 > 79 characters)
+src/core/cache_decorators.py:141:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:143:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:145:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:150:1: D401 First line should be in imperative mood
+src/core/cache_decorators.py:151:80: E501 line too long (86 > 79 characters)
+src/core/cache_decorators.py:152:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:157:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:160:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:170:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:176:80: E501 line too long (116 > 79 characters)
+src/core/cache_decorators.py:178:80: E501 line too long (96 > 79 characters)
+src/core/cache_decorators.py:179:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:181:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:183:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:192:1: D401 First line should be in imperative mood
+src/core/cache_decorators.py:194:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:196:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:204:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:209:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:218:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:227:80: E501 line too long (101 > 79 characters)
+src/core/cache_decorators.py:229:80: E501 line too long (96 > 79 characters)
+src/core/cache_decorators.py:230:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:232:1: W293 blank line contains whitespace
+src/core/cache_decorators.py:234:1: W293 blank line contains whitespace
+src/core/database.py:1:1: D200 One-line docstring should fit on one line with quotes
+src/core/database.py:10:80: E501 line too long (88 > 79 characters)
+src/core/database.py:12:1: I201 Missing newline between import groups. 'from tenacity import retry, stop_after_attempt, wait_exponential' is identified as Third Party and 'from sqlalchemy.pool import StaticPool' is identified as Third Party.
+src/core/database.py:14:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from tenacity import retry, stop_after_attempt, wait_exponential' and in a different group.
+src/core/database.py:23:1: D205 1 blank line required between summary line and description
+src/core/database.py:30:80: E501 line too long (93 > 79 characters)
+src/core/database.py:31:80: E501 line too long (86 > 79 characters)
+src/core/database.py:33:80: E501 line too long (94 > 79 characters)
+src/core/database.py:34:1: W293 blank line contains whitespace
+src/core/database.py:37:80: E501 line too long (81 > 79 characters)
+src/core/database.py:63:80: E501 line too long (83 > 79 characters)
+src/core/database.py:66:80: E501 line too long (90 > 79 characters)
+src/core/database.py:103:80: E501 line too long (82 > 79 characters)
+src/core/database.py:112:80: E501 line too long (94 > 79 characters)
+src/core/database.py:133:1: D101 Missing docstring in public class
+src/core/database.py:140:1: D107 Missing docstring in __init__
+src/core/database.py:147:1: D102 Missing docstring in public method
+src/core/database.py:153:1: D102 Missing docstring in public method
+src/core/database.py:158:1: D102 Missing docstring in public method
+src/core/database.py:161:1: W293 blank line contains whitespace
+src/core/database.py:163:80: E501 line too long (80 > 79 characters)
+src/core/database.py:168:1: E305 expected 2 blank lines after class or function definition, found 1
+src/core/database.py:168:80: E501 line too long (89 > 79 characters)
+src/core/database.py:172:80: E501 line too long (86 > 79 characters)
+src/core/database.py:174:1: D205 1 blank line required between summary line and description
+src/core/database.py:185:80: E501 line too long (82 > 79 characters)
+src/core/database.py:187:1: W293 blank line contains whitespace
+src/core/geo/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/core/geo/__init__.py:8:36: W292 no newline at end of file
+src/core/geo/postgis_service.py:9:1: I101 Imported names are in the wrong order. Should be Any, Dict, List
+src/core/geo/postgis_service.py:10:1: I201 Missing newline between import groups. 'from sqlalchemy.ext.asyncio import AsyncSession' is identified as Third Party and 'from typing import List, Dict, Any' is identified as Stdlib.
+src/core/geo/postgis_service.py:11:1: I100 Import statements are in the wrong order. 'from sqlalchemy import text' should be before 'from sqlalchemy.ext.asyncio import AsyncSession'
+src/core/geo/postgis_service.py:12:1: I100 Import statements are in the wrong order. 'from fastapi import HTTPException' should be before 'from sqlalchemy import text' and in a different group.
+src/core/geo/postgis_service.py:12:1: I201 Missing newline between import groups. 'from fastapi import HTTPException' is identified as Third Party and 'from sqlalchemy import text' is identified as Third Party.
+src/core/geo/postgis_service.py:20:22: W291 trailing whitespace
+src/core/geo/postgis_service.py:21:16: W291 trailing whitespace
+src/core/geo/postgis_service.py:22:16: W291 trailing whitespace
+src/core/geo/postgis_service.py:27:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:30:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:36:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:39:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:45:80: E501 line too long (81 > 79 characters)
+src/core/geo/postgis_service.py:47:80: E501 line too long (84 > 79 characters)
+src/core/geo/postgis_service.py:48:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:57:80: E501 line too long (86 > 79 characters)
+src/core/geo/postgis_service.py:59:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:63:19: W291 trailing whitespace
+src/core/geo/postgis_service.py:66:26: W291 trailing whitespace
+src/core/geo/postgis_service.py:69:27: W291 trailing whitespace
+src/core/geo/postgis_service.py:70:35: W291 trailing whitespace
+src/core/geo/postgis_service.py:72:80: E501 line too long (83 > 79 characters)
+src/core/geo/postgis_service.py:75:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:77:19: W291 trailing whitespace
+src/core/geo/postgis_service.py:80:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:82:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:88:80: E501 line too long (90 > 79 characters)
+src/core/geo/postgis_service.py:90:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:98:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:100:1: W293 blank line contains whitespace
+src/core/geo/postgis_service.py:113:10: W292 no newline at end of file
+src/core/logging.py:11:1: I100 Import statements are in the wrong order. 'import os' should be before 'from pathlib import Path'
+src/core/logging.py:13:1: I100 Import statements are in the wrong order. 'import json' should be before 'from typing import Optional'
+src/core/logging.py:43:1: D107 Missing docstring in __init__
+src/core/logging.py:50:80: E501 line too long (84 > 79 characters)
+src/core/logging.py:62:1: W293 blank line contains whitespace
+src/core/logging.py:64:80: E501 line too long (90 > 79 characters)
+src/core/logging.py:71:80: E501 line too long (87 > 79 characters)
+src/core/logging.py:78:80: E501 line too long (86 > 79 characters)
+src/core/logging.py:85:80: E501 line too long (92 > 79 characters)
+src/core/logging.py:99:1: W293 blank line contains whitespace
+src/core/logging.py:106:1: W293 blank line contains whitespace
+src/core/logging.py:112:1: W293 blank line contains whitespace
+src/core/logging.py:115:1: W293 blank line contains whitespace
+src/core/logging.py:123:80: E501 line too long (89 > 79 characters)
+src/core/logging.py:125:1: W293 blank line contains whitespace
+src/core/logging.py:148:1: W293 blank line contains whitespace
+src/core/logging.py:167:1: W293 blank line contains whitespace
+src/core/logging.py:184:1: W293 blank line contains whitespace
+src/core/logging.py:195:1: W293 blank line contains whitespace
+src/core/logging.py:202:1: W293 blank line contains whitespace
+src/core/logging.py:205:1: W293 blank line contains whitespace
+src/core/logging.py:213:41: W292 no newline at end of file
+src/core/migrations.py:12:1: I101 Imported names are in the wrong order. Should be Any, Dict, List, Optional
+src/core/migrations.py:13:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from typing import List, Optional, Dict, Any'
+src/core/migrations.py:22:1: D200 One-line docstring should fit on one line with quotes
+src/core/migrations.py:25:1: W293 blank line contains whitespace
+src/core/migrations.py:26:1: D107 Missing docstring in __init__
+src/core/migrations.py:30:1: W293 blank line contains whitespace
+src/core/migrations.py:34:1: W293 blank line contains whitespace
+src/core/migrations.py:37:1: W293 blank line contains whitespace
+src/core/migrations.py:41:80: E501 line too long (82 > 79 characters)
+src/core/migrations.py:45:1: W293 blank line contains whitespace
+src/core/migrations.py:51:1: W293 blank line contains whitespace
+src/core/migrations.py:60:1: W293 blank line contains whitespace
+src/core/migrations.py:65:80: E501 line too long (88 > 79 characters)
+src/core/migrations.py:67:1: W293 blank line contains whitespace
+src/core/migrations.py:81:1: W293 blank line contains whitespace
+src/core/migrations.py:89:1: W293 blank line contains whitespace
+src/core/migrations.py:110:1: W293 blank line contains whitespace
+src/core/migrations.py:114:1: W293 blank line contains whitespace
+src/core/migrations.py:119:1: W293 blank line contains whitespace
+src/core/migrations.py:126:1: W293 blank line contains whitespace
+src/core/migrations.py:128:1: W293 blank line contains whitespace
+src/core/migrations.py:132:1: W293 blank line contains whitespace
+src/core/migrations.py:137:1: W293 blank line contains whitespace
+src/core/migrations.py:143:1: W293 blank line contains whitespace
+src/core/migrations.py:149:80: E501 line too long (80 > 79 characters)
+src/core/migrations.py:158:1: W293 blank line contains whitespace
+src/core/migrations.py:161:1: W293 blank line contains whitespace
+src/core/migrations.py:163:1: W293 blank line contains whitespace
+src/core/migrations.py:164:80: E501 line too long (90 > 79 characters)
+src/core/migrations.py:167:1: W293 blank line contains whitespace
+src/core/migrations.py:171:1: W293 blank line contains whitespace
+src/core/migrations.py:179:1: W293 blank line contains whitespace
+src/core/migrations.py:184:1: W293 blank line contains whitespace
+src/core/migrations.py:186:1: W293 blank line contains whitespace
+src/core/migrations.py:200:1: W293 blank line contains whitespace
+src/core/migrations.py:205:1: W293 blank line contains whitespace
+src/core/migrations.py:207:1: W293 blank line contains whitespace
+src/core/migrations.py:211:1: W293 blank line contains whitespace
+src/core/migrations.py:214:1: W293 blank line contains whitespace
+src/core/migrations.py:221:1: W293 blank line contains whitespace
+src/core/migrations.py:223:1: W293 blank line contains whitespace
+src/core/migrations.py:228:1: W293 blank line contains whitespace
+src/core/migrations.py:230:1: W293 blank line contains whitespace
+src/core/migrations.py:234:1: W293 blank line contains whitespace
+src/core/migrations.py:237:1: W293 blank line contains whitespace
+src/core/migrations.py:244:1: W293 blank line contains whitespace
+src/core/migrations.py:246:1: W293 blank line contains whitespace
+src/core/migrations.py:251:1: W293 blank line contains whitespace
+src/core/migrations.py:253:1: W293 blank line contains whitespace
+src/core/migrations.py:257:1: W293 blank line contains whitespace
+src/core/migrations.py:262:1: W293 blank line contains whitespace
+src/core/migrations.py:270:1: W293 blank line contains whitespace
+src/core/migrations.py:274:1: W293 blank line contains whitespace
+src/core/migrations.py:280:1: W293 blank line contains whitespace
+src/core/migrations.py:284:80: E501 line too long (81 > 79 characters)
+src/core/migrations.py:285:1: W293 blank line contains whitespace
+src/core/migrations.py:289:1: W293 blank line contains whitespace
+src/core/migrations.py:296:80: E501 line too long (86 > 79 characters)
+src/core/migrations.py:298:1: W293 blank line contains whitespace
+src/core/migrations.py:307:1: W293 blank line contains whitespace
+src/core/migrations.py:309:1: W293 blank line contains whitespace
+src/core/migrations.py:313:1: W293 blank line contains whitespace
+src/core/migrations.py:318:1: W293 blank line contains whitespace
+src/core/migrations.py:330:1: W293 blank line contains whitespace
+src/core/migrations.py:333:1: W293 blank line contains whitespace
+src/core/migrations.py:337:45: W291 trailing whitespace
+src/core/migrations.py:340:1: W293 blank line contains whitespace
+src/core/migrations.py:346:1: W293 blank line contains whitespace
+src/core/migrations.py:351:1: D200 One-line docstring should fit on one line with quotes
+src/core/migrations.py:355:1: W293 blank line contains whitespace
+src/core/migrations.py:357:1: W293 blank line contains whitespace
+src/core/migrations.py:365:1: W293 blank line contains whitespace
+src/core/migrations.py:371:1: W293 blank line contains whitespace
+src/core/migrations.py:374:1: W293 blank line contains whitespace
+src/core/migrations.py:382:1: W293 blank line contains whitespace
+src/core/migrations.py:387:1: D200 One-line docstring should fit on one line with quotes
+src/core/migrations.py:391:1: W293 blank line contains whitespace
+src/core/migrations.py:394:1: W293 blank line contains whitespace
+src/core/migrations.py:400:80: E501 line too long (81 > 79 characters)
+src/core/migrations.py:401:1: W293 blank line contains whitespace
+src/core/migrations.py:409:24: W292 no newline at end of file
+src/core/performance.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:20:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:23:1: W293 blank line contains whitespace
+src/core/performance.py:24:1: D107 Missing docstring in __init__
+src/core/performance.py:28:1: W293 blank line contains whitespace
+src/core/performance.py:29:80: E501 line too long (93 > 79 characters)
+src/core/performance.py:33:1: W293 blank line contains whitespace
+src/core/performance.py:35:80: E501 line too long (85 > 79 characters)
+src/core/performance.py:36:1: W293 blank line contains whitespace
+src/core/performance.py:47:1: W293 blank line contains whitespace
+src/core/performance.py:53:1: W293 blank line contains whitespace
+src/core/performance.py:62:1: W293 blank line contains whitespace
+src/core/performance.py:71:1: W293 blank line contains whitespace
+src/core/performance.py:80:1: W293 blank line contains whitespace
+src/core/performance.py:91:80: E501 line too long (120 > 79 characters)
+src/core/performance.py:92:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:97:1: W293 blank line contains whitespace
+src/core/performance.py:112:80: E501 line too long (95 > 79 characters)
+src/core/performance.py:113:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:119:19: W291 trailing whitespace
+src/core/performance.py:126:36: W291 trailing whitespace
+src/core/performance.py:128:41: W291 trailing whitespace
+src/core/performance.py:131:1: W293 blank line contains whitespace
+src/core/performance.py:133:80: E501 line too long (84 > 79 characters)
+src/core/performance.py:136:1: W293 blank line contains whitespace
+src/core/performance.py:140:80: E501 line too long (88 > 79 characters)
+src/core/performance.py:144:80: E501 line too long (101 > 79 characters)
+src/core/performance.py:147:1: W293 blank line contains whitespace
+src/core/performance.py:149:1: W293 blank line contains whitespace
+src/core/performance.py:152:80: E501 line too long (100 > 79 characters)
+src/core/performance.py:157:80: E501 line too long (82 > 79 characters)
+src/core/performance.py:158:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:164:19: W291 trailing whitespace
+src/core/performance.py:171:21: W291 trailing whitespace
+src/core/performance.py:172:74: W291 trailing whitespace
+src/core/performance.py:173:27: W291 trailing whitespace
+src/core/performance.py:175:37: W291 trailing whitespace
+src/core/performance.py:181:1: W293 blank line contains whitespace
+src/core/performance.py:183:1: W293 blank line contains whitespace
+src/core/performance.py:193:80: E501 line too long (114 > 79 characters)
+src/core/performance.py:201:1: W293 blank line contains whitespace
+src/core/performance.py:203:1: W293 blank line contains whitespace
+src/core/performance.py:210:1: D200 One-line docstring should fit on one line with quotes
+src/core/performance.py:213:1: W293 blank line contains whitespace
+src/core/performance.py:214:1: D107 Missing docstring in __init__
+src/core/performance.py:216:1: W293 blank line contains whitespace
+src/core/performance.py:217:80: E501 line too long (96 > 79 characters)
+src/core/performance.py:220:1: W293 blank line contains whitespace
+src/core/performance.py:230:1: W293 blank line contains whitespace
+src/core/performance.py:236:1: W293 blank line contains whitespace
+src/core/performance.py:239:80: E501 line too long (88 > 79 characters)
+src/core/performance.py:240:1: W293 blank line contains whitespace
+src/core/performance.py:243:1: W293 blank line contains whitespace
+src/core/performance.py:250:1: W293 blank line contains whitespace
+src/core/performance.py:258:1: W293 blank line contains whitespace
+src/core/performance.py:265:80: E501 line too long (107 > 79 characters)
+src/core/performance.py:272:49: W292 no newline at end of file
+src/core/security.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/core/security.py:10:1: I201 Missing newline between import groups. 'from passlib.context import CryptContext' is identified as Third Party and 'from jose import jwt' is identified as Third Party.
+src/core/security.py:12:1: I100 Import statements are in the wrong order. 'from config.settings import settings' should be before 'from passlib.context import CryptContext' and in a different group.
+src/core/security.py:23:1: D200 One-line docstring should fit on one line with quotes
+src/core/security.py:33:80: E501 line too long (81 > 79 characters)
+src/core/security.py:38:1: D200 One-line docstring should fit on one line with quotes
+src/core/security.py:45:1: D200 One-line docstring should fit on one line with quotes
+src/core/security.py:48:38: W292 no newline at end of file
+src/core/websocket_integration.py:9:1: I101 Imported names are in the wrong order. Should be Any, Dict, Optional
+src/core/websocket_integration.py:10:1: I100 Import statements are in the wrong order. 'import asyncio' should be before 'from typing import Optional, Dict, Any'
+src/core/websocket_integration.py:26:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:30:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:31:1: D107 Missing docstring in __init__
+src/core/websocket_integration.py:36:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:41:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:46:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:47:66: W291 trailing whitespace
+src/core/websocket_integration.py:48:26: E128 continuation line under-indented for visual indent
+src/core/websocket_integration.py:51:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:59:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:66:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:68:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:76:80: E501 line too long (88 > 79 characters)
+src/core/websocket_integration.py:78:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:82:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:90:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:97:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:104:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:106:80: E501 line too long (83 > 79 characters)
+src/core/websocket_integration.py:107:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:108:80: E501 line too long (88 > 79 characters)
+src/core/websocket_integration.py:111:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:115:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:117:80: E501 line too long (86 > 79 characters)
+src/core/websocket_integration.py:118:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:123:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:130:80: E501 line too long (97 > 79 characters)
+src/core/websocket_integration.py:132:80: E501 line too long (90 > 79 characters)
+src/core/websocket_integration.py:133:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:136:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:137:80: E501 line too long (91 > 79 characters)
+src/core/websocket_integration.py:140:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:144:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:146:80: E501 line too long (94 > 79 characters)
+src/core/websocket_integration.py:147:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:152:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:159:80: E501 line too long (105 > 79 characters)
+src/core/websocket_integration.py:161:80: E501 line too long (98 > 79 characters)
+src/core/websocket_integration.py:162:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:163:80: E501 line too long (90 > 79 characters)
+src/core/websocket_integration.py:171:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:177:13: F841 local variable '_dashboard_data' is assigned to but never used
+src/core/websocket_integration.py:188:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:189:80: E501 line too long (94 > 79 characters)
+src/core/websocket_integration.py:189:95: W291 trailing whitespace
+src/core/websocket_integration.py:190:49: E128 continuation line under-indented for visual indent
+src/core/websocket_integration.py:190:80: E501 line too long (99 > 79 characters)
+src/core/websocket_integration.py:191:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:196:80: E501 line too long (84 > 79 characters)
+src/core/websocket_integration.py:200:80: E501 line too long (96 > 79 characters)
+src/core/websocket_integration.py:203:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:206:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:211:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:215:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:222:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:233:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:247:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:253:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:257:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:259:80: E501 line too long (80 > 79 characters)
+src/core/websocket_integration.py:265:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:275:80: E501 line too long (95 > 79 characters)
+src/core/websocket_integration.py:277:80: E501 line too long (81 > 79 characters)
+src/core/websocket_integration.py:279:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:284:80: E501 line too long (94 > 79 characters)
+src/core/websocket_integration.py:285:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:289:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:291:80: E501 line too long (83 > 79 characters)
+src/core/websocket_integration.py:298:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:302:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:305:1: D401 First line should be in imperative mood
+src/core/websocket_integration.py:306:80: E501 line too long (81 > 79 characters)
+src/core/websocket_integration.py:307:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:308:49: W291 trailing whitespace
+src/core/websocket_integration.py:309:80: E501 line too long (92 > 79 characters)
+src/core/websocket_integration.py:310:1: D401 First line should be in imperative mood
+src/core/websocket_integration.py:311:80: E501 line too long (87 > 79 characters)
+src/core/websocket_integration.py:312:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:313:80: E501 line too long (89 > 79 characters)
+src/core/websocket_integration.py:321:80: E501 line too long (95 > 79 characters)
+src/core/websocket_integration.py:323:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:326:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:331:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:339:80: E501 line too long (97 > 79 characters)
+src/core/websocket_integration.py:341:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:343:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:350:1: W293 blank line contains whitespace
+src/core/websocket_integration.py:351:70: W292 no newline at end of file
+src/core/websockets.py:13:1: I100 Import statements are in the wrong order. 'import asyncio' should be before 'import json'
+src/core/websockets.py:14:1: I101 Imported names are in the wrong order. Should be Any, Dict, Optional, Set
+src/core/websockets.py:15:1: I100 Import statements are in the wrong order. 'from datetime import datetime' should be before 'from typing import Dict, Set, Optional, Any'
+src/core/websockets.py:17:1: I100 Import statements are in the wrong order. 'import uuid' should be before 'from enum import Enum'
+src/core/websockets.py:20:1: I201 Missing newline between import groups. 'from pydantic import BaseModel, Field' is identified as Third Party and 'from fastapi import WebSocket' is identified as Third Party.
+src/core/websockets.py:27:32: W291 trailing whitespace
+src/core/websockets.py:29:22: W291 trailing whitespace
+src/core/websockets.py:30:20: W291 trailing whitespace
+src/core/websockets.py:43:1: D204 1 blank line required after class docstring
+src/core/websockets.py:47:1: W293 blank line contains whitespace
+src/core/websockets.py:51:1: W293 blank line contains whitespace
+src/core/websockets.py:57:1: W293 blank line contains whitespace
+src/core/websockets.py:61:1: W293 blank line contains whitespace
+src/core/websockets.py:67:1: W293 blank line contains whitespace
+src/core/websockets.py:75:1: D204 1 blank line required after class docstring
+src/core/websockets.py:87:1: D204 1 blank line required after class docstring
+src/core/websockets.py:96:1: W293 blank line contains whitespace
+src/core/websockets.py:105:1: W293 blank line contains whitespace
+src/core/websockets.py:112:1: W293 blank line contains whitespace
+src/core/websockets.py:113:1: D107 Missing docstring in __init__
+src/core/websockets.py:116:1: W293 blank line contains whitespace
+src/core/websockets.py:118:80: E501 line too long (84 > 79 characters)
+src/core/websockets.py:119:80: E501 line too long (81 > 79 characters)
+src/core/websockets.py:120:1: W293 blank line contains whitespace
+src/core/websockets.py:131:1: W293 blank line contains whitespace
+src/core/websockets.py:135:1: D102 Missing docstring in public method
+src/core/websockets.py:141:80: E501 line too long (94 > 79 characters)
+src/core/websockets.py:143:1: D102 Missing docstring in public method
+src/core/websockets.py:160:1: W293 blank line contains whitespace
+src/core/websockets.py:161:80: E501 line too long (80 > 79 characters)
+src/core/websockets.py:161:81: W291 trailing whitespace
+src/core/websockets.py:162:22: E128 continuation line under-indented for visual indent
+src/core/websockets.py:165:1: W293 blank line contains whitespace
+src/core/websockets.py:170:1: W293 blank line contains whitespace
+src/core/websockets.py:175:1: W293 blank line contains whitespace
+src/core/websockets.py:181:1: W293 blank line contains whitespace
+src/core/websockets.py:184:1: W293 blank line contains whitespace
+src/core/websockets.py:190:1: W293 blank line contains whitespace
+src/core/websockets.py:196:1: W293 blank line contains whitespace
+src/core/websockets.py:200:1: W293 blank line contains whitespace
+src/core/websockets.py:208:1: W293 blank line contains whitespace
+src/core/websockets.py:221:1: W293 blank line contains whitespace
+src/core/websockets.py:225:1: W293 blank line contains whitespace
+src/core/websockets.py:227:1: W293 blank line contains whitespace
+src/core/websockets.py:231:1: W293 blank line contains whitespace
+src/core/websockets.py:237:1: W293 blank line contains whitespace
+src/core/websockets.py:239:1: W293 blank line contains whitespace
+src/core/websockets.py:243:80: E501 line too long (85 > 79 characters)
+src/core/websockets.py:246:1: W293 blank line contains whitespace
+src/core/websockets.py:249:80: E501 line too long (87 > 79 characters)
+src/core/websockets.py:252:1: W293 blank line contains whitespace
+src/core/websockets.py:256:1: W293 blank line contains whitespace
+src/core/websockets.py:259:1: W293 blank line contains whitespace
+src/core/websockets.py:265:1: W293 blank line contains whitespace
+src/core/websockets.py:270:1: W293 blank line contains whitespace
+src/core/websockets.py:277:1: W293 blank line contains whitespace
+src/core/websockets.py:278:80: E501 line too long (87 > 79 characters)
+src/core/websockets.py:281:1: W293 blank line contains whitespace
+src/core/websockets.py:285:1: W293 blank line contains whitespace
+src/core/websockets.py:292:1: W293 blank line contains whitespace
+src/core/websockets.py:294:1: W293 blank line contains whitespace
+src/core/websockets.py:299:1: W293 blank line contains whitespace
+src/core/websockets.py:301:1: W293 blank line contains whitespace
+src/core/websockets.py:309:80: E501 line too long (84 > 79 characters)
+src/core/websockets.py:314:1: W293 blank line contains whitespace
+src/core/websockets.py:316:1: W293 blank line contains whitespace
+src/core/websockets.py:324:1: W293 blank line contains whitespace
+src/core/websockets.py:328:1: W293 blank line contains whitespace
+src/core/websockets.py:330:1: W293 blank line contains whitespace
+src/core/websockets.py:334:1: W293 blank line contains whitespace
+src/core/websockets.py:338:1: W293 blank line contains whitespace
+src/core/websockets.py:344:1: W293 blank line contains whitespace
+src/core/websockets.py:347:1: W293 blank line contains whitespace
+src/core/websockets.py:352:80: E501 line too long (113 > 79 characters)
+src/core/websockets.py:358:1: W293 blank line contains whitespace
+src/core/websockets.py:362:1: W293 blank line contains whitespace
+src/core/websockets.py:366:1: W293 blank line contains whitespace
+src/core/websockets.py:372:1: W293 blank line contains whitespace
+src/core/websockets.py:375:1: W293 blank line contains whitespace
+src/core/websockets.py:380:80: E501 line too long (113 > 79 characters)
+src/core/websockets.py:390:1: W293 blank line contains whitespace
+src/core/websockets.py:391:50: W291 trailing whitespace
+src/core/websockets.py:392:24: E128 continuation line under-indented for visual indent
+src/core/websockets.py:395:1: W293 blank line contains whitespace
+src/core/websockets.py:399:1: W293 blank line contains whitespace
+src/core/websockets.py:405:58: W291 trailing whitespace
+src/core/websockets.py:408:1: W293 blank line contains whitespace
+src/core/websockets.py:414:80: E501 line too long (113 > 79 characters)
+src/core/websockets.py:425:80: E501 line too long (81 > 79 characters)
+src/core/websockets.py:472:1: W293 blank line contains whitespace
+src/core/websockets.py:484:1: W293 blank line contains whitespace
+src/core/websockets.py:487:1: W293 blank line contains whitespace
+src/core/websockets.py:491:1: W293 blank line contains whitespace
+src/core/websockets.py:493:80: E501 line too long (84 > 79 characters)
+src/core/websockets.py:495:1: W293 blank line contains whitespace
+src/core/websockets.py:497:1: W293 blank line contains whitespace
+src/core/websockets.py:503:1: W293 blank line contains whitespace
+src/core/websockets.py:507:1: W293 blank line contains whitespace
+src/core/websockets.py:514:39: W291 trailing whitespace
+src/core/websockets.py:524:80: E501 line too long (108 > 79 characters)
+src/core/websockets.py:534:70: W291 trailing whitespace
+src/core/websockets.py:535:29: E128 continuation line under-indented for visual indent
+src/core/websockets.py:545:1: W293 blank line contains whitespace
+src/core/websockets.py:558:1: W293 blank line contains whitespace
+src/core/websockets.py:562:68: W291 trailing whitespace
+src/core/websockets.py:563:28: E128 continuation line under-indented for visual indent
+src/core/websockets.py:574:1: W293 blank line contains whitespace
+src/core/websockets.py:586:1: W293 blank line contains whitespace
+src/core/websockets.py:595:1: W293 blank line contains whitespace
+src/core/websockets.py:596:47: W292 no newline at end of file
+src/core/ws_pubsub.py:19:80: E501 line too long (117 > 79 characters)
+src/core/ws_pubsub.py:23:1: D101 Missing docstring in public class
+src/core/ws_pubsub.py:24:1: D107 Missing docstring in __init__
+src/core/ws_pubsub.py:44:80: E501 line too long (97 > 79 characters)
+src/core/ws_pubsub.py:53:24: C408 Unnecessary dict call - rewrite as a literal.
+src/core/ws_pubsub.py:61:80: E501 line too long (116 > 79 characters)
+src/core/ws_pubsub.py:63:80: E501 line too long (97 > 79 characters)
+src/core/ws_pubsub.py:65:80: E501 line too long (83 > 79 characters)
+src/core/ws_pubsub.py:76:80: E501 line too long (99 > 79 characters)
+src/core/ws_pubsub.py:78:80: E501 line too long (94 > 79 characters)
+src/core/ws_pubsub.py:97:80: E501 line too long (103 > 79 characters)
+src/core/ws_pubsub.py:103:80: E501 line too long (84 > 79 characters)
+src/core/ws_pubsub.py:105:1: D102 Missing docstring in public method
+src/core/ws_pubsub.py:125:80: E501 line too long (86 > 79 characters)
+src/core/ws_pubsub.py:139:80: E501 line too long (81 > 79 characters)
+src/grupo_gad/__init__.py:1:1: D104 Missing docstring in public package
+src/observability/__init__.py:6:4: W292 no newline at end of file
+src/observability/metrics.py:5:80: E501 line too long (81 > 79 characters)
+src/observability/metrics.py:11:1: I101 Imported names are in the wrong order. Should be Any, Dict, Optional
+src/observability/metrics.py:12:1: I100 Import statements are in the wrong order. 'import time' should be before 'from typing import Dict, Optional, Any'
+src/observability/metrics.py:13:1: I201 Missing newline between import groups. 'from prometheus_client import Counter, Gauge, Histogram' is identified as Third Party and 'import time' is identified as Stdlib.
+src/observability/metrics.py:32:80: E501 line too long (96 > 79 characters)
+src/observability/metrics.py:104:1: E302 expected 2 blank lines, found 1
+src/observability/metrics.py:105:1: D205 1 blank line required between summary line and description
+src/observability/metrics.py:113:1: W293 blank line contains whitespace
+src/observability/metrics.py:117:80: E501 line too long (99 > 79 characters)
+src/observability/metrics.py:120:1: W293 blank line contains whitespace
+src/observability/metrics.py:127:1: W293 blank line contains whitespace
+src/observability/metrics.py:133:80: E501 line too long (94 > 79 characters)
+src/observability/metrics.py:136:1: W293 blank line contains whitespace
+src/observability/metrics.py:142:1: W293 blank line contains whitespace
+src/observability/metrics.py:151:1: W293 blank line contains whitespace
+src/observability/metrics.py:156:1: W293 blank line contains whitespace
+src/observability/metrics.py:162:1: D200 One-line docstring should fit on one line with quotes
+src/observability/metrics.py:169:1: D200 One-line docstring should fit on one line with quotes
+src/observability/metrics.py:178:1: W293 blank line contains whitespace
+src/observability/metrics.py:188:1: W293 blank line contains whitespace
+src/observability/metrics.py:198:1: W293 blank line contains whitespace
+src/observability/metrics.py:203:80: E501 line too long (82 > 79 characters)
+src/observability/metrics.py:204:1: W293 blank line contains whitespace
+src/observability/metrics.py:209:1: W293 blank line contains whitespace
+src/observability/metrics.py:214:1: W293 blank line contains whitespace
+src/observability/metrics.py:218:62: W292 no newline at end of file
+src/schemas/__init__.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/schemas/tarea.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/schemas/tarea.py:16:1: D101 Missing docstring in public class
+src/schemas/tarea.py:31:1: D101 Missing docstring in public class
+src/schemas/tarea.py:39:1: W293 blank line contains whitespace
+src/schemas/tarea.py:48:1: D101 Missing docstring in public class
+src/schemas/tarea.py:62:1: D101 Missing docstring in public class
+src/schemas/tarea.py:74:1: W293 blank line contains whitespace
+src/schemas/tarea.py:80:1: D102 Missing docstring in public method
+src/schemas/tarea.py:87:1: D101 Missing docstring in public class
+src/schemas/tarea.py:92:1: D101 Missing docstring in public class
+src/schemas/token.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/schemas/token.py:11:1: D101 Missing docstring in public class
+src/schemas/token.py:16:1: D101 Missing docstring in public class
+src/schemas/usuario.py:2:1: D200 One-line docstring should fit on one line with quotes
+src/schemas/usuario.py:15:1: D101 Missing docstring in public class
+src/schemas/usuario.py:27:1: D101 Missing docstring in public class
+src/schemas/usuario.py:36:1: D101 Missing docstring in public class
+src/schemas/usuario.py:49:1: D101 Missing docstring in public class
+src/schemas/usuario.py:54:1: D102 Missing docstring in public method
+src/schemas/usuario.py:61:1: D101 Missing docstring in public class
+src/schemas/usuario.py:66:1: D101 Missing docstring in public class
+src/shared/constants.py:2:1: D200 One-line docstring should fit on one line with quotes
