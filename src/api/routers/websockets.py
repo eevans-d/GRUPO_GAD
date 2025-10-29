@@ -417,7 +417,8 @@ async def test_trigger_broadcast(payload: dict):  # pragma: no cover - cubierto 
             "title": payload.get("title", "Test Broadcast"),
             "content": payload.get("content", "Mensaje de prueba"),
             "level": payload.get("level", "info")
-        }
+        },
+        topic=payload.get("topic") if isinstance(payload.get("topic"), str) else None
     )
     sent = await websocket_manager.broadcast(message)
     return {"status": "ok", "sent": sent, "metrics": websocket_manager.get_stats().get("metrics", {})}
