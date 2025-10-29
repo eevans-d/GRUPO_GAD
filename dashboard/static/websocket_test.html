@@ -155,6 +155,7 @@
 
         <div class="controls">
             <input id="tokenInput" type="text" placeholder="JWT (opcional)" style="flex:1; min-width:280px; padding:8px;" />
+            <input id="topicsInput" type="text" placeholder="Tópicos (coma-separados), p.ej.: notifications,dashboard:kpis" style="flex:1; min-width:320px; padding:8px;" />
             <button id="connectBtn" onclick="connect()">🔌 Conectar</button>
             <button id="disconnectBtn" onclick="disconnect()" disabled>🔌 Desconectar</button>
             <button id="dashboardBtn" onclick="requestDashboard()" disabled>📊 Dashboard</button>
@@ -198,7 +199,8 @@
         };
         let uptimeInterval = null;
         let reconnectAttempts = 0;
-        let lastSubscribedEvents = ['task_created', 'task_updated', 'dashboard_update', 'notification'];
+    // Por defecto, suscríbete a tópicos de ejemplo compatibles con el backend
+    let lastSubscribedEvents = ['notifications', 'dashboard:kpis'];
 
         function connect() {
             if (websocket && websocket.readyState === WebSocket.OPEN) {
@@ -373,9 +375,19 @@
         }
 
         function subscribe(events) {
-            const evts = events || ['task_created', 'task_updated', 'dashboard_update', 'notification'];
+            // Leer de input si no se pasó explícitamente
+            let evts = events;
+            if (!evts) {
+                const raw = (document.getElementById('topicsInput').value || '').trim();
+                if (raw.length > 0) {
+                    evts = raw.split(',').map(s => s.trim()).filter(Boolean);
+                } else {
+                    evts = lastSubscribedEvents.slice();
+                }
+            }
             lastSubscribedEvents = evts.slice();
             sendMessage('subscribe', { events: evts });
+            addMessage(`🔔 Suscrito a: ${evts.join(', ')}`, 'info');
         }
 
         function addMessage(text, type = 'info') {
