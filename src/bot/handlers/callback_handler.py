@@ -12,6 +12,14 @@ from config.settings import settings
 from src.bot.utils.keyboards import KeyboardFactory
 from src.bot.handlers.wizard_text_handler import get_step_header, format_task_summary
 
+# Quick Wins imports
+from src.bot.utils.error_messages import ErrorMessages, log_error, ErrorCategory
+from src.bot.utils.validators import TaskValidator, UnifiedCopy
+from src.bot.utils.wizard_state import wizard_manager, WizardState
+from src.bot.utils.ux_metrics import ux_metrics
+from src.bot.utils.confirmations import ConfirmationFormatter, ConfirmationPattern
+from src.bot.utils.emojis import StatusEmojis, ActionEmojis
+
 
 async def handle_callback_query(
     update: Update, 
@@ -55,6 +63,16 @@ async def handle_callback_query(
         entity=entity
     )
     
+    # Quick Win #4: Verificar estado del wizard
+    user_id = update.effective_user.id if update.effective_user else 0
+    session = wizard_manager.get_session(user_id)
+    if not session.allow_callback():
+        await query.answer(
+            f"{StatusEmojis.WARNING} Operación en proceso, espera...",
+            show_alert=True
+        )
+        return
+    
     # Router de acciones
     try:
         if action == "menu":
@@ -66,10 +84,19 @@ async def handle_callback_query(
         elif action == "page":
             await handle_pagination_action(query, context, entity, parts[2:])
         else:
-            await query.edit_message_text(f"❌ Acción desconocida: {action}")
+            # Quick Win #2: Mensaje de error específico
+            error_msg = ErrorMessages.get_generic_error("acción")
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
     except Exception as e:
         logger.exception(f"Error procesando callback: {e}")
-        await query.answer("❌ Error procesando acción. Intenta nuevamente.", show_alert=True)
+        # Quick Win #2: Error específico con contexto
+        error_msg = ErrorMessages.format_api_error(
+            operation="procesar callback",
+            error_code="500",
+            technical_details=str(e)[:100]
+        )
+        await query.edit_message_text(error_msg, parse_mode="Markdown")
+        log_error(ErrorCategory.SYSTEM, f"Error en callback: {str(e)}", user_id=user_id)
 
 
 async def handle_menu_action(
@@ -167,24 +194,51 @@ async def handle_crear_action(
     """
     if entity == "tipo":
         # Step 1: Usuario seleccionó un tipo de tarea
+        user_id = query.from_user.id if query.from_user else 0
+        
         if not params:
-            await query.edit_message_text("❌ Error: tipo de tarea no especificado")
+            error_msg = ErrorMessages.format_user_input_error(
+                expected="Tipo de tarea",
+                examples=["OPERATIVO", "ADMINISTRATIVO", "EMERGENCIA"]
+            )
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
             return
         
         tipo = params[0]
         
-        # Inicializar wizard
+        # Quick Win #3: Validar tipo
+        validation = TaskValidator.validate_tipo(tipo)
+        if not validation.is_valid:
+            error_msg = ErrorMessages.format_validation_error(
+                field="Tipo",
+                value=tipo,
+                issue=validation.error_message or "Tipo inválido",
+                suggestion=validation.suggestion
+            )
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
+            ux_metrics.track_validation_error(user_id, "tipo", "invalid_type", 1)
+            return
+        
+        # Quick Win #5: Track inicio de wizard
+        ux_metrics.track_wizard_start(user_id, "crear")
+        ux_metrics.track_step_start(user_id, 1)
+        ux_metrics.track_step_complete(user_id, 1)
+        ux_metrics.track_step_start(user_id, 2)
+        
+        # Quick Win #4: Inicializar wizard state
+        wizard_manager.start_wizard(user_id, "crear")
+        wizard_manager.advance_state(user_id, WizardState.ENTERING_CODE, data={'tipo': tipo})
+        
+        # Inicializar wizard en context
         context.user_data['wizard'] = {
             'command': 'crear',
             'current_step': 2,
-            'data': {
-                'tipo': tipo
-            }
+            'data': {'tipo': tipo}
         }
         
         logger.bind(wizard=True).info(
             f"Wizard iniciado - Step 1 (tipo): {tipo}",
-            user_id=query.from_user.id if query.from_user else None
+            user_id=user_id
         )
         
         # Step 2: Solicitar código
@@ -192,44 +246,77 @@ async def handle_crear_action(
         header = get_step_header(2, "Crear Nueva Tarea")
         await query.edit_message_text(
             f"{header}\n"
-            f"Tipo: *{tipo}*\n\n"
+            f"✅ Tipo: *{tipo}*\n\n"
             f"🔤 *Ingresa el código único de la tarea:*\n\n"
             f"📌 *Formato sugerido:* `TIP-2025-001`\n"
-            f"⚠️ *Importante:* Máximo 20 caracteres",
+            f"⚠️ *Importante:* Máximo {UnifiedCopy.MAX_CODIGO_LENGTH} caracteres\n\n"
+            f"{ActionEmojis.CANCEL} Cancelar: /cancelar",
             reply_markup=keyboard,
             parse_mode="Markdown"
         )
     
     elif entity == "delegado":
         # Step 4: Usuario seleccionó un delegado
+        user_id = query.from_user.id if query.from_user else 0
+        
         if not params:
-            await query.edit_message_text("❌ Error: delegado no especificado")
+            error_msg = ErrorMessages.format_user_input_error(
+                expected="ID de usuario",
+                examples=["101", "205"]
+            )
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
             return
         
-        delegado_id = params[0]
+        delegado_id_str = params[0]
+        
+        # Quick Win #3: Validar ID
+        validation = TaskValidator.validate_user_id(delegado_id_str)
+        if not validation.is_valid:
+            error_msg = ErrorMessages.format_validation_error(
+                field=UnifiedCopy.DELEGADO_TERM,
+                value=delegado_id_str,
+                issue=validation.error_message or "ID inválido",
+                suggestion=validation.suggestion
+            )
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
+            ux_metrics.track_validation_error(user_id, "delegado_id", "invalid_format", 4)
+            return
         
         # Actualizar state
         if 'wizard' not in context.user_data:
-            await query.edit_message_text("❌ Error: no hay wizard activo")
+            error_msg = ErrorMessages.format_api_error(
+                operation="continuar con el wizard",
+                error_code="WIZARD_LOST"
+            )
+            await query.edit_message_text(error_msg, parse_mode="Markdown")
+            ux_metrics.track_wizard_abandon(user_id, step=4, reason="session_lost")
+            wizard_manager.cancel_wizard(user_id)
             return
         
-        context.user_data['wizard']['data']['delegado_id'] = int(delegado_id)
+        delegado_id = int(delegado_id_str)
+        context.user_data['wizard']['data']['delegado_id'] = delegado_id
         context.user_data['wizard']['current_step'] = 5
         
+        wizard_manager.advance_state(user_id, WizardState.SELECTING_ASIGNADOS, data={'delegado_id': delegado_id})
+        ux_metrics.track_step_complete(user_id, 4)
+        ux_metrics.track_step_start(user_id, 5)
+        
         logger.bind(wizard=True).info(
-            f"Wizard Step 4: delegado seleccionado {delegado_id}",
-            user_id=query.from_user.id if query.from_user else None
+            f"Delegado seleccionado: {delegado_id}",
+            user_id=user_id
         )
         
-        # Step 5: Mostrar selector multi-select de asignados
-        # TODO: Llamar a API para obtener lista de agentes
-        # Por ahora, mostrar mensaje temporal y pedir IDs
+        # Step 5: Solicitar asignados con terminología unificada
         keyboard = KeyboardFactory.back_button("crear:cancel")
+        header = get_step_header(5, "Crear Nueva Tarea")
         await query.edit_message_text(
-            f"📝 *Crear Tarea - Paso 5 de 6*\n\n"
-            f"Delegado: ID {delegado_id}\n\n"
-            f"Por favor, envía los *IDs de agentes asignados*\n"
-            f"separados por comas (ej: 101,102,103):",
+            f"{header}\n"
+            f"✅ {UnifiedCopy.DELEGADO_TERM}: ID {delegado_id}\n\n"
+            f"👥 *Selecciona los {UnifiedCopy.ASIGNADOS_TERM}:*\n\n"
+            f"{StatusEmojis.INFO} {UnifiedCopy.HELP_ASIGNADOS}\n\n"
+            f"📝 Envía IDs separados por comas\n"
+            f"Ejemplo: `201, 202, 203`\n\n"
+            f"{ActionEmojis.CANCEL} Cancelar: /cancelar",
             reply_markup=keyboard,
             parse_mode="Markdown"
         )
