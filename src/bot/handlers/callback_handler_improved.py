@@ -22,11 +22,11 @@ from src.bot.utils.keyboards import KeyboardFactory
 from src.bot.utils.error_messages import ErrorMessages, log_error, ErrorCategory
 from src.bot.utils.validators import TaskValidator, UnifiedCopy, ValidationResult
 from src.bot.utils.wizard_state import (
-    wizard_manager, WizardState, can_execute_command, can_process_text_input
+    wizard_manager, WizardState, can_process_text_input
 )
 from src.bot.utils.ux_metrics import ux_metrics
 from src.bot.utils.confirmations import (
-    ConfirmationFormatter, ConfirmationPattern, ConfirmationHelper
+    ConfirmationFormatter, ConfirmationPattern
 )
 from src.bot.utils.emojis import StatusEmojis, ActionEmojis
 

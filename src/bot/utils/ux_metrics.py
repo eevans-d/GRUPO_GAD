@@ -8,7 +8,7 @@ Este módulo implementa Quick Win #5: Instrumentación UX Básica
 - Tasa de confirmaciones erróneas (objetivo <2%)
 """
 
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
@@ -55,9 +55,9 @@ class UXMetricsCollector:
     Quick Win #5: Tracking de métricas críticas de experiencia.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         self._events: List[UXMetricEvent] = []
-        self._wizard_sessions: Dict[int, Dict] = {}  # user_id -> session data
+        self._wizard_sessions: Dict[int, Dict[str, Any]] = {}  # user_id -> session data
     
     # ==================== WIZARD LIFECYCLE ====================
     

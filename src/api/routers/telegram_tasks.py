@@ -9,7 +9,7 @@ Handles task operations specific to Telegram bot:
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_
 from datetime import datetime
 from typing import List
 
@@ -20,8 +20,9 @@ from src.api.schemas.telegram import (
     TelegramTaskFinalizeResponse,
     TelegramUserTasksResponse
 )
-from src.api.dependencies import get_db_session
+from src.api.dependencies import get_db_session, get_audit_service_dep
 from src.api.models import Usuario, Tarea
+from src.core.audit_service import AuditService
 from src.core.websockets import websocket_manager, WSMessage, EventType
 
 router = APIRouter(prefix="/telegram/tasks", tags=["Telegram Tasks"])
@@ -30,7 +31,8 @@ router = APIRouter(prefix="/telegram/tasks", tags=["Telegram Tasks"])
 @router.post("/create", response_model=TelegramTaskCreateResponse)
 async def create_task_from_telegram(
     task_data: TelegramTaskCreate,
-    db: AsyncSession = Depends(get_db_session)
+    db: AsyncSession = Depends(get_db_session),
+    audit_service: AuditService = Depends(get_audit_service_dep)
 ) -> TelegramTaskCreateResponse:
     """
     Create a new task from Telegram bot wizard.
@@ -73,6 +75,29 @@ async def create_task_from_telegram(
         db.add(new_task)
         await db.commit()
         await db.refresh(new_task)
+        
+        # Audit Trail: Log task creation via Telegram
+        await audit_service.log_create(
+            resource_type="tarea",
+            resource_id=str(new_task.id),
+            new_values={
+                "codigo": new_task.codigo,
+                "titulo": new_task.titulo,
+                "tipo": new_task.tipo,
+                "estado": new_task.estado,
+                "delegado_usuario_id": new_task.delegado_usuario_id,
+                "prioridad": task_data.prioridad,
+                "origen": "telegram_bot"
+            },
+            user_id=creator.id,
+            telegram_id=task_data.telegram_id,
+            request_context={
+                "endpoint": "/telegram/tasks/create",
+                "method": "POST",
+                "ip_address": "telegram_bot",
+                "user_agent": "telegram_bot"
+            }
+        )
         
         # 4. If urgent, broadcast alert to admin via WebSocket
         if task_data.prioridad == "urgente":

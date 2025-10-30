@@ -301,12 +301,12 @@ def setup_sqlalchemy_events():
     """
     
     @event.listens_for(Engine, "connect")
-    def receive_connect(dbapi_connection, connection_record):
+    def receive_connect(_, __):
         """Listener para conexiones a la base de datos."""
         integration_logger.debug("Nueva conexión a la base de datos establecida")
     
     @event.listens_for(Engine, "before_execute") 
-    def receive_before_execute(conn, clauseelement, multiparams, params, execution_options):
+    def receive_before_execute(conn, clauseelement, _, __, ___):
         """Listener para ejecuciones de consultas."""
         integration_logger.debug(f"Ejecutando consulta: {str(clauseelement)[:100]}...")
     

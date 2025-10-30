@@ -1,0 +1,3 @@
+src/api/routers/dashboard.py:13: unused variable 'current_admin' (100% confidence, 1 line)
+src/bot/handlers/callback_handler_improved.py:24: unused import 'can_execute_command' (90% confidence, 3 lines)
+src/bot/handlers/callback_handler_improved.py:28: unused import 'ConfirmationHelper' (90% confidence, 3 lines)

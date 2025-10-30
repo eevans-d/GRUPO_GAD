@@ -7,11 +7,12 @@ from telegram import Update
 from telegram.ext import CallbackContext, MessageHandler, filters
 from telegram import Bot, Chat, User
 from loguru import logger
+from typing import Dict, Any
 
 from src.bot.utils.keyboards import KeyboardFactory
 from src.bot.utils.emojis import (
     TaskEmojis, StatusEmojis, ActionEmojis, ProgressEmojis,
-    get_task_emoji, get_status_emoji
+    get_task_emoji
 )
 
 
@@ -51,7 +52,7 @@ def get_step_header(current_step: int, title: str = "Crear Nueva Tarea") -> str:
     return f"📋 *{title}* [Paso {current_step}/6]\n{progress}\n"
 
 
-def format_task_summary(task_data: dict) -> str:
+def format_task_summary(task_data: Dict[str, Any]) -> str:
     """
     Formatea el resumen de una tarea con diseño visual mejorado.
     
@@ -239,7 +240,7 @@ async def handle_wizard_text_input(
         return
     
     # Verificar si hay wizard activo
-    wizard = context.user_data.get('wizard')  # type: ignore
+    wizard = context.user_data.get('wizard')
     if not wizard:
         # No hay wizard activo, dejar que message_handler lo procese
         return
@@ -300,8 +301,17 @@ async def _handle_step_2_codigo(
         return
     
     # Guardar en wizard
-    context.user_data['wizard']['data']['codigo'] = codigo  # type: ignore
-    context.user_data['wizard']['current_step'] = 3  # type: ignore
+    context.user_data['wizard']['data']['codigo'] = codigo
+    context.user_data['wizard']['current_step'] = 3
+    
+    logger.bind(wizard=True).info(
+        f"Wizard Step 2 completado: código={codigo}",
+        user_id=update.effective_user.id if update.effective_user else None
+    )
+    
+    # Guardar en wizard
+    context.user_data['wizard']['data']['codigo'] = codigo
+    context.user_data['wizard']['current_step'] = 3
     
     logger.bind(wizard=True).info(
         f"Wizard Step 2 completado: código={codigo}",
@@ -317,29 +327,51 @@ async def _handle_step_2_codigo(
         f"Código: `{codigo}`\n\n"
         f"✏️ *Ingresa el título de la tarea:*\n\n"
         f"💡 *Consejos:* Sé específico y claro\n"
+        f"📝 *Máximo:* 100 caracteres",  # Corregido: 100 caracteres (consistente con validación)
+        reply_markup=keyboard,
+        parse_mode="Markdown"
+    )
+
+
+async def _handle_codigo_input(
+    update: Update,
+    context: CallbackContext[Bot, Update, Chat, User],
+    codigo: str
+) -> None:
+    """
+    Valida y guarda el código de la tarea con validación en tiempo real.
+    
+    Args:
+        update: Update de Telegram
+        context: Contexto con wizard state
+        codigo: Código ingresado por el usuario
+    """
+    # Validación en tiempo real
+    es_valido, mensaje = validate_codigo(codigo)
+    
+    if not es_valido:
+        await update.message.reply_text(
+            f"{mensaje}\n\n"
+            f"Intenta nuevamente con un código válido:"
         )
         return
     
     # Guardar en wizard
-    context.user_data['wizard']['data']['codigo'] = codigo  # type: ignore
-    context.user_data['wizard']['current_step'] = 3  # type: ignore
+    context.user_data['wizard']['data']['codigo'] = codigo.upper()
+    context.user_data['wizard']['current_step'] = 3
     
     logger.bind(wizard=True).info(
-        f"Wizard Step 2 completado: código={codigo}",
+        f"Wizard Step 2 completado: codigo={codigo}",
         user_id=update.effective_user.id if update.effective_user else None
     )
     
     # Step 3: Solicitar título
-    keyboard = KeyboardFactory.back_button("crear:cancel")
-    header = get_step_header(3, "Crear Nueva Tarea")
     await update.message.reply_text(
-        f"{header}\n"
-        f"Código: `{codigo}`\n\n"
-        f"✏️ *Ingresa el título de la tarea:*\n\n"
-        f"💡 *Consejos:* Sé específico y claro\n"
-        f"📝 *Máximo:* 200 caracteres",
-        reply_markup=keyboard,
-        parse_mode="Markdown"
+        f"✅ Código guardado: *{codigo.upper()}*\n\n"
+        f"🏷️ *Paso 3/6:* Escribe el título de la tarea\n"
+        f"💡 *Guía:* Título descriptivo (5-200 caracteres)\n"
+        f"📝 *Ejemplo:* Patrullaje nocturno sector norte",
+        parse_mode='Markdown'
     )
 
 
@@ -367,8 +399,8 @@ async def _handle_titulo_input(
         return
     
     # Guardar en wizard
-    context.user_data['wizard']['data']['titulo'] = titulo  # type: ignore
-    context.user_data['wizard']['current_step'] = 4  # type: ignore
+    context.user_data['wizard']['data']['titulo'] = titulo
+    context.user_data['wizard']['current_step'] = 4
     
     logger.bind(wizard=True).info(
         f"Wizard Step 3 completado: titulo={titulo[:50]}",
@@ -412,8 +444,8 @@ async def _handle_delegado_input(
         return
     
     # Guardar en wizard
-    context.user_data['wizard']['data']['delegado_id'] = delegado_id  # type: ignore
-    context.user_data['wizard']['current_step'] = 5  # type: ignore
+    context.user_data['wizard']['data']['delegado_id'] = delegado_id
+    context.user_data['wizard']['current_step'] = 5
     
     logger.bind(wizard=True).info(
         f"Wizard Step 4 completado: delegado_id={delegado_id}",
@@ -462,8 +494,8 @@ async def _handle_asignados_input(
         return
     
     # Guardar en wizard
-    context.user_data['wizard']['data']['asignados'] = asignados_ids  # type: ignore
-    context.user_data['wizard']['current_step'] = 6  # type: ignore
+    context.user_data['wizard']['data']['asignados'] = asignados_ids
+    context.user_data['wizard']['current_step'] = 6
     
     logger.bind(wizard=True).info(
         f"Wizard Step 5 completado: asignados={asignados_ids}",
@@ -485,7 +517,7 @@ async def _show_wizard_summary(
         update: Update de Telegram
         context: Contexto con datos del wizard
     """
-    wizard_data = context.user_data.get('wizard', {}).get('data', {})  # type: ignore
+    wizard_data = context.user_data.get('wizard', {}).get('data', {})
     
     tipo = wizard_data.get('tipo', 'N/A')
     codigo = wizard_data.get('codigo', 'N/A')

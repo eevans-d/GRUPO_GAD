@@ -57,7 +57,6 @@ class ApiService:
             return [Tarea(**t) for t in response]
         except requests.exceptions.RequestException:
             return []
-        return Tarea(**response)
     
     def get_users(self, role: Optional[str] = None) -> List[Dict[str, Any]]:
         """

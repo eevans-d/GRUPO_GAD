@@ -80,6 +80,10 @@ class Usuario(Base):
     historial_estados: Mapped[List["HistorialEstado"]] = relationship(
         "HistorialEstado", back_populates="usuario"
     )
+    
+    audit_logs: Mapped[List["AuditLog"]] = relationship(
+        "AuditLog", back_populates="user"
+    )
 
     @property
     def nombre_completo(self) -> str:

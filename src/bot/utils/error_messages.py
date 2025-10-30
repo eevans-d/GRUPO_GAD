@@ -6,7 +6,7 @@ Este módulo implementa Quick Win #2: Mensajes de error específicos
 con guidance clara y contexto útil para el usuario.
 """
 
-from typing import Optional
+from typing import Optional, Dict, Any
 from loguru import logger
 
 from src.bot.utils.emojis import StatusEmojis, ActionEmojis, GeneralEmojis
@@ -365,7 +365,7 @@ def log_error(
     category: str,
     message: str,
     user_id: Optional[int] = None,
-    context: Optional[dict] = None
+    context: Optional[Dict[str, Any]] = None
 ) -> None:
     """
     Registra errores con contexto estructurado.

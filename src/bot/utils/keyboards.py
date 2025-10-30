@@ -4,7 +4,7 @@ Factory para construir teclados inline reutilizables con emojis semánticos.
 """
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
 
 from src.bot.utils.emojis import (
     TaskEmojis, ActionEmojis, NavigationEmojis, StatusEmojis
@@ -163,7 +163,7 @@ class KeyboardFactory:
     
     @staticmethod
     def user_selector(
-        users: List[dict],
+        users: List[Dict[str, Any]],
         action_prefix: str = "select:user"
     ) -> InlineKeyboardMarkup:
         """
@@ -200,7 +200,7 @@ class KeyboardFactory:
     
     @staticmethod
     def multi_select_users(
-        users: List[dict],
+        users: List[Dict[str, Any]],
         selected_ids: List[int],
         action_prefix: str = "crear:asignado"
     ) -> InlineKeyboardMarkup:

@@ -142,7 +142,7 @@ class WizardSessionManager:
     Quick Win #4: Gestión centralizada de estados por usuario.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         self._sessions: Dict[int, WizardSession] = {}
     
     def get_session(self, user_id: int) -> WizardSession:

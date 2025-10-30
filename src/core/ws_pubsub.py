@@ -114,8 +114,8 @@ class RedisWebSocketPubSub:
         if self._redis is not None:
             try:
                 await self._redis.aclose()
-            except Exception:
-                pass
+            except Exception as e:
+                ws_pubsub_logger.warning(f"Error cerrando conexión Redis: {e}")
             self._redis = None
         ws_pubsub_logger.info("RedisWebSocketPubSub detenido")
 

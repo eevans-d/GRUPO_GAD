@@ -49,16 +49,14 @@ api_logger = setup_logging(
 )
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    """
-    Gestiona los eventos de arranque y parada de la aplicación.
-    """
-    # Startup
+async def _initialize_database_connection() -> str | None:
+    """Inicializa conexión a la base de datos."""
     api_logger.info("Iniciando aplicación y conexión a la base de datos...")
+    
     # Obtener una instancia validada de Settings para evitar atributos faltantes del proxy
     _settings = get_settings()
     db_url = _settings.assemble_db_url() if hasattr(_settings, "assemble_db_url") else None
+    
     if not db_url:
         # Fallback a variable de entorno directa si existe
         import os
@@ -69,6 +67,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
             elif db_url.startswith("postgres://"):
                 db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+    
     if not db_url:
         # En desarrollo/testing, permitir iniciar sin DB si ALLOW_NO_DB=1
         import os
@@ -78,12 +77,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         else:
             api_logger.warning("⚠️  Iniciando SIN base de datos (ALLOW_NO_DB=1). Solo endpoints sin DB funcionarán.")
             db_url = None
+    
     if db_url:
         db.init_db(db_url)
-    app.state.start_time = time.time()
-    api_logger.info("Conexión a la base de datos establecida.")
     
-    # Iniciar sistema de WebSockets
+    api_logger.info("Conexión a la base de datos establecida.")
+    return db_url
+
+
+async def _initialize_websockets() -> None:
+    """Inicializa sistema de WebSockets."""
     api_logger.info("Iniciando sistema de WebSockets...")
     await websocket_event_emitter.start()
     
@@ -100,81 +103,124 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     
     api_logger.info("Sistema de WebSockets iniciado correctamente.")
 
-    # Iniciar pub/sub Redis para broadcast cross-worker si está configurado
-    app.state.ws_pubsub = None
+
+def _get_redis_url() -> str | None:
+    """Obtiene URL de Redis desde múltiples fuentes."""
+    import os
+    from urllib.parse import urlparse
+    
+    _settings = get_settings()
+    
+    # Priorizar URL TLS de Upstash si existe
+    raw_upstash_tls = os.getenv("UPSTASH_REDIS_TLS_URL")
+    raw_redis_url = os.getenv("REDIS_URL")
+    raw_upstash_url = os.getenv("UPSTASH_REDIS_URL")
+    redis_url = raw_upstash_tls.strip() if isinstance(raw_upstash_tls, str) else None
+    
+    if not redis_url:
+        redis_url = raw_redis_url.strip() if isinstance(raw_redis_url, str) else None
+    if not redis_url:
+        # Compatibilidad con proveedores que exponen UPSTASH_REDIS_URL
+        redis_url = raw_upstash_url.strip() if isinstance(raw_upstash_url, str) else None
+
+    # Backwards-compat: construir desde componentes si no se definió REDIS_URL
+    if not redis_url:
+        redis_host = getattr(_settings, 'REDIS_HOST', None) or None
+        redis_port = getattr(_settings, 'REDIS_PORT', 6379)
+        redis_db = getattr(_settings, 'REDIS_DB', 0)
+        redis_password = getattr(_settings, 'REDIS_PASSWORD', None)
+        if redis_host:
+            # Permitir forzar TLS con REDIS_SCHEME=rediss si el proveedor lo exige (Upstash)
+            scheme = os.getenv("REDIS_SCHEME", "redis").strip() or "redis"
+            auth = f":{redis_password}@" if redis_password else ""
+            redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
+    
+    return redis_url
+
+
+def _normalize_upstash_url(redis_url: str) -> str:
+    """Normaliza URL de Upstash para TLS."""
+    from urllib.parse import urlparse
+    
+    def _sanitize_redis_url(url: str) -> str:
+        try:
+            parsed = urlparse(url)
+            # Construir forma segura sin credenciales
+            netloc = parsed.hostname or "localhost"
+            if parsed.port:
+                netloc = f"{netloc}:{parsed.port}"
+            path = parsed.path or "/0"
+            return f"{parsed.scheme}://{netloc}{path}"
+        except Exception:
+            return "<invalid>"
+    
     try:
-        # Preferir REDIS_URL completa si está definida (permite rediss:// con TLS)
-        import os
-        from urllib.parse import urlparse
+        parsed0 = urlparse(redis_url.strip())
+        host = (parsed0.hostname or "").lower()
+        if host.endswith(".upstash.io"):
+            tls_port = 6380
+            # Reconstruir URL manteniendo userinfo si existe
+            userinfo = ""
+            if parsed0.username or parsed0.password:
+                u = parsed0.username or ""
+                p = parsed0.password or ""
+                userinfo = f"{u}:{p}@" if (u or p) else ""
+            path = parsed0.path or "/0"
+            # Forzar esquema y puerto correctos si no coinciden
+            needs_scheme_fix = parsed0.scheme != "rediss"
+            needs_port_fix = parsed0.port != tls_port
+            if needs_scheme_fix or needs_port_fix:
+                redis_url = f"rediss://{userinfo}{host}:{tls_port}{path}"
+                api_logger.info(
+                    "Ajuste Upstash TLS: forzado rediss y puerto 6380",
+                    redis_url_sanitized=_sanitize_redis_url(redis_url)
+                )
+    except Exception as ex:
+        api_logger.warning("No se pudo aplicar ajuste Upstash TLS", error=str(ex))
+    
+    return redis_url
 
-        def _sanitize_redis_url(url: str) -> str:
-            try:
-                parsed = urlparse(url)
-                # Construir forma segura sin credenciales
-                netloc = parsed.hostname or "localhost"
-                if parsed.port:
-                    netloc = f"{netloc}:{parsed.port}"
-                path = parsed.path or "/0"
-                return f"{parsed.scheme}://{netloc}{path}"
-            except Exception:
-                return "<invalid>"
 
-        # Priorizar URL TLS de Upstash si existe
-        raw_upstash_tls = os.getenv("UPSTASH_REDIS_TLS_URL")
-        raw_redis_url = os.getenv("REDIS_URL")
-        raw_upstash_url = os.getenv("UPSTASH_REDIS_URL")
-        redis_url = raw_upstash_tls.strip() if isinstance(raw_upstash_tls, str) else None
-        if not redis_url:
-            redis_url = raw_redis_url.strip() if isinstance(raw_redis_url, str) else None
-        if not redis_url:
-            # Compatibilidad con proveedores que exponen UPSTASH_REDIS_URL
-            redis_url = raw_upstash_url.strip() if isinstance(raw_upstash_url, str) else None
-
-        # Backwards-compat: construir desde componentes si no se definió REDIS_URL
-        if not redis_url:
-            redis_host = getattr(_settings, 'REDIS_HOST', None) or None
-            redis_port = getattr(_settings, 'REDIS_PORT', 6379)
-            redis_db = getattr(_settings, 'REDIS_DB', 0)
-            redis_password = getattr(_settings, 'REDIS_PASSWORD', None)
-            if redis_host:
-                # Permitir forzar TLS con REDIS_SCHEME=rediss si el proveedor lo exige (Upstash)
-                scheme = os.getenv("REDIS_SCHEME", "redis").strip() or "redis"
-                auth = f":{redis_password}@" if redis_password else ""
-                redis_url = f"{scheme}://{auth}{redis_host}:{redis_port}/{redis_db}"
-
+async def _initialize_redis_and_cache(app: FastAPI) -> None:
+    """Inicializa Redis pub/sub y CacheService."""
+    import os
+    from urllib.parse import urlparse
+    
+    def _sanitize_redis_url(url: str) -> str:
+        try:
+            parsed = urlparse(url)
+            # Construir forma segura sin credenciales
+            netloc = parsed.hostname or "localhost"
+            if parsed.port:
+                netloc = f"{netloc}:{parsed.port}"
+            path = parsed.path or "/0"
+            return f"{parsed.scheme}://{netloc}{path}"
+        except Exception:
+            return "<invalid>"
+    
+    app.state.ws_pubsub = None
+    
+    try:
+        redis_url = _get_redis_url()
+        
         if redis_url:
-            # Ajuste Upstash TLS: normalizar Upstash a TLS en 6380 y esquema rediss
-            try:
-                parsed0 = urlparse(redis_url.strip())
-                host = (parsed0.hostname or "").lower()
-                if host.endswith(".upstash.io"):
-                    tls_port = 6380
-                    # Reconstruir URL manteniendo userinfo si existe
-                    userinfo = ""
-                    if parsed0.username or parsed0.password:
-                        u = parsed0.username or ""
-                        p = parsed0.password or ""
-                        userinfo = f"{u}:{p}@" if (u or p) else ""
-                    path = parsed0.path or "/0"
-                    # Forzar esquema y puerto correctos si no coinciden
-                    needs_scheme_fix = parsed0.scheme != "rediss"
-                    needs_port_fix = parsed0.port != tls_port
-                    if needs_scheme_fix or needs_port_fix:
-                        redis_url = f"rediss://{userinfo}{host}:{tls_port}{path}"
-                        api_logger.info(
-                            "Ajuste Upstash TLS: forzado rediss y puerto 6380",
-                            redis_url_sanitized=_sanitize_redis_url(redis_url)
-                        )
-            except Exception as ex:
-                api_logger.warning("No se pudo aplicar ajuste Upstash TLS", error=str(ex))
+            redis_url = _normalize_upstash_url(redis_url)
+            
+            # Determinar fuente para logging
+            raw_upstash_tls = os.getenv("UPSTASH_REDIS_TLS_URL")
+            raw_redis_url = os.getenv("REDIS_URL")
+            raw_upstash_url = os.getenv("UPSTASH_REDIS_URL")
+            source = (
+                "UPSTASH_REDIS_TLS_URL" if raw_upstash_tls else
+                ("REDIS_URL/UPSTASH_REDIS_URL" if (raw_redis_url or raw_upstash_url) else "settings+REDIS_*")
+            )
+            
             api_logger.info(
                 "Detectada configuración Redis",
                 redis_url_sanitized=_sanitize_redis_url(redis_url),
-                source=(
-                    "UPSTASH_REDIS_TLS_URL" if raw_upstash_tls else
-                    ("REDIS_URL/UPSTASH_REDIS_URL" if (raw_redis_url or raw_upstash_url) else "settings+REDIS_*")
-                ),
+                source=source
             )
+            
             pubsub = RedisWebSocketPubSub(redis_url)
             websocket_manager.set_pubsub(pubsub)
             await pubsub.start(websocket_manager)
@@ -198,9 +244,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
     except Exception as e:
         api_logger.error(f"No se pudo iniciar pub/sub Redis o CacheService: {e}", exc_info=True)
-    
-    yield
-    
+
+
+async def _shutdown_services(app: FastAPI) -> None:
+    """Detiene todos los servicios de la aplicación."""
     # Shutdown
     api_logger.info("Deteniendo integración WebSocket-Modelos...")
     await stop_websocket_integration()
@@ -223,13 +270,32 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         _pubsub = getattr(app.state, 'ws_pubsub', None)
         if _pubsub is not None:
             await _pubsub.stop()
-    except Exception:
-        pass
+    except Exception as e:
+        api_logger.error(f"Error deteniendo pub/sub Redis: {e}", exc_info=True)
     
     api_logger.info("Cerrando conexión a la base de datos...")
     if db.async_engine:
         await db.async_engine.dispose()
     api_logger.info("Conexión a la base de datos cerrada.")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """
+    Gestiona los eventos de arranque y parada de la aplicación.
+    Refactorizada para reducir complejidad ciclomática.
+    """
+    # Startup
+    await _initialize_database_connection()
+    app.state.start_time = time.time()
+    
+    await _initialize_websockets()
+    await _initialize_redis_and_cache(app)
+    
+    yield
+    
+    # Shutdown
+    await _shutdown_services(app)
 
 
 app = FastAPI(

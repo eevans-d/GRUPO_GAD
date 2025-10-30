@@ -30,7 +30,6 @@ try:
     from dotenv import load_dotenv
     from sqlalchemy import Column, MetaData, Table, create_engine, select
     from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-    from sqlalchemy.orm import sessionmaker
 except ImportError:
     print("Error: Dependencias faltantes. Ejecute: pip install sqlalchemy python-dotenv")
     sys.exit(1)

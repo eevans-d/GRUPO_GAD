@@ -1,0 +1,50 @@
+src/bot/utils/validators.py:389: error: Value of type "str | None" is not
+indexable  [index]
+        print(f"  Sugerencia: {result.suggestion[:50]}...")
+                              ^~~~~~~~~~~~~~~~~~~~~~~
+src/bot/utils/keyboards.py:166: error: Missing type parameters for generic type
+"dict"  [type-arg]
+            users: List[dict],
+                        ^
+src/bot/utils/keyboards.py:203: error: Missing type parameters for generic type
+"dict"  [type-arg]
+            users: List[dict],
+                        ^
+src/bot/utils/error_messages.py:368: error: Missing type parameters for generic
+type "dict"  [type-arg]
+        context: Optional[dict] = None
+                          ^
+src/app/core/config.py:5: error: Class cannot subclass "BaseSettings" (has type
+"Any")  [misc]
+    class Settings(BaseSettings):
+                   ^~~~~~~~~~~~
+src/bot/utils/wizard_state.py:145: error: Function is missing a return type
+annotation  [no-untyped-def]
+        def __init__(self):
+        ^
+src/bot/utils/wizard_state.py:145: note: Use "-> None" if function does not return a value
+src/bot/utils/wizard_state.py:269: error: Call to untyped function
+"WizardSessionManager" in typed context  [no-untyped-call]
+    wizard_manager = WizardSessionManager()
+                     ^~~~~~~~~~~~~~~~~~~~~~
+src/bot/handlers/wizard_text_handler.py:54: error: Missing type parameters for
+generic type "dict"  [type-arg]
+    def format_task_summary(task_data: dict) -> str:
+                                       ^
+src/bot/handlers/wizard_text_handler.py:242: error: Unused "type: ignore"
+comment  [unused-ignore]
+        wizard = context.user_data.get('wizard')  # type: ignore
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/bot/handlers/wizard_text_handler.py:258: error: Name "_handle_codigo_input"
+is not defined  [name-defined]
+            await _handle_codigo_input(update, context, text_input)
+                  ^~~~~~~~~~~~~~~~~~~~
+src/bot/handlers/wizard_text_handler.py:303: error: Unused "type: ignore"
+comment  [unused-ignore]
+        context.user_data['wizard']['data']['codigo'] = codigo  # type: ig...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/bot/handlers/wizard_text_handler.py:304: error: Unused "type: ignore"
+comment  [unused-ignore]
+        context.user_data['wizard']['current_step'] = 3  # type: ignore
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/bot/handlers/wizard_text_handler.py:312: error: Unused "type: ignore"

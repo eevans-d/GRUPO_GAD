@@ -17,7 +17,6 @@ from pydantic import BaseModel
 
 from src.api.models import Usuario
 from src.api.dependencies import get_db_session
-from src.core.cache_decorators import cache_result, cache_and_invalidate
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 

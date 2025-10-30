@@ -1,0 +1,38 @@
+[flake8]
+# Configuración unificada para GRUPO_GAD
+# Límite de línea: 120 caracteres (unifica conflicto 79 vs 120)
+max-line-length = 120
+
+# Directorios excluidos
+exclude = 
+    .git,
+    __pycache__,
+    build,
+    dist,
+    venv,
+    .venv,
+    env,
+    .env,
+    node_modules,
+    migrations,
+    .mypy_cache,
+    .pytest_cache,
+    *.egg-info
+
+# Configuraciones adicionales de calidad
+max-complexity = 10
+statistics = True
+count = True
+
+# Ignorar errores específicos que son aceptables en este proyecto
+ignore = 
+    # E203: Whitespace before ':' (conflicto con black formatter)
+    E203,
+    # W503: Line break before binary operator (preferencia de estilo)
+    W503
+
+# Formato de salida detallado
+format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+
+# Habilitar verificaciones adicionales
+select = E,W,F,C,N

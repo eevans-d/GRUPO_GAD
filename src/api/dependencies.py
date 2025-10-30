@@ -16,6 +16,7 @@ from src.api.crud.crud_usuario import usuario as crud_usuario
 from src.api.models.usuario import Usuario
 from src.core import security
 from src.core.database import get_db_session
+from src.core.audit_service import AuditService, get_audit_service
 from src.schemas.token import TokenPayload
 
 reusable_oauth2 = OAuth2PasswordBearer(
@@ -67,3 +68,34 @@ async def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+async def get_audit_service_dep(
+    db: AsyncSession = Depends(get_db_session)
+) -> AuditService:
+    """
+    Dependencia para obtener el servicio de auditoría.
+    """
+    return await get_audit_service(db)
+
+
+def extract_request_context(request) -> dict:
+    """
+    Extrae contexto relevante de una request para auditoría.
+    
+    Args:
+        request: Request object de FastAPI
+        
+    Returns:
+        Dict con información del contexto de la request
+    """
+    client_ip = "unknown"
+    if hasattr(request, 'client') and request.client:
+        client_ip = request.client.host
+
+    return {
+        "endpoint": str(request.url.path) if hasattr(request, 'url') else None,
+        "method": request.method if hasattr(request, 'method') else None,
+        "ip_address": client_ip,
+        "user_agent": request.headers.get("user-agent", "unknown") if hasattr(request, 'headers') else None,
+    }

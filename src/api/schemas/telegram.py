@@ -34,21 +34,21 @@ class TelegramTaskCreate(BaseModel):
     asignado_a: Optional[List[int]] = Field(default=None, description="List of telegram_ids to assign")
 
     @validator('tipo')
-    def validate_tipo(cls, v):
+    def validate_tipo(_, v):
         valid_types = ['operativa', 'administrativa', 'inspeccion', 'patrullaje', 'emergencia']
         if v.lower() not in valid_types:
             raise ValueError(f"Tipo must be one of: {', '.join(valid_types)}")
         return v.lower()
 
     @validator('prioridad')
-    def validate_prioridad(cls, v):
+    def validate_prioridad(_, v):
         valid_priorities = ['baja', 'media', 'alta', 'urgente']
         if v.lower() not in valid_priorities:
             raise ValueError(f"Prioridad must be one of: {', '.join(valid_priorities)}")
         return v.lower()
 
     @validator('codigo')
-    def validate_codigo_format(cls, v):
+    def validate_codigo_format(_, v):
         """Ensure codigo follows format: letters + numbers."""
         if not v.replace('-', '').replace('_', '').isalnum():
             raise ValueError("Código must be alphanumeric (letters, numbers, -, _)")
@@ -80,7 +80,7 @@ class TelegramTaskFinalizeRequest(BaseModel):
     observaciones: Optional[str] = Field(None, max_length=500, description="Final observations")
 
     @validator('codigo')
-    def uppercase_codigo(cls, v):
+    def uppercase_codigo(_, v):
         return v.upper()
 
     class Config:
