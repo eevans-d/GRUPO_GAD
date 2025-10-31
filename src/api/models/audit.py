@@ -15,11 +15,14 @@ from datetime import datetime
 from enum import Enum
 
 from sqlalchemy import ForeignKey, Integer, String, Text, Boolean
-from sqlalchemy.dialects.postgresql import ENUM, INET, UUID
+from sqlalchemy.dialects.postgresql import ENUM, INET
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from .base import Base, CustomJsonB
+
+# Tipo compatible para IP: INET en PostgreSQL, String(45) en otros (e.g., SQLite para tests)
+IP_ADDRESS_TYPE = String(45).with_variant(INET(), "postgresql")
 
 if TYPE_CHECKING:
     from .usuario import Usuario
@@ -112,7 +115,7 @@ class AuditLog(Base):
     endpoint: Mapped[Optional[str]] = mapped_column(String(255))
     http_method: Mapped[Optional[str]] = mapped_column(String(10))
     user_agent: Mapped[Optional[str]] = mapped_column(Text)
-    ip_address: Mapped[Optional[str]] = mapped_column(INET)
+    ip_address: Mapped[Optional[str]] = mapped_column(IP_ADDRESS_TYPE)
     referer: Mapped[Optional[str]] = mapped_column(Text)
     
     # Detalles del evento
@@ -198,7 +201,7 @@ class AuditSession(Base):
     ended_at: Mapped[Optional[datetime]] = mapped_column()
     
     # Contexto de la sesión
-    ip_address: Mapped[Optional[str]] = mapped_column(INET)
+    ip_address: Mapped[Optional[str]] = mapped_column(IP_ADDRESS_TYPE)
     user_agent: Mapped[Optional[str]] = mapped_column(Text)
     platform: Mapped[Optional[str]] = mapped_column(String(50))  # "web", "telegram", "api"
     

@@ -11,7 +11,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from datetime import datetime
-from typing import List
+from typing import List, Any
 
 from src.api.schemas.telegram import (
     TelegramTaskCreate,
@@ -36,7 +36,7 @@ async def create_task_from_telegram(
 ) -> TelegramTaskCreateResponse:
     """
     Create a new task from Telegram bot wizard.
-    
+
     Validates user exists, creates task, and broadcasts alert if urgent.
     """
     try:
@@ -44,24 +44,24 @@ async def create_task_from_telegram(
         user_query = select(Usuario).where(Usuario.telegram_id == task_data.telegram_id)
         user_result = await db.execute(user_query)
         creator = user_result.scalars().first()
-        
+
         if not creator:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Usuario con telegram_id {task_data.telegram_id} no encontrado"
             )
-        
+
         # 2. Check if codigo already exists
         codigo_query = select(Tarea).where(Tarea.codigo == task_data.codigo)
         codigo_result = await db.execute(codigo_query)
         existing_task = codigo_result.scalars().first()
-        
+
         if existing_task:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Ya existe una tarea con el código {task_data.codigo}"
             )
-        
+
         # 3. Create task (delegado = creator from Telegram)
         new_task = Tarea(
             codigo=task_data.codigo,
@@ -71,11 +71,11 @@ async def create_task_from_telegram(
             estado="programada",  # New tasks start as programmed
             delegado_usuario_id=creator.id
         )
-        
+
         db.add(new_task)
         await db.commit()
         await db.refresh(new_task)
-        
+
         # Audit Trail: Log task creation via Telegram
         await audit_service.log_create(
             resource_type="tarea",
@@ -98,7 +98,7 @@ async def create_task_from_telegram(
                 "user_agent": "telegram_bot"
             }
         )
-        
+
         # 4. If urgent, broadcast alert to admin via WebSocket
         if task_data.prioridad == "urgente":
             try:
@@ -116,7 +116,7 @@ async def create_task_from_telegram(
             except Exception as ws_error:
                 # Don't fail task creation if WS broadcast fails
                 print(f"Warning: WebSocket broadcast failed: {ws_error}")
-        
+
         return TelegramTaskCreateResponse(
             success=True,
             message=f"Tarea {task_data.codigo} creada exitosamente",
@@ -124,7 +124,7 @@ async def create_task_from_telegram(
             codigo=new_task.codigo,
             created_at=new_task.inicio_programado
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -142,7 +142,7 @@ async def finalize_task_by_code(
 ) -> TelegramTaskFinalizeResponse:
     """
     Finalize a task using its code from Telegram bot.
-    
+
     Validates user has permission (creator or assigned).
     """
     try:
@@ -150,28 +150,28 @@ async def finalize_task_by_code(
         task_query = select(Tarea).where(Tarea.codigo == finalize_request.codigo)
         task_result = await db.execute(task_query)
         task = task_result.scalars().first()
-        
+
         if not task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Tarea con código {finalize_request.codigo} no encontrada"
             )
-        
+
         # 2. Verify user exists
         user_query = select(Usuario).where(Usuario.telegram_id == finalize_request.telegram_id)
         user_result = await db.execute(user_query)
         user = user_result.scalars().first()
-        
+
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Usuario con telegram_id {finalize_request.telegram_id} no encontrado"
             )
-        
+
         # 3. Check permissions (delegado_usuario_id must be the creator or assignee)
         # For now, allow any user with matching telegram_id (admin override)
         # TODO: Add proper permission validation when assignment schema updated
-        
+
         # 4. Check if already completed
         if task.estado == "finalizada":
             return TelegramTaskFinalizeResponse(
@@ -181,14 +181,14 @@ async def finalize_task_by_code(
                 codigo=task.codigo,
                 finalized_at=task.fin_real or datetime.now()
             )
-        
+
         # 5. Update task to finalized
         task.estado = "finalizada"
         task.fin_real = datetime.now()
-        
+
         await db.commit()
         await db.refresh(task)
-        
+
         # 6. Broadcast completion notification
         try:
             await websocket_manager.broadcast(WSMessage(
@@ -203,7 +203,7 @@ async def finalize_task_by_code(
             ))
         except Exception as ws_error:
             print(f"Warning: WebSocket broadcast failed: {ws_error}")
-        
+
         return TelegramTaskFinalizeResponse(
             success=True,
             message=f"Tarea {task.codigo} finalizada exitosamente",
@@ -211,7 +211,7 @@ async def finalize_task_by_code(
             codigo=task.codigo,
             finalized_at=task.fin_real or datetime.now()
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -229,7 +229,7 @@ async def get_user_tasks_by_telegram(
 ) -> TelegramUserTasksResponse:
     """
     Get all tasks for a user by their telegram_id.
-    
+
     Returns active, pending, and completed tasks summary.
     """
     try:
@@ -237,24 +237,24 @@ async def get_user_tasks_by_telegram(
         user_query = select(Usuario).where(Usuario.telegram_id == telegram_id)
         user_result = await db.execute(user_query)
         user = user_result.scalars().first()
-        
+
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Usuario con telegram_id {telegram_id} no encontrado"
             )
-        
+
         # 2. Get all tasks created by user (delegado_usuario_id = user.id)
         tasks_query = select(Tarea).where(Tarea.delegado_usuario_id == user.id)
         tasks_result = await db.execute(tasks_query)
         all_tasks = tasks_result.scalars().all()
-        
+
         # 3. Calculate statistics
         total_tasks = len(all_tasks)
         active_tasks = sum(1 for t in all_tasks if t.estado == "en_curso")
         pending_tasks = sum(1 for t in all_tasks if t.estado == "programada")
         completed_tasks = sum(1 for t in all_tasks if t.estado == "finalizada")
-        
+
         # 4. Build task summaries (only non-finalized for brevity)
         task_summaries = [
             {
@@ -268,7 +268,7 @@ async def get_user_tasks_by_telegram(
             for task in all_tasks
             if task.estado in ["programada", "en_curso"]
         ]
-        
+
         return TelegramUserTasksResponse(
             telegram_id=telegram_id,
             total_tasks=total_tasks,
@@ -277,7 +277,7 @@ async def get_user_tasks_by_telegram(
             completed_tasks=completed_tasks,
             tasks=task_summaries
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -294,22 +294,22 @@ async def get_task_by_code(
 ) -> dict[str, Any]:
     """
     Get task details by code.
-    
+
     Useful for bot to show task info before finalizing.
     """
     try:
         codigo_upper = codigo.upper()
-        
+
         query = select(Tarea).where(Tarea.codigo == codigo_upper)
         result = await db.execute(query)
         task = result.scalars().first()
-        
+
         if not task:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Tarea con código {codigo_upper} no encontrada"
             )
-        
+
         return {
             "id": task.id,
             "codigo": task.codigo,
@@ -319,7 +319,7 @@ async def get_task_by_code(
             "inicio_programado": task.inicio_programado.isoformat() if task.inicio_programado else None,
             "fin_real": task.fin_real.isoformat() if task.fin_real else None
         }
-        
+
     except HTTPException:
         raise
     except Exception as e:
