@@ -895,3 +895,7 @@
 # uploads/
 # downloads/
 
+
+# Load test results
+scripts/load_test_results/
+data/

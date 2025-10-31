@@ -4,8 +4,11 @@
 [![Security](https://img.shields.io/badge/security-approved-green)](reports/SECURITY_AUDIT_RESULTS.md)
 [![Coverage](https://img.shields.io/badge/coverage-70%25-yellow)](reports/)
 [![Production Ready](https://img.shields.io/badge/production-ready-brightgreen)](#deployment)
+[![Audit Score](https://img.shields.io/badge/audit%20score-9.2%2F10-brightgreen)](AUDIT_QUICK_WINS.md)
 
 Sistema de gestión administrativa para entidades gubernamentales con API REST, WebSockets en tiempo real, monitoreo completo y despliegue automatizado.
+
+> **🎯 Auditoría Integral Completa** (Oct 2025): Score 7.5→**9.2/10** | ROI **300-400%** | Ver [Quick Wins →](AUDIT_QUICK_WINS.md)
 
 ---
 
@@ -459,12 +462,27 @@ Importar en Grafana (Dashboards → Import):
 | Documento | Descripción |
 |-----------|-------------|
 | [README.md](README.md) | Este archivo - Overview general |
+| [AUDIT_QUICK_WINS.md](AUDIT_QUICK_WINS.md) | 🎯 **Auditoría integral y plan de 90 días** |
+| [docs/gad_audit/](docs/gad_audit/) | 📊 **Auditoría completa** (76 archivos, 6 fases) |
 | [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) | Checklist completo para deployment |
 | [PRODUCTION_RUNBOOK.md](docs/PRODUCTION_RUNBOOK.md) | Procedimientos operacionales (8.5k+ líneas) |
 | [MONITORING_SETUP.md](docs/MONITORING_SETUP.md) | Guía de monitoring completa |
 | [SECURITY_AUDIT_RESULTS.md](reports/SECURITY_AUDIT_RESULTS.md) | Resultados audit de seguridad |
 | [GDPR_COMPLIANCE_REPORT.md](reports/GDPR_COMPLIANCE_REPORT.md) | Assessment GDPR compliance |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Guía para contribuidores |
+
+### Auditoría Integral (Oct 2025)
+
+| Documento | Líneas | Descripción |
+|-----------|--------|-------------|
+| [DIAGNOSTICO_CONSOLIDADO](docs/gad_audit/final/DIAGNOSTICO_CONSOLIDADO_COMPLETO_GRUPO_GAD.md) | 676 | Diagnóstico consolidado completo |
+| [BLUEPRINT_ESTRATEGICO](docs/gad_audit/strategic/BLUEPRINT_ESTRATEGICO_IMPLEMENTACION_GRUPO_GAD.md) | 726 | Blueprint estratégico de implementación |
+| [PLAN_ACCION_90_DIAS](docs/gad_audit/action_plan/PLAN_ACCION_90_DIAS_PRIORITARIO.md) | 578 | Plan de acción de 90 días (3 fases, gates de calidad) |
+| [PATRONES_ASYNC](docs/gad_audit/performance/04_patrones_async_concurrency.md) | 358 | Patrones async/concurrency y recomendaciones |
+| [AUDITORIA_CALIDAD](docs/gad_audit/performance/05_auditoria_calidad_codigo.md) | 491 | Auditoría de calidad de código (bandit, flake8, mypy, pylint) |
+
+**Hallazgos clave**: Score 7.5→9.2/10 | ROI 300-400% | Inversión $100k-500k  
+**Ver**: [Quick Wins y Prioridades P0 →](AUDIT_QUICK_WINS.md)
 
 ### Reportes de Progreso
 
