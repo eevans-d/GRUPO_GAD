@@ -16,6 +16,7 @@ from src.api.schemas.telegram import TelegramAuthRequest, TelegramAuthResponse
 from src.api.dependencies import get_db_session
 from src.api.models import Usuario
 from config.settings import get_settings
+from src.core.security import create_telegram_token, verify_jwt_claims, CLAIM_IAT, CLAIM_EXP
 
 router = APIRouter(prefix="/telegram/auth", tags=["Telegram Authentication"])
 
@@ -24,7 +25,7 @@ settings = get_settings()
 
 def create_jwt_token(telegram_id: int, user_id: int, nivel: str) -> str:
     """
-    Create JWT token for authenticated Telegram user.
+    Create JWT token for authenticated Telegram user using standard claims.
     
     Args:
         telegram_id: Telegram user ID
@@ -32,19 +33,15 @@ def create_jwt_token(telegram_id: int, user_id: int, nivel: str) -> str:
         nivel: User level (uno, dos, tres, etc.)
     
     Returns:
-        JWT token string
+        JWT token string with standard RFC 7519 claims
     """
-    payload = {
-        "sub": str(telegram_id),
-        "user_id": user_id,
-        "nivel": nivel,
-        "exp": datetime.utcnow() + timedelta(days=7)  # Token válido 7 días
-    }
-    
-    # Use SECRET_KEY from settings for JWT encoding
-    secret = settings.SECRET_KEY
-    token = jwt.encode(payload, secret, algorithm="HS256")
-    return token
+    # Delegate to standardized function
+    return create_telegram_token(
+        telegram_id=telegram_id,
+        user_id=user_id,
+        nivel=nivel,
+        expires_delta=timedelta(days=7)
+    )
 
 
 @router.post("/authenticate", response_model=TelegramAuthResponse)  # type: ignore[misc]

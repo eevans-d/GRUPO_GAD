@@ -7,6 +7,7 @@ Maneja los endpoints WebSocket y la lógica de conexión/desconexión.
 
 import json
 from typing import Optional, Any
+from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
 from fastapi.security import HTTPBearer
 from jose import jwt
@@ -15,7 +16,8 @@ from starlette.status import WS_1008_POLICY_VIOLATION
 from src.core.websockets import (
     websocket_manager, 
     WSMessage, 
-    EventType
+    EventType,
+    ChannelType
 )
 from src.core.logging import get_logger
 from config.settings import settings
@@ -76,16 +78,19 @@ async def get_user_from_token(token: Optional[str] = None) -> Optional[dict[str,
 @router.websocket("/connect")  # type: ignore[misc]
 async def websocket_endpoint(
     websocket: WebSocket,
-    token: Optional[str] = Query(None, description="JWT (opcional si Authorization header está presente)")
+    token: Optional[str] = Query(None, description="JWT (opcional si Authorization header está presente)"),
+    priority: Optional[int] = Query(None, description="Prioridad del usuario (1-10), opcional")
 ):
     """
-    Endpoint principal de WebSocket.
+    Endpoint principal de WebSocket con soporte para sharding de canales.
     
     Query Parameters:
         token: Token JWT para autenticación (opcional)
+        priority: Prioridad del usuario (1-10), determina el tipo de canal
     
     Maneja:
     - Autenticación de usuarios
+    - Asignación inteligente de canal con sharding
     - Establecimiento de conexión
     - Manejo de mensajes
     - Desconexión limpia
@@ -115,11 +120,30 @@ async def websocket_endpoint(
                 await websocket.close(code=WS_1008_POLICY_VIOLATION, reason="Invalid token")
                 return
         
-        # Establecer conexión
+        # Determinar prioridad del usuario
+        user_priority = 1  # Default
+        if priority and 1 <= priority <= 10:
+            user_priority = priority
+        elif user_info and "role" in user_info:
+            # Mapear rol a prioridad por defecto
+            role = user_info["role"]
+            if role in ["SUPER_ADMIN"]:
+                user_priority = 10
+            elif role in ["ADMIN"]:
+                user_priority = 8
+            elif role in ["MODERATOR", "LEVEL_3"]:
+                user_priority = 6
+            elif role in ["LEVEL_2"]:
+                user_priority = 4
+            else:
+                user_priority = 2
+        
+        # Establecer conexión con sharding de canales
         connection_id = await websocket_manager.connect(
             websocket=websocket,
             user_id=user_info.get("user_id") if user_info else None,
-            user_role=user_info.get("role") if user_info else None
+            user_role=user_info.get("role") if user_info else None,
+            user_priority=user_priority
         )
         
         ws_router_logger.info(
@@ -383,20 +407,176 @@ async def handle_unsubscription(connection_id: str, data: dict[str, Any], user_i
 @router.get("/stats")  # type: ignore[misc]
 async def get_websocket_stats():
     """
-    Endpoint para obtener estadísticas de WebSockets.
+    Endpoint para obtener estadísticas completas de WebSockets y sharding de canales.
     
     Returns:
-        dict: Estadísticas de conexiones activas
+        dict: Estadísticas de conexiones activas y métricas de sharding
     """
     stats = websocket_manager.get_stats()
+    
+    # Añadir información específica del sharding si está disponible
+    try:
+        if hasattr(websocket_manager, 'get_sharding_stats'):
+            stats["sharding_details"] = websocket_manager.get_sharding_stats()
+        
+        if hasattr(websocket_manager, 'get_channel_metrics'):
+            stats["channel_metrics"] = websocket_manager.get_channel_metrics()
+        
+        if hasattr(websocket_manager, 'get_channel_utilization_matrix'):
+            stats["utilization_matrix"] = websocket_manager.get_channel_utilization_matrix()
+            
+    except Exception as e:
+        ws_router_logger.warning(f"Error obteniendo estadísticas de sharding: {e}")
     
     ws_router_logger.debug("Estadísticas WebSocket solicitadas", stats=stats)
     
     return {
         "status": "ok",
         "stats": stats,
-        "timestamp": "2025-09-22T04:55:00Z"
+        "timestamp": datetime.now().isoformat(),
+        "version": "2.0.0-sharding"
     }
+
+
+@router.post("/admin/channels")  # type: ignore[misc]
+async def add_dynamic_channel(
+    channel_type: str,
+    channel_name: str,
+    capacity: int = 1000,
+    priority: int = 1
+):
+    """
+    Endpoint para añadir canales dinámicamente (solo administradores).
+    
+    Args:
+        channel_type: Tipo de canal (general, admin, users, priority)
+        channel_name: Nombre del canal a crear
+        capacity: Capacidad máxima de usuarios
+        priority: Nivel de prioridad (1-10)
+        
+    Returns:
+        dict: Confirmación de creación
+    """
+    from src.core.websockets import ChannelType
+    
+    # Validar tipo de canal
+    try:
+        ct = ChannelType(channel_type.lower())
+    except ValueError:
+        return {
+            "status": "error",
+            "error": f"Tipo de canal inválido: {channel_type}. Válidos: {[t.value for t in ChannelType]}"
+        }
+    
+    # Validar capacidad y prioridad
+    if capacity <= 0 or capacity > 10000:
+        return {"status": "error", "error": "Capacidad debe estar entre 1 y 10,000"}
+    
+    if priority < 1 or priority > 10:
+        return {"status": "error", "error": "Prioridad debe estar entre 1 y 10"}
+    
+    try:
+        # Añadir canal dinámicamente
+        websocket_manager.add_dynamic_channel(ct, channel_name, capacity, priority)
+        
+        ws_router_logger.info(
+            "Canal dinámico añadido",
+            channel_name=channel_name,
+            channel_type=ct.value,
+            capacity=capacity,
+            priority=priority
+        )
+        
+        return {
+            "status": "ok",
+            "message": f"Canal {channel_name} creado exitosamente",
+            "channel": {
+                "name": channel_name,
+                "type": ct.value,
+                "capacity": capacity,
+                "priority": priority
+            }
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error creando canal dinámico: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.get("/admin/channels/status")  # type: ignore[misc]
+async def get_channels_status():
+    """
+    Endpoint para obtener estado detallado de todos los canales.
+    
+    Returns:
+        dict: Estado completo del sistema de canales
+    """
+    try:
+        # Obtener estadísticas básicas
+        stats = websocket_manager.get_stats()
+        
+        # Obtener información específica de canales
+        channel_info = {}
+        if hasattr(websocket_manager, 'channel_stats'):
+            for channel_name, info in websocket_manager.channel_stats.items():
+                active_connections = [
+                    cid for cid, conn_info in websocket_manager.active_connections.items()
+                    if conn_info.assigned_channel == channel_name
+                ]
+                
+                channel_info[channel_name] = {
+                    "name": info.name,
+                    "type": info.channel_type.value,
+                    "capacity": info.user_capacity,
+                    "current_load": len(active_connections),
+                    "utilization": info.utilization,
+                    "is_overloaded": info.is_overloaded,
+                    "is_underutilized": info.is_underutilized,
+                    "priority_level": info.priority_level,
+                    "active_connections": len(active_connections)
+                }
+        
+        return {
+            "status": "ok",
+            "timestamp": datetime.now().isoformat(),
+            "summary": {
+                "total_channels": len(channel_info),
+                "total_connections": stats.get("total_connections", 0),
+                "overloaded_channels": [ch for ch, info in channel_info.items() if info["is_overloaded"]],
+                "underutilized_channels": [ch for ch, info in channel_info.items() if info["is_underutilized"]]
+            },
+            "channels": channel_info,
+            "sharding_stats": stats.get("sharding", {})
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error obteniendo estado de canales: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.post("/admin/channels/optimize")  # type: ignore[misc]
+async def optimize_channels():
+    """
+    Endpoint para optimizar la distribución de canales.
+    
+    Returns:
+        dict: Resultado de la optimización
+    """
+    try:
+        # Ejecutar optimización
+        websocket_manager.optimize_channels()
+        
+        ws_router_logger.info("Optimización de canales ejecutada")
+        
+        return {
+            "status": "ok",
+            "message": "Optimización de canales ejecutada",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error optimizando canales: {e}")
+        return {"status": "error", "error": str(e)}
 
 
 @router.post("/_test/broadcast")  # type: ignore[misc]
@@ -422,3 +602,228 @@ async def test_trigger_broadcast(payload: dict[str, Any]):  # pragma: no cover -
     )
     sent = await websocket_manager.broadcast(message)
     return {"status": "ok", "sent": sent, "metrics": websocket_manager.get_stats().get("metrics", {})}
+
+
+# --- ENDPOINTS DE CLEANUP AGRESIVO --- #
+
+@router.get("/cleanup/status")  # type: ignore[misc]
+async def get_cleanup_status():
+    """
+    Obtiene el estado del sistema de cleanup agresivo.
+    
+    Returns:
+        dict: Estado completo del sistema de cleanup
+    """
+    try:
+        cleanup_stats = websocket_manager.get_cleanup_stats()
+        health_report = websocket_manager.get_connection_health_report()
+        
+        return {
+            "status": "ok",
+            "cleanup_enabled": websocket_manager.enable_aggressive_cleanup,
+            "cleanup_active": websocket_manager.cleanup_integration_active,
+            "cleanup_stats": cleanup_stats,
+            "health_report": health_report,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error obteniendo estado de cleanup: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.post("/cleanup/emergency")  # type: ignore[misc]
+async def trigger_emergency_cleanup(payload: dict[str, Any]):
+    """
+    Dispara un cleanup de emergencia manual (solo administradores).
+    
+    Args:
+        payload: Datos del payload con reason opcional
+        
+    Returns:
+        dict: Resultado del cleanup de emergencia
+    """
+    reason = payload.get("reason", "Manual trigger via API")
+    
+    try:
+        # Activar cleanup de emergencia
+        await websocket_manager.trigger_emergency_cleanup(reason)
+        
+        # Notificar a administradores
+        from src.core.websockets import notify_emergency_cleanup
+        await notify_emergency_cleanup(reason, "critical")
+        
+        ws_router_logger.warning(f"Cleanup de emergencia activado via API: {reason}")
+        
+        return {
+            "status": "ok",
+            "message": "Cleanup de emergencia activado",
+            "reason": reason,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error ejecutando cleanup de emergencia: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.get("/cleanup/report")  # type: ignore[misc]
+async def get_detailed_cleanup_report():
+    """
+    Obtiene un reporte detallado completo del sistema de cleanup.
+    
+    Returns:
+        dict: Reporte detallado
+    """
+    try:
+        report = await websocket_manager.get_detailed_cleanup_report()
+        
+        return {
+            "status": "ok",
+            "report": report
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error generando reporte de cleanup: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.get("/cleanup/health")  # type: ignore[misc]
+async def get_websocket_health():
+    """
+    Obtiene el resumen de salud del sistema WebSocket.
+    
+    Returns:
+        dict: Resumen de salud
+    """
+    try:
+        from src.core.websockets import get_websocket_health_summary
+        health_summary = get_websocket_health_summary()
+        
+        return {
+            "status": "ok",
+            "health": health_summary,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error obteniendo salud del sistema: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.post("/cleanup/initialize")  # type: ignore[misc]
+async def initialize_cleanup_system():
+    """
+    Inicializa el sistema de cleanup agresivo (solo administradores).
+    
+    Returns:
+        dict: Resultado de la inicialización
+    """
+    try:
+        if websocket_manager.cleanup_integration_active:
+            return {
+                "status": "ok",
+                "message": "Sistema de cleanup ya está activo"
+            }
+        
+        await websocket_manager.activate_cleanup_integration()
+        
+        ws_router_logger.info("Sistema de cleanup inicializado via API")
+        
+        return {
+            "status": "ok",
+            "message": "Sistema de cleanup inicializado correctamente",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error inicializando sistema de cleanup: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.post("/cleanup/shutdown")  # type: ignore[misc]
+async def shutdown_cleanup_system():
+    """
+    Detiene el sistema de cleanup agresivo (solo administradores).
+    
+    Returns:
+        dict: Resultado del apagado
+    """
+    try:
+        if not websocket_manager.cleanup_integration_active:
+            return {
+                "status": "ok",
+                "message": "Sistema de cleanup ya está inactivo"
+            }
+        
+        await websocket_manager.deactivate_cleanup_integration()
+        
+        ws_router_logger.info("Sistema de cleanup detenido via API")
+        
+        return {
+            "status": "ok",
+            "message": "Sistema de cleanup detenido correctamente",
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error deteniendo sistema de cleanup: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.get("/cleanup/metrics")  # type: ignore[misc]
+async def get_cleanup_metrics():
+    """
+    Obtiene métricas detalladas del sistema de cleanup.
+    
+    Returns:
+        dict: Métricas de cleanup
+    """
+    try:
+        cleanup_stats = websocket_manager.get_cleanup_stats()
+        
+        # Notificar métricas a administradores si está configurado
+        try:
+            from src.core.websockets import notify_cleanup_metrics
+            await notify_cleanup_metrics(cleanup_stats.get("metrics", {}))
+        except Exception:
+            # No fallar si no se puede notificar
+            pass
+        
+        return {
+            "status": "ok",
+            "metrics": cleanup_stats,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error obteniendo métricas de cleanup: {e}")
+        return {"status": "error", "error": str(e)}
+
+
+@router.get("/cleanup/recommendations")  # type: ignore[misc]
+async def get_cleanup_recommendations():
+    """
+    Obtiene recomendaciones de optimización del sistema.
+    
+    Returns:
+        dict: Recomendaciones del sistema
+    """
+    try:
+        health_report = websocket_manager.get_connection_health_report()
+        
+        recommendations = health_report.get("recommendations", [])
+        optimization_suggestions = websocket_manager._get_system_optimization_suggestions()
+        
+        return {
+            "status": "ok",
+            "health_score": health_report.get("health_score", 0),
+            "cleanup_recommendations": recommendations,
+            "optimization_suggestions": optimization_suggestions,
+            "immediate_actions": recommendations if health_report.get("health_score", 0) < 80 else [],
+            "timestamp": datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        ws_router_logger.error(f"Error obteniendo recomendaciones: {e}")
+        return {"status": "error", "error": str(e)}
