@@ -30,8 +30,8 @@ auth_logger = get_logger("api.auth")
 router = APIRouter()
 
 
-@router.post("/logout")
-@log_endpoint_call("user_logout")
+@router.post("/logout")  # type: ignore[misc]
+@log_endpoint_call("user_logout")  # type: ignore[misc]
 async def logout(
     request: Request,
     response: Response,
@@ -64,8 +64,8 @@ async def logout(
     return {"status": "logged_out"}
 
 
-@router.post("/login", response_model=Token)
-@log_endpoint_call("user_login")
+@router.post("/login", response_model=Token)  # type: ignore[misc]
+@log_endpoint_call("user_login")  # type: ignore[misc]
 async def login_for_access_token(
     request: Request,
     response: Response,

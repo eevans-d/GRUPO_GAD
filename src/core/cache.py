@@ -66,7 +66,7 @@ class CacheService:
             )
             if insecure_tls and parsed.scheme == "rediss":
                 # Mitigación temporal: desactivar validación de certificado
-                extra_kwargs["ssl_cert_reqs"] = None  # type: ignore[assignment]
+                extra_kwargs["ssl_cert_reqs"] = None
                 cache_logger.warning(
                     "REDIS_INSECURE_TLS=1 activo: deshabilitando verificación de certificado TLS para Redis"
                 )
@@ -114,7 +114,7 @@ class CacheService:
                         health_check_interval=30,
                         retry_on_timeout=True,
                     )
-                    await self._redis.ping()  # type: ignore[union-attr]
+                    await self._redis.ping()
                     self.redis_url = fallback_url
                     self._connected = True
                     cache_logger.info("CacheService conectado (fallback no-TLS)")

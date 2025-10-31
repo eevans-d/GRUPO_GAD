@@ -45,7 +45,7 @@ class UXMetricEvent:
     error_field: Optional[str] = None  # Campo con error
     
     # Metadata adicional
-    metadata: Dict = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class UXMetricsCollector:
@@ -387,14 +387,14 @@ class UXMetricsCollector:
             time_window_hours=time_window_hours
         )
         
-        breakdown = {}
+        breakdown: Dict[str, int] = {}
         for event in events:
             if event.error_field:
                 breakdown[event.error_field] = breakdown.get(event.error_field, 0) + 1
         
         return breakdown
     
-    def get_metrics_summary(self) -> Dict[str, any]:
+    def get_metrics_summary(self) -> Dict[str, Any]:
         """
         Obtiene resumen de todas las métricas UX.
         

@@ -35,13 +35,13 @@ def _get_effective_cache_service() -> Optional[Any]:
     if _cache_service is not None:
         return _cache_service
     try:
-        from src.core.cache import _cache_service as _global_cache_service  # type: ignore
+        from src.core.cache import _cache_service as _global_cache_service
         return _global_cache_service
     except Exception:
         return None
 
 
-def _generate_cache_key(func_name: str, args: tuple, kwargs: dict) -> str:
+def _generate_cache_key(func_name: str, args: tuple[Any, ...], kwargs: dict[str, Any]) -> str:
     """
     Generate a cache key from function name and arguments.
     
@@ -104,7 +104,7 @@ def cache_result(
     """
     def decorator(func: F) -> F:
         @functools.wraps(func)
-        async def wrapper(*args, **kwargs) -> Any:
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
             # Skip if cache not initialized
             _svc = _get_effective_cache_service()
             if _svc is None:
@@ -141,7 +141,7 @@ def cache_result(
             
             return result
         
-        return wrapper  # type: ignore
+        return wrapper
     
     return decorator
 
@@ -163,7 +163,7 @@ def invalidate_cache(pattern: str) -> Callable[[F], F]:
     """
     def decorator(func: F) -> F:
         @functools.wraps(func)
-        async def wrapper(*args, **kwargs) -> Any:
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
             _svc = _get_effective_cache_service()
             # Call the actual function first
             result = await func(*args, **kwargs)
@@ -179,7 +179,7 @@ def invalidate_cache(pattern: str) -> Callable[[F], F]:
             
             return result
         
-        return wrapper  # type: ignore
+        return wrapper
     
     return decorator
 
@@ -212,7 +212,7 @@ def cache_and_invalidate(
     """
     def decorator(func: F) -> F:
         @functools.wraps(func)
-        async def wrapper(*args, **kwargs) -> Any:
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
             # Call the actual function
             result = await func(*args, **kwargs)
             
@@ -230,6 +230,6 @@ def cache_and_invalidate(
             
             return result
         
-        return wrapper  # type: ignore
+        return wrapper
     
     return decorator

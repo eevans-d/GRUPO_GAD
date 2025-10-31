@@ -386,7 +386,7 @@ if __name__ == "__main__":
     print(f"\nTítulo largo:")
     print(f"  Válido: {result.is_valid}")
     print(f"  Error: {result.error_message}")
-    print(f"  Sugerencia: {result.suggestion[:50]}...")
+    print(f"  Sugerencia: {result.suggestion[:50] if result.suggestion else ''}...")
     
     # Test 5: IDs de usuario
     result, ids = TaskValidator.validate_user_ids_list("101, 102, 103")

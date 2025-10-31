@@ -4,7 +4,8 @@ Dependencias de FastAPI para la aplicación.
 """
 
 
-from fastapi import Depends, HTTPException, status
+from typing import Any, Dict
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from jose.exceptions import JWTError
@@ -79,7 +80,7 @@ async def get_audit_service_dep(
     return await get_audit_service(db)
 
 
-def extract_request_context(request) -> dict:
+def extract_request_context(request: Request) -> Dict[str, Any]:
     """
     Extrae contexto relevante de una request para auditoría.
     

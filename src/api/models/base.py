@@ -7,14 +7,14 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Dict
 
-from sqlalchemy import Integer, MetaData
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB
-from sqlalchemy.ext.asyncio import AsyncAttrs
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.types import JSON, TypeDecorator
+from sqlalchemy import Integer, MetaData  # type: ignore[import-not-found]
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB  # type: ignore[import-not-found]
+from sqlalchemy.ext.asyncio import AsyncAttrs  # type: ignore[import-not-found]
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column  # type: ignore[import-not-found]
+from sqlalchemy.types import JSON, TypeDecorator  # type: ignore[import-not-found]
 
 
-class CustomJsonB(TypeDecorator[Any]):
+class CustomJsonB(TypeDecorator[Any]):  # type: ignore[misc]
     """Platform-independent JSONB type.
 
     Uses JSONB on PostgreSQL, otherwise uses JSON.
@@ -30,7 +30,7 @@ class CustomJsonB(TypeDecorator[Any]):
             return dialect.type_descriptor(JSON())
 
 
-class CustomArray(TypeDecorator[Any]):
+class CustomArray(TypeDecorator[Any]):  # type: ignore[misc]
     """Platform-independent ARRAY type.
 
     Uses ARRAY on PostgreSQL, otherwise simulates with JSON.
@@ -56,7 +56,7 @@ class CustomArray(TypeDecorator[Any]):
         return json.loads(value)
 
 
-class Base(AsyncAttrs, DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):  # type: ignore[misc]
     """Modelo base para todos los modelos ORM."""
 
     __abstract__ = True

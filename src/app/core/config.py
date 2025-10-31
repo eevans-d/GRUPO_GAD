@@ -1,8 +1,8 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict  # type: ignore[import-not-found]
 from typing import List
 from functools import lru_cache
 
-class Settings(BaseSettings):
+class Settings(BaseSettings):  # type: ignore[misc]
     # Defaults seguros para dev/test (NO usar en producción)
     SECRET_KEY: str = "dev-insecure-secret-key-change-me-please-0123456789"
     JWT_SECRET_KEY: str = "dev-insecure-jwt-secret-key-change-me-please-0123456789"

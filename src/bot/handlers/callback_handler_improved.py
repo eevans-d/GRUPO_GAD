@@ -10,9 +10,9 @@ Este módulo extiende el callback_handler con:
 - Quick Win #5: Instrumentación UX
 """
 
-from typing import Optional
+from typing import Optional, Any
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, CallbackQuery
 from telegram import Bot, Chat, User
 from loguru import logger
 from datetime import datetime
@@ -32,10 +32,12 @@ from src.bot.utils.emojis import StatusEmojis, ActionEmojis
 
 
 async def handle_crear_action_improved(
-    query, 
+    query: CallbackQuery,
     context: CallbackContext[Bot, Update, Chat, User], 
     entity: str, 
-    params: list
+    params: list[Any],
+    *args: Any,
+    **kwargs: Any
 ) -> None:
     """
     Handler mejorado de creación con Quick Wins integrados.
@@ -113,7 +115,7 @@ async def handle_crear_action_improved(
         )
 
 
-async def _handle_tipo_selection_improved(query, context, params: list) -> None:
+async def _handle_tipo_selection_improved(query: CallbackQuery, context: CallbackContext[Bot, Update, Chat, User], params: list[Any], *args: Any, **kwargs: Any) -> None:
     """
     Maneja selección de tipo con Quick Wins.
     
@@ -202,7 +204,7 @@ async def _handle_tipo_selection_improved(query, context, params: list) -> None:
     )
 
 
-async def _handle_delegado_selection_improved(query, context, params: list) -> None:
+async def _handle_delegado_selection_improved(query: CallbackQuery, context: CallbackContext[Bot, Update, Chat, User], params: list[Any], *args: Any, **kwargs: Any) -> None:
     """
     Maneja selección de delegado con Quick Wins.
     
@@ -304,7 +306,7 @@ async def _handle_delegado_selection_improved(query, context, params: list) -> N
     )
 
 
-async def _handle_confirmation_improved(query, context, params: list) -> None:
+async def _handle_confirmation_improved(query: CallbackQuery, context: CallbackContext[Bot, Update, Chat, User], params: list[Any], *args: Any, **kwargs: Any) -> None:
     """
     Maneja confirmación con patrón mejorado.
     
@@ -348,7 +350,7 @@ async def _handle_confirmation_improved(query, context, params: list) -> None:
         await _create_task_improved(query, context)
 
 
-async def _create_task_improved(query, context) -> None:
+async def _create_task_improved(query: CallbackQuery, context: CallbackContext[Bot, Update, Chat, User], *args: Any, **kwargs: Any) -> None:
     """
     Crea tarea con manejo mejorado de errores y métricas.
     
@@ -431,7 +433,7 @@ async def _create_task_improved(query, context) -> None:
         )
 
 
-async def _handle_cancel_improved(query, context) -> None:
+async def _handle_cancel_improved(query: CallbackQuery, context: CallbackContext[Bot, Update, Chat, User], *args: Any, **kwargs: Any) -> None:
     """
     Maneja cancelación con tracking.
     
@@ -468,7 +470,7 @@ async def _handle_cancel_improved(query, context) -> None:
 
 
 # Función auxiliar para obtener métricas
-def get_ux_metrics_summary() -> dict:
+def get_ux_metrics_summary() -> dict[str, Any]:
     """
     Obtiene resumen de métricas UX para análisis.
     

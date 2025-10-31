@@ -3,6 +3,7 @@
 Manejador central para todos los callback queries del bot.
 """
 
+from typing import Any, List
 from telegram import Update
 from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram import Bot, Chat, User
@@ -100,10 +101,12 @@ async def handle_callback_query(
 
 
 async def handle_menu_action(
-    query, 
+    query: Any, 
     context: CallbackContext[Bot, Update, Chat, User], 
     entity: str, 
-    params: list
+    params: List[Any], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Maneja acciones del menú principal.
@@ -178,10 +181,12 @@ async def handle_menu_action(
 
 
 async def handle_crear_action(
-    query, 
+    query: Any, 
     context: CallbackContext[Bot, Update, Chat, User], 
     entity: str, 
-    params: list
+    params: List[Any], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Maneja wizard de creación de tareas.
@@ -395,7 +400,12 @@ async def handle_crear_action(
         await query.edit_message_text(f"❌ Acción de creación desconocida: {entity}")
 
 
-async def _show_wizard_summary(query, context: CallbackContext[Bot, Update, Chat, User]) -> None:
+async def _show_wizard_summary(
+    query: Any, 
+    context: CallbackContext[Bot, Update, Chat, User], 
+    *args: Any, 
+    **kwargs: Any
+) -> None:
     """
     Muestra resumen del wizard antes de crear la tarea.
     
@@ -422,7 +432,12 @@ async def _show_wizard_summary(query, context: CallbackContext[Bot, Update, Chat
     )
 
 
-async def _create_task_from_wizard(query, context: CallbackContext[Bot, Update, Chat, User]) -> None:
+async def _create_task_from_wizard(
+    query: Any, 
+    context: CallbackContext[Bot, Update, Chat, User], 
+    *args: Any, 
+    **kwargs: Any
+) -> None:
     """
     Crea la tarea en la API con los datos del wizard.
     
@@ -462,10 +477,12 @@ async def _create_task_from_wizard(query, context: CallbackContext[Bot, Update, 
 
 
 async def handle_finalizar_action(
-    query, 
+    query: Any, 
     context: CallbackContext[Bot, Update, Chat, User], 
     entity: str, 
-    params: list
+    params: List[Any], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Maneja finalización de tareas.
@@ -529,10 +546,12 @@ async def handle_finalizar_action(
 
 
 async def handle_pagination_action(
-    query, 
+    query: Any, 
     context: CallbackContext[Bot, Update, Chat, User], 
     entity: str, 
-    params: list
+    params: List[Any], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Maneja navegación de páginas en listas paginadas.
@@ -559,9 +578,11 @@ async def handle_pagination_action(
 
 
 async def _show_pending_tasks_list(
-    query, 
+    query: Any, 
     context: CallbackContext[Bot, Update, Chat, User], 
-    page: int = 0
+    page: int = 0, 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Muestra lista paginada de tareas pendientes del usuario.
@@ -634,8 +655,10 @@ async def _show_pending_tasks_list(
 
 
 async def _show_finalize_confirmation(
-    query, 
-    context: CallbackContext[Bot, Update, Chat, User]
+    query: Any, 
+    context: CallbackContext[Bot, Update, Chat, User], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Muestra pantalla de confirmación antes de finalizar tarea.
@@ -672,8 +695,10 @@ async def _show_finalize_confirmation(
 
 
 async def _finalize_task(
-    query, 
-    context: CallbackContext[Bot, Update, Chat, User]
+    query: Any, 
+    context: CallbackContext[Bot, Update, Chat, User], 
+    *args: Any, 
+    **kwargs: Any
 ) -> None:
     """
     Finaliza la tarea llamando a la API.

@@ -8,7 +8,7 @@ These models are optimized for Telegram bot integration:
 """
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Any
 from pydantic import BaseModel, Field, validator
 
 
@@ -34,21 +34,21 @@ class TelegramTaskCreate(BaseModel):
     asignado_a: Optional[List[int]] = Field(default=None, description="List of telegram_ids to assign")
 
     @validator('tipo')
-    def validate_tipo(_, v):
+    def validate_tipo(cls, v: str) -> str:
         valid_types = ['operativa', 'administrativa', 'inspeccion', 'patrullaje', 'emergencia']
         if v.lower() not in valid_types:
             raise ValueError(f"Tipo must be one of: {', '.join(valid_types)}")
         return v.lower()
 
     @validator('prioridad')
-    def validate_prioridad(_, v):
+    def validate_prioridad(cls, v: str) -> str:
         valid_priorities = ['baja', 'media', 'alta', 'urgente']
         if v.lower() not in valid_priorities:
             raise ValueError(f"Prioridad must be one of: {', '.join(valid_priorities)}")
         return v.lower()
 
     @validator('codigo')
-    def validate_codigo_format(_, v):
+    def validate_codigo_format(cls, v: str) -> str:
         """Ensure codigo follows format: letters + numbers."""
         if not v.replace('-', '').replace('_', '').isalnum():
             raise ValueError("Código must be alphanumeric (letters, numbers, -, _)")
@@ -80,7 +80,7 @@ class TelegramTaskFinalizeRequest(BaseModel):
     observaciones: Optional[str] = Field(None, max_length=500, description="Final observations")
 
     @validator('codigo')
-    def uppercase_codigo(_, v):
+    def uppercase_codigo(cls, v: str) -> str:
         return v.upper()
 
     class Config:
@@ -160,7 +160,7 @@ class TelegramUserTasksResponse(BaseModel):
     active_tasks: int
     pending_tasks: int
     completed_tasks: int
-    tasks: List[dict] = Field(default_factory=list, description="List of task summaries")
+    tasks: List[dict[str, Any]] = Field(default_factory=list, description="List of task summaries")
 
     class Config:
         json_schema_extra = {

@@ -4,6 +4,6 @@ from src.app.core.startup import validate_environment
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
-@app.on_event("startup")
+@app.on_event("startup")  # type: ignore[misc]
 async def startup_event() -> None:
     validate_environment()
