@@ -34,7 +34,7 @@ class AdminCommandResponse(BaseModel):
     timestamp: datetime
 
 
-@router.post("/agent/command", response_model=AdminCommandResponse)
+@router.post("/agent/command", response_model=AdminCommandResponse)  # type: ignore[misc]
 async def execute_admin_command(
     *,
     db: AsyncSession = Depends(get_db_session),

@@ -31,18 +31,18 @@ def create_access_token(
         )
     to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return str(encoded_jwt)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Verifica una contraseña plana contra su hash.
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    return bool(pwd_context.verify(plain_password, hashed_password))
 
 
 def get_password_hash(password: str) -> str:
     """
     Genera el hash de una contraseña.
     """
-    return pwd_context.hash(password)
+    return str(pwd_context.hash(password))

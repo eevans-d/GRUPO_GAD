@@ -25,7 +25,7 @@ def log_endpoint_call(operation: str = ""):
     Args:
         operation: Descripción de la operación (ej: "create_user", "login")
     """
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs) -> Any:
             start_time = time.time()
@@ -88,7 +88,7 @@ def log_database_operation(operation: str, table: str = ""):
         operation: Tipo de operación (CREATE, READ, UPDATE, DELETE)
         table: Nombre de la tabla/entidad
     """
-    def decorator(func: Callable) -> Callable:
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(func)
         async def wrapper(*args, **kwargs) -> Any:
             start_time = time.time()

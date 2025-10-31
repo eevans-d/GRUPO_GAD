@@ -5,7 +5,7 @@ Protección contra DoS y abuso en servicios ciudadanos.
 """
 
 import time
-from typing import Dict, Callable
+from typing import Dict, Callable, Any
 from collections import defaultdict
 from datetime import datetime
 
@@ -30,7 +30,7 @@ class GovernmentRateLimiter:
     """
     
     def __init__(self):
-        self.requests: Dict[str, list] = defaultdict(list)
+        self.requests: Dict[str, list[float]] = defaultdict(list)
         self.window_seconds = 60
     
     def is_rate_limited(self, client_id: str, limit: int) -> bool:
@@ -109,13 +109,13 @@ def get_rate_limit_for_path(path: str) -> int:
     return GOVERNMENT_RATE_LIMITS["general_api"]
 
 
-class GovernmentRateLimitMiddleware(BaseHTTPMiddleware):
+class GovernmentRateLimitMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Middleware for rate limiting government services.
     Applies different limits based on endpoint type and user status.
     """
     
-    async def dispatch(self, request: Request, call_next: Callable):
+    async def dispatch(self, request: Request, call_next: Callable[[Request], Any]):
         # Skip rate limiting for health checks and metrics
         if request.url.path in ["/health", "/health/live", "/health/ready", "/metrics"]:
             return await call_next(request)

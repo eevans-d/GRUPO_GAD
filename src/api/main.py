@@ -583,8 +583,8 @@ async def health_ready():
     # Check WebSocket Manager
     try:
         checks["websocket_manager"] = "ok"
-        checks["active_ws_connections"] = len(websocket_manager.active_connections)
-        checks["unique_users"] = len(websocket_manager.user_connections)
+        checks["active_ws_connections"] = str(len(websocket_manager.active_connections))
+        checks["unique_users"] = str(len(websocket_manager.user_connections))
     except Exception as e:
         checks["websocket_manager"] = f"error: {str(e)}"
     

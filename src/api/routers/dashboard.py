@@ -8,7 +8,7 @@ from src.core.auth import get_current_admin_user
 
 router = APIRouter()
 
-@router.get("/dashboard", include_in_schema=False)
+@router.get("/dashboard", include_in_schema=False)  # type: ignore[misc]
 
 async def admin_dashboard(current_admin: Any = Depends(get_current_admin_user)) -> FileResponse:
     """Servir dashboard administrativo - Solo para admins"""

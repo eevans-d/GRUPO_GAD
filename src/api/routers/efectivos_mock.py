@@ -38,7 +38,7 @@ EFECTIVOS_NAMES = [
     "Cabo Herrera", "Sgt. Vargas", "Of. Mendoza", "Cabo Torres"
 ]
 
-@router.get("/geo/efectivos/mock", summary="Efectivos simulados para desarrollo")
+@router.get("/geo/efectivos/mock", summary="Efectivos simulados para desarrollo")  # type: ignore[misc]
 async def mock_efectivos(
     *,
     center_lat: float = Query(..., description="Latitud del centro"),

@@ -10,7 +10,7 @@ Este módulo extiende el callback_handler con:
 - Quick Win #5: Instrumentación UX
 """
 
-from typing import Optional, Any
+from typing import Optional, Any, Dict
 from telegram import Update
 from telegram.ext import CallbackContext, CallbackQuery
 from telegram import Bot, Chat, User
@@ -470,7 +470,7 @@ async def _handle_cancel_improved(query: CallbackQuery, context: CallbackContext
 
 
 # Función auxiliar para obtener métricas
-def get_ux_metrics_summary() -> dict[str, Any]:
+def get_ux_metrics_summary() -> Dict[str, Any]:
     """
     Obtiene resumen de métricas UX para análisis.
     
@@ -479,7 +479,7 @@ def get_ux_metrics_summary() -> dict[str, Any]:
     Returns:
         Diccionario con métricas principales
     """
-    return ux_metrics.get_metrics_summary()
+    return dict(ux_metrics.get_metrics_summary())
 
 
 # Exportar funciones mejoradas

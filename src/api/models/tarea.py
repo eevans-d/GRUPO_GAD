@@ -131,17 +131,17 @@ class Tarea(Base):
     )
 
     # Propiedades híbridas para cálculos
-    @hybrid_property
+    @hybrid_property  # type: ignore[misc]
     def duracion_estimada_horas(self) -> float:
         """Estima la duración de la tarea en horas basado en programación."""
         if self.inicio_programado and self.fin_programado:
-            return (
-                self.fin_programado - self.inicio_programado
-            ).total_seconds() / 3600.0
+            return float(
+                (self.fin_programado - self.inicio_programado).total_seconds() / 3600.0
+            )
         # Estimación por defecto basada en prioridad
-        return 2.0 + (5 - self.prioridad.value) * 0.5
+        return float(2.0 + (5 - self.prioridad.value) * 0.5)
 
-    @hybrid_property
+    @hybrid_property  # type: ignore[misc]
     def esta_activa(self) -> bool:
         """Verifica si la tarea está activa."""
         return self.estado in [
@@ -150,14 +150,14 @@ class Tarea(Base):
             TaskStatus.PAUSED,
         ]
 
-    @hybrid_property
+    @hybrid_property  # type: ignore[misc]
     def esta_completada(self) -> bool:
         """Verifica si la tarea está completada."""
-        return self.estado == TaskStatus.COMPLETED
+        return bool(self.estado == TaskStatus.COMPLETED)
 
-    @hybrid_property
+    @hybrid_property  # type: ignore[misc]
     def esta_retrasada(self) -> bool:
         """Verifica si la tarea está retrasada respecto a su programación."""
         if not self.inicio_real or not self.inicio_programado:
             return False
-        return self.inicio_real > self.inicio_programado
+        return bool(self.inicio_real > self.inicio_programado)

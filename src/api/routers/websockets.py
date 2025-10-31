@@ -6,7 +6,7 @@ Maneja los endpoints WebSocket y la lógica de conexión/desconexión.
 """
 
 import json
-from typing import Optional
+from typing import Optional, Any
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
 from fastapi.security import HTTPBearer
 from jose import jwt
@@ -30,7 +30,7 @@ router = APIRouter(prefix="/ws", tags=["websockets"])
 security = HTTPBearer()
 
 
-async def get_user_from_token(token: Optional[str] = None) -> Optional[dict]:
+async def get_user_from_token(token: Optional[str] = None) -> Optional[dict[str, Any]]:
     """
     Obtiene información del usuario desde el token JWT.
     
@@ -73,7 +73,7 @@ async def get_user_from_token(token: Optional[str] = None) -> Optional[dict]:
         return None
 
 
-@router.websocket("/connect")
+@router.websocket("/connect")  # type: ignore[misc]
 async def websocket_endpoint(
     websocket: WebSocket,
     token: Optional[str] = Query(None, description="JWT (opcional si Authorization header está presente)")
@@ -91,7 +91,7 @@ async def websocket_endpoint(
     - Desconexión limpia
     """
     connection_id: Optional[str] = None
-    user_info: Optional[dict] = None
+    user_info: Optional[dict[str, Any]] = None
     
     try:
         # Autenticar por header Authorization Bearer o query token
@@ -173,8 +173,8 @@ async def websocket_endpoint(
             await websocket_manager.disconnect(connection_id)
 
 
-async def handle_client_message(connection_id: str, message_data: dict, 
-                               user_info: Optional[dict]):
+async def handle_client_message(connection_id: str, message_data: dict[str, Any], 
+                               user_info: Optional[dict[str, Any]]):
     """
     Maneja mensajes recibidos del cliente.
     
@@ -254,7 +254,7 @@ async def handle_client_message(connection_id: str, message_data: dict,
         await websocket_manager.send_to_connection(connection_id, error_message)
 
 
-async def get_dashboard_data(user_info: dict) -> dict:
+async def get_dashboard_data(user_info: dict[str, Any]) -> dict[str, Any]:
     """
     Obtiene datos del dashboard para el usuario.
     
@@ -278,7 +278,7 @@ async def get_dashboard_data(user_info: dict) -> dict:
     }
 
 
-async def get_metrics_data(user_info: dict) -> dict:
+async def get_metrics_data(user_info: dict[str, Any]) -> dict[str, Any]:
     """
     Obtiene datos de métricas para el usuario.
     
@@ -308,7 +308,7 @@ async def get_metrics_data(user_info: dict) -> dict:
     }
 
 
-async def handle_subscription(connection_id: str, data: dict, user_info: Optional[dict]):
+async def handle_subscription(connection_id: str, data: dict[str, Any], user_info: Optional[dict[str, Any]]):
     """
     Maneja suscripciones a eventos específicos.
     
@@ -352,7 +352,7 @@ async def handle_subscription(connection_id: str, data: dict, user_info: Optiona
     await websocket_manager.send_to_connection(connection_id, response)
 
 
-async def handle_unsubscription(connection_id: str, data: dict, user_info: Optional[dict]):
+async def handle_unsubscription(connection_id: str, data: dict[str, Any], user_info: Optional[dict[str, Any]]):
     """
     Maneja desuscripciones de eventos.
     
@@ -380,7 +380,7 @@ async def handle_unsubscription(connection_id: str, data: dict, user_info: Optio
         ws_router_logger.error("Error registrando desuscripción", error=_e)
 
 
-@router.get("/stats")
+@router.get("/stats")  # type: ignore[misc]
 async def get_websocket_stats():
     """
     Endpoint para obtener estadísticas de WebSockets.
@@ -399,8 +399,8 @@ async def get_websocket_stats():
     }
 
 
-@router.post("/_test/broadcast")
-async def test_trigger_broadcast(payload: dict):  # pragma: no cover - cubierto en test E2E dedicado
+@router.post("/_test/broadcast")  # type: ignore[misc]
+async def test_trigger_broadcast(payload: dict[str, Any]):  # pragma: no cover - cubierto en test E2E dedicado
     """Dispara un broadcast manual en entornos no productivos.
 
     Este endpoint existe únicamente para facilitar pruebas E2E del sistema

@@ -48,7 +48,7 @@ async def main() -> None:
     register_handlers(application)
 
     logger.info("Bot iniciado y escuchando...")
-    await application.run_polling()  # type: ignore[func-returns-value]
+    await application.run_polling()
 
 
 if __name__ == "__main__":

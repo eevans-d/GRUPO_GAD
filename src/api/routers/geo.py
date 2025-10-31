@@ -42,7 +42,7 @@ def _haversine_approx_distance_m(lat1: float, lon1: float, lat2: float, lon2: fl
     return hypot(dlat_m, dlon_m)
 
 
-@router.get("/geo/map/view", summary="Vista de mapa para dashboard")
+@router.get("/geo/map/view", summary="Vista de mapa para dashboard")  # type: ignore[misc]
 async def map_view(
     *,
     center_lat: float = Query(..., description="Latitud del centro"),

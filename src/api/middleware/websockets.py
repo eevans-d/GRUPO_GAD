@@ -35,8 +35,8 @@ class WebSocketEventEmitter:
     """
     
     def __init__(self):
-        self._event_queue: asyncio.Queue = asyncio.Queue()
-        self._processing_task: Optional[asyncio.Task] = None
+        self._event_queue: asyncio.Queue[Any] = asyncio.Queue()
+        self._processing_task: Optional[asyncio.Task[Any]] = None
         self._is_running = False
     
     async def start(self):

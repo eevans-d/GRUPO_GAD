@@ -8,6 +8,7 @@ from telegram.ext import CallbackContext, CommandHandler
 from telegram import Bot, Chat, User
 from loguru import logger
 from datetime import datetime, timedelta
+from typing import Any
 
 from src.bot.services.api_service import ApiService
 from config.settings import get_settings
@@ -87,7 +88,7 @@ async def estadisticas(
         )
 
 
-def _calculate_statistics(tareas: list, user_id: int) -> dict:
+def _calculate_statistics(tareas: list[Any], user_id: int) -> dict[str, Any]:
     """
     Calcula estadísticas a partir de las tareas del usuario.
     
@@ -142,7 +143,7 @@ def _calculate_statistics(tareas: list, user_id: int) -> dict:
     }
 
 
-def _format_statistics(stats: dict, user_name: str) -> str:
+def _format_statistics(stats: dict[str, Any], user_name: str) -> str:
     """
     Formatea estadísticas en un mensaje bonito de Telegram.
     

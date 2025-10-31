@@ -7,11 +7,11 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Dict
 
-from sqlalchemy import Integer, MetaData  # type: ignore[import-not-found]
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB  # type: ignore[import-not-found]
-from sqlalchemy.ext.asyncio import AsyncAttrs  # type: ignore[import-not-found]
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column  # type: ignore[import-not-found]
-from sqlalchemy.types import JSON, TypeDecorator  # type: ignore[import-not-found]
+from sqlalchemy import Integer, MetaData
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.types import JSON, TypeDecorator
 
 
 class CustomJsonB(TypeDecorator[Any]):  # type: ignore[misc]

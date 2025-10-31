@@ -24,7 +24,7 @@ stats_logger = get_logger(__name__)
 router = APIRouter(prefix="/stats", tags=["statistics"])
 
 
-@router.get("/user/{user_id}")
+@router.get("/user/{user_id}")  # type: ignore[misc]
 async def get_user_statistics(
     user_id: int,
     days: int = Query(default=30, ge=1, le=365, description="Días hacia atrás"),
@@ -179,7 +179,7 @@ async def get_user_statistics(
         )
 
 
-@router.post("/invalidate/user/{user_id}")
+@router.post("/invalidate/user/{user_id}")  # type: ignore[misc]
 async def invalidate_user_statistics(
     user_id: int,
     cache: CacheService = Depends(get_cache_service),

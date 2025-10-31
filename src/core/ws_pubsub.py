@@ -63,7 +63,7 @@ class RedisWebSocketPubSub:
         # Crear cliente y forzar conexión; si falla TLS en Upstash, intentar fallback no-TLS:6380
         try:
             self._redis = cast(Any, redis).from_url(self.redis_url, **extra_kwargs)
-            await self._redis.ping()  # type: ignore[union-attr]
+            await self._redis.ping()
         except Exception as e1:
             fallback_done = False
             if parsed.hostname and parsed.hostname.endswith(".upstash.io"):
@@ -84,7 +84,7 @@ class RedisWebSocketPubSub:
                         health_check_interval=30,
                         retry_on_timeout=True,
                     )
-                    await self._redis.ping()  # type: ignore[union-attr]
+                    await self._redis.ping()
                     self.redis_url = fallback_url
                     fallback_done = True
                 except Exception as e2:

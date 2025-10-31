@@ -119,7 +119,7 @@ class WebSocketManager:
         self.role_connections: Dict[str, Set[str]] = {}  # role -> connection_ids
         
         # Task para heartbeat
-        self._heartbeat_task: Optional[asyncio.Task] = None
+        self._heartbeat_task: Optional[asyncio.Task[Any]] = None
         self._heartbeat_interval: int = 30  # segundos
         # Métricas básicas (reinician por proceso)
         self.total_messages_sent = 0

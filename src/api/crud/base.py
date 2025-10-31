@@ -39,7 +39,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         Obtiene un registro por su ID.
         """
-        query = select(self.model).filter(self.model.id == id)  # type: ignore
+        query = select(self.model).filter(self.model.id == id)
         result = await db.execute(query)
         return result.scalars().first()
 

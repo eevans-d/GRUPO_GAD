@@ -8,7 +8,7 @@ de performance con información estructurada para debugging y monitoreo.
 
 import time
 import uuid
-from typing import Callable
+from typing import Callable, Any
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -18,7 +18,7 @@ from src.core.logging import get_logger
 middleware_logger = get_logger("api.middleware")
 
 
-class SecurityLoggingMiddleware(BaseHTTPMiddleware):
+class SecurityLoggingMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Middleware para logging de seguridad y compliance.
     
@@ -38,7 +38,7 @@ class SecurityLoggingMiddleware(BaseHTTPMiddleware):
             "/admin"
         ]
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(self, request: Request, call_next: Callable[[Request], Any]) -> Response:
         # Generar ID único para la request
         request_id = str(uuid.uuid4())[:8]
         
@@ -110,7 +110,7 @@ class SecurityLoggingMiddleware(BaseHTTPMiddleware):
             raise
 
 
-class PerformanceLoggingMiddleware(BaseHTTPMiddleware):
+class PerformanceLoggingMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Middleware para logging de performance y métricas.
     
@@ -125,7 +125,7 @@ class PerformanceLoggingMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.slow_request_threshold = slow_request_threshold  # segundos
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(self, request: Request, call_next: Callable[[Request], Any]) -> Response:
         start_time = time.time()
         
         try:
@@ -174,7 +174,7 @@ class PerformanceLoggingMiddleware(BaseHTTPMiddleware):
             raise
 
 
-class DatabaseLoggingMiddleware(BaseHTTPMiddleware):
+class DatabaseLoggingMiddleware(BaseHTTPMiddleware):  # type: ignore[misc]
     """
     Middleware para logging de operaciones de base de datos.
     
@@ -184,7 +184,7 @@ class DatabaseLoggingMiddleware(BaseHTTPMiddleware):
     - Errores de conexión
     """
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(self, request: Request, call_next: Callable[[Request], Any]) -> Response:
         # Marcar inicio de request para tracking de DB
         if hasattr(request.app.state, 'db_queries'):
             request.app.state.db_queries = []

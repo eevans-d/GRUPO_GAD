@@ -146,7 +146,7 @@ async def _process_codigo_input(
             field=validation.field_name or "Código",
             value=codigo,
             issue=validation.error_message or "Código inválido",
-            suggestion=validation.suggestion,
+            suggestion=validation.suggestion or "",
             max_length=UnifiedCopy.MAX_CODIGO_LENGTH
         )
         
@@ -232,7 +232,7 @@ async def _process_titulo_input(
             field=validation.field_name or "Título",
             value=titulo,
             issue=validation.error_message or "Título inválido",
-            suggestion=validation.suggestion,
+            suggestion=validation.suggestion or "",
             max_length=UnifiedCopy.MAX_TITULO_LENGTH
         )
         
@@ -300,7 +300,7 @@ async def _process_delegado_input(
             field=UnifiedCopy.DELEGADO_TERM,
             value=delegado_id_str,
             issue=validation.error_message or "ID inválido",
-            suggestion=validation.suggestion
+            suggestion=validation.suggestion or ""
         )
         
         await update.message.reply_text(
@@ -364,7 +364,7 @@ async def _process_asignados_input(
             field=UnifiedCopy.ASIGNADOS_TERM,
             value=asignados_str,
             issue=validation.error_message or "IDs inválidos",
-            suggestion=validation.suggestion
+            suggestion=validation.suggestion or ""
         )
         
         await update.message.reply_text(

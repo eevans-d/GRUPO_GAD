@@ -69,7 +69,7 @@ class EmergencyResponse(BaseModel):
     status: str
 
 
-@router.get("/", response_model=List[Tarea])
+@router.get("/", response_model=List[Tarea])  # type: ignore[misc]
 async def read_tasks(
     db: AsyncSession = Depends(get_db_session),
     skip: int = 0,
@@ -83,7 +83,7 @@ async def read_tasks(
     return tasks
 
 
-@router.post("/", response_model=Tarea)
+@router.post("/", response_model=Tarea)  # type: ignore[misc]
 async def create_task(
     *,
     db: AsyncSession = Depends(get_db_session),
@@ -104,7 +104,7 @@ async def create_task(
     return task
 
 
-@router.post("/emergency", response_model=EmergencyResponse)
+@router.post("/emergency", response_model=EmergencyResponse)  # type: ignore[misc]
 async def create_emergency(
     *,
     db: AsyncSession = Depends(get_db_session),
@@ -201,7 +201,7 @@ async def create_emergency(
         )
 
 
-@router.get("/{task_id}", response_model=Tarea)
+@router.get("/{task_id}", response_model=Tarea)  # type: ignore[misc]
 async def read_task_by_id(
     task_id: int,
     current_user: Usuario = Depends(get_current_active_user),
@@ -219,7 +219,7 @@ async def read_task_by_id(
     return task
 
 
-@router.put("/{task_id}", response_model=Tarea)
+@router.put("/{task_id}", response_model=Tarea)  # type: ignore[misc]
 async def update_task(
     *,
     db: AsyncSession = Depends(get_db_session),
@@ -247,7 +247,7 @@ async def update_task(
     return task
 
 
-@router.delete("/{task_id}", response_model=Tarea)
+@router.delete("/{task_id}", response_model=Tarea)  # type: ignore[misc]
 async def delete_task(
     *,
     db: AsyncSession = Depends(get_db_session),

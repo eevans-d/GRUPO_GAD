@@ -45,7 +45,7 @@ class UsuarioUpdate(BaseModel):
     nivel: Optional[str] = None
 
 
-@router.get("", response_model=List[UsuarioResponse])
+@router.get("", response_model=List[UsuarioResponse])  # type: ignore[misc]
 # Nota: cache_result temporalmente deshabilitado en staging por interferencia con Depends(get_db_session)
 # @cache_result(ttl_seconds=300, key_prefix="usuarios")  # Cache for 5 minutes
 async def list_usuarios(
@@ -70,7 +70,7 @@ async def list_usuarios(
         )
 
 
-@router.get("/{usuario_id}", response_model=UsuarioResponse)
+@router.get("/{usuario_id}", response_model=UsuarioResponse)  # type: ignore[misc]
 # @cache_result(ttl_seconds=300, key_prefix="usuarios")  # Cache for 5 minutos (deshabilitado temporalmente)
 async def get_usuario(
     usuario_id: int,
@@ -100,7 +100,7 @@ async def get_usuario(
         )
 
 
-@router.post("", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=UsuarioResponse, status_code=status.HTTP_201_CREATED)  # type: ignore[misc]
 # @cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def create_usuario(
     usuario_in: UsuarioCreate,
@@ -135,7 +135,7 @@ async def create_usuario(
         new_usuario = Usuario(
             telegram_id=usuario_in.telegram_id,
             nombre=usuario_in.nombre,
-            nivel=usuario_in.nivel  # type: ignore
+            nivel=usuario_in.nivel
         )
         
         db.add(new_usuario)
@@ -154,7 +154,7 @@ async def create_usuario(
         )
 
 
-@router.put("/{usuario_id}", response_model=UsuarioResponse)
+@router.put("/{usuario_id}", response_model=UsuarioResponse)  # type: ignore[misc]
 # @cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def update_usuario(
     usuario_id: int,
@@ -189,7 +189,7 @@ async def update_usuario(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"Nivel debe ser uno de: {', '.join(valid_niveles)}"
                 )
-            usuario.nivel = usuario_in.nivel  # type: ignore
+            usuario.nivel = usuario_in.nivel
         
         await db.commit()
         await db.refresh(usuario)
@@ -206,7 +206,7 @@ async def update_usuario(
         )
 
 
-@router.delete("/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{usuario_id}", status_code=status.HTTP_204_NO_CONTENT)  # type: ignore[misc]
 # @cache_and_invalidate(invalidate_patterns=["usuarios:list_usuarios:*", "usuarios:get_usuario:*"])
 async def delete_usuario(
     usuario_id: int,

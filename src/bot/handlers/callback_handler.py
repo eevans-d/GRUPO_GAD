@@ -218,7 +218,7 @@ async def handle_crear_action(
                 field="Tipo",
                 value=tipo,
                 issue=validation.error_message or "Tipo inválido",
-                suggestion=validation.suggestion
+                suggestion=validation.suggestion or ""
             )
             await query.edit_message_text(error_msg, parse_mode="Markdown")
             ux_metrics.track_validation_error(user_id, "tipo", "invalid_type", 1)
@@ -281,7 +281,7 @@ async def handle_crear_action(
                 field=UnifiedCopy.DELEGADO_TERM,
                 value=delegado_id_str,
                 issue=validation.error_message or "ID inválido",
-                suggestion=validation.suggestion
+                suggestion=validation.suggestion or ""
             )
             await query.edit_message_text(error_msg, parse_mode="Markdown")
             ux_metrics.track_validation_error(user_id, "delegado_id", "invalid_format", 4)

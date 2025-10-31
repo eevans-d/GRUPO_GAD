@@ -28,7 +28,7 @@ from src.core.websockets import websocket_manager, WSMessage, EventType
 router = APIRouter(prefix="/telegram/tasks", tags=["Telegram Tasks"])
 
 
-@router.post("/create", response_model=TelegramTaskCreateResponse)
+@router.post("/create", response_model=TelegramTaskCreateResponse)  # type: ignore[misc]
 async def create_task_from_telegram(
     task_data: TelegramTaskCreate,
     db: AsyncSession = Depends(get_db_session),
@@ -135,7 +135,7 @@ async def create_task_from_telegram(
         )
 
 
-@router.post("/finalize", response_model=TelegramTaskFinalizeResponse)
+@router.post("/finalize", response_model=TelegramTaskFinalizeResponse)  # type: ignore[misc]
 async def finalize_task_by_code(
     finalize_request: TelegramTaskFinalizeRequest,
     db: AsyncSession = Depends(get_db_session)
@@ -183,7 +183,7 @@ async def finalize_task_by_code(
             )
         
         # 5. Update task to finalized
-        task.estado = "finalizada"  # type: ignore
+        task.estado = "finalizada"
         task.fin_real = datetime.now()
         
         await db.commit()
@@ -222,7 +222,7 @@ async def finalize_task_by_code(
         )
 
 
-@router.get("/user/{telegram_id}", response_model=TelegramUserTasksResponse)
+@router.get("/user/{telegram_id}", response_model=TelegramUserTasksResponse)  # type: ignore[misc]
 async def get_user_tasks_by_telegram(
     telegram_id: int,
     db: AsyncSession = Depends(get_db_session)
@@ -287,11 +287,11 @@ async def get_user_tasks_by_telegram(
         )
 
 
-@router.get("/code/{codigo}")
+@router.get("/code/{codigo}")  # type: ignore[misc]
 async def get_task_by_code(
     codigo: str,
     db: AsyncSession = Depends(get_db_session)
-) -> dict:
+) -> dict[str, Any]:
     """
     Get task details by code.
     

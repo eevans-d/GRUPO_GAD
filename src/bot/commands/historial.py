@@ -7,6 +7,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, CommandHandler
 from telegram import Bot, Chat, User
 from loguru import logger
+from typing import Any
 
 from src.bot.services.api_service import ApiService
 from config.settings import get_settings
@@ -117,7 +118,7 @@ async def historial(
         )
 
 
-def _format_historial(tareas: list, filtro: str, page: int = 1) -> str:
+def _format_historial(tareas: list[Any], filtro: str, page: int = 1) -> str:
     """
     Formatea el historial de tareas en texto bonito.
     

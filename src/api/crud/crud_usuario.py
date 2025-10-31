@@ -14,7 +14,7 @@ from src.core.security import get_password_hash
 from src.schemas.usuario import UsuarioCreate, UsuarioUpdate
 
 
-class CRUDUsuario(CRUDBase[Usuario, UsuarioCreate, UsuarioUpdate]):
+class CRUDUsuario(CRUDBase[Usuario, UsuarioCreate, UsuarioUpdate]):  # type: ignore[misc]
     async def get_by_email(self, db: AsyncSession, *, email: str) -> Optional[Usuario]:
         """
         Obtiene un usuario por su dirección de email.

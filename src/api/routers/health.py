@@ -24,7 +24,7 @@ router = APIRouter()
 _app_start_time = time.time()
 
 
-@router.get("/health")
+@router.get("/health")  # type: ignore[misc]
 async def health_check() -> Dict[str, Any]:
     """
     Basic health check endpoint for load balancers.
@@ -33,7 +33,7 @@ async def health_check() -> Dict[str, Any]:
     return {"status": "ok"}
 
 
-@router.get("/health/detailed")
+@router.get("/health/detailed")  # type: ignore[misc]
 async def detailed_health_check() -> Dict[str, Any]:
     """
     Comprehensive health check with database and system status.
@@ -94,7 +94,7 @@ async def detailed_health_check() -> Dict[str, Any]:
     return health_status
 
 
-@router.get("/health/ready")
+@router.get("/health/ready")  # type: ignore[misc]
 async def readiness_check() -> Dict[str, Any]:
     """
     Kubernetes readiness probe endpoint.
@@ -120,7 +120,7 @@ async def readiness_check() -> Dict[str, Any]:
         )
 
 
-@router.get("/health/live")
+@router.get("/health/live")  # type: ignore[misc]
 async def liveness_check() -> Dict[str, Any]:
     """
     Kubernetes liveness probe endpoint.
@@ -131,7 +131,7 @@ async def liveness_check() -> Dict[str, Any]:
     }
 
 
-@router.get("/health/performance")
+@router.get("/health/performance")  # type: ignore[misc]
 async def performance_metrics() -> Dict[str, Any]:
     """
     Performance metrics endpoint for monitoring and optimization.
@@ -155,7 +155,7 @@ async def performance_metrics() -> Dict[str, Any]:
     return metrics
 
 
-@router.get("/health/government")
+@router.get("/health/government")  # type: ignore[misc]
 async def government_health_check() -> Dict[str, Any]:
     """
     Comprehensive government-grade health check for GRUPO_GAD.
@@ -524,4 +524,4 @@ def _calculate_sla_compliance(uptime_seconds: float, checks: Dict[str, Any]) -> 
 
 
 # Initialize start time for uptime calculation (dynamic attribute for uptime)
-health_check._start_time = time.time()  # type: ignore[attr-defined]
+health_check._start_time = time.time()

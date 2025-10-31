@@ -17,7 +17,7 @@ cache_router_logger = get_logger(__name__)
 router = APIRouter(prefix="/cache", tags=["cache"])
 
 
-@router.get("/stats", response_model=dict[str, Any])
+@router.get("/stats", response_model=dict[str, Any])  # type: ignore[misc]
 async def get_cache_stats(
     cache: CacheService = Depends(get_cache_service),
 ) -> dict[str, Any]:
@@ -35,7 +35,7 @@ async def get_cache_stats(
     """
     try:
         stats = await cache.get_stats()
-        return stats
+        return dict(stats)
     except Exception as e:
         cache_router_logger.error(f"Error obteniendo stats de caché: {e}")
         raise HTTPException(
@@ -44,7 +44,7 @@ async def get_cache_stats(
         )
 
 
-@router.post("/invalidate/{key}")
+@router.post("/invalidate/{key}")  # type: ignore[misc]
 async def invalidate_cache_key(
     key: str,
     cache: CacheService = Depends(get_cache_service),
@@ -79,7 +79,7 @@ async def invalidate_cache_key(
         )
 
 
-@router.post("/invalidate-pattern/{pattern:path}")
+@router.post("/invalidate-pattern/{pattern:path}")  # type: ignore[misc]
 async def invalidate_cache_pattern(
     pattern: str,
     cache: CacheService = Depends(get_cache_service),
@@ -115,7 +115,7 @@ async def invalidate_cache_pattern(
         )
 
 
-@router.post("/clear")
+@router.post("/clear")  # type: ignore[misc]
 async def clear_cache(
     cache: CacheService = Depends(get_cache_service),
 ) -> JSONResponse:

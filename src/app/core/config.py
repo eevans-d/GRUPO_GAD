@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict  # type: ignore[import-not-found]
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 from functools import lru_cache
 

@@ -24,7 +24,7 @@ from src.schemas.usuario import (
 router = APIRouter()
 
 
-@router.get("/", response_model=List[UsuarioSchema]) # Use UsuarioSchema here
+@router.get("/", response_model=List[UsuarioSchema])  # type: ignore[misc]  # Use UsuarioSchema here
 async def read_users(
     db: AsyncSession = Depends(get_db_session),
     skip: int = 0,
@@ -38,7 +38,7 @@ async def read_users(
     return users
 
 
-@router.post("/", response_model=UsuarioSchema) # Use UsuarioSchema here
+@router.post("/", response_model=UsuarioSchema)  # type: ignore[misc]  # Use UsuarioSchema here
 async def create_user(
     *,
     request: Request,
@@ -79,7 +79,7 @@ async def create_user(
     return user
 
 
-@router.get("/me", response_model=UsuarioSchema) # Use UsuarioSchema here
+@router.get("/me", response_model=UsuarioSchema)  # type: ignore[misc]  # Use UsuarioSchema here
 async def read_user_me(
     current_user: Usuario = Depends(get_current_active_user),
 ) -> Any:
@@ -89,7 +89,7 @@ async def read_user_me(
     return current_user
 
 
-@router.get("/{user_id}", response_model=UsuarioSchema) # Use UsuarioSchema here
+@router.get("/{user_id}", response_model=UsuarioSchema)  # type: ignore[misc]  # Use UsuarioSchema here
 async def read_user_by_id(
     user_id: int,
     request: Request,
@@ -121,7 +121,7 @@ async def read_user_by_id(
     return user
 
 
-@router.put("/{user_id}", response_model=UsuarioSchema) # Use UsuarioSchema here
+@router.put("/{user_id}", response_model=UsuarioSchema)  # type: ignore[misc]  # Use UsuarioSchema here
 async def update_user(
     *,
     request: Request,

@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Any
 import jwt
 
 from src.api.schemas.telegram import TelegramAuthRequest, TelegramAuthResponse
@@ -47,7 +47,7 @@ def create_jwt_token(telegram_id: int, user_id: int, nivel: str) -> str:
     return token
 
 
-@router.post("/authenticate", response_model=TelegramAuthResponse)
+@router.post("/authenticate", response_model=TelegramAuthResponse)  # type: ignore[misc]
 async def authenticate_telegram_user(
     auth_request: TelegramAuthRequest,
     db: AsyncSession = Depends(get_db_session)
@@ -73,7 +73,7 @@ async def authenticate_telegram_user(
         
         # User found, generate token
         token = create_jwt_token(
-            telegram_id=int(user.telegram_id),  # type: ignore
+            telegram_id=int(user.telegram_id),
             user_id=user.id,
             nivel=str(user.nivel)
         )
@@ -81,7 +81,7 @@ async def authenticate_telegram_user(
         return TelegramAuthResponse(
             authenticated=True,
             user_id=user.id,
-            telegram_id=int(user.telegram_id),  # type: ignore
+            telegram_id=int(user.telegram_id),
             role=str(user.nivel),
             token=token,
             message="Usuario autenticado correctamente"
@@ -94,7 +94,7 @@ async def authenticate_telegram_user(
         )
 
 
-@router.get("/{telegram_id}", response_model=TelegramAuthResponse)
+@router.get("/{telegram_id}", response_model=TelegramAuthResponse)  # type: ignore[misc]
 async def get_telegram_user_auth(
     telegram_id: int,
     db: AsyncSession = Depends(get_db_session)
@@ -119,7 +119,7 @@ async def get_telegram_user_auth(
         
         # Generate token
         token = create_jwt_token(
-            telegram_id=int(user.telegram_id),  # type: ignore
+            telegram_id=int(user.telegram_id),
             user_id=user.id,
             nivel=str(user.nivel)
         )
@@ -140,8 +140,8 @@ async def get_telegram_user_auth(
         )
 
 
-@router.get("/verify/{token}")
-async def verify_token(token: str) -> dict:
+@router.get("/verify/{token}")  # type: ignore[misc]
+async def verify_token(token: str) -> dict[str, Any]:
     """
     Verify JWT token validity.
     
@@ -153,7 +153,7 @@ async def verify_token(token: str) -> dict:
         
         return {
             "valid": True,
-            "telegram_id": int(decoded["sub"]),  # type: ignore
+            "telegram_id": int(decoded["sub"]),
             "user_id": decoded.get("user_id"),
             "role": decoded.get("nivel"),
             "expires": decoded.get("exp")

@@ -30,8 +30,8 @@ class WebSocketModelIntegrator:
     
     def __init__(self, emitter: WebSocketEventEmitter):
         self.enabled = True
-        self._event_queue: asyncio.Queue = asyncio.Queue()
-        self._processing_task: Optional[asyncio.Task] = None
+        self._event_queue: asyncio.Queue[Any] = asyncio.Queue()
+        self._processing_task: Optional[asyncio.Task[Any]] = None
         self.emitter = emitter
         
     def enable(self):

@@ -276,7 +276,7 @@ class CacheService:
                 return 0
 
             # Eliminar en batch
-            deleted = await self._redis.delete(*keys)
+            deleted: int = await self._redis.delete(*keys)
             cache_logger.info(
                 "Cache DELETE PATTERN",
                 pattern=full_pattern,

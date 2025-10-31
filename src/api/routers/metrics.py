@@ -19,7 +19,7 @@ metrics_logger = get_logger("api.routers.metrics")
 router = APIRouter(prefix="/metrics", tags=["monitoring"])
 
 
-@router.get("/prometheus", response_class=Response)
+@router.get("/prometheus", response_class=Response)  # type: ignore[misc]
 async def prometheus_metrics() -> Response:
     """
     Endpoint para métricas en formato Prometheus.

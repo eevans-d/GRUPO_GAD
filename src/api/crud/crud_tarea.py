@@ -13,7 +13,7 @@ from src.api.models.tarea import Tarea
 from src.schemas.tarea import TareaCreate, TareaUpdate
 
 
-class CRUDTarea(CRUDBase[Tarea, TareaCreate, TareaUpdate]):
+class CRUDTarea(CRUDBase[Tarea, TareaCreate, TareaUpdate]):  # type: ignore[misc]
     async def get_multi_by_delegado(
         self,
         db: AsyncSession,
@@ -31,7 +31,7 @@ class CRUDTarea(CRUDBase[Tarea, TareaCreate, TareaUpdate]):
             .offset(skip)
             .limit(limit)
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 tarea = CRUDTarea(Tarea)

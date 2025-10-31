@@ -100,16 +100,16 @@ class Usuario(Base):
         """Verifica si el usuario está bloqueado temporalmente."""
         if not self.bloqueado_hasta:
             return False
-        return self.bloqueado_hasta > datetime.now(timezone.utc)
+        return bool(self.bloqueado_hasta > datetime.now(timezone.utc))
 
     @property
     def is_superuser(self) -> bool:
         """Verifica si el usuario tiene nivel de superusuario (nivel 3)."""
-        return self.nivel == UserLevel.LEVEL_3
+        return bool(self.nivel == UserLevel.LEVEL_3)
 
     def can_access_level(self, required_level: UserLevel) -> bool:
         """Verifica si el usuario puede acceder a un nivel requerido."""
-        return self.nivel.value >= required_level.value
+        return bool(self.nivel.value >= required_level.value)
 
     def reset_failed_attempts(self) -> None:
         """Reinicia los intentos fallidos."""
